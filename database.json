@@ -40,7 +40,7 @@
         "Warehouse":"Ref Warehouse"
     },
     "DeliveryOrders":{
-        "Date":"Date",
+        "Time":"Date",
         "Supplier":"Ref Supplier",
         "Product":"Ref Product",
         "Quantity":"Number",
