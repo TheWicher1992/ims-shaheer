@@ -1,0 +1,50 @@
+{
+    "Sales":{
+        "Time": "Date",
+        "Product":"Ref Product", 
+        "Quantity":"Number",
+        "Amount":"Number", 
+        "Client":"Ref Client"
+    },
+    "Cients":{
+        "FirstName":"String",
+        "LastName":"String",
+        "Balance":"Number",
+        "Phone":"String"
+    },
+    
+    "Suppliers":{
+        "FirstName":"String",
+        "LastName":"String",
+        "Balance":"Number",
+        "Phone":"String"
+    },
+    "Warehouses":{
+        "Name":"String",
+        "NoOfProducts":"Number",
+        "TotalQuantity":"Number"
+    },
+    "Purchases":{
+        "Time":"Date",
+        "Product":"Ref Product",
+        "Quantity":"Number",
+        "Amount":"Number",
+        "Supplier":"Ref Supplier"
+    },
+    "Products":{
+        "Title":"String",
+        "Serial":"String",
+        "Brand":"String",
+        "Colour":"String",
+        "Quantity":"Number",
+        "Warehouse":"Ref Warehouse"
+    },
+    "DeliveryOrders":{
+        "Date":"Date",
+        "Supplier":"Ref Supplier",
+        "Product":"Ref Product",
+        "Quantity":"Number",
+        "Location":"String"
+    }
+
+}
