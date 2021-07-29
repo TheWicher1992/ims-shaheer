@@ -1,0 +1,183 @@
+const express = require('express')
+const Admin = require('../models/Admin')
+const router = express.Router()
+const bcrypt = require('bcryptjs')
+const Employee = require('../models/Employee')
+const jwt = require('jsonwebtoken')
+const config = require('config')
+const { auth, adminAuth, employeeAuth } = require('../middlewares/auth')
+
+router.post('/add-admin', adminAuth, async (req, res) => {
+    try {
+        const {
+            userName,
+            password
+        } = req.body
+
+        const exists = await Admin.exists({
+            userName
+        })
+
+        if (exists) {
+            return res.status(400).json({
+                error: "USER_ALREADY_EXIST"
+            })
+        }
+
+        const salt = await bcrypt.genSalt(10)
+        const hashedPassword = await bcrypt.hash(password, salt)
+
+        const admin = new Admin({
+            userName,
+            password: hashedPassword
+        })
+
+        await admin.save()
+
+        const payload = {
+            type: 'admin',
+            id: admin._id
+        }
+
+
+        const token = await jwt.sign(payload, config.get('token-secret'), { expiresIn: 360000 })
+
+        return res.status(200).json({
+            token
+        })
+    }
+    catch (err) {
+        return res.status(500).json({
+            error: 'SERVER_ERROR'
+        })
+    }
+
+})
+
+router.post('/add-employee', adminAuth, async (req, res) => {
+    try {
+        const {
+            userName,
+            password
+        } = req.body
+        const exists = await Employee.exists({
+            userName
+        })
+
+        if (exists) {
+            return res.status(400).json({
+                error: "USER_ALREADY_EXIST"
+            })
+        }
+
+        const salt = await bcrypt.genSalt(10)
+        const hashedPassword = await bcrypt.hash(password, salt)
+        const employee = new Employee({
+            userName,
+            password: hashedPassword
+        })
+
+        await employee.save()
+
+        const payload = {
+            type: 'employee',
+            id: employee._id
+        }
+
+
+        const token = await jwt.sign(payload, config.get('token-secret'), { expiresIn: 360000 })
+
+        return res.status(200).json({
+            token
+        })
+    }
+    catch (err) {
+        return res.status(500).json({
+            error: 'SERVER_ERROR'
+        })
+    }
+
+
+})
+
+router.get("/", auth, async (req, res) => {
+
+    try {
+        const User = req.user.type === 'admin' ? Admin : Employee
+        const user = await User.findById(req.user.id)
+
+        console.log(user)
+
+        return res.status(200).json({
+            user
+        })
+    }
+    catch (err) {
+        return res.status(500).json({
+            error: 'SERVER_ERROR'
+        })
+    }
+
+})
+
+
+router.post('/login', async (req, res) => {
+    try {
+
+
+        const {
+            userName,
+            password,
+            type
+        } = req.body
+
+        const userType = {
+            'admin': Admin,
+            'employee': Employee
+        }
+
+        const User = userType[type]
+
+        const exists = await User.exists({
+            userName
+        })
+
+        if (!exists) {
+            return res.status(400).json({
+                error: "INVALID_CREDITS"
+            })
+        }
+
+        const user = await User.findOne({
+            userName
+        })
+
+        const passMatch = await bcrypt.compare(password, user.password)
+
+        if (passMatch) {
+            const token = await jwt.sign({
+                type, id: user._id
+            }, config.get('token-secret'), {
+                expiresIn: 360000
+            })
+
+            return res.status(200).json({
+                token
+            })
+        }
+        else {
+            return res.status(400).json({
+                error: 'INVALID_CREDITS'
+            })
+        }
+    }
+    catch (err) {
+        return res.status(500).json({
+            error: 'SERVER_ERROR'
+        })
+    }
+
+})
+
+
+module.exports = router

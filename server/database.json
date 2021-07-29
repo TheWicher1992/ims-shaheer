@@ -8,7 +8,8 @@
         "Payment":["Partial", "Credit","Full"],
         "Discount":"Number",
         "Total":"Number",
-        "Note":"String"
+        "Note":"String",
+        "DeliveryStatus":"Bool"
     },
     "Client":{
         "FirstName":"String",

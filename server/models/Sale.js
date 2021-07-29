@@ -43,6 +43,10 @@ const saleSchema = new Schema({
     date: {
         type: Date,
         default: Date.now
+    },
+    deliveryStatus: {
+        type: Boolean,
+        default: false
     }
 })
 
