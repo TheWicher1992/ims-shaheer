@@ -6,7 +6,8 @@ const Schema = mongoose.Schema
 const employeeSchema = new Schema({
     userName: {
         type: String,
-        require: true
+        require: true,
+        trim: true
     },
     password: {
         type: String,

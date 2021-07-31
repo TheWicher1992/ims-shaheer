@@ -28,10 +28,12 @@ const deliveryOrderSchema = new Schema({
         type: Number
     },
     location: {
-        type: String
+        type: String,
+        trim: true
     },
     note: {
-        type: String
+        type: String,
+        trim: true
     }
 })
 

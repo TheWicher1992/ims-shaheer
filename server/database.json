@@ -37,7 +37,8 @@
         "Brand":"String",
         "Colour":"String",
         "Stock":"Number",
-        "Warehouse":"Ref Warehouse"
+        "Warehouse":"Ref Warehouse",
+        "Price":"Number"
     },
     "DeliveryOrder":{
         "Time":"Date",

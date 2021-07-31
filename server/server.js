@@ -21,6 +21,8 @@ require('./models/Product')
 require('./models/Purchase')
 require('./models/Sale')
 require('./models/Warehouse')
+require('./models/Brand')
+require('./models/ProductColour')
 
 //Test Route
 app.get('/', (req, res) => res.send("Hello World!"))

@@ -3,15 +3,11 @@ const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
 
-const adminSchema = new Schema({
-    userName: {
+const brandSchema = new Schema({
+    title: {
         type: String,
         require: true,
         trim: true
-    },
-    password: {
-        type: String,
-        require: true
     },
     date: {
         type: Date,
@@ -20,4 +16,4 @@ const adminSchema = new Schema({
 })
 
 
-module.exports = mongoose.model('Admin', adminSchema)
+module.exports = mongoose.model('Brand', brandSchema)
