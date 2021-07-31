@@ -6,7 +6,8 @@ const Schema = mongoose.Schema
 const warehouseSchema = new Schema({
     name: {
         type: String,
-        require: true
+        require: true,
+        trim: true
     },
     totalProducts: {
         type: Number,

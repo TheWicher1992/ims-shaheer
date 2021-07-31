@@ -4,18 +4,25 @@ const Schema = mongoose.Schema
 
 const productSchema = new Schema({
     title: {
-        type: String
+        type: String,
+        trim: true
     },
     serial: {
-        type: String
+        type: String,
+        trim: true
     },
     brand: {
-        type: String
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Brand'
     },
     colour: {
-        type: String
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'ProductColour'
     },
     stock: {
+        type: Number
+    },
+    price: {
         type: Number
     },
     warehouse: {
@@ -23,7 +30,8 @@ const productSchema = new Schema({
         ref: 'Warehouse'
     },
     description: {
-        type: String
+        type: String,
+        trim: true
     },
     date: {
         type: Date,

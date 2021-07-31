@@ -6,15 +6,18 @@ const Schema = mongoose.Schema
 const clientSchema = new Schema({
     userName: {
         type: String,
-        require: true
+        require: true,
+        trim: true
     },
     balance: {
         type: String,
-        require: true
+        require: true,
+        trim: true
     },
     phone: {
         type: String,
-        require: true
+        require: true,
+        trim: true
     },
     date: {
         type: Date,

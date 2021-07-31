@@ -38,7 +38,8 @@ const saleSchema = new Schema({
         type: Number
     },
     note: {
-        type: String
+        type: String,
+        trim: true
     },
     date: {
         type: Date,
