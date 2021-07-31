@@ -2,17 +2,6 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
-
-// "Product":{
-//     "Title":"String",
-//     "Serial":"String",
-//     "Brand":"String",
-//     "Colour":"String",
-//     "Stock":"Number",
-//     "Warehouse":"Ref Warehouse"
-// }
-
-
 const productSchema = new Schema({
     title: {
         type: String
@@ -41,3 +30,5 @@ const productSchema = new Schema({
         default: Date.now
     }
 })
+
+module.exports = mongoose.model('Product', productSchema)
