@@ -186,6 +186,28 @@ router.get('/:page/:query/:colour/:brand/:warehouse/:sort/:sortBy', async (req, 
 
 })
 
+router.delete('/:id', async (req, res) => {
+    const id = req.params.id
+
+    const exists = await Product.exists({
+        _id: id
+    })
+
+    if (!exists) {
+        return res.status(400).json({
+            error: 'PRODUCT_NOT_EXISTENT'
+        })
+    }
+
+    await Product.deleteOne({
+        _id: id
+    })
+
+    res.status(200).end()
+
+
+})
+
 
 
 module.exports = router
