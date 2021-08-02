@@ -5,6 +5,7 @@ import { createDrawerNavigator } from 'react-navigation-drawer'
 import React from 'react'
 import AdminDashboard from '../screens/AdminDashboard';
 import AdminLogin from '../screens/AdminLogin';
+import EmployeeLogin from '../screens/EmployeeLogin';
 import MakeSale from '../screens/MakeSale';
 import MakePurchase from '../screens/MakePurchase';
 
@@ -63,6 +64,13 @@ const AppNavigation = createDrawerNavigator({
             drawerLockMode: 'locked-closed', // prevent user from opening the drawer in Bar
           },
     },
+    employeeLogin : {
+        screen: EmployeeLogin,
+        navigationOptions: {
+            drawerLabel: () => null, // hides from the drawer
+            drawerLockMode: 'locked-closed', // prevent user from opening the drawer in Bar
+          },
+    }, 
     main: {
         screen: MainStack,
         navigationOptions: {

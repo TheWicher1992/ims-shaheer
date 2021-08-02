@@ -1,28 +1,14 @@
-import React, {useState} from 'react'
-import { StyleSheet, Text, View, Button, Dimensions, TextInput, TouchableOpacity, KeyboardAvoidingView, Switch } from 'react-native'; 
+import React from 'react'
+import { StyleSheet, Text, View, Button, Dimensions, TextInput, TouchableOpacity, KeyboardAvoidingView } from 'react-native'; 
 
-const AdminLogin = props => {
-    const [isEnabled, setIsEnabled] = useState(false);
-    const toggleSwitch = () => {
-        
-        props.navigation.navigate({routeName: 'EmployeeLogin'})
-    };
+
+const EmployeeLogin = props => {
     return(
         <KeyboardAvoidingView style = {styles.containerView} behavior = "padding">
             <View>
                 <View style={styles.circleNumber1}>
 
                 </View>
-                
-                <View style={styles.container}>
-      <Switch
-        trackColor={{ false: "#767577", true: "#81b0ff" }}
-        thumbColor={isEnabled ? "#f5dd4b" : "#f4f3f4"}
-        ios_backgroundColor="#3e3e3e"
-        onValueChange={toggleSwitch}
-        value={isEnabled}
-      />
-    </View>
                 <View style={styles.screen}>
                     <View>
                         <Text style={styles.title}>LOGIN</Text>
@@ -60,15 +46,6 @@ const AdminLogin = props => {
                     <View style={styles.container}>
                         {Dimensions.get('window').height === 1232 ? <Text style={styles.footer}>Zaki Sons</Text> : console.log(Dimensions.get('window').height)}
                     </View>
-                            
-                            
-                                
-                                
-                                    
-                
-                
-
-            
             </View>
         </KeyboardAvoidingView>
         
@@ -76,7 +53,7 @@ const AdminLogin = props => {
     )
 }
 
-AdminLogin.navigationOptions = () =>{
+EmployeeLogin.navigationOptions = () =>{
     return{
         header: null,
         swipeEnabled: false,
@@ -197,4 +174,4 @@ const styles = StyleSheet.create({
 
 })
 
-export default AdminLogin
+export default EmployeeLogin
