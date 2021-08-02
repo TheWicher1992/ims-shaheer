@@ -44,8 +44,7 @@ const defaultStackNavOptions = {
 //         screen: Drawer,   
 //     } 
 // }, defaultStackNavOptions)
-
-//Testing           
+         
 const MainStack = createStackNavigator({
     
     Dashboard: {
