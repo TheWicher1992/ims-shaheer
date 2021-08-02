@@ -64,7 +64,8 @@ const AdminLogin = props => {
 
 AdminLogin.navigationOptions = () =>{
     return{
-        header: null
+        header: null,
+        swipeEnabled: false,
     }
 }
 

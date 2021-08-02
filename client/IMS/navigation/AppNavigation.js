@@ -12,24 +12,70 @@ import MakePurchase from '../screens/MakePurchase';
 const defaultStackNavOptions = {
     mode: 'modal'
 }
+// const MainStack = createStackNavigator({
+//     Dashboard: {
+//         screen: AdminDashboard,
+//     },
+//     Sales: {
+//       screen: MakeSale,
+//     },
+//     MakePurchase: {
+//       screen: MakePurchase,
+//     }, 
+//   }, { headerMode: 'screen' } );  
 
-const AppNavigation = createStackNavigator({
-    Login : {
-        screen: AdminLogin,
-    },
+// const Drawer = createDrawerNavigator({ 
+//     MainStack: {
+//       screen: MainStack  
+//     },
+//     Dashboard: {
+//         screen: AdminDashboard,
+//     },      
+//   });
+
+// const AppNavigation = createStackNavigator({
+//     Login : {
+//         screen: AdminLogin,
+//     },
+//     Dashboard: {
+//         screen: AdminDashboard,
+//     },
+//     Drawer: {
+//         screen: Drawer,   
+//     } 
+// }, defaultStackNavOptions)
+
+//Testing           
+const MainStack = createStackNavigator({
+    
     Dashboard: {
         screen: AdminDashboard,
     },
     Sales: {
         screen: MakeSale,
+      }, 
+    
+  }, defaultStackNavOptions );  
+const AppNavigation = createDrawerNavigator({
+    Login : {
+        screen: AdminLogin,
+        navigationOptions: {
+            drawerLabel: () => null, // hides from the drawer
+            drawerLockMode: 'locked-closed', // prevent user from opening the drawer in Bar
+          },
     },
-    Purchases: {
-        screen: MakePurchase
-    }
+    main: {
+        screen: MainStack,
+        navigationOptions: {
+            drawerLabel: () => null, // hides from the drawer
+          },
+    },
+    Sales: {
+        screen: MakeSale,
+      },
+      MakePurchase: {
+        screen: MakePurchase,
+      }, 
 }, defaultStackNavOptions)
-
-//Testing           
-
-
 
 export default createAppContainer(AppNavigation)
