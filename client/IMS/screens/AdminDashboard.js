@@ -8,4 +8,17 @@ const AdminDashboard = () => {
 }
 
 
+AdminDashboard.navigationOptions = navigationData => {
+    return {
+        headerTitle: 'Zaki Sons',
+        headerTitleAlign: 'center',
+        headerTitleStyle: { color: 'white' },
+        headerStyle: {
+            backgroundColor: '#008394',
+        },
+    };
+  };
+  
+
+
 export default AdminDashboard
