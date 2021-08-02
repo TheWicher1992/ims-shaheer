@@ -1,11 +1,11 @@
 import React, {useState} from 'react'
-import { StyleSheet, Text, View, Button, Dimensions, TextInput, TouchableOpacity, KeyboardAvoidingView, Switch } from 'react-native'; 
+import { StyleSheet, Text, View, Button, Dimensions, TextInput, TouchableOpacity, KeyboardAvoidingView, Switch } from 'react-native';
+import styles from '../components/LoginStyles' 
 
 const AdminLogin = props => {
     const [isEnabled, setIsEnabled] = useState(false);
     const toggleSwitch = () => {
-        
-        props.navigation.navigate({routeName: 'EmployeeLogin'})
+        props.navigation.navigate({routeName: 'employeeLogin', params: {switchVal1: true}})
     };
     return(
         <KeyboardAvoidingView style = {styles.containerView} behavior = "padding">
@@ -14,15 +14,18 @@ const AdminLogin = props => {
 
                 </View>
                 
-                <View style={styles.container}>
-      <Switch
-        trackColor={{ false: "#767577", true: "#81b0ff" }}
-        thumbColor={isEnabled ? "#f5dd4b" : "#f4f3f4"}
-        ios_backgroundColor="#3e3e3e"
-        onValueChange={toggleSwitch}
-        value={isEnabled}
-      />
-    </View>
+                <View style={styles.label}>
+                    <Text>Admin Login</Text>
+                    <Switch
+                        trackColor={{ false: "#00E0C7", true: "#006270" }}
+                        thumbColor={isEnabled ? "white" : "#006270"}
+                        onValueChange={toggleSwitch}
+                        value={props.navigation.getParam('switchVal')}
+                    />
+                    <Text>Employee Login</Text>
+                </View>
+
+    
                 <View style={styles.screen}>
                     <View>
                         <Text style={styles.title}>LOGIN</Text>
@@ -60,15 +63,6 @@ const AdminLogin = props => {
                     <View style={styles.container}>
                         {Dimensions.get('window').height === 1232 ? <Text style={styles.footer}>Zaki Sons</Text> : console.log(Dimensions.get('window').height)}
                     </View>
-                            
-                            
-                                
-                                
-                                    
-                
-                
-
-            
             </View>
         </KeyboardAvoidingView>
         
@@ -83,118 +77,6 @@ AdminLogin.navigationOptions = () =>{
     }
 }
 
-const styles = StyleSheet.create({
-    screen: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginTop: Dimensions.get('window').height === 1232 ? Dimensions.get('window').height * 0.12 : Dimensions.get('window').height * 0.05
-    },
-    footer: {
-        color: 'black',
-        fontSize: 16,
-        marginTop: 50,
-        fontFamily: 'Roboto',
-        fontWeight: 'bold'
-    },
-    title: {
-        color: '#006270',
-        fontSize: 36,
-        fontFamily: 'Roboto',
-        fontWeight: 'bold'
-    },  
-    subtitle: {
-        color: '#008394',
-        fontSize: 25,
-        marginTop: 50,
-        fontFamily: 'Roboto',
-    },
-    container:{
-        alignItems: 'center',
-        justifyContent: 'center',
 
-    },
-    containerF:{
-        alignItems: 'center',
-        justifyContent: 'center',
-        
-    },
-    input: {
-        height: 40,
-        width: Dimensions.get('window').width * 0.65,
-        borderColor: 'gray',
-        borderWidth: 2,
-        borderRadius: 20,
-        marginBottom: 20,
-        fontSize: 12,
-        borderColor: "#008394",
-        padding: 13
-        
-    },
-    buttonContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-        marginTop: Dimensions.get('window').height > 600 ? 15 : 8,
-        borderRadius: 25,
-        backgroundColor: '#00E0C7',
-        paddingVertical: 12,
-        paddingHorizontal: 30,
-    },
-    buttonText: {
-        fontSize:18,
-        textAlign: 'center',
-        color:'white',
-        fontWeight: 'bold'
-
-    },
-    circleNumber1 :{
-        height : 30 ,
-        width :30,
-        borderRadius: 1000,
-        backgroundColor: '#006270',
-        margin: Dimensions.get('window').width * 0.10,
-
-       },
-    circleNumber2 :{
-        height : 50 ,
-        width :50,
-        borderRadius: 1000,
-        backgroundColor: '#008394',
-        marginTop: Dimensions.get('window').height * 0.10,
-        marginLeft: Dimensions.get('window').width * 0.88
-
-       },
-    circleNumber3 :{
-        height : 60 ,
-        width :60,
-        borderRadius: 1000,
-        borderColor: '#00E0C7',
-        borderWidth: 3,
-        marginTop: Dimensions.get('window').height * 0,
-        marginRight: Dimensions.get('window').width * 0.95,
-        
-
-       },
-    circleNumber4 :{
-        height : 45 ,
-        width :45,
-        borderRadius: 1000,
-        backgroundColor: '#008394',
-        marginTop: Dimensions.get('window').width * 0.20,
-        marginLeft: Dimensions.get('window').width * 0.2
-
-       },
-
-    circleNumber5 :{
-        height : 180 ,
-        width : 180,
-        borderRadius: 1000,
-        backgroundColor: '#00E0C7',
-        marginTop: Dimensions.get('window').width * 0.0,
-        marginLeft: Dimensions.get('window').width * 0.8
-
-    }
-
-})
 
 export default AdminLogin

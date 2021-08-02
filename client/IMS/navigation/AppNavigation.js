@@ -61,7 +61,7 @@ const AppNavigation = createDrawerNavigator({
         screen: AdminLogin,
         navigationOptions: {
             drawerLabel: () => null, // hides from the drawer
-            drawerLockMode: 'locked-closed', // prevent user from opening the drawer in Bar
+            drawerLockMode: 'locked-closed', // prevent user from opening the drawer in Bar 
           },
     },
     employeeLogin : {
@@ -69,7 +69,7 @@ const AppNavigation = createDrawerNavigator({
         navigationOptions: {
             drawerLabel: () => null, // hides from the drawer
             drawerLockMode: 'locked-closed', // prevent user from opening the drawer in Bar
-          },
+          }, 
     }, 
     main: {
         screen: MainStack,
