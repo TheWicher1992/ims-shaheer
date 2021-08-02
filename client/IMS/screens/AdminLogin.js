@@ -13,35 +13,39 @@ const AdminLogin = props => {
                     <Text style={styles.title}>LOGIN</Text>
                 </View>
                         
-                        <View>
-                            <Text style={styles.subtitle}>Sign in to your account</Text>
-                        </View>
-                    </View>
+                <View>
+                    <Text style={styles.subtitle}>Sign in to your account</Text>
+                </View>
+            </View>
                 <View style={styles.circleNumber2}>
                     
                     
                 </View>
-                    <View style={styles.circleNumber3}>
+                <View style={styles.circleNumber3}>
 
-                    </View>
-                    <View style={styles.container}>
-                        <TextInput style={styles.input} placeholder="Email" />
-                        <TextInput style={styles.input} placeholder="Password"/>
-                        <View >
-                            <TouchableOpacity onPress={() => props.navigation.navigate({routeName: 'Dashboard'})}>
-                                <View style={styles.buttonContainer}>
-                                    <Text style={styles.buttonText}>Login</Text>
-                                </View>
-                                </TouchableOpacity>
-                        </View>
-                        
-                    </View>
-                        <View style={styles.circleNumber4}>
-
-                        </View>
-                        <View style={styles.circleNumber5}>
-                                
+                </View>
+                <View style={styles.container}>
+                    <TextInput style={styles.input} placeholder="Email" autoCorrect={false}/>
+                    <TextInput style={styles.input} placeholder="Password" secureTextEntry={true} autoCorrect={false}/>
+                    <View >
+                        <TouchableOpacity onPress={() => props.navigation.navigate({routeName: 'Dashboard'})}>
+                            <View style={styles.buttonContainer}>
+                                <Text style={styles.buttonText}>Login</Text>
                             </View>
+                            </TouchableOpacity>
+                    </View>
+                        
+                </View>
+                <View style={styles.circleNumber4}>
+
+                </View>
+                <View style={styles.circleNumber5}>
+                    
+                </View>
+                <View style={styles.container}>
+                    {Dimensions.get('window').height === 1232 ? <Text style={styles.footer}>Zaki Sons</Text> : console.log(Dimensions.get('window').height)}
+                </View>
+                        
                         
                             
                             
@@ -67,7 +71,14 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: Dimensions.get('window').height * 0.05
+        marginTop: Dimensions.get('window').height === 1232 ? Dimensions.get('window').height * 0.12 : Dimensions.get('window').height * 0.05
+    },
+    footer: {
+        color: 'black',
+        fontSize: 16,
+        marginTop: 50,
+        fontFamily: 'Roboto',
+        fontWeight: 'bold'
     },
     title: {
         color: '#006270',
