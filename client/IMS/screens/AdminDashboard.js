@@ -46,7 +46,7 @@ AdminDashboard.navigationOptions = navigationData => {
         headerTitleAlign: 'center',
         headerTitleStyle: { color: 'white' },
         headerStyle: {
-            backgroundColor: '#008394',
+            backgroundColor: '#008394', 
         },
         headerLeft: (
             <HeaderButtons HeaderButtonComponent={HeaderButton}>
