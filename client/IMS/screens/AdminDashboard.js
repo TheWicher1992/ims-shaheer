@@ -39,7 +39,7 @@ const AdminDashboard = () => {
     )
 }
 
-
+ 
 AdminDashboard.navigationOptions = navigationData => {
     return {
         headerTitle: 'Zaki Sons',
