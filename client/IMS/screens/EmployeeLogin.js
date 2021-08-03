@@ -1,11 +1,11 @@
-import React, {useState} from 'react'
-import { StyleSheet, Text, View, Button, Dimensions, TextInput, TouchableOpacity, KeyboardAvoidingView, Switch } from 'react-native';
+import React, { useState } from 'react'
+import { StyleSheet, Text, View, Button, Dimensions, TextInput, TouchableOpacity, KeyboardAvoidingView, Switch } from 'react-native'; 
 import styles from '../components/LoginStyles' 
 
-const AdminLogin = props => {
+const EmployeeLogin = props => {
     const [isEnabled, setIsEnabled] = useState(false);
     const toggleSwitch = () => {
-        props.navigation.navigate({routeName: 'employeeLogin', params: {switchVal1: true}})
+        props.navigation.navigate({routeName: 'Login', params: {switchVal: false}})
     };
     return(
         <KeyboardAvoidingView style = {styles.containerView} behavior = "padding">
@@ -13,22 +13,19 @@ const AdminLogin = props => {
                 <View style={styles.circleNumber1}>
 
                 </View>
-                
                 <View style={styles.label}>
                     <Text style={styles.switch}>A</Text>
                     <Switch
                         trackColor={{ false: "#00E0C7", true: "#006270" }}
-                        thumbColor={isEnabled ? "white" : "#006270"}
+                        thumbColor={isEnabled ? "white" : "#00E0C7"}
                         onValueChange={toggleSwitch}
-                        value={props.navigation.getParam('switchVal')}
+                        value={props.navigation.getParam('switchVal1')}
                     />
                     <Text style={styles.switch}>E</Text>
                 </View>
-
-    
                 <View style={styles.screen}>
                     <View>
-                        <Text style={styles.title}>ADMIN LOGIN</Text>
+                        <Text style={styles.title}>EMPLOYEE LOGIN</Text>
                     </View>
                             
                     <View>
@@ -51,11 +48,10 @@ const AdminLogin = props => {
                                     <Text style={styles.buttonText}>Login</Text>
                                 </View>
                                 </TouchableOpacity>
-                                
                         </View>
-                            <View style={{paddingTop: 20}}>
-                                <Text style={styles.note}>Note: To switch between logins, press the toggle</Text>
-                            </View>
+                        <View style={{paddingTop: 20}}>
+                            <Text style={styles.note}>Note: To switch between logins, press the toggle</Text>
+                        </View>
                             
                     </View>
                     <View style={styles.circleNumber4}>
@@ -74,13 +70,11 @@ const AdminLogin = props => {
     )
 }
 
-AdminLogin.navigationOptions = () =>{
+EmployeeLogin.navigationOptions = () =>{
     return{
         header: null,
         swipeEnabled: false,
     }
 }
 
-
-
-export default AdminLogin
+export default EmployeeLogin
