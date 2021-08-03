@@ -17,13 +17,13 @@ const styles = StyleSheet.create({
     },
     title: {
         color: '#006270',
-        fontSize: 36,
+        fontSize: Dimensions.get('window').height === 1232 ? 36 : 28,
         fontFamily: 'Roboto',
         fontWeight: 'bold'
     },  
     subtitle: {
         color: '#008394',
-        fontSize: 25,
+        fontSize: Dimensions.get('window').height === 1232 ? 25 : 18,
         marginTop: 50,
         fontFamily: 'Roboto',
     },
@@ -70,7 +70,8 @@ const styles = StyleSheet.create({
         width :30,
         borderRadius: 1000,
         backgroundColor: '#006270',
-        margin: Dimensions.get('window').width * 0.10,
+        marginTop: Dimensions.get('window').width * 0.10,
+        marginLeft: Dimensions.get('window').width * 0.08
 
        },
     circleNumber2 :{
@@ -115,19 +116,18 @@ const styles = StyleSheet.create({
     label: {
         alignSelf: 'center',
         flexDirection: 'row',
-        paddingHorizontal: 6,
         fontWeight: 'bold',
         marginLeft: Dimensions.get('window').width * 0.75
 
       },
     switch: {
         color: '#008394',
-        fontSize: 25,
+        fontSize: Dimensions.get('window').height === 1232 ? 25 : 16,
         fontFamily: 'Roboto',
     },
     note: {
         color: '#008394',
-        fontSize: 14,
+        fontSize: Dimensions.get('window').height === 1232 ? 16 : 14,
         fontFamily: 'Roboto',
     }
 
