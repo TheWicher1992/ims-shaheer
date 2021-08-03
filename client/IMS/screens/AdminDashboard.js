@@ -3,9 +3,10 @@ import { StyleSheet, Text, View, TouchableOpacity, Dimensions } from 'react-nati
 import HeaderButton from '../components/HeaderButton';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { DrawerActions } from 'react-navigation-drawer';
+import { FontAwesome } from '@expo/vector-icons';
 const AdminDashboard = props => {
     return(
-      <View style={{marginTop: Dimensions.get('window').height < 900 ? null : 60}}>
+      <View style={{marginTop: Dimensions.get('window').height < 900 ? 5 : 60}}>
         <View style={{justifyContent: 'center', alignSelf: 'center',}}>
           <Text style={styles.titleText}>Admin Dashboard</Text>
         </View>
@@ -59,6 +60,16 @@ AdminDashboard.navigationOptions = navigationData => {
                 onPress={() => {
                     navigationData.navigation.toggleDrawer();
                   }}
+              />
+            </HeaderButtons>
+          ),
+          headerRight: (
+            <HeaderButtons HeaderButtonComponent = {HeaderButton}>
+              <FontAwesome
+                name = {"user"}
+                size = {24}
+                color = {"white"}
+                style = {{right: 10}}
               />
             </HeaderButtons>
           )

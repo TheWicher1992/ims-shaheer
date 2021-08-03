@@ -1,7 +1,7 @@
 import { createStackNavigator } from 'react-navigation-stack'
 import { createAppContainer } from 'react-navigation';
 import { createDrawerNavigator } from 'react-navigation-drawer'
-// import { createBottomTabNavigator } from 'react-navigation-tabs'
+import { Dimensions } from 'react-native';
 import React from 'react'
 import AdminDashboard from '../screens/AdminDashboard';
 import AdminLogin from '../screens/AdminLogin';
@@ -39,7 +39,8 @@ export const Drawer = createDrawerNavigator({
     screen: dash,
     navigationOptions: ({ navigation }) => ({
       drawerLabel: 'Dashboard',
-      activeTintColor: 'black'
+      activeTintColor: 'black',
+      headerTitle: 'Menu'
     })
   },
   Sales: {
@@ -102,15 +103,23 @@ AddEmployee: {
   contentOptions: {
     activeTintColor: 'none',
     activeBackgroundColor :'none',
-    style: {
-      backgroundColor: '#008394',
-      flex: 1
-    },
     
+    headerTitleStyle: {
+      color: 'white'
+    },
+    headerStyle: {
+      backgroundColor: '#006270'
+    },
+    itemsContainerStyle: {
+      paddingVertical: Dimensions.get('window').height < 900 ? 95 : 120, 
+    },
     labelStyle: {
-      //color: 'white'
+      color: 'white',
     }
-  }
+  },
+  headerTitle: 'Menu', 
+  drawerBackgroundColor: '#008394',
+
 }
 );
 
@@ -135,7 +144,7 @@ export const AppNavigation = createStackNavigator({
   Drawer: {
     screen: Drawer,
     navigationOptions: {
-      header: null,
+      
       gesturesEnabled: false
     }
   }
