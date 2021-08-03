@@ -20,7 +20,12 @@ const productSchema = new Schema({
         ref: 'ProductColour'
     },
     stock: {
-        type: Number
+        type: Number,
+        default: 0
+    },
+    physicalStock: {
+        type: Number,
+        default: 0
     },
     price: {
         type: Number

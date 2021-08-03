@@ -72,7 +72,6 @@ router.post('/', async (req, res) => {
             serial,
             brand: brandID,
             colour: colourID,
-            stock,
             warehouse,
             description
         })
@@ -298,7 +297,7 @@ router.put('/:id', async (req, res) => {
         product.serial = serial
         product.brand = brandID
         product.colour = colourID
-        product.stock = stock
+        // product.stock = stock
         product.warehouse = warehouse
         product.description = description
 
