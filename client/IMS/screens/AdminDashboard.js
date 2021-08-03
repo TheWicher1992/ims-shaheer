@@ -3,9 +3,12 @@ import { StyleSheet, Text, View, TouchableOpacity, Dimensions } from 'react-nati
 import HeaderButton from '../components/HeaderButton';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { DrawerActions } from 'react-navigation-drawer';
-const AdminDashboard = () => {
+const AdminDashboard = props => {
     return(
       <View style={{marginTop: Dimensions.get('window').height < 900 ? null : 60}}>
+        <View style={{justifyContent: 'center', alignSelf: 'center',}}>
+          <Text style={styles.titleText}>Admin Dashboard</Text>
+        </View>
         <TouchableOpacity>
           <View style={styles.containers}>
             <Text style={styles.containerText}>Goods out of stock 8</Text>
@@ -22,13 +25,13 @@ const AdminDashboard = () => {
           </View>
         </TouchableOpacity>
         <View style={styles.buttonContainer}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => props.navigation.navigate({routeName: 'Sales'})}>
             <View elevation={5} style={styles.buttons}>
                 <Text style={styles.buttonContainerText}>Make a Sale</Text>
             </View>
           </TouchableOpacity>
           <View style={{paddingLeft: 20}}></View>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => props.navigation.navigate({routeName: 'MakePurchase'})}>
             <View elevation={5} style={styles.buttons}>
                 <Text style={styles.buttonContainerText}>Make a Purchase</Text>
             </View>
@@ -63,6 +66,13 @@ AdminDashboard.navigationOptions = navigationData => {
   };
   
 const styles = StyleSheet.create({
+  titleText: {
+    color: '#008394',
+    fontFamily: 'Roboto',
+    fontWeight: 'bold',
+    fontSize: Dimensions.get('window').height === 1232 ? 32 : 24
+
+  },
   containers: {
     borderColor: '#00E0C7',
     borderRadius: 30,
@@ -79,7 +89,6 @@ const styles = StyleSheet.create({
     fontFamily: 'Roboto',
     fontWeight: 'bold',
     fontSize: Dimensions.get('window').height === 1232 ? 26 : 20
-
   },
   buttonContainer: {
     flexDirection: 'row',
