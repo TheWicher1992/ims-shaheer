@@ -58,7 +58,7 @@ const MainStack = createStackNavigator({
   }, defaultStackNavOptions );  
 const AppNavigation = createDrawerNavigator({
     Login : {
-        screen: AdminLogin,
+        screen: AdminLogin, 
         navigationOptions: {
             drawerLabel: () => null, // hides from the drawer
             drawerLockMode: 'locked-closed', // prevent user from opening the drawer in Bar 

@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
     footer: {
         color: 'black',
         fontSize: 16,
-        marginTop: 50,
+        marginTop: 30,
         fontFamily: 'Roboto',
         fontWeight: 'bold'
     },
@@ -113,11 +113,23 @@ const styles = StyleSheet.create({
 
     },
     label: {
-        alignSelf: 'flex-end',
+        alignSelf: 'center',
         flexDirection: 'row',
         paddingHorizontal: 6,
         fontWeight: 'bold',
+        marginLeft: Dimensions.get('window').width * 0.75
+
       },
+    switch: {
+        color: '#008394',
+        fontSize: 25,
+        fontFamily: 'Roboto',
+    },
+    note: {
+        color: '#008394',
+        fontSize: 14,
+        fontFamily: 'Roboto',
+    }
 
 })
 

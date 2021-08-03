@@ -14,18 +14,18 @@ const EmployeeLogin = props => {
 
                 </View>
                 <View style={styles.label}>
-                    <Text>Admin Login</Text>
+                    <Text style={styles.switch}>A</Text>
                     <Switch
                         trackColor={{ false: "#00E0C7", true: "#006270" }}
                         thumbColor={isEnabled ? "white" : "#00E0C7"}
                         onValueChange={toggleSwitch}
                         value={props.navigation.getParam('switchVal1')}
                     />
-                    <Text>Employee Login</Text>
+                    <Text style={styles.switch}>E</Text>
                 </View>
                 <View style={styles.screen}>
                     <View>
-                        <Text style={styles.title}>LOGIN</Text>
+                        <Text style={styles.title}>EMPLOYEE LOGIN</Text>
                     </View>
                             
                     <View>
@@ -48,6 +48,9 @@ const EmployeeLogin = props => {
                                     <Text style={styles.buttonText}>Login</Text>
                                 </View>
                                 </TouchableOpacity>
+                        </View>
+                        <View style={{paddingTop: 20}}>
+                            <Text style={styles.note}>Note: To switch between logins, press the toggle</Text>
                         </View>
                             
                     </View>
