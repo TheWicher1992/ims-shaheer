@@ -5,7 +5,7 @@ import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { DrawerActions } from 'react-navigation-drawer';
 const AdminDashboard = () => {
     return(
-        <Text>Admin Dashboard</Text>
+        <Text>Admin Dashboard!</Text>
     )
 }
 
