@@ -95,7 +95,7 @@ Cheques: {
 AddEmployee: {
   screen: AddEmployee,
   navigationOptions: ({ navigation }) => ({
-    drawerLabel: 'Add Employees',
+    drawerLabel: 'Employees',
   })
 },
 
