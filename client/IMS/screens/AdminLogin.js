@@ -1,8 +1,15 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { StyleSheet, Text, View, Button, Dimensions, TextInput, TouchableOpacity, KeyboardAvoidingView, Switch } from 'react-native';
 import styles from '../components/LoginStyles'
 import axios from 'axios'
+import { connect } from 'react-redux'
+import { login, loadUser } from '../actions/auth'
+
+
 const AdminLogin = props => {
+    useEffect(() => {
+        props.loadUser(props.navigation)
+    }, [])
     const [isEnabled, setIsEnabled] = useState(false);
 
     const [userName, setUserName] = useState(``)
@@ -11,25 +18,15 @@ const AdminLogin = props => {
 
     const onChangePassword = (pass) => {
         setPassword(pass)
-        console.log(pass)
     }
 
 
     const onChangeUserName = (userName) => {
         setUserName(userName)
-        console.log(userName)
     }
 
     const login = () => {
-        try {
-            axios.get('http://192.168.18.121:5000/api/auth')
-                .then(res => console.log(res))
-                .catch(err => console.log(err.response.data))
-            console.log('login')
-        }
-        catch (err) {
-            console.log(err)
-        }
+        props.login(userName, password, props.navigation)
     }
 
 
@@ -115,4 +112,4 @@ AdminLogin.navigationOptions = () => {
 
 
 
-export default AdminLogin
+export default connect(null, { login, loadUser })(AdminLogin)
