@@ -59,7 +59,7 @@ export const loadUser = (navigation) => async dispatch => {
             type: USER_LOADED,
             payload: res.data.user
         })
-        navigation.navigate({ routeName: 'main' })
+        navigation.navigate({ routeName: 'Dashboard' })
         // navigation.navigate({ routeName: 'main' })
 
 
