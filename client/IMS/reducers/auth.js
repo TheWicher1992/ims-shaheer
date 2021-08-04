@@ -18,7 +18,7 @@ const initialState = {
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const authReducer = async (state = initialState, action) => {
-    console.log(action)
+    // console.log(action.type)
 
     switch (action.type) {
         case ADMIN_LOGIN_SUCCESS:

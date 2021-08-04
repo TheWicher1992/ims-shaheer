@@ -10,16 +10,17 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios'
 import setAuthToken from '../utils/setAuthToken';
 import { useNavigation } from '@react-navigation/native';
+import * as RootNavigation from '../navigation/RootNavigation';
 
-
-export const login = (userName, password) => async dispatch => {
+export const login = (userName, password, navigation) => async dispatch => {
+    console.log('login')
     try {
         let formData = {
             userName,
             password,
             type: 'admin'
         }
-        const res = await axios.post(`http://192.168.18.7:5000/api/auth/login`, formData, {
+        const res = await axios.post(`http://192.168.18.121:5000/api/auth/login`, formData, {
             headers: {
                 'Content-Type': 'application/json'
             }
@@ -28,7 +29,7 @@ export const login = (userName, password) => async dispatch => {
             type: ADMIN_LOGIN_SUCCESS,
             payload: res.data.token
         })
-        dispatch(loadUser())
+        dispatch(loadUser(navigation))
 
     } catch (error) {
 
@@ -45,18 +46,20 @@ export const login = (userName, password) => async dispatch => {
 }
 
 
-export const loadUser = () => async dispatch => {
+export const loadUser = (navigation) => async dispatch => {
     let token = await AsyncStorage.getItem('token')
-    const navigation = useNavigation()
+    // const navigation = useNavigation()
+    console.log('load')
     if (token) {
         setAuthToken(token)
     }
     try {
-        const res = await axios.get(`http://192.168.18.7:5000/api/auth`)
+        const res = await axios.get(`http://192.168.18.121:5000/api/auth`)
         dispatch({
             type: USER_LOADED,
             payload: res.data.user
         })
+        navigation.navigate({ routeName: 'main' })
         // navigation.navigate({ routeName: 'main' })
 
 
