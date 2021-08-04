@@ -1,9 +1,10 @@
-import React from 'react'
-import { StyleSheet, Text, View, TouchableOpacity, Dimensions } from 'react-native';
+import React, { useState } from 'react'
+import { Alert, StyleSheet, Text, View, TouchableOpacity, Dimensions } from 'react-native';
 import HeaderButton from '../components/HeaderButton';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { DrawerActions } from 'react-navigation-drawer';
-import { FontAwesome } from '@expo/vector-icons';
+import { EvilIcons } from '@expo/vector-icons';
+
 const AdminDashboard = props => {
     return(
       <View style={{marginTop: Dimensions.get('window').height < 900 ? 5 : 60}}>
@@ -43,6 +44,12 @@ const AdminDashboard = props => {
     )
 }
 
+const userInfo = () =>{
+  return(
+    <UserInfo />
+  )
+    
+}
  
 AdminDashboard.navigationOptions = navigationData => {
     return {
@@ -65,11 +72,28 @@ AdminDashboard.navigationOptions = navigationData => {
           ),
           headerRight: (
             <HeaderButtons HeaderButtonComponent = {HeaderButton}>
-              <FontAwesome
-                name = {"user"}
-                size = {24}
+              <EvilIcons
+                name={"user"}
+                size={36}
                 color = {"white"}
                 style = {{right: 10}}
+                onPress={() => {
+
+                  Alert.alert(
+                    "User Information",
+                    "My Alert Msg",
+                    [
+                      {
+                        text: "Cancel",
+                        onPress: () => console.log("Cancel Pressed"),
+                        style: "cancel"
+                      },
+                      { text: "OK", onPress: () => console.log("OK Pressed") }
+                    ]
+                  )
+
+                  }}
+                  
               />
             </HeaderButtons>
           )

@@ -82,13 +82,13 @@ Suppliers: {
 },
 Clients: {
   screen: MakeSale,
-  navigationOptions: ({ navigation }) => ({
+  navigationOptions: ({ navigation }) => ({ 
     drawerLabel: 'Clients',
   })
 },
 Cheques: {
   screen: MakeSale,
-  navigationOptions: ({ navigation }) => ({
+  navigationOptions: ({ navigation }) => ({ 
     drawerLabel: 'Cheques',
   })
 },
@@ -97,7 +97,7 @@ AddEmployee: {
   navigationOptions: ({ navigation }) => ({
     drawerLabel: 'Employees',
   })
-},
+}, 
 
 },
 {
@@ -115,7 +115,7 @@ AddEmployee: {
       paddingVertical: Dimensions.get('window').height < 900 ? 95 : 120, 
     },
     labelStyle: {
-      color: 'white',
+      color: 'white',   
     }
   },
   headerTitle: 'Menu', 
