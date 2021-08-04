@@ -8,6 +8,7 @@ import AdminLogin from '../screens/AdminLogin';
 import EmployeeLogin from '../screens/EmployeeLogin';
 import MakeSale from '../screens/MakeSale';
 import MakePurchase from '../screens/MakePurchase';
+import AddEmployee from '../screens/addEmployee';
 
 
 const defaultStackNavOptions = {
@@ -92,7 +93,7 @@ Cheques: {
   })
 },
 AddEmployee: {
-  screen: MakeSale,
+  screen: AddEmployee,
   navigationOptions: ({ navigation }) => ({
     drawerLabel: 'Add Employees',
   })
