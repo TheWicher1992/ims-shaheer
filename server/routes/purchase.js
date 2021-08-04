@@ -7,7 +7,7 @@ const Warehouse = require('../models/Warehouse')
 
 router.post('/', async (req, res) => {
     const {
-        product,
+        productID,
         quantity,
         client,
         payment,
@@ -29,7 +29,7 @@ router.post('/', async (req, res) => {
 
     //Update product stock
     const product = await Product.findOne({
-        _id: product
+        _id: productID
     })
     product.stock += quantity
 
