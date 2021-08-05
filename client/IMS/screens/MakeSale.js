@@ -172,13 +172,12 @@ const styles = StyleSheet.create({
   },
   modalStyle: {
     backgroundColor: "#fff",
-    width: Dimensions.get('window').width * 0.8,
-    height: Dimensions.get('window').height * 0.55,
+    width: Dimensions.get('window').height > 900 ? 600 : 320,
+    height: Dimensions.get('window').height > 900 ? 450: 420,
     borderWidth: 2,
     borderRadius: 20,
     marginBottom: 20,
     borderColor: "#008394",
-
   },
   subtitle: {
     color: '#008394',
