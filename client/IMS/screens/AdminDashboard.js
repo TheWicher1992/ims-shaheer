@@ -2,8 +2,8 @@ import React from 'react'
 import { StyleSheet, Text, View, TouchableOpacity, Dimensions } from 'react-native';
 import HeaderButton from '../components/HeaderButton';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
-import { DrawerActions } from 'react-navigation-drawer';
-import { FontAwesome } from '@expo/vector-icons';
+import HeaderNavigation from '../components/HeaderNavigation';
+
 const AdminDashboard = props => {
     return(
       <View style={{marginTop: Dimensions.get('window').height < 900 ? 5 : 60}}>
@@ -43,7 +43,6 @@ const AdminDashboard = props => {
     )
 }
 
- 
 AdminDashboard.navigationOptions = navigationData => {
     return {
         headerTitle: 'Zaki Sons',
@@ -64,14 +63,7 @@ AdminDashboard.navigationOptions = navigationData => {
             </HeaderButtons>
           ),
           headerRight: (
-            <HeaderButtons HeaderButtonComponent = {HeaderButton}>
-              <FontAwesome
-                name = {"user"}
-                size = {24}
-                color = {"white"}
-                style = {{right: 10}}
-              />
-            </HeaderButtons>
+            <HeaderNavigation/>
           )
     };
   };
