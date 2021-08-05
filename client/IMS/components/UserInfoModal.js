@@ -13,7 +13,7 @@ const UserInfoModal = props => {
             setModalVisible(!modalVisible);
             props.navigation.navigate({routeName: 'Dashboard'})
             }}
-        >
+        > 
             <View style={styles.centeredView}>
                 <View style={styles.modalView}>
                     <Text style={styles.modalText}>User Information</Text>
