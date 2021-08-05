@@ -11,10 +11,6 @@ import MakePurchase from '../screens/MakePurchase';
 import AddEmployee from '../screens/addEmployee';
 
 
-const defaultStackNavOptions = {
-    mode: 'modal'
-}
-
 const dash = createStackNavigator({
   Dashboard: {
     screen: AdminDashboard
