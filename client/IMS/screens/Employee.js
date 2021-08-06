@@ -5,7 +5,7 @@ import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { FontAwesome } from '@expo/vector-icons';
 import { DataTable } from 'react-native-paper';
 import Modal from 'react-native-modal';
-import AddEmployee from './addEmployee';
+import {Picker} from '@react-native-picker/picker';
 
 const optionsPerPage = [2, 3, 4];
 
@@ -14,9 +14,9 @@ const Employee = props => {
   const [page, setPage] = React.useState(0);
   const [itemsPerPage, setItemsPerPage] = React.useState(optionsPerPage[0]);
   const [isModalVisible, setModalVisible] = React.useState(false);
-  const [selectedOccupation, setSelectedOccupation] = useState(``);
-  const [userName, setUserName] = useState(``)
-  const [password, setPassword] = useState(``)
+  const [selectedOccupation, setSelectedOccupation] = React.useState(``);
+  const [userName, setUserName] = React.useState(``)
+  const [password, setPassword] = React.useState(``)
 
 
   const onChangePassword = (pass) => { // setting password on change
@@ -30,7 +30,7 @@ const Employee = props => {
       //console.log(userName)
   }
 
-  const add = () => { //when add button is clicked
+  const addEmployee = () => { //when add button is clicked
       console.log(password)
       console.log(userName)
       console.log(selectedOccupation)
@@ -61,31 +61,62 @@ const Employee = props => {
             <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
                 <View style={styles.modalStyle}>
                   <View style = {{justifyContent: 'center', alignItems : 'center', }}>
-                      <Text style = {styles.modalTitle}>Make a Sale</Text>
+                    <View style = {{top:30, justifyContent: 'center', alignContent: 'center', alignItems: 'center'}}>
                       <View>
-                        <TextInput style={styles.input} placeholder="Product" autoCorrect={false} />
-                        <TextInput style={styles.input} placeholder="Quantity" autoCorrect={false} />
-                        <TextInput style={styles.input} placeholder="Amount" autoCorrect={false} />
-                        <TextInput style={styles.input} placeholder="Client" autoCorrect={false} />
+                        <FontAwesome
+                            name = {"user"}
+                            size = {Dimensions.get('window').height > 900 ? 160: 100}
+                            color = {'#006270'}
+                            style = {{}}
+                        />
                       </View>
-                      <View style = {{flexDirection: 'row', justifyContent: 'space-evenly', alignItems : 'center'}}>
-                        <TouchableOpacity onPress = {() => {setModalVisible(false)}}>
-                          <View style={styles.buttonModalContainerCross}>
-                            <View>
-                              
-                                <Text style={styles.buttonModalText}>Cancel</Text>
+                      <View>
+                        <Text style = {styles.title}>Add Employee</Text>
+                      </View>
+                    </View>
+                    <View>
+                      <TextInput onChangeText={onChangeUserName} style={styles.input} placeholder="Username" autoCorrect={false} />
+                      <TextInput onChangeText={onChangePassword} style={styles.input} placeholder="Password" secureTextEntry={true} autoCorrect={false} />
+                    </View>
+
+
+                    <View>
+                      <View style={{ borderWidth: 2, borderRadius: 40,borderColor: "#008394",width: Dimensions.get('window').width * 0.65, top: 60, height: 40 }}>
+                        <Picker
+                            // style = {{width: 200, height: 100, top: 28}}
+                            style = {{top: 6, color: 'grey', fontSize: 8}}
+                            selectedValue={selectedOccupation}
+                            onValueChange={(itemValue, itemIndex) =>
+                                setSelectedOccupation(itemValue)
+                            }>
+                            <Picker.Item label="Manager" value="Manager" fontSize = {8}/>
+                            <Picker.Item label="Receptionist" value="Receptionist" />
+                        </Picker>
+                      </View>
+                    </View>
+
+
+
+                    <View style = {{flexDirection: 'row', justifyContent: 'space-evenly', alignItems : 'center', top: 20}}>
+                      <TouchableOpacity onPress = {() => {setModalVisible(false)}}>
+                        <View style={styles.buttonModalContainerCross}>
+                          <View>
                             
-                            </View>
-                            
+                              <Text style={styles.buttonModalText}>Cancel</Text>
+                          
                           </View>
-                        </TouchableOpacity>  
+                          
+                        </View>
+                      </TouchableOpacity> 
+                      <TouchableOpacity onPress={() => { addEmployee() }}>
                         <View style={styles.buttonModalContainer}>
                           <View>
                             <Text style={styles.buttonModalText}>Done</Text>
                           </View>
                           
                         </View>
-                      </View>
+                      </TouchableOpacity>
+                    </View>
                   </View>
                 </View>
             </View>
@@ -191,7 +222,7 @@ const styles = StyleSheet.create({
   modalStyle: {
     backgroundColor: "#fff",
     width: Dimensions.get('window').height > 900 ? 600 : 320,
-    height: Dimensions.get('window').height > 900 ? 450: 420,
+    height: Dimensions.get('window').height > 900 ? 560: 460,
     borderWidth: 2,
     borderRadius: 20,
     marginBottom: 20,
