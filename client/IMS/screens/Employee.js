@@ -5,25 +5,45 @@ import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { FontAwesome } from '@expo/vector-icons';
 import { DataTable } from 'react-native-paper';
 import Modal from 'react-native-modal';
-import { Icon } from 'react-native-elements'
-
+import AddEmployee from './addEmployee';
 
 const optionsPerPage = [2, 3, 4];
 
-const MakeSale = props => {
+const Employee = props => {
 
   const [page, setPage] = React.useState(0);
   const [itemsPerPage, setItemsPerPage] = React.useState(optionsPerPage[0]);
-
   const [isModalVisible, setModalVisible] = React.useState(false);
+  const [selectedOccupation, setSelectedOccupation] = useState(``);
+  const [userName, setUserName] = useState(``)
+  const [password, setPassword] = useState(``)
 
-  const toggleModal = () => {
+
+  const onChangePassword = (pass) => { // setting password on change
+      setPassword(pass)
+      //console.log(pass)
+  }
+
+
+  const onChangeUserName = (userName) => { //setting username on change
+      setUserName(userName)
+      //console.log(userName)
+  }
+
+  const add = () => { //when add button is clicked
+      console.log(password)
+      console.log(userName)
+      console.log(selectedOccupation)
+  }
+
+
+  const toggleModal = () => { //to switch modal on
     setModalVisible(!isModalVisible);
   };
 
 
 
-  React.useEffect(() => {
+  React.useEffect(() => { //table stuff, might be useless
     setPage(0);
   }, [itemsPerPage]);
 
@@ -72,42 +92,28 @@ const MakeSale = props => {
         </Modal>
         <View style = {styles.screen}>
           <View>
-            <Text style={styles.title}>Sales</Text>
+            <Text style={styles.title}>Employees</Text>
           </View>
         </View>
         <View style = {styles.containerButton}>
           <TouchableOpacity onPress = {() => {setModalVisible(true)}}>
             <View style={styles.buttonContainer}>
-              <Text style={styles.buttonText}>Make a Sale</Text>
+              <Text style={styles.buttonText}>Add Employee</Text>
             </View>
           </TouchableOpacity>
-          <View style = {styles.searchBar}>
-            <TextInput style={styles.buttonInput} placeholder="type here..." autoCorrect={false} />
-            <View style = {styles.searchButton}>
-              <FontAwesome
-                name = {"search"}
-                size = {16}
-                color = {"#006270"}
-                style = {{right: 10, top: 2}}
-              />
-              <Text style = {styles.searchButtonText}>Search</Text>
-            </View>
-          </View>
         </View>
         <View>
           <DataTable style = {{top: 30}}>
             <DataTable.Header>
-              <DataTable.Title >Product</DataTable.Title>
-              <DataTable.Title>Quantity</DataTable.Title>
-              <DataTable.Title>Amount</DataTable.Title>
-              <DataTable.Title>Client</DataTable.Title>
+              <DataTable.Title >Email</DataTable.Title>
+              <DataTable.Title>Name</DataTable.Title>
+              <DataTable.Title>Occupation</DataTable.Title>
             </DataTable.Header>
 
             <DataTable.Row>
               <DataTable.Cell>yogurt</DataTable.Cell>
               <DataTable.Cell>159</DataTable.Cell>
               <DataTable.Cell>6.0</DataTable.Cell>
-              <DataTable.Cell>Raaking</DataTable.Cell>
             </DataTable.Row>
             <DataTable.Pagination
               page={page}
@@ -131,7 +137,7 @@ const MakeSale = props => {
 }
 
 
-MakeSale.navigationOptions = navigationData => {
+Employee.navigationOptions = navigationData => {
     return {
         headerTitle: 'Zaki Sons',
         headerTitleAlign: 'center',
@@ -163,7 +169,7 @@ MakeSale.navigationOptions = navigationData => {
     };
   };
 
-export default MakeSale
+export default Employee;
 
 
 const styles = StyleSheet.create({
@@ -269,42 +275,5 @@ const styles = StyleSheet.create({
     height: 40,
     padding: 10,
   },
-  searchBar: {
-    justifyContent: 'center',
-    alignContent: 'center',
-    alignItems: 'center',
-    flexDirection: 'row',
-    bottom: 30,
-    left: Dimensions.get('window').height > 900 ? Dimensions.get('window').width /11:0,
-  },
-  searchButton: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    marginTop: Dimensions.get('window').height > 600 ? 15 : 8,
-    borderRadius: 25,
-    backgroundColor: '#008394',
-    paddingVertical: 12,
-    paddingHorizontal: 30,
-    top: 43,
-    right: 20
-  },
-  searchButtonText: {
-    fontSize:15,
-    textAlign: 'center',
-    color:'white',
-    fontWeight: 'bold',
-  },
-  buttonInput: {
-    width: Dimensions.get('window').width * 0.65,
-    borderColor: 'gray',
-    borderWidth: 2,
-    borderRadius: 40,
-    marginBottom:20,
-    fontSize: 12,
-    borderColor: "#008394",
-    top: 60,
-    height: 44,
-    padding: 15,
-    left: 30,
-  }
+
 })
