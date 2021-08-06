@@ -1,19 +1,27 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Modal, StyleSheet, Text, View, TouchableOpacity, Dimensions } from "react-native";
 
 const UserInfoModal = props => {
-  const [modalVisible, setModalVisible] = useState(props.state);
-  console.log(props.state)
+  const [modalVisible, setModalVisible] = useState(false);
+  //console.log('hete')
+  useEffect(() => {
+    setModalVisible(props.state);
+  }, [props.state]);
+
+  function handleClose() {
+    setModalVisible(false);
+  }
   return (
     
     <View style={styles.centeredView}>
         <Modal
             animationType="slide"
             transparent={true}
+            swipeDirection="left"
             visible={modalVisible}
-            onSwipeComplete={() => setModalVisible(!modalVisible)}
+            onSwipeComplete={() => props.handleClose()}
             onRequestClose={() => {
-            setModalVisible(!modalVisible);
+            props.handleClose();
             }}
         > 
             <View style={styles.centeredView}>
@@ -25,12 +33,12 @@ const UserInfoModal = props => {
                         <Text style={styles.bodyText}>Status: Admin</Text>
                     </View>
                     <View style={{flexDirection: 'row', justifyContent: 'space-evenly', alignItems : 'center'}}>
-                        <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
+                        <TouchableOpacity onPress={() => props.handleClose()}>
                             <View style={styles.buttonModalContainer}>
                                 <Text style={styles.buttonModalText}>Back</Text>
                             </View>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={() => setModalVisible(!modalVisible)}>
+                        <TouchableOpacity onPress={() => props.handleClose()}>
                             <View style={styles.backButtonModalContainer}>
                                 <Text style={styles.buttonModalText}>Logout</Text>
                             </View>
