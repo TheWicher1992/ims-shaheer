@@ -5,6 +5,7 @@ import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { FontAwesome } from '@expo/vector-icons';
 import { DataTable } from 'react-native-paper';
 import Modal from 'react-native-modal';
+import PickerCheckBox from 'react-native-picker-checkbox';
 import { Icon } from 'react-native-elements'
 
 
@@ -12,20 +13,92 @@ const optionsPerPage = [2, 3, 4];
 
 const MakeSale = props => {
 
-  const [page, setPage] = React.useState(0);
-  const [itemsPerPage, setItemsPerPage] = React.useState(optionsPerPage[0]);
 
-  const [isModalVisible, setModalVisible] = React.useState(false);
+  const handleConfirm = (pItems) => { // temporary for picker
+    console.log('pItems =>', pItems);
+  }
+ 
+  const items = [ //temporary for picker for filter
+    {
+      itemKey:1,
+      itemDescription:'Item 1'
+      },
+    {
+      itemKey:2,
+      itemDescription:'Item 2'
+      },
+    {
+      itemKey:3,
+      itemDescription:'Item 3'
+      }
+  ];
 
-  const toggleModal = () => {
+  const [page, setPage] = React.useState(0); //for pages of table
+  const [itemsPerPage, setItemsPerPage] = React.useState(optionsPerPage[0]); //for items per page on table
+
+  const [isModalVisible, setModalVisible] = React.useState(false); //to set modal on and off
+
+  const toggleModal = () => { //to toggle model on and off -- function
     setModalVisible(!isModalVisible);
   };
 
 
 
-  React.useEffect(() => {
+  React.useEffect(() => { //for table
     setPage(0);
   }, [itemsPerPage]);
+
+
+  const [search, setSearch] = React.useState(``) //for keeping track of search
+  const onChangeSearch = (searchVal) => { //function to keep track of search as the user types
+    setSearch(searchVal);
+    console.log(search);
+  }
+
+  const searchFunc = () => {
+    console.log(search); //printing search value for now
+  }
+
+  
+  // make a sale variables below:
+  const [productName, setProductName] = React.useState(``)
+  const [quantityVal, setQuantityVal] = React.useState(0)
+  const [amountVal, setAmountVal] = React.useState(0)
+  const [clientName, setClientName] = React.useState(``)
+  const [notes, setNotes] = React.useState(``)
+
+
+  const onChangeProductName = (prodName) => {
+    setProductName(prodName);
+  }
+
+  const onChangeQuantity = (quant) => {
+    setQuantityVal(quant);
+  }
+
+  const onChangeAmount = (amount) => {
+    setAmountVal(amount);
+  }
+
+  const onChangeClientName = (clName) => {
+    setClientName(clName);
+  }
+
+  const onChangeNotes = (noteVal) => {
+    setNotes(noteVal);
+  }
+
+  const addSale = () => {
+    console.log(productName);
+    console.log(quantityVal);
+    console.log(amountVal);
+    console.log(clientName);
+    console.log(notes);
+  }
+  
+
+
+
 
 
     return(
@@ -43,28 +116,32 @@ const MakeSale = props => {
                   <View style = {{justifyContent: 'center', alignItems : 'center', }}>
                       <Text style = {styles.modalTitle}>Make a Sale</Text>
                       <View>
-                        <TextInput style={styles.input} placeholder="Product" autoCorrect={false} />
-                        <TextInput style={styles.input} placeholder="Quantity" autoCorrect={false} />
-                        <TextInput style={styles.input} placeholder="Amount" autoCorrect={false} />
-                        <TextInput style={styles.input} placeholder="Client" autoCorrect={false} />
+                        <TextInput onChangeText={onChangeProductName} style={styles.input} placeholder="Product" autoCorrect={false} />
+                        <TextInput onChangeText={onChangeQuantity} style={styles.input} placeholder="Quantity" autoCorrect={false} />
+                        <TextInput onChangeText={onChangeAmount} style={styles.input} placeholder="Amount" autoCorrect={false} />
+                        <TextInput onChangeText={onChangeClientName} style={styles.input} placeholder="Client" autoCorrect={false} />
+                        <TextInput onChangeText={onChangeNotes} style={styles.input} placeholder="Notes" autoCorrect={false} />
                       </View>
                       <View style = {{flexDirection: 'row', justifyContent: 'space-evenly', alignItems : 'center'}}>
                         <TouchableOpacity onPress = {() => {setModalVisible(false)}}>
                           <View style={styles.buttonModalContainerCross}>
+                          
                             <View>
                               
                                 <Text style={styles.buttonModalText}>Cancel</Text>
                             
                             </View>
+                          
+                          </View>
+                        </TouchableOpacity>   
+                        <TouchableOpacity onPress = {() => {addSale()}}>
+                          <View style={styles.buttonModalContainer}>
+                            <View>
+                              <Text style={styles.buttonModalText}>Done</Text>
+                            </View>
                             
                           </View>
-                        </TouchableOpacity>  
-                        <View style={styles.buttonModalContainer}>
-                          <View>
-                            <Text style={styles.buttonModalText}>Done</Text>
-                          </View>
-                          
-                        </View>
+                        </TouchableOpacity>
                       </View>
                   </View>
                 </View>
@@ -82,17 +159,64 @@ const MakeSale = props => {
             </View>
           </TouchableOpacity>
           <View style = {styles.searchBar}>
-            <TextInput style={styles.buttonInput} placeholder="type here..." autoCorrect={false} />
-            <View style = {styles.searchButton}>
-              <FontAwesome
-                name = {"search"}
-                size = {16}
-                color = {"#006270"}
-                style = {{right: 10, top: 2}}
-              />
-              <Text style = {styles.searchButtonText}>Search</Text>
-            </View>
+            <TextInput onChangeText={onChangeSearch}  style={styles.buttonInput} placeholder="type here..." autoCorrect={false} />
+            {/* <View style = {{justifyContent: 'space-between',flexDirection: 'row'}}> */}
+              <TouchableOpacity  onPress = {() => { searchFunc() }}>
+                <View style = {styles.searchButton}>
+                  <FontAwesome
+                    name = {"search"}
+                    size = {16}
+                    color = {"#006270"}
+                    style = {{right: 10, top: 2}}
+                  />
+                  <Text style = {styles.searchButtonText}>Search</Text>
+                </View>
+              </TouchableOpacity>
+            {/* </View>  */}
           </View>
+        </View>
+        <View style = {{flexDirection: 'row', top: 35, justifyContent: 'space-around',alignItems: 'stretch'}}>
+          <PickerCheckBox
+            data={items}
+            headerComponent={<Text style={{fontSize:25}} >Items</Text>}
+            OnConfirm={(pItems) => {handleConfirm(pItems)}}
+            ConfirmButtonTitle='OK'
+            DescriptionField='itemDescription' 
+            KeyField='itemKey'
+            placeholder='Quantity'
+            arrowColor='#006270'
+            arrowSize={20}
+            placeholderSelectedItems ='$count selected item(s)'
+            containerStyle = {styles.filterInput}
+          />
+          <PickerCheckBox
+            data={items}
+            headerComponent={<Text style={{fontSize:25}} >Items</Text>}
+            OnConfirm={(pItems) => {handleConfirm(pItems)}}
+            ConfirmButtonTitle='OK'
+            DescriptionField='itemDescription' 
+            KeyField='itemKey'
+            placeholder='Amount'
+            arrowColor='#006270'
+            arrowSize={20}
+            placeholderSelectedItems ='$count selected item(s)'
+            containerStyle = {styles.filterInput}
+          />
+        </View>
+        <View style = {{flexDirection: 'row', top: 35, justifyContent: 'space-around',alignItems: 'stretch'}}>
+          <PickerCheckBox
+            data={items}
+            headerComponent={<Text style={{fontSize:25}} >Items</Text>}
+            OnConfirm={(pItems) => {handleConfirm(pItems)}}
+            ConfirmButtonTitle='OK'
+            DescriptionField='itemDescription' 
+            KeyField='itemKey'
+            placeholder='Time'
+            arrowColor='#006270'
+            arrowSize={20}
+            placeholderSelectedItems ='$count selected item(s)'
+            containerStyle = {styles.filterInput}
+          />          
         </View>
         <View>
           <DataTable style = {{top: 30}}>
@@ -185,7 +309,7 @@ const styles = StyleSheet.create({
   modalStyle: {
     backgroundColor: "#fff",
     width: Dimensions.get('window').height > 900 ? 600 : 320,
-    height: Dimensions.get('window').height > 900 ? 450: 420,
+    height: Dimensions.get('window').height > 900 ? 540: 480,
     borderWidth: 2,
     borderRadius: 20,
     marginBottom: 20,
@@ -224,7 +348,8 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     paddingHorizontal: 24,
     top: 45,
-    margin: 20
+    margin: 20,
+    display: 'flex'
   },
   buttonModalContainerCross : {
     justifyContent: 'center',
@@ -235,7 +360,8 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     paddingHorizontal: 24,
     top: 45,
-    margin: 20
+    margin: 20,
+    display: 'flex'
   },
   buttonModalText :{
     color: '#ffffff',
@@ -269,6 +395,16 @@ const styles = StyleSheet.create({
     height: 40,
     padding: 10,
   },
+  filterInput: {
+    width: Dimensions.get('window').width * 0.35,
+    height: 1000,
+    borderColor: 'gray',
+    borderWidth: 2,
+    borderRadius: 4,
+    marginBottom:20,
+    fontSize: 12,
+    borderColor: "#008394",
+  },
   searchBar: {
     justifyContent: 'center',
     alignContent: 'center',
@@ -300,11 +436,12 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderRadius: 40,
     marginBottom:20,
-    fontSize: 12,
+    fontSize: 14,
     borderColor: "#008394",
     top: 60,
     height: 44,
     padding: 15,
     left: 30,
+    paddingBottom: 13,
   }
 })
