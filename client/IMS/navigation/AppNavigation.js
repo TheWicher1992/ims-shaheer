@@ -9,7 +9,6 @@ import EmployeeLogin from '../screens/EmployeeLogin';
 import MakeSale from '../screens/MakeSale';
 import MakePurchase from '../screens/MakePurchase';
 import Employee from '../screens/Employee';
-import AddEmployee from '../screens/addEmployee';
 
 
 const dash = createStackNavigator({

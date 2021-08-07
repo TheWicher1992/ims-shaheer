@@ -1,11 +1,12 @@
 import * as React from 'react';
-import { StyleSheet, Text, View, Button, Dimensions, TextInput, TouchableOpacity, KeyboardAvoidingView, useWindowDimensions } from 'react-native'; 
+import { StyleSheet, Text, View, Button, Dimensions, TextInput, TouchableOpacity, KeyboardAvoidingView, ScrollView} from 'react-native'; 
 import HeaderButton from '../components/HeaderButton';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { FontAwesome } from '@expo/vector-icons';
 import { DataTable } from 'react-native-paper';
 import Modal from 'react-native-modal';
 import PickerCheckBox from 'react-native-picker-checkbox';
+import TableDetailModal from '../components/TableDetailModal';
 import { Icon } from 'react-native-elements'
 
 
@@ -97,12 +98,18 @@ const MakeSale = props => {
   }
   
 
+  const [isTableDetailModalVisible, setTableDetailModalVisible] = React.useState(false);
+
+  const handleClose = ()=>{
+    setTableDetailModalVisible(false)
+  }
 
 
 
 
     return(
       // <KeyboardAvoidingView style = {styles.containerView} behavior = "padding">
+      
       <View>
         <Modal
             onSwipeComplete={() => setModalVisible(false)}
@@ -147,6 +154,7 @@ const MakeSale = props => {
                 </View>
             </View>
         </Modal>
+        <TableDetailModal state={isTableDetailModalVisible} handleClose={handleClose} title='Employee Information' name='Raahem Asghar' email='raahemasghar97@gmail.com' occupation="Employee" />
         <View style = {styles.screen}>
           <View>
             <Text style={styles.title}>Sales</Text>
@@ -218,21 +226,24 @@ const MakeSale = props => {
             containerStyle = {styles.filterInput}
           />          
         </View>
-        <View>
+        <ScrollView>
+        
           <DataTable style = {{top: 30}}>
             <DataTable.Header>
-              <DataTable.Title >Product</DataTable.Title>
-              <DataTable.Title>Quantity</DataTable.Title>
-              <DataTable.Title>Amount</DataTable.Title>
-              <DataTable.Title>Client</DataTable.Title>
+              <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Product</Text></DataTable.Title>
+              <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Quantity</Text></DataTable.Title>
+              <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Amount</Text></DataTable.Title>
+              <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Client</Text></DataTable.Title>
             </DataTable.Header>
 
-            <DataTable.Row>
-              <DataTable.Cell>yogurt</DataTable.Cell>
-              <DataTable.Cell>159</DataTable.Cell>
-              <DataTable.Cell>6.0</DataTable.Cell>
-              <DataTable.Cell>Raaking</DataTable.Cell>
-            </DataTable.Row>
+            <TouchableOpacity onPress={() => setTableDetailModalVisible(true)}>
+              <DataTable.Row>
+                <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>ABC34013-133</Text></DataTable.Cell>
+                <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>59</Text></DataTable.Cell>
+                <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>69000</Text></DataTable.Cell>
+                <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>Ahmed Ateeq</Text></DataTable.Cell>
+              </DataTable.Row>
+            </TouchableOpacity>
             <DataTable.Pagination
               page={page}
               numberOfPages={3}
@@ -246,7 +257,7 @@ const MakeSale = props => {
             />
           </DataTable>
 
-        </View>
+        </ScrollView>
       </View>        
       // </KeyboardAvoidingView>
         
@@ -325,7 +336,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: Dimensions.get('window').height * 0.015
   },
   buttonContainer: {
     flexDirection: 'row',
@@ -443,5 +453,17 @@ const styles = StyleSheet.create({
     padding: 15,
     left: 30,
     paddingBottom: 13,
+  },
+  cells: {
+    justifyContent:'center', 
+    flexDirection: 'row',
+    flex: 1
+  },
+  tableText: {
+    fontSize: Dimensions.get('window').height > 900 ? 18 : 14,
+  },
+  tableTitleText: {
+    fontSize: Dimensions.get('window').height > 900 ? 18 : 14,
+    fontWeight: 'bold'
   }
 })
