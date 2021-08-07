@@ -6,6 +6,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import { DataTable } from 'react-native-paper';
 import Modal from 'react-native-modal';
 import {Picker} from '@react-native-picker/picker';
+import TableDetailModal from '../components/TableDetailModal'
 
 const optionsPerPage = [2, 3, 4];
 
@@ -14,6 +15,7 @@ const Employee = props => {
   const [page, setPage] = React.useState(0);
   const [itemsPerPage, setItemsPerPage] = React.useState(optionsPerPage[0]);
   const [isModalVisible, setModalVisible] = React.useState(false);
+  const [isTableDetailModalVisible, setTableDetailModalVisible] = React.useState(false);
   const [selectedOccupation, setSelectedOccupation] = React.useState(``);
   const [userName, setUserName] = React.useState(``)
   const [password, setPassword] = React.useState(``)
@@ -23,7 +25,9 @@ const Employee = props => {
       setPassword(pass)
       //console.log(pass)
   }
-
+  const handleClose = ()=>{
+    setTableDetailModalVisible(false)
+  }
 
   const onChangeUserName = (userName) => { //setting username on change
       setUserName(userName)
@@ -121,6 +125,7 @@ const Employee = props => {
                 </View>
             </View>
         </Modal>
+        <TableDetailModal state={isTableDetailModalVisible} handleClose={handleClose} title='Employee Information' name='Raahem Asghar' email='raahemasghar97@gmail.com' occupation="Employee" />
         <View style = {styles.screen}>
           <View>
             <Text style={styles.title}>Employees</Text>
@@ -136,16 +141,18 @@ const Employee = props => {
         <View>
           <DataTable style = {{top: 30}}>
             <DataTable.Header>
-              <DataTable.Title >Email</DataTable.Title>
-              <DataTable.Title>Name</DataTable.Title>
-              <DataTable.Title>Occupation</DataTable.Title>
+              <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Email</Text></DataTable.Title>
+              <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Name</Text></DataTable.Title>
+              <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Occupation</Text></DataTable.Title>
             </DataTable.Header>
 
-            <DataTable.Row>
-              <DataTable.Cell>yogurt</DataTable.Cell>
-              <DataTable.Cell>159</DataTable.Cell>
-              <DataTable.Cell>6.0</DataTable.Cell>
-            </DataTable.Row>
+            <TouchableOpacity onPress={() => setTableDetailModalVisible(true)}>
+              <DataTable.Row>
+                <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>raahemasghar97@gmail.com</Text></DataTable.Cell>
+                <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>Raahem Asghar</Text></DataTable.Cell>
+                <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>Employee</Text></DataTable.Cell>
+              </DataTable.Row>
+            </TouchableOpacity>
             <DataTable.Pagination
               page={page}
               numberOfPages={3}
@@ -306,5 +313,17 @@ const styles = StyleSheet.create({
     height: 40,
     padding: 10,
   },
+  cells: {
+    justifyContent:'center', 
+    flexDirection: 'row',
+    flex: 1
+  },
+  tableText: {
+    fontSize: Dimensions.get('window').height > 900 ? 18 : 14,
+  },
+  tableTitleText: {
+    fontSize: Dimensions.get('window').height > 900 ? 18 : 14,
+    fontWeight: 'bold'
+  }
 
 })
