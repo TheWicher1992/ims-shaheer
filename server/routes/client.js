@@ -73,4 +73,43 @@ router.post('/', async (req, res) => {
         }
     })
 
+    router.put('/:id', async (req, res) => {
+        try {
+            var {
+                userName,
+                balance,
+                phone,
+            } = req.body
+            console.log(userName, balance,phone)
+            const id = req.params.id
+    
+    
+            let client = await Client.findOne({
+                _id : id
+            })
+            console.log(client)
+            if(!client){
+                return res.status(400).json({
+                    error: 'CLIENT_DOES_NOT_EXIST'
+                })
+            }
+
+            client.userName= userName
+            client.balance = balance
+            client.phone = phone
+    
+            await client.save()
+            console.log(client)
+            return res.status(200).json({
+                client
+            })
+        }
+        catch (err) {
+            console.log(err)
+            return res.status(400).json({
+                error: 'SERVER_ERROR'
+            })
+        }
+        })
+
     module.exports = router
