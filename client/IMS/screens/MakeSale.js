@@ -117,7 +117,6 @@ const MakeSale = props => {
             presentationStyle="overFullScreen"
             transparent
             visible={isModalVisible}>
-
             <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
                 <View style={styles.modalStyle}>
                   <View style = {{justifyContent: 'center', alignItems : 'center', }}>
@@ -132,13 +131,7 @@ const MakeSale = props => {
                       <View style = {{flexDirection: 'row', justifyContent: 'space-evenly', alignItems : 'center'}}>
                         <TouchableOpacity onPress = {() => {setModalVisible(false)}}>
                           <View style={styles.buttonModalContainerCross}>
-                          
-                            <View>
-                              
-                                <Text style={styles.buttonModalText}>Cancel</Text>
-                            
-                            </View>
-                          
+                            <Text style={styles.buttonModalText}>Cancel</Text>
                           </View>
                         </TouchableOpacity>   
                         <TouchableOpacity onPress = {() => {addSale()}}>
@@ -168,19 +161,21 @@ const MakeSale = props => {
           </TouchableOpacity>
           <View style = {styles.searchBar}>
             <TextInput onChangeText={onChangeSearch}  style={styles.buttonInput} placeholder="type here..." autoCorrect={false} />
-            {/* <View style = {{justifyContent: 'space-between',flexDirection: 'row'}}> */}
-              <TouchableOpacity  onPress = {() => { searchFunc() }}>
-                <View style = {styles.searchButton}>
+            
+              <View style = {styles.searchButton}>
+                
                   <FontAwesome
                     name = {"search"}
                     size = {16}
                     color = {"#006270"}
                     style = {{right: 10, top: 2}}
                   />
+                  <TouchableOpacity onPress = {() => { searchFunc() }}>
                   <Text style = {styles.searchButtonText}>Search</Text>
-                </View>
-              </TouchableOpacity>
-            {/* </View>  */}
+                  </TouchableOpacity>
+                
+              </View>
+              
           </View>
         </View>
         <View style = {{flexDirection: 'row', top: 35, justifyContent: 'space-around',alignItems: 'stretch'}}>
@@ -285,16 +280,6 @@ MakeSale.navigationOptions = navigationData => {
               />
             </HeaderButtons>
         ),
-        headerRight: (
-          <HeaderButtons HeaderButtonComponent = {HeaderButton}>
-            <FontAwesome
-              name = {"user"}
-              size = {24}
-              color = {"white"}
-              style = {{right: 10}}
-            />
-          </HeaderButtons>
-        )
     };
   };
 
@@ -339,7 +324,6 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
     marginTop: Dimensions.get('window').height > 900 ? 80 : 60,
     borderRadius: 40,
     backgroundColor: '#00E0C7',
@@ -425,14 +409,13 @@ const styles = StyleSheet.create({
   },
   searchButton: {
     flexDirection: 'row',
-    justifyContent: 'space-around',
     marginTop: Dimensions.get('window').height > 600 ? 15 : 8,
     borderRadius: 25,
     backgroundColor: '#008394',
     paddingVertical: 12,
     paddingHorizontal: 30,
     top: 43,
-    right: 20
+    right: 20,
   },
   searchButtonText: {
     fontSize:15,
@@ -465,5 +448,32 @@ const styles = StyleSheet.create({
   tableTitleText: {
     fontSize: Dimensions.get('window').height > 900 ? 18 : 14,
     fontWeight: 'bold'
-  }
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22
+  },
+  modalBody:{
+    paddingVertical:Dimensions.get('window').height < 900 ? Dimensions.get('window').height * 0.11 : Dimensions.get('window').height * 0.1,
+    paddingHorizontal:10
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+    width: Dimensions.get('window').height > 900 ? Dimensions.get('window').width * 0.7 : Dimensions.get('window').width * 0.80,
+    height: Dimensions.get('window').height > 900 ? Dimensions.get('window').height* 0.5 : Dimensions.get('window').height * 0.60
+  },
 })

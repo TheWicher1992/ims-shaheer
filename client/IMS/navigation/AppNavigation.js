@@ -88,12 +88,6 @@ const Drawer = createDrawerNavigator({
       drawerLabel: 'Clients',
     })
   },
-  Cheques: {
-    screen: MakeSale,
-    navigationOptions: ({ navigation }) => ({ 
-      drawerLabel: 'Cheques',
-    })
-  },
   Employee: {
     screen: Employee,
     navigationOptions: ({ navigation }) => ({
@@ -117,8 +111,13 @@ const Drawer = createDrawerNavigator({
         paddingVertical: Dimensions.get('window').height < 900 ? 95 : 120, 
       },
       labelStyle: {
-        color: 'white',   
-      }
+        color: 'white',
+        fontSize: Dimensions.get('window').height > 900 ? 20: 15,
+        marginTop: Dimensions.get('window').height > 900 ? "16%": "8%",
+      },
+      
+
+
     },
     drawerBackgroundColor: '#008394',
 
