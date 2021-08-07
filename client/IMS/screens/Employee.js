@@ -7,6 +7,7 @@ import { DataTable } from 'react-native-paper';
 import Modal from 'react-native-modal';
 import {Picker} from '@react-native-picker/picker';
 import TableDetailModal from '../components/TableDetailModal'
+import UpdateModal from '../components/UpdateModal'
 
 const optionsPerPage = [2, 3, 4];
 
@@ -28,6 +29,8 @@ const Employee = props => {
   const handleClose = ()=>{
     setTableDetailModalVisible(false)
   }
+
+  
 
   const onChangeUserName = (userName) => { //setting username on change
       setUserName(userName)

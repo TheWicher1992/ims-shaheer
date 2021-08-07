@@ -1,17 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Modal, StyleSheet, Text, View, TouchableOpacity, Dimensions } from "react-native";
-import UpdateModal from "./UpdateModal";
-const TableDetailModal = props => {
+import { Modal, StyleSheet, Text, View, TouchableOpacity, Dimensions, TextInput } from "react-native";
+
+const UpdateModal = props => {
   const [modalVisible, setModalVisible] = useState(false);
-  const [isUpdateModalVisible, setUpdateModalVisible] = React.useState(false);
   //console.log('hete')
   useEffect(() => {
     setModalVisible(props.state);
   }, [props.state]);
-
-  const handleCloseUpdate = ()=>{
-    setUpdateModalVisible(false)
-  }
 
   function handleClose() {
     setModalVisible(false);
@@ -19,7 +14,6 @@ const TableDetailModal = props => {
   return (
     
     <View style={styles.centeredView}>
-        <UpdateModal state={isUpdateModalVisible} handleClose={handleCloseUpdate} title='Update Information' name='Raahem Asghar' email='raahemasghar97@gmail.com' occupation="Employee" />
         <Modal
             animationType="slide"
             transparent={true}
@@ -34,9 +28,9 @@ const TableDetailModal = props => {
                 <View style={styles.modalView}>
                     <Text style={styles.modalTitle}>{props.title}</Text>
                     <View style={styles.modalBody}>
-                        <Text style={styles.bodyText}>Name: {props.name}</Text>
-                        <Text style={styles.bodyText}>Email: {props.email}</Text>
-                        <Text style={styles.bodyText}>Occupation: {props.occupation}</Text>
+                        <TextInput placeholder="Username" style={styles.input}/>
+                        <TextInput placeholder="Email" style={styles.input}/>
+                        <TextInput placeholder="Status" style={styles.input}/>
                     </View>
                     <View style={{flexDirection: 'row', justifyContent: 'space-evenly', alignItems : 'center'}}>
                         <TouchableOpacity onPress={() => props.handleClose()}>
@@ -44,16 +38,12 @@ const TableDetailModal = props => {
                                 <Text style={styles.buttonModalText}>Back</Text>
                             </View>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress = {() => {setUpdateModalVisible(true)}}>
-                            <View style={styles.backButtonModalContainer}>
-                                <Text style={styles.buttonModalText}>Update</Text>
-                            </View>
-                        </TouchableOpacity>
                         <TouchableOpacity onPress={() => props.handleClose()}>
-                            <View style={styles.deleteButtonModalContainer}>
-                                <Text style={styles.buttonModalText}>Delete</Text>
+                            <View style={styles.backButtonModalContainer}>
+                                <Text style={styles.buttonModalText}>Done</Text>
                             </View>
                         </TouchableOpacity>
+                        
                     </View>
                 </View>
                 
@@ -87,7 +77,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#00E0C7',
     paddingVertical: 8,
     paddingHorizontal: 24,
-    top: Dimensions.get('window').height > 900 ? 35 : 15,
+    top: Dimensions.get('window').height > 900 ? 35 : null,
     margin: 20,
     display: 'flex',
 
@@ -100,7 +90,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#008394',
     paddingVertical: 8,
     paddingHorizontal: 24,
-    top: Dimensions.get('window').height > 900 ? 35 : 15,
+    top: Dimensions.get('window').height > 900 ? 35 : null,
     margin: 20,
     display: 'flex',
     
@@ -151,7 +141,20 @@ const styles = StyleSheet.create({
     width: Dimensions.get('window').height > 900 ? Dimensions.get('window').width * 0.7 : Dimensions.get('window').width * 0.80,
     height: Dimensions.get('window').height > 900 ? Dimensions.get('window').height* 0.5 : Dimensions.get('window').height * 0.60
   },
+
+  input: {
+    height: 40,
+    width: Dimensions.get('window').width * 0.65,
+    borderColor: 'gray',
+    borderWidth: 2,
+    borderRadius: 20,
+    marginBottom: 5,
+    fontSize: 12,
+    borderColor: "#008394",
+    padding: 13
+    
+},
   
 });
 
-export default TableDetailModal;
+export default UpdateModal;
