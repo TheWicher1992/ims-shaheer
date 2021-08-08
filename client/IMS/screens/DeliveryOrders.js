@@ -12,7 +12,7 @@ import { Icon } from 'react-native-elements'
 
 const optionsPerPage = [2, 3, 4];
 
-const Warehouse = props => {
+const DeliveryOrders = props => {
 
 
   const handleConfirm = (pItems) => { // temporary for picker
@@ -62,25 +62,39 @@ const Warehouse = props => {
 
   
   // make a sale variables below:
-  const [warehouseName, setWarehouseName] = React.useState(``)
-  const [totalProducts, setTotalProducts] = React.useState(0)
-  const [stock, setStock] = React.useState(0)
+  const [productName, setProductName] = React.useState(``)
+  const [quantityVal, setQuantityVal] = React.useState(0)
+  const [location, setLocation] = React.useState(``)
+  const [clientName, setClientName] = React.useState(``)
+  const [notes, setNotes] = React.useState(``)
 
 
-  const onChangeWarehouseName = (warehousename) => {
-    setWarehouseName(warehousename);
+  const onChangeProductName = (prodName) => {
+    setProductName(prodName);
   }
 
-  const onChangeTotalProducts = (totalproducts) => {
-    setTotalProducts(totalproducts);
+  const onChangeQuantity = (quant) => {
+    setQuantityVal(quant);
   }
 
-  const onChangeStock = (stocks) => {
-    setStock(stocks);
+  const onChangeLocation = (loc) => {
+    setLocation(loc);
+  }
+
+  const onChangeClientName = (clName) => {
+    setClientName(clName);
+  }
+
+  const onChangeNotes = (noteVal) => {
+    setNotes(noteVal);
   }
 
   const addWarehouse = () => {
-    console.log(`add warehouse`)
+    console.log(productName);
+    console.log(quantityVal);
+    console.log(amountVal);
+    console.log(clientName);
+    console.log(notes);
     setModalVisible(false); //closing modal on done for now
   }
   
@@ -107,11 +121,13 @@ const Warehouse = props => {
             <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
                 <View style={styles.modalStyle}>
                   <View style = {{justifyContent: 'center', alignItems : 'center', }}>
-                      <Text style = {styles.modalTitle}>Add Warehouse</Text>
+                      <Text style = {styles.modalTitle}>Add Delivery Order</Text>
                       <View>
-                        <TextInput onChangeText={onChangeWarehouseName} style={styles.input} placeholder="Name" autoCorrect={false} />
-                        <TextInput onChangeText={onChangeTotalProducts} style={styles.input} placeholder="Total Products" autoCorrect={false} />
-                        <TextInput onChangeText={onChangeStock} style={styles.input} placeholder="Stock" autoCorrect={false} />
+                        <TextInput onChangeText={onChangeProductName} style={styles.input} placeholder="Client" autoCorrect={false} />
+                        <TextInput onChangeText={onChangeQuantity} style={styles.input} placeholder="Product" autoCorrect={false} />
+                        <TextInput onChangeText={onChangeLocation} style={styles.input} placeholder="Quantity" autoCorrect={false} />
+                        <TextInput onChangeText={onChangeClientName} style={styles.input} placeholder="Location" autoCorrect={false} />
+                        <TextInput onChangeText={onChangeNotes} style={styles.input} placeholder="Notes" autoCorrect={false} />
                       </View>
                       <View style = {{flexDirection: 'row',  alignItems : 'center', top: 45}}>
                         <TouchableOpacity style={{alignSelf: 'flex-start'}} onPress = {() => {setModalVisible(false)}}>
@@ -140,13 +156,13 @@ const Warehouse = props => {
         <TableDetailModal state={isTableDetailModalVisible} handleClose={handleClose} title='Employee Information' name='Raahem Asghar' email='raahemasghar97@gmail.com' occupation="Employee" />
         <View style = {styles.screen}>
           <View>
-            <Text style={styles.title}>Warehouses</Text>
+            <Text style={styles.title}>Delivery Orders</Text>
           </View>
         </View>
         <View style = {styles.containerButton}>
           <TouchableOpacity onPress = {() => {setModalVisible(true)}}>
             <View style={styles.buttonContainer}>
-              <Text style={styles.buttonText}>Add Warehouse</Text>
+              <Text style={styles.buttonText}>Add Delivery Order</Text>
             </View>
           </TouchableOpacity>
           <View style = {{flexDirection: 'row', justifyContent: 'center',}}>
@@ -177,7 +193,7 @@ const Warehouse = props => {
             ConfirmButtonTitle='OK'
             DescriptionField='itemDescription' 
             KeyField='itemKey'
-            placeholder='Stock'
+            placeholder='Quantity'
             arrowColor='#006270'
             arrowSize={20}
             placeholderSelectedItems ='$count selected item(s)'
@@ -190,14 +206,14 @@ const Warehouse = props => {
             ConfirmButtonTitle='OK'
             DescriptionField='itemDescription' 
             KeyField='itemKey'
-            placeholder='Products'
+            placeholder='Time'
             arrowColor='#006270'
             arrowSize={20}
             placeholderSelectedItems ='$count selected item(s)'
             containerStyle = {styles.filterInput}
           />
         </View>
-        <View style = {{flexDirection: 'row', top: 35, justifyContent: 'space-around',alignItems: 'stretch'}}>
+        {/* <View style = {{flexDirection: 'row', top: 35, justifyContent: 'space-around',alignItems: 'stretch'}}>
           <PickerCheckBox
             data={items}
             headerComponent={<Text style={{fontSize:25}} >Items</Text>}
@@ -211,22 +227,23 @@ const Warehouse = props => {
             placeholderSelectedItems ='$count selected item(s)'
             containerStyle = {styles.filterInput}
           />          
-        </View>
+        </View> */}
         <ScrollView>
         
           <DataTable style = {{top: 30}}>
             <DataTable.Header>
-              <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Name</Text></DataTable.Title>
-              <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Total Products</Text></DataTable.Title>
-              <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Stock</Text></DataTable.Title>
-              
+              <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Client</Text></DataTable.Title>
+              <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Quantity</Text></DataTable.Title>
+              <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Product</Text></DataTable.Title>
+              <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Location</Text></DataTable.Title>
             </DataTable.Header>
 
             <TouchableOpacity onPress={() => setTableDetailModalVisible(true)}>
               <DataTable.Row>
-                <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>ABC34013-133</Text></DataTable.Cell>
+                <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text>Ahmed Ateeq</DataTable.Cell>
                 <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>59</Text></DataTable.Cell>
-                <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>69000</Text></DataTable.Cell>
+                <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>ABC34013-133</Text></DataTable.Cell>
+                <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>Lahore</Text></DataTable.Cell>
               </DataTable.Row>
             </TouchableOpacity>
             <DataTable.Pagination
@@ -251,7 +268,7 @@ const Warehouse = props => {
 }
 
 
-Warehouse.navigationOptions = navigationData => {
+DeliveryOrders.navigationOptions = navigationData => {
     return {
         headerTitle: 'Zaki Sons',
         headerTitleAlign: 'center',
@@ -273,7 +290,7 @@ Warehouse.navigationOptions = navigationData => {
     };
   };
 
-export default Warehouse
+export default DeliveryOrders
 
 
 const styles = StyleSheet.create({
@@ -295,7 +312,7 @@ const styles = StyleSheet.create({
   modalStyle: {
     backgroundColor: "#fff",
     width: Dimensions.get('window').height > 900 ? 600 : 320,
-    height: Dimensions.get('window').height > 900 ? "35%": "60%",
+    height: Dimensions.get('window').height > 900 ? 540: 480,
     borderWidth: 2,
     borderRadius: 20,
     marginBottom: 20,
