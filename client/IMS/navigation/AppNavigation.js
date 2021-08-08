@@ -11,7 +11,9 @@ import MakePurchase from '../screens/MakePurchase';
 import Employee from '../screens/Employee';
 import Product from '../screens/Product'
 import Warehouse from '../screens/Warehouses';
-
+import DeliveryOrders from '../screens/DeliveryOrders';
+import Suppliers from '../screens/Suppliers';
+import Clients from '../screens/Clients';
 
 const dash = createStackNavigator({
   Dashboard: {
@@ -30,10 +32,16 @@ const dash = createStackNavigator({
     screen: Warehouse
   },
   Delivery: {
-    screen: MakeSale
+    screen: DeliveryOrders
+  },
+  Suppliers: {
+    screen: Suppliers
   },
   Employee: {
     screen: Employee
+  },
+  Clients: {
+    screen: Clients
   }
 }, {initialRouteName: 'Dashboard'});
 
@@ -76,19 +84,19 @@ const Drawer = createDrawerNavigator({
     })
   },
   Delivery: {
-    screen: MakeSale,
+    screen: DeliveryOrders,
     navigationOptions: ({ navigation }) => ({
       drawerLabel: 'Delivery Orders',
     })
   },
   Suppliers: {
-    screen: MakeSale,
+    screen: Suppliers,
     navigationOptions: ({ navigation }) => ({
       drawerLabel: 'Suppliers',
     })
   },
   Clients: {
-    screen: MakeSale,
+    screen: Clients,
     navigationOptions: ({ navigation }) => ({ 
       drawerLabel: 'Clients',
     })

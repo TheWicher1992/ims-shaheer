@@ -177,7 +177,7 @@ const Warehouse = props => {
             ConfirmButtonTitle='OK'
             DescriptionField='itemDescription' 
             KeyField='itemKey'
-            placeholder='Quantity'
+            placeholder='Stock'
             arrowColor='#006270'
             arrowSize={20}
             placeholderSelectedItems ='$count selected item(s)'
@@ -190,7 +190,7 @@ const Warehouse = props => {
             ConfirmButtonTitle='OK'
             DescriptionField='itemDescription' 
             KeyField='itemKey'
-            placeholder='Amount'
+            placeholder='Products'
             arrowColor='#006270'
             arrowSize={20}
             placeholderSelectedItems ='$count selected item(s)'
