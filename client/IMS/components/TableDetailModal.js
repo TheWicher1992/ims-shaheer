@@ -4,7 +4,7 @@ import UpdateModal from "./UpdateModal";
 const TableDetailModal = props => {
   const [modalVisible, setModalVisible] = useState(false);
   const [isUpdateModalVisible, setUpdateModalVisible] = React.useState(false);
-  //console.log('hete')
+  console.log('hete', Dimensions.get('window').width)
   useEffect(() => {
     setModalVisible(props.state);
   }, [props.state]);
@@ -68,7 +68,7 @@ const TableDetailModal = props => {
 const styles = StyleSheet.create({
   bodyText: {
     fontFamily: 'Roboto',
-    fontSize: Dimensions.get('window').height > 900 ? 22 : 14,
+    fontSize: Dimensions.get('window').height > 900 ? (Dimensions.get('window').width > 480 ? 24 : 18): 14,
     paddingTop: Dimensions.get('window').height > 900 ? 25 : 16
   },  
   modalTitle : {
@@ -76,9 +76,10 @@ const styles = StyleSheet.create({
     //fontSize: Dimensions.get('window').height > 900 ? 30 : 20,
     fontFamily: 'Roboto',
     fontWeight: 'bold',
-    fontSize: Dimensions.get('window').height > 900 ? 36 : 24,
+    fontSize: Dimensions.get('window').height > 900 ? (Dimensions.get('window').width > 480 ? 28 : 24): 24,
     top: 15,
   },
+  //Dimensions.get('window').height < 900 ? Dimensions.get('window').height * 0.11 : Dimensions.get('window').height * 0.1
   buttonModalContainer : {
     justifyContent: 'center',
     alignItems: 'center',
@@ -120,7 +121,7 @@ const styles = StyleSheet.create({
   },
   buttonModalText :{
     color: '#ffffff',
-    fontSize: Dimensions.get('window').height < 900 ? 16 : 24,
+    fontSize: Dimensions.get('window').height > 900 ? (Dimensions.get('window').width > 480 ? 24 : 16): 16,
     fontFamily: 'Roboto',
     fontWeight: 'bold'
   },
@@ -131,7 +132,7 @@ const styles = StyleSheet.create({
     marginTop: 22
   },
   modalBody:{
-    paddingVertical:Dimensions.get('window').height < 900 ? Dimensions.get('window').height * 0.11 : Dimensions.get('window').height * 0.1,
+    paddingVertical:'30%',
     paddingHorizontal:10
   },
   modalView: {
@@ -148,8 +149,8 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
-    width: Dimensions.get('window').height > 900 ? Dimensions.get('window').width * 0.7 : Dimensions.get('window').width * 0.80,
-    height: Dimensions.get('window').height > 900 ? Dimensions.get('window').height* 0.5 : Dimensions.get('window').height * 0.60
+    width: '80%',
+    height: Dimensions.get('window').height > 900 ? '65%' : Dimensions.get('window').height * 0.60
   },
   
 });
