@@ -9,6 +9,8 @@ import EmployeeLogin from '../screens/EmployeeLogin';
 import MakeSale from '../screens/MakeSale';
 import MakePurchase from '../screens/MakePurchase';
 import Employee from '../screens/Employee';
+import Product from '../screens/Product'
+import Warehouse from '../screens/Warehouses';
 
 
 const dash = createStackNavigator({
@@ -22,7 +24,10 @@ const dash = createStackNavigator({
     screen: MakePurchase,
   },
   Products: {
-    screen: MakeSale
+    screen: Product
+  },
+  Warehouse: {
+    screen: Warehouse
   },
   Delivery: {
     screen: MakeSale
@@ -59,13 +64,13 @@ const Drawer = createDrawerNavigator({
     })
   },
   Products: {
-    screen: MakeSale,
+    screen: Product,
     navigationOptions: ({ navigation }) => ({
       drawerLabel: 'Products',
     })
   },
-  Warehouses: {
-    screen: MakeSale,
+  Warehouse: {
+    screen: Warehouse,
     navigationOptions: ({ navigation }) => ({
       drawerLabel: 'Warehouses',
     })

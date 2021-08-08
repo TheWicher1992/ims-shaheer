@@ -12,7 +12,7 @@ import { Icon } from 'react-native-elements'
 
 const optionsPerPage = [2, 3, 4];
 
-const MakePurchase = props => {
+const Warehouse = props => {
 
 
   const handleConfirm = (pItems) => { // temporary for picker
@@ -62,39 +62,25 @@ const MakePurchase = props => {
 
   
   // make a sale variables below:
-  const [productName, setProductName] = React.useState(``)
-  const [quantityVal, setQuantityVal] = React.useState(0)
-  const [amountVal, setAmountVal] = React.useState(0)
-  const [clientName, setClientName] = React.useState(``)
-  const [notes, setNotes] = React.useState(``)
+  const [warehouseName, setWarehouseName] = React.useState(``)
+  const [totalProducts, setTotalProducts] = React.useState(0)
+  const [stock, setStock] = React.useState(0)
 
 
-  const onChangeProductName = (prodName) => {
-    setProductName(prodName);
+  const onChangeWarehouseName = (warehousename) => {
+    setWarehouseName(warehousename);
   }
 
-  const onChangeQuantity = (quant) => {
-    setQuantityVal(quant);
+  const onChangeTotalProducts = (totalproducts) => {
+    setTotalProducts(totalproducts);
   }
 
-  const onChangeAmount = (amount) => {
-    setAmountVal(amount);
+  const onChangeStock = (stocks) => {
+    setStock(stocks);
   }
 
-  const onChangeClientName = (clName) => {
-    setClientName(clName);
-  }
-
-  const onChangeNotes = (noteVal) => {
-    setNotes(noteVal);
-  }
-
-  const addPurchase = () => {
-    console.log(productName);
-    console.log(quantityVal);
-    console.log(amountVal);
-    console.log(clientName);
-    console.log(notes);
+  const addWarehouse = () => {
+    console.log(`add warehouse`)
     setModalVisible(false); //closing modal on done for now
   }
   
@@ -121,13 +107,11 @@ const MakePurchase = props => {
             <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
                 <View style={styles.modalStyle}>
                   <View style = {{justifyContent: 'center', alignItems : 'center', }}>
-                      <Text style = {styles.modalTitle}>Make a Purchase</Text>
+                      <Text style = {styles.modalTitle}>Add Warehouse</Text>
                       <View>
-                        <TextInput onChangeText={onChangeProductName} style={styles.input} placeholder="Product" autoCorrect={false} />
-                        <TextInput onChangeText={onChangeQuantity} style={styles.input} placeholder="Quantity" autoCorrect={false} />
-                        <TextInput onChangeText={onChangeAmount} style={styles.input} placeholder="Amount" autoCorrect={false} />
-                        <TextInput onChangeText={onChangeClientName} style={styles.input} placeholder="Client" autoCorrect={false} />
-                        <TextInput onChangeText={onChangeNotes} style={styles.input} placeholder="Notes" autoCorrect={false} />
+                        <TextInput onChangeText={onChangeWarehouseName} style={styles.input} placeholder="Name" autoCorrect={false} />
+                        <TextInput onChangeText={onChangeTotalProducts} style={styles.input} placeholder="Total Products" autoCorrect={false} />
+                        <TextInput onChangeText={onChangeStock} style={styles.input} placeholder="Stock" autoCorrect={false} />
                       </View>
                       <View style = {{flexDirection: 'row',  alignItems : 'center', top: 45}}>
                         <TouchableOpacity style={{alignSelf: 'flex-start'}} onPress = {() => {setModalVisible(false)}}>
@@ -139,7 +123,7 @@ const MakePurchase = props => {
                             </View>
                           </View>
                         </TouchableOpacity>   
-                        <TouchableOpacity onPress = {() => {addPurchase()}}>
+                        <TouchableOpacity onPress = {() => {addWarehouse()}}>
                           <View>
                             <View style={styles.buttonModalContainer}>
                               <View>
@@ -156,13 +140,13 @@ const MakePurchase = props => {
         <TableDetailModal state={isTableDetailModalVisible} handleClose={handleClose} title='Employee Information' name='Raahem Asghar' email='raahemasghar97@gmail.com' occupation="Employee" />
         <View style = {styles.screen}>
           <View>
-            <Text style={styles.title}>Purchases</Text>
+            <Text style={styles.title}>Warehouses</Text>
           </View>
         </View>
         <View style = {styles.containerButton}>
           <TouchableOpacity onPress = {() => {setModalVisible(true)}}>
             <View style={styles.buttonContainer}>
-              <Text style={styles.buttonText}>Add Purchase</Text>
+              <Text style={styles.buttonText}>Add Warehouse</Text>
             </View>
           </TouchableOpacity>
           <View style = {{flexDirection: 'row', justifyContent: 'center',}}>
@@ -232,10 +216,10 @@ const MakePurchase = props => {
         
           <DataTable style = {{top: 30}}>
             <DataTable.Header>
-              <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Product</Text></DataTable.Title>
-              <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Quantity</Text></DataTable.Title>
-              <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Amount</Text></DataTable.Title>
-              <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Client</Text></DataTable.Title>
+              <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Name</Text></DataTable.Title>
+              <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Total Products</Text></DataTable.Title>
+              <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Stock</Text></DataTable.Title>
+              
             </DataTable.Header>
 
             <TouchableOpacity onPress={() => setTableDetailModalVisible(true)}>
@@ -243,7 +227,6 @@ const MakePurchase = props => {
                 <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>ABC34013-133</Text></DataTable.Cell>
                 <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>59</Text></DataTable.Cell>
                 <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>69000</Text></DataTable.Cell>
-                <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>Ahmed Ateeq</Text></DataTable.Cell>
               </DataTable.Row>
             </TouchableOpacity>
             <DataTable.Pagination
@@ -268,7 +251,7 @@ const MakePurchase = props => {
 }
 
 
-MakePurchase.navigationOptions = navigationData => {
+Warehouse.navigationOptions = navigationData => {
     return {
         headerTitle: 'Zaki Sons',
         headerTitleAlign: 'center',
@@ -290,7 +273,7 @@ MakePurchase.navigationOptions = navigationData => {
     };
   };
 
-export default MakePurchase
+export default Warehouse
 
 
 const styles = StyleSheet.create({
@@ -312,7 +295,7 @@ const styles = StyleSheet.create({
   modalStyle: {
     backgroundColor: "#fff",
     width: Dimensions.get('window').height > 900 ? 600 : 320,
-    height: Dimensions.get('window').height > 900 ? 540: 480,
+    height: Dimensions.get('window').height > 900 ? "35%": "60%",
     borderWidth: 2,
     borderRadius: 20,
     marginBottom: 20,

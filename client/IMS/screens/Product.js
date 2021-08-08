@@ -12,7 +12,7 @@ import { Icon } from 'react-native-elements'
 
 const optionsPerPage = [2, 3, 4];
 
-const MakePurchase = props => {
+const Product = props => {
 
 
   const handleConfirm = (pItems) => { // temporary for picker
@@ -62,12 +62,18 @@ const MakePurchase = props => {
 
   
   // make a sale variables below:
+  const [serialNo, setSerialNo] = React.useState(``)
   const [productName, setProductName] = React.useState(``)
   const [quantityVal, setQuantityVal] = React.useState(0)
   const [amountVal, setAmountVal] = React.useState(0)
-  const [clientName, setClientName] = React.useState(``)
-  const [notes, setNotes] = React.useState(``)
+  const [color, setColor] = React.useState(``)
+  const [brand, setBrand] = React.useState(``)
+  const [warehouse, setWarehouse] = React.useState(``)
+  const [description, setDescription] = React.useState(``)
 
+  const onChangeSerialNo = (serial) => {
+    setSerialNo(serial);
+  }
 
   const onChangeProductName = (prodName) => {
     setProductName(prodName);
@@ -81,20 +87,23 @@ const MakePurchase = props => {
     setAmountVal(amount);
   }
 
-  const onChangeClientName = (clName) => {
-    setClientName(clName);
+  const onChangeColor = (colorName) => {
+    setColor(colorName);
   }
 
-  const onChangeNotes = (noteVal) => {
-    setNotes(noteVal);
+  const onChangeBrand = (brandName) => {
+    setBrand(brandName);
   }
 
-  const addPurchase = () => {
-    console.log(productName);
-    console.log(quantityVal);
-    console.log(amountVal);
-    console.log(clientName);
-    console.log(notes);
+  const onChangeWarehouse = (warehouseName) => {
+    setWarehouse(warehouseName);
+  }
+  
+  const onChangeDescription = (desc) => {
+    setDescription(desc);
+  }
+
+  const addProduct = () => {
     setModalVisible(false); //closing modal on done for now
   }
   
@@ -118,16 +127,21 @@ const MakePurchase = props => {
             presentationStyle="overFullScreen"
             transparent
             visible={isModalVisible}>
+            
             <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+              <ScrollView>
                 <View style={styles.modalStyle}>
                   <View style = {{justifyContent: 'center', alignItems : 'center', }}>
-                      <Text style = {styles.modalTitle}>Make a Purchase</Text>
+                      <Text style = {styles.modalTitle}>Add a Product</Text>
                       <View>
+                      <TextInput onChangeText={onChangeSerialNo} style={styles.input} placeholder="Serial" autoCorrect={false} />
                         <TextInput onChangeText={onChangeProductName} style={styles.input} placeholder="Product" autoCorrect={false} />
+                        <TextInput onChangeText={onChangeBrand} style={styles.input} placeholder="Brand" autoCorrect={false} />
+                        <TextInput onChangeText={onChangeColor} style={styles.input} placeholder="Color" autoCorrect={false} />
                         <TextInput onChangeText={onChangeQuantity} style={styles.input} placeholder="Quantity" autoCorrect={false} />
                         <TextInput onChangeText={onChangeAmount} style={styles.input} placeholder="Amount" autoCorrect={false} />
-                        <TextInput onChangeText={onChangeClientName} style={styles.input} placeholder="Client" autoCorrect={false} />
-                        <TextInput onChangeText={onChangeNotes} style={styles.input} placeholder="Notes" autoCorrect={false} />
+                        <TextInput onChangeText={onChangeWarehouse} style={styles.input} placeholder="Warehouse" autoCorrect={false} />
+                        {/* <TextInput onChangeText={onChangeDescription} style={styles.input} placeholder="Description" autoCorrect={false} /> */}
                       </View>
                       <View style = {{flexDirection: 'row',  alignItems : 'center', top: 45}}>
                         <TouchableOpacity style={{alignSelf: 'flex-start'}} onPress = {() => {setModalVisible(false)}}>
@@ -139,7 +153,7 @@ const MakePurchase = props => {
                             </View>
                           </View>
                         </TouchableOpacity>   
-                        <TouchableOpacity onPress = {() => {addPurchase()}}>
+                        <TouchableOpacity onPress = {() => {addProduct()}}>
                           <View>
                             <View style={styles.buttonModalContainer}>
                               <View>
@@ -151,18 +165,21 @@ const MakePurchase = props => {
                       </View>
                   </View>
                 </View>
+              </ScrollView>
             </View>
+            
         </Modal>
+        
         <TableDetailModal state={isTableDetailModalVisible} handleClose={handleClose} title='Employee Information' name='Raahem Asghar' email='raahemasghar97@gmail.com' occupation="Employee" />
         <View style = {styles.screen}>
           <View>
-            <Text style={styles.title}>Purchases</Text>
+            <Text style={styles.title}>Products</Text>
           </View>
         </View>
         <View style = {styles.containerButton}>
           <TouchableOpacity onPress = {() => {setModalVisible(true)}}>
             <View style={styles.buttonContainer}>
-              <Text style={styles.buttonText}>Add Purchase</Text>
+              <Text style={styles.buttonText}>Add Product</Text>
             </View>
           </TouchableOpacity>
           <View style = {{flexDirection: 'row', justifyContent: 'center',}}>
@@ -185,7 +202,7 @@ const MakePurchase = props => {
           </View>
 
         </View>
-        <View style = {{flexDirection: 'row', top: 35, justifyContent: 'space-around',alignItems: 'stretch'}}>
+        <View style = {{flexDirection: 'row', top: Dimensions.get('window').height > 900 ? 50 : 35, justifyContent: 'space-around',alignItems: 'stretch'}}>
           <PickerCheckBox
             data={items}
             headerComponent={<Text style={{fontSize:25}} >Items</Text>}
@@ -213,7 +230,7 @@ const MakePurchase = props => {
             containerStyle = {styles.filterInput}
           />
         </View>
-        <View style = {{flexDirection: 'row', top: 35, justifyContent: 'space-around',alignItems: 'stretch'}}>
+        <View style = {{flexDirection: 'row', top: Dimensions.get('window').height > 900 ? 50 : 35, justifyContent: 'space-around',alignItems: 'stretch'}}>
           <PickerCheckBox
             data={items}
             headerComponent={<Text style={{fontSize:25}} >Items</Text>}
@@ -221,45 +238,81 @@ const MakePurchase = props => {
             ConfirmButtonTitle='OK'
             DescriptionField='itemDescription' 
             KeyField='itemKey'
-            placeholder='Time'
+            placeholder='Color'
             arrowColor='#006270'
             arrowSize={20}
             placeholderSelectedItems ='$count selected item(s)'
             containerStyle = {styles.filterInput}
-          />          
+          />
+          <PickerCheckBox
+            data={items}
+            headerComponent={<Text style={{fontSize:25}} >Items</Text>}
+            OnConfirm={(pItems) => {handleConfirm(pItems)}}
+            ConfirmButtonTitle='OK'
+            DescriptionField='itemDescription' 
+            KeyField='itemKey'
+            placeholder='Warehouse'
+            arrowColor='#006270'
+            arrowSize={20}
+            placeholderSelectedItems ='$count selected item(s)'
+            containerStyle = {styles.filterInput}
+          />         
         </View>
-        <ScrollView>
-        
-          <DataTable style = {{top: 30}}>
-            <DataTable.Header>
-              <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Product</Text></DataTable.Title>
-              <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Quantity</Text></DataTable.Title>
-              <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Amount</Text></DataTable.Title>
-              <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Client</Text></DataTable.Title>
-            </DataTable.Header>
+        <View style = {{flexDirection: 'row', top: Dimensions.get('window').height > 900 ? 50 : 35, justifyContent: 'space-around',alignItems: 'stretch'}}>
+          <PickerCheckBox
+            data={items}
+            headerComponent={<Text style={{fontSize:25}} >Items</Text>}
+            OnConfirm={(pItems) => {handleConfirm(pItems)}}
+            ConfirmButtonTitle='OK'
+            DescriptionField='itemDescription' 
+            KeyField='itemKey'
+            placeholder='Brand'
+            arrowColor='#006270'
+            arrowSize={20}
+            placeholderSelectedItems ='$count selected item(s)'
+            containerStyle = {styles.filterInput}
+          />
+        </View>
+        <View style = {{flexDirection: 'row',}}>
+        {/* <ScrollView horizontal = {true}> */}
+            <DataTable style = {{top: Dimensions.get('window').height > 900 ? 50 : 30,}}>
+                <DataTable.Header>
+                <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Serial No.</Text></DataTable.Title>
+                <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Product</Text></DataTable.Title>
+                <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Brand</Text></DataTable.Title>
+                <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Color</Text></DataTable.Title>
+                <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Quantity</Text></DataTable.Title>
+                <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Amount</Text></DataTable.Title>
+                <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Warehouse</Text></DataTable.Title>
+                
+                </DataTable.Header>
 
-            <TouchableOpacity onPress={() => setTableDetailModalVisible(true)}>
-              <DataTable.Row>
-                <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>ABC34013-133</Text></DataTable.Cell>
-                <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>59</Text></DataTable.Cell>
-                <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>69000</Text></DataTable.Cell>
-                <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>Ahmed Ateeq</Text></DataTable.Cell>
-              </DataTable.Row>
-            </TouchableOpacity>
-            <DataTable.Pagination
-              page={page}
-              numberOfPages={3}
-              onPageChange={(page) => setPage(page)}
-              label="1-2 of 6"
-              optionsPerPage={optionsPerPage}
-              itemsPerPage={itemsPerPage}
-              setItemsPerPage={setItemsPerPage}
-              showFastPagination
-              optionsLabel={'Rows per page'}
-            />
+                <TouchableOpacity onPress={() => setTableDetailModalVisible(true)}>
+                <DataTable.Row>
+                    <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>122</Text></DataTable.Cell>
+                    <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>Abcdecec</Text></DataTable.Cell>
+                    <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>PVC</Text></DataTable.Cell>
+                    <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>Transparent</Text></DataTable.Cell>
+                    <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>59</Text></DataTable.Cell>
+                    <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>69000</Text></DataTable.Cell>
+                    <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>11-B</Text></DataTable.Cell>
+                </DataTable.Row>
+                </TouchableOpacity>
+                <DataTable.Pagination
+                page={page}
+                numberOfPages={3}
+                onPageChange={(page) => setPage(page)}
+                label="1-2 of 6"
+                optionsPerPage={optionsPerPage}
+                itemsPerPage={itemsPerPage}
+                setItemsPerPage={setItemsPerPage}
+                showFastPagination
+                optionsLabel={'Rows per page'}
+                />
           </DataTable>
 
-        </ScrollView>
+        {/* </ScrollView> */}
+        </View>
       </View>        
       // </KeyboardAvoidingView>
         
@@ -268,7 +321,7 @@ const MakePurchase = props => {
 }
 
 
-MakePurchase.navigationOptions = navigationData => {
+Product.navigationOptions = navigationData => {
     return {
         headerTitle: 'Zaki Sons',
         headerTitleAlign: 'center',
@@ -290,7 +343,7 @@ MakePurchase.navigationOptions = navigationData => {
     };
   };
 
-export default MakePurchase
+export default Product
 
 
 const styles = StyleSheet.create({
@@ -312,7 +365,7 @@ const styles = StyleSheet.create({
   modalStyle: {
     backgroundColor: "#fff",
     width: Dimensions.get('window').height > 900 ? 600 : 320,
-    height: Dimensions.get('window').height > 900 ? 540: 480,
+    height: Dimensions.get('window').height > 900 ? 680: 600,
     borderWidth: 2,
     borderRadius: 20,
     marginBottom: 20,
@@ -447,14 +500,21 @@ const styles = StyleSheet.create({
   cells: {
     justifyContent:'center', 
     flexDirection: 'row',
-    flex: 1
+    flex: 1,
+    //paddingRight: 40,
+    alignItems: 'center',
+    alignContent: 'center',
   },
   tableText: {
     fontSize: Dimensions.get('window').height > 900 ? 18 : 14,
   },
   tableTitleText: {
     fontSize: Dimensions.get('window').height > 900 ? 18 : 14,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    justifyContent: 'center',
+    textAlign: 'center',
+    alignItems: 'center',
+    alignContent: 'center',
   },
   centeredView: {
     flex: 1,
