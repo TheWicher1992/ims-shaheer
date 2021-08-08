@@ -12,7 +12,7 @@ import { Icon } from 'react-native-elements'
 
 const optionsPerPage = [2, 3, 4];
 
-const Warehouse = props => {
+const Suppliers = props => {
 
 
   const handleConfirm = (pItems) => { // temporary for picker
@@ -62,25 +62,25 @@ const Warehouse = props => {
 
   
   // make a sale variables below:
-  const [warehouseName, setWarehouseName] = React.useState(``)
-  const [totalProducts, setTotalProducts] = React.useState(0)
-  const [stock, setStock] = React.useState(0)
+  const [name, setName] = React.useState(``)
+  const [balance, setBalance] = React.useState(``)
+  const [phoneNumber, setPhoneNumber] = React.useState(0)
 
 
-  const onChangeWarehouseName = (warehousename) => {
-    setWarehouseName(warehousename);
+  const onChangeName = (supplierName) => {
+    setName(supplierName);
   }
 
-  const onChangeTotalProducts = (totalproducts) => {
-    setTotalProducts(totalproducts);
+  const onChangeBalnace = (bal) => {
+    setBalance(bal);
   }
 
-  const onChangeStock = (stocks) => {
-    setStock(stocks);
+  const onChangePhoneNumber = (phNumber) => {
+    setPhoneNumber(phNumber);
   }
 
-  const addWarehouse = () => {
-    console.log(`add warehouse`)
+
+  const addSupplier = () => {
     setModalVisible(false); //closing modal on done for now
   }
   
@@ -107,11 +107,11 @@ const Warehouse = props => {
             <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
                 <View style={styles.modalStyle}>
                   <View style = {{justifyContent: 'center', alignItems : 'center', }}>
-                      <Text style = {styles.modalTitle}>Add Warehouse</Text>
+                      <Text style = {styles.modalTitle}>Add Supplier</Text>
                       <View>
-                        <TextInput onChangeText={onChangeWarehouseName} style={styles.input} placeholder="Name" autoCorrect={false} />
-                        <TextInput onChangeText={onChangeTotalProducts} style={styles.input} placeholder="Total Products" autoCorrect={false} />
-                        <TextInput onChangeText={onChangeStock} style={styles.input} placeholder="Stock" autoCorrect={false} />
+                        <TextInput onChangeText={onChangeName} style={styles.input} placeholder="Name" autoCorrect={false} />
+                        <TextInput onChangeText={onChangeBalnace} style={styles.input} placeholder="Balance" autoCorrect={false} />
+                        <TextInput onChangeText={onChangePhoneNumber} style={styles.input} placeholder="Phone Number" autoCorrect={false} />
                       </View>
                       <View style = {{flexDirection: 'row',  alignItems : 'center', top: 45}}>
                         <TouchableOpacity style={{alignSelf: 'flex-start'}} onPress = {() => {setModalVisible(false)}}>
@@ -123,7 +123,7 @@ const Warehouse = props => {
                             </View>
                           </View>
                         </TouchableOpacity>   
-                        <TouchableOpacity onPress = {() => {addWarehouse()}}>
+                        <TouchableOpacity onPress = {() => {addSupplier()}}>
                           <View>
                             <View style={styles.buttonModalContainer}>
                               <View>
@@ -140,13 +140,13 @@ const Warehouse = props => {
         <TableDetailModal state={isTableDetailModalVisible} handleClose={handleClose} title='Employee Information' name='Raahem Asghar' email='raahemasghar97@gmail.com' occupation="Employee" />
         <View style = {styles.screen}>
           <View>
-            <Text style={styles.title}>Warehouses</Text>
+            <Text style={styles.title}>Suppliers</Text>
           </View>
         </View>
         <View style = {styles.containerButton}>
           <TouchableOpacity onPress = {() => {setModalVisible(true)}}>
             <View style={styles.buttonContainer}>
-              <Text style={styles.buttonText}>Add Warehouse</Text>
+              <Text style={styles.buttonText}>Add Supplier</Text>
             </View>
           </TouchableOpacity>
           <View style = {{flexDirection: 'row', justifyContent: 'center',}}>
@@ -177,27 +177,27 @@ const Warehouse = props => {
             ConfirmButtonTitle='OK'
             DescriptionField='itemDescription' 
             KeyField='itemKey'
-            placeholder='Stock'
+            placeholder='Balance'
             arrowColor='#006270'
             arrowSize={20}
             placeholderSelectedItems ='$count selected item(s)'
             containerStyle = {styles.filterInput}
           />
-          <PickerCheckBox
+          {/* <PickerCheckBox
             data={items}
             headerComponent={<Text style={{fontSize:25}} >Items</Text>}
             OnConfirm={(pItems) => {handleConfirm(pItems)}}
             ConfirmButtonTitle='OK'
             DescriptionField='itemDescription' 
             KeyField='itemKey'
-            placeholder='Products'
+            placeholder='Amount'
             arrowColor='#006270'
             arrowSize={20}
             placeholderSelectedItems ='$count selected item(s)'
             containerStyle = {styles.filterInput}
-          />
+          /> */}
         </View>
-        <View style = {{flexDirection: 'row', top: 35, justifyContent: 'space-around',alignItems: 'stretch'}}>
+        {/* <View style = {{flexDirection: 'row', top: 35, justifyContent: 'space-around',alignItems: 'stretch'}}>
           <PickerCheckBox
             data={items}
             headerComponent={<Text style={{fontSize:25}} >Items</Text>}
@@ -211,22 +211,21 @@ const Warehouse = props => {
             placeholderSelectedItems ='$count selected item(s)'
             containerStyle = {styles.filterInput}
           />          
-        </View>
+        </View> */}
         <ScrollView>
         
           <DataTable style = {{top: 30}}>
             <DataTable.Header>
               <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Name</Text></DataTable.Title>
-              <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Total Products</Text></DataTable.Title>
-              <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Stock</Text></DataTable.Title>
-              
+              <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Balance</Text></DataTable.Title>
+              <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Phone Number</Text></DataTable.Title>
             </DataTable.Header>
 
             <TouchableOpacity onPress={() => setTableDetailModalVisible(true)}>
               <DataTable.Row>
-                <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>ABC34013-133</Text></DataTable.Cell>
-                <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>59</Text></DataTable.Cell>
-                <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>69000</Text></DataTable.Cell>
+                <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>Ahmed Ateeq</Text></DataTable.Cell>
+                <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>59000</Text></DataTable.Cell>
+                <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>0347-0545035</Text></DataTable.Cell>
               </DataTable.Row>
             </TouchableOpacity>
             <DataTable.Pagination
@@ -251,7 +250,7 @@ const Warehouse = props => {
 }
 
 
-Warehouse.navigationOptions = navigationData => {
+Suppliers.navigationOptions = navigationData => {
     return {
         headerTitle: 'Zaki Sons',
         headerTitleAlign: 'center',
@@ -273,7 +272,7 @@ Warehouse.navigationOptions = navigationData => {
     };
   };
 
-export default Warehouse
+export default Suppliers
 
 
 const styles = StyleSheet.create({
@@ -295,7 +294,7 @@ const styles = StyleSheet.create({
   modalStyle: {
     backgroundColor: "#fff",
     width: Dimensions.get('window').height > 900 ? 600 : 320,
-    height: Dimensions.get('window').height > 900 ? "35%": "60%",
+    height: Dimensions.get('window').height > 900 ? 380: 360,
     borderWidth: 2,
     borderRadius: 20,
     marginBottom: 20,
