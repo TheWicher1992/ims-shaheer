@@ -80,7 +80,7 @@ const DeliveryOrders = props => {
 
   const onChangeLocation = (locationVal) => {
     setLocation(locationVal);
-
+  }
   const onChangeClientName = (clName) => {
     setClientName(clName);
   }
@@ -278,7 +278,6 @@ const DeliveryOrders = props => {
     )
 }
 
-
 DeliveryOrders.navigationOptions = navigationData => {
     return {
         headerTitle: 'Zaki Sons',
@@ -300,6 +299,7 @@ DeliveryOrders.navigationOptions = navigationData => {
         ),
     };
   };
+
 
 export default DeliveryOrders
 
