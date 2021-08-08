@@ -41,6 +41,8 @@ const Employee = props => {
       console.log(password)
       console.log(userName)
       console.log(selectedOccupation)
+      setModalVisible(!isModalVisible); //closing modal for now
+
   }
 
 
@@ -105,24 +107,28 @@ const Employee = props => {
 
 
                     <View style = {{flexDirection: 'row', justifyContent: 'space-evenly', alignItems : 'center', top: 20}}>
-                      <TouchableOpacity onPress = {() => {setModalVisible(false)}}>
-                        <View style={styles.buttonModalContainerCross}>
-                          <View>
+                      <View style = {{top:45}}>
+                        <TouchableOpacity onPress = {() => {setModalVisible(false)}}>
+                          <View style={styles.buttonModalContainerCross}>
+                            <View>
+                              
+                                <Text style={styles.buttonModalText}>Cancel</Text>
                             
-                              <Text style={styles.buttonModalText}>Cancel</Text>
-                          
+                            </View>
+                            
                           </View>
-                          
-                        </View>
-                      </TouchableOpacity> 
-                      <TouchableOpacity onPress={() => { addEmployee() }}>
-                        <View style={styles.buttonModalContainer}>
-                          <View>
-                            <Text style={styles.buttonModalText}>Done</Text>
+                        </TouchableOpacity>
+                      </View> 
+                      <View style = {{top:45}}>
+                        <TouchableOpacity onPress={() => { addEmployee() }}>
+                          <View style={styles.buttonModalContainer}>
+                            <View>
+                              <Text style={styles.buttonModalText}>Done</Text>
+                            </View>
+                            
                           </View>
-                          
-                        </View>
-                      </TouchableOpacity>
+                        </TouchableOpacity>
+                      </View>  
                     </View>
                   </View>
                 </View>
@@ -270,7 +276,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#00E0C7',
     paddingVertical: 8,
     paddingHorizontal: 24,
-    top: 45,
+    //top: 45,
     margin: 20
   },
   buttonModalContainerCross : {
@@ -281,7 +287,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#ff0000',
     paddingVertical: 8,
     paddingHorizontal: 24,
-    top: 45,
+    //top: 45,
     margin: 20
   },
   buttonModalText :{
