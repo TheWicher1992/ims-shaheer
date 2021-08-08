@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
     //fontSize: Dimensions.get('window').height > 900 ? 30 : 20,
     fontFamily: 'Roboto',
     fontWeight: 'bold',
-    fontSize: Dimensions.get('window').height > 900 ? 36 : 24,
+    fontSize: Dimensions.get('window').height > 900 ? (Dimensions.get('window').width > 480 ? 28 : 24): 24,
     top: 15,
   },
   buttonModalContainer : {
@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#00E0C7',
     paddingVertical: 8,
     paddingHorizontal: 24,
-    top: Dimensions.get('window').height > 900 ? 35 : null,
+    top: Dimensions.get('window').height > 900 ? (Dimensions.get('window').width > 480 ? 35 : null): null,
     margin: 20,
     display: 'flex',
 
@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#008394',
     paddingVertical: 8,
     paddingHorizontal: 24,
-    top: Dimensions.get('window').height > 900 ? 35 : null,
+    top: Dimensions.get('window').height > 900 ? (Dimensions.get('window').width > 480 ? 35 : null): null,
     margin: 20,
     display: 'flex',
     
@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
   },
   buttonModalText :{
     color: '#ffffff',
-    fontSize: Dimensions.get('window').height < 900 ? 16 : 24,
+    fontSize: Dimensions.get('window').height > 900 ? (Dimensions.get('window').width > 480 ? 24 : 16): 16,
     fontFamily: 'Roboto',
     fontWeight: 'bold'
   },
@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
     marginTop: 22
   },
   modalBody:{
-    paddingVertical:Dimensions.get('window').height < 900 ? Dimensions.get('window').height * 0.11 : Dimensions.get('window').height * 0.1,
+    paddingVertical:'30%',
     paddingHorizontal:10
   },
   modalView: {
@@ -148,7 +148,7 @@ const styles = StyleSheet.create({
     borderColor: 'gray',
     borderWidth: 2,
     borderRadius: 20,
-    marginBottom: 5,
+    marginTop: Dimensions.get('window').height > 900 ? 5 : 5,
     fontSize: 12,
     borderColor: "#008394",
     padding: 13
