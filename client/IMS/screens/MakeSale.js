@@ -95,6 +95,7 @@ const MakeSale = props => {
     console.log(amountVal);
     console.log(clientName);
     console.log(notes);
+    setModalVisible(false); //closing modal on done for now
   }
   
 
@@ -128,18 +129,23 @@ const MakeSale = props => {
                         <TextInput onChangeText={onChangeClientName} style={styles.input} placeholder="Client" autoCorrect={false} />
                         <TextInput onChangeText={onChangeNotes} style={styles.input} placeholder="Notes" autoCorrect={false} />
                       </View>
-                      <View style = {{flexDirection: 'row', justifyContent: 'space-evenly', alignItems : 'center'}}>
-                        <TouchableOpacity onPress = {() => {setModalVisible(false)}}>
-                          <View style={styles.buttonModalContainerCross}>
-                            <Text style={styles.buttonModalText}>Cancel</Text>
+                      <View style = {{flexDirection: 'row',  alignItems : 'center', top: 45}}>
+                        <TouchableOpacity style={{alignSelf: 'flex-start'}} onPress = {() => {setModalVisible(false)}}>
+                          <View>
+                            <View style={styles.buttonModalContainerCross}>
+                              <View>
+                                <Text style={styles.buttonModalText}>Cancel</Text>
+                              </View>
+                            </View>
                           </View>
                         </TouchableOpacity>   
                         <TouchableOpacity onPress = {() => {addSale()}}>
-                          <View style={styles.buttonModalContainer}>
-                            <View>
-                              <Text style={styles.buttonModalText}>Done</Text>
+                          <View>
+                            <View style={styles.buttonModalContainer}>
+                              <View>
+                                <Text style={styles.buttonModalText}>Done</Text>
+                              </View>
                             </View>
-                            
                           </View>
                         </TouchableOpacity>
                       </View>
@@ -159,24 +165,25 @@ const MakeSale = props => {
               <Text style={styles.buttonText}>Make a Sale</Text>
             </View>
           </TouchableOpacity>
-          <View style = {styles.searchBar}>
-            <TextInput onChangeText={onChangeSearch}  style={styles.buttonInput} placeholder="type here..." autoCorrect={false} />
-            
-              <View style = {styles.searchButton}>
-                
+          <View style = {{flexDirection: 'row', justifyContent: 'center',}}>
+            <View style = {styles.searchBar}>
+              <TextInput onChangeText={onChangeSearch}  style={styles.buttonInput} placeholder="type here..." autoCorrect={false} />
+            </View>
+            <View style = {{top:14}}>
+            <TouchableOpacity onPress = {() => { searchFunc() }}>
+              <View style = {styles.searchButton}>   
                   <FontAwesome
                     name = {"search"}
                     size = {16}
                     color = {"#006270"}
-                    style = {{right: 10, top: 2}}
-                  />
-                  <TouchableOpacity onPress = {() => { searchFunc() }}>
-                  <Text style = {styles.searchButtonText}>Search</Text>
-                  </TouchableOpacity>
-                
+                    style = {{right: 10, top: 3}}
+                  />                  
+                  <Text style = {styles.searchButtonText}>Search</Text>             
               </View>
-              
+            </TouchableOpacity>
+            </View> 
           </View>
+
         </View>
         <View style = {{flexDirection: 'row', top: 35, justifyContent: 'space-around',alignItems: 'stretch'}}>
           <PickerCheckBox
@@ -341,7 +348,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#00E0C7',
     paddingVertical: 8,
     paddingHorizontal: 24,
-    top: 45,
+    //top: 45,
     margin: 20,
     display: 'flex'
   },
@@ -353,7 +360,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#ff0000',
     paddingVertical: 8,
     paddingHorizontal: 24,
-    top: 45,
+    //top: 45, //here is the problem
     margin: 20,
     display: 'flex'
   },
@@ -400,12 +407,12 @@ const styles = StyleSheet.create({
     borderColor: "#008394",
   },
   searchBar: {
-    justifyContent: 'center',
-    alignContent: 'center',
-    alignItems: 'center',
+    alignItems: 'flex-start',
+    justifyContent: 'flex-start',
     flexDirection: 'row',
     bottom: 30,
     left: Dimensions.get('window').height > 900 ? Dimensions.get('window').width /11:0,
+    
   },
   searchButton: {
     flexDirection: 'row',
@@ -414,7 +421,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#008394',
     paddingVertical: 12,
     paddingHorizontal: 30,
-    top: 43,
+    //top: 43, //HERE IS THE ISSUE
     right: 20,
   },
   searchButtonText: {
