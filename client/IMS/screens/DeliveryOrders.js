@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, Text, View, Button, Dimensions, TextInput, TouchableOpacity, KeyboardAvoidingView, ScrollView} from 'react-native'; 
+import { StyleSheet, Text, View, Button, Dimensions, TextInput, TouchableOpacity, KeyboardAvoidingView, ScrollView, CheckBox } from 'react-native'; 
 import HeaderButton from '../components/HeaderButton';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { FontAwesome } from '@expo/vector-icons';
@@ -36,7 +36,7 @@ const DeliveryOrders = props => {
 
   const [page, setPage] = React.useState(0); //for pages of table
   const [itemsPerPage, setItemsPerPage] = React.useState(optionsPerPage[0]); //for items per page on table
-
+  const [isSelected, setSelection] = React.useState(false);
   const [isModalVisible, setModalVisible] = React.useState(false); //to set modal on and off
 
   const toggleModal = () => { //to toggle model on and off -- function
@@ -77,9 +77,9 @@ const DeliveryOrders = props => {
     setQuantityVal(quant);
   }
 
-  const onChangeLocation = (loc) => {
-    setLocation(loc);
-  }
+
+  const onChangeLocation = (locationVal) => {
+    setLocation(locationVal);
 
   const onChangeClientName = (clName) => {
     setClientName(clName);
@@ -89,10 +89,11 @@ const DeliveryOrders = props => {
     setNotes(noteVal);
   }
 
-  const addWarehouse = () => {
+
+  const addDeliveryOrder = () => {
     console.log(productName);
     console.log(quantityVal);
-    console.log(amountVal);
+    console.log(location);
     console.log(clientName);
     console.log(notes);
     setModalVisible(false); //closing modal on done for now
@@ -121,12 +122,12 @@ const DeliveryOrders = props => {
             <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
                 <View style={styles.modalStyle}>
                   <View style = {{justifyContent: 'center', alignItems : 'center', }}>
-                      <Text style = {styles.modalTitle}>Add Delivery Order</Text>
+                      <Text style = {styles.modalTitle}>Add Order</Text>
                       <View>
-                        <TextInput onChangeText={onChangeProductName} style={styles.input} placeholder="Client" autoCorrect={false} />
-                        <TextInput onChangeText={onChangeQuantity} style={styles.input} placeholder="Product" autoCorrect={false} />
-                        <TextInput onChangeText={onChangeLocation} style={styles.input} placeholder="Quantity" autoCorrect={false} />
-                        <TextInput onChangeText={onChangeClientName} style={styles.input} placeholder="Location" autoCorrect={false} />
+                        <TextInput onChangeText={onChangeProductName} style={styles.input} placeholder="Product" autoCorrect={false} />
+                        <TextInput onChangeText={onChangeQuantity} style={styles.input} placeholder="Quantity" autoCorrect={false} />
+                        <TextInput onChangeText={onChangeLocation} style={styles.input} placeholder="Location" autoCorrect={false} />
+                        <TextInput onChangeText={onChangeClientName} style={styles.input} placeholder="Client" autoCorrect={false} />
                         <TextInput onChangeText={onChangeNotes} style={styles.input} placeholder="Notes" autoCorrect={false} />
                       </View>
                       <View style = {{flexDirection: 'row',  alignItems : 'center', top: 45}}>
@@ -139,7 +140,7 @@ const DeliveryOrders = props => {
                             </View>
                           </View>
                         </TouchableOpacity>   
-                        <TouchableOpacity onPress = {() => {addWarehouse()}}>
+                        <TouchableOpacity onPress = {() => {addDeliveryOrder()}}>
                           <View>
                             <View style={styles.buttonModalContainer}>
                               <View>
@@ -153,7 +154,7 @@ const DeliveryOrders = props => {
                 </View>
             </View>
         </Modal>
-        <TableDetailModal state={isTableDetailModalVisible} handleClose={handleClose} title='Employee Information' name='Raahem Asghar' email='raahemasghar97@gmail.com' occupation="Employee" />
+        <TableDetailModal state={isTableDetailModalVisible} handleClose={handleClose} title='Delivery Information' name='ABC1234' email='raahemasghar97@gmail.com' occupation="Employee" />
         <View style = {styles.screen}>
           <View>
             <Text style={styles.title}>Delivery Orders</Text>
@@ -162,7 +163,7 @@ const DeliveryOrders = props => {
         <View style = {styles.containerButton}>
           <TouchableOpacity onPress = {() => {setModalVisible(true)}}>
             <View style={styles.buttonContainer}>
-              <Text style={styles.buttonText}>Add Delivery Order</Text>
+              <Text style={styles.buttonText}>Add a Order</Text>
             </View>
           </TouchableOpacity>
           <View style = {{flexDirection: 'row', justifyContent: 'center',}}>
@@ -193,7 +194,7 @@ const DeliveryOrders = props => {
             ConfirmButtonTitle='OK'
             DescriptionField='itemDescription' 
             KeyField='itemKey'
-            placeholder='Quantity'
+            placeholder='Status'
             arrowColor='#006270'
             arrowSize={20}
             placeholderSelectedItems ='$count selected item(s)'
@@ -206,14 +207,14 @@ const DeliveryOrders = props => {
             ConfirmButtonTitle='OK'
             DescriptionField='itemDescription' 
             KeyField='itemKey'
-            placeholder='Time'
+            placeholder='Client'
             arrowColor='#006270'
             arrowSize={20}
             placeholderSelectedItems ='$count selected item(s)'
             containerStyle = {styles.filterInput}
           />
         </View>
-        {/* <View style = {{flexDirection: 'row', top: 35, justifyContent: 'space-around',alignItems: 'stretch'}}>
+        <View style = {{flexDirection: 'row', top: 35, justifyContent: 'space-around',alignItems: 'stretch'}}>
           <PickerCheckBox
             data={items}
             headerComponent={<Text style={{fontSize:25}} >Items</Text>}
@@ -221,31 +222,41 @@ const DeliveryOrders = props => {
             ConfirmButtonTitle='OK'
             DescriptionField='itemDescription' 
             KeyField='itemKey'
-            placeholder='Time'
+            placeholder='Product'
             arrowColor='#006270'
             arrowSize={20}
             placeholderSelectedItems ='$count selected item(s)'
             containerStyle = {styles.filterInput}
           />          
-        </View> */}
+        </View>
         <ScrollView>
         
           <DataTable style = {{top: 30}}>
             <DataTable.Header>
+              <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Product</Text></DataTable.Title>
               <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Client</Text></DataTable.Title>
               <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Quantity</Text></DataTable.Title>
-              <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Product</Text></DataTable.Title>
               <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Location</Text></DataTable.Title>
+              <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Status</Text></DataTable.Title>
             </DataTable.Header>
 
-            <TouchableOpacity onPress={() => setTableDetailModalVisible(true)}>
+            {/* <TouchableOpacity onPress={() => setTableDetailModalVisible(true)}> */}
               <DataTable.Row>
-                <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text>Ahmed Ateeq</DataTable.Cell>
-                <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>59</Text></DataTable.Cell>
-                <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>ABC34013-133</Text></DataTable.Cell>
-                <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>Lahore</Text></DataTable.Cell>
+              <TouchableOpacity style={styles.cells} onPress={() => setTableDetailModalVisible(true)}><DataTable.Cell style={styles.cells}><Text style={styles.tableText} numberOfLines={2}>09/08/2021{'\n'}ABC34013-133</Text></DataTable.Cell></TouchableOpacity>
+              <TouchableOpacity style={styles.cells} onPress={() => setTableDetailModalVisible(true)}><DataTable.Cell style={styles.cells}><Text style={styles.tableText}>Raahem</Text></DataTable.Cell></TouchableOpacity>
+              <TouchableOpacity style={styles.cells} onPress={() => setTableDetailModalVisible(true)}><DataTable.Cell style={styles.cells}><Text style={styles.tableText}>69000</Text></DataTable.Cell></TouchableOpacity>
+              <TouchableOpacity style={styles.cells} onPress={() => setTableDetailModalVisible(true)}><DataTable.Cell style={styles.cells}><Text style={styles.tableText}>Model Town, Lahore</Text></DataTable.Cell></TouchableOpacity>
+                <DataTable.Cell style={styles.cells}>
+                    <View style={styles.checkboxContainer}>
+        <CheckBox
+          value={isSelected}
+          onValueChange={setSelection}
+          style={styles.checkbox}
+        />
+            </View>
+            </DataTable.Cell>
               </DataTable.Row>
-            </TouchableOpacity>
+            {/* </TouchableOpacity> */}
             <DataTable.Pagination
               page={page}
               numberOfPages={3}
@@ -482,5 +493,8 @@ const styles = StyleSheet.create({
     elevation: 5,
     width: Dimensions.get('window').height > 900 ? Dimensions.get('window').width * 0.7 : Dimensions.get('window').width * 0.80,
     height: Dimensions.get('window').height > 900 ? Dimensions.get('window').height* 0.5 : Dimensions.get('window').height * 0.60
+  },
+  checkbox: {
+    alignSelf: "center",
   },
 })
