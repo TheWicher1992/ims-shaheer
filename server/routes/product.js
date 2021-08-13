@@ -187,6 +187,7 @@ router.get('/:page/:query/:colour/:brand/:warehouse/:sort/:sortBy', async (req, 
             products
         })
     } catch (err) {
+        console.log(err)
         return res.status(400).json({
             error: 'SERVER_ERROR'
         })

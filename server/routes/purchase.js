@@ -12,6 +12,7 @@ router.post('/', async (req, res) => {
         client,
         payment,
         total,
+        received,
         note,
         isDeliveryOrder,
         location
