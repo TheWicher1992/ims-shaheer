@@ -7,7 +7,7 @@ import { DataTable } from 'react-native-paper';
 import Modal from 'react-native-modal';
 import PickerCheckBox from 'react-native-picker-checkbox';
 import TableDetailModal from '../components/TableDetailModal';
-import { Icon } from 'react-native-elements'
+import FilterButton from '../components/FilterButton';
 
 
 const optionsPerPage = [2, 3, 4];
@@ -186,52 +186,11 @@ const DeliveryOrders = props => {
           </View>
 
         </View>
-        <View style = {{flexDirection: 'row', top: 35, justifyContent: 'space-around',alignItems: 'stretch'}}>
-          <PickerCheckBox
-            data={items}
-            headerComponent={<Text style={{fontSize:25}} >Items</Text>}
-            OnConfirm={(pItems) => {handleConfirm(pItems)}}
-            ConfirmButtonTitle='OK'
-            DescriptionField='itemDescription' 
-            KeyField='itemKey'
-            placeholder='Status'
-            arrowColor='#006270'
-            arrowSize={20}
-            placeholderSelectedItems ='$count selected item(s)'
-            containerStyle = {styles.filterInput}
-          />
-          <PickerCheckBox
-            data={items}
-            headerComponent={<Text style={{fontSize:25}} >Items</Text>}
-            OnConfirm={(pItems) => {handleConfirm(pItems)}}
-            ConfirmButtonTitle='OK'
-            DescriptionField='itemDescription' 
-            KeyField='itemKey'
-            placeholder='Client'
-            arrowColor='#006270'
-            arrowSize={20}
-            placeholderSelectedItems ='$count selected item(s)'
-            containerStyle = {styles.filterInput}
-          />
-        </View>
-        <View style = {{flexDirection: 'row', top: 35, justifyContent: 'space-around',alignItems: 'stretch'}}>
-          <PickerCheckBox
-            data={items}
-            headerComponent={<Text style={{fontSize:25}} >Items</Text>}
-            OnConfirm={(pItems) => {handleConfirm(pItems)}}
-            ConfirmButtonTitle='OK'
-            DescriptionField='itemDescription' 
-            KeyField='itemKey'
-            placeholder='Product'
-            arrowColor='#006270'
-            arrowSize={20}
-            placeholderSelectedItems ='$count selected item(s)'
-            containerStyle = {styles.filterInput}
-          />          
-        </View>
+
+        <FilterButton/>
         <ScrollView>
         
-          <DataTable style = {{top: 30}}>
+          <DataTable>
             <DataTable.Header>
               <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Product</Text></DataTable.Title>
               <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Client</Text></DataTable.Title>
