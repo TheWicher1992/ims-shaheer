@@ -1,2 +1,6 @@
 /server/node_modules
 /client/IMS/node_modules
+/client/IMS/package-lock.json
+/client/IMS/.expo
+package-lock.json
+/client/IMS/package-lock.json

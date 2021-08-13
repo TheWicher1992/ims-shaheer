@@ -1,5 +1,6 @@
 const authRouter = require('./auth')
 const productRouter = require('./product')
+const purchaseRouter = require('./purchase')
 const orderRouter = require('./order')
 const saleRouter = require('./sale')
 const supplierRouter = require('./supplier')
@@ -10,4 +11,6 @@ module.exports = function (app) {
     
     app.use('/api/supplier',supplierRouter)
     app.use('/api/sale',saleRouter)
+    app.use('/api/purchase', purchaseRouter)
+
 }

@@ -101,18 +101,19 @@ router.post('/add-employee', adminAuth, async (req, res) => {
 })
 
 router.get("/", auth, async (req, res) => {
-
+    console.log('/get-user')
     try {
         const User = req.user.type === 'admin' ? Admin : Employee
         const user = await User.findById(req.user.id)
 
-        console.log(user)
 
         return res.status(200).json({
             user
         })
     }
     catch (err) {
+        console.log('sasas')
+
         return res.status(500).json({
             error: 'SERVER_ERROR'
         })
@@ -122,6 +123,7 @@ router.get("/", auth, async (req, res) => {
 
 
 router.post('/login', async (req, res) => {
+    console.log('/login')
     try {
 
 
@@ -179,5 +181,22 @@ router.post('/login', async (req, res) => {
 
 })
 
+
+router.get('/default-admin', async (req, res) => {
+    const userName = 'admin'
+    const password = 'admin'
+
+    const salt = await bcrypt.genSalt(10)
+    const hashedPassword = await bcrypt.hash(password, salt)
+
+    const admin = new Admin({
+        userName,
+        password: hashedPassword
+    })
+
+    await admin.save()
+    res.end()
+
+})
 
 module.exports = router
