@@ -8,6 +8,7 @@ import Modal from 'react-native-modal';
 import PickerCheckBox from 'react-native-picker-checkbox';
 import TableDetailModal from '../components/TableDetailModal';
 import { Icon } from 'react-native-elements'
+import FilterButton from '../components/FilterButton';
 
 
 const optionsPerPage = [2, 3, 4];
@@ -160,11 +161,15 @@ const MakeSale = props => {
           </View>
         </View>
         <View style = {styles.containerButton}>
-          <TouchableOpacity onPress = {() => {setModalVisible(true)}}>
-            <View style={styles.buttonContainer}>
-              <Text style={styles.buttonText}>Make a Sale</Text>
-            </View>
-          </TouchableOpacity>
+          <View style = {{flexDirection: 'row', justifyContent: 'space-around',alignItems: 'stretch'}}>
+            <View>
+              <TouchableOpacity onPress = {() => {setModalVisible(true)}}>
+                <View style={styles.buttonContainer}>
+                  <Text style={styles.buttonText}>Make a Sale</Text>
+                </View>
+              </TouchableOpacity>
+            </View>            
+          </View>
           <View style = {{flexDirection: 'row', justifyContent: 'center',}}>
             <View style = {styles.searchBar}>
               <TextInput onChangeText={onChangeSearch}  style={styles.buttonInput} placeholder="type here..." autoCorrect={false} />
@@ -185,7 +190,9 @@ const MakeSale = props => {
           </View>
 
         </View>
-        <View style = {{flexDirection: 'row', top: 35, justifyContent: 'space-around',alignItems: 'stretch'}}>
+
+        <FilterButton/>
+        {/* <View style = {{flexDirection: 'row', top: 35, justifyContent: 'space-around',alignItems: 'stretch'}}>
           <PickerCheckBox
             data={items}
             headerComponent={<Text style={{fontSize:25}} >Items</Text>}
@@ -227,10 +234,10 @@ const MakeSale = props => {
             placeholderSelectedItems ='$count selected item(s)'
             containerStyle = {styles.filterInput}
           />          
-        </View>
+        </View> */}
         <ScrollView>
         
-          <DataTable style = {{top: 30}}>
+          <DataTable>
             <DataTable.Header>
               <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Product</Text></DataTable.Title>
               <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Quantity</Text></DataTable.Title>
