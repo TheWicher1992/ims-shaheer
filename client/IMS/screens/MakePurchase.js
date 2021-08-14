@@ -5,7 +5,7 @@ import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { FontAwesome } from '@expo/vector-icons';
 import { DataTable } from 'react-native-paper';
 import Modal from 'react-native-modal';
-import PickerCheckBox from 'react-native-picker-checkbox';
+import { Picker } from '@react-native-picker/picker';
 import TableDetailModal from '../components/TableDetailModal';
 import FilterButton from '../components/FilterButton';
 
@@ -123,13 +123,50 @@ const MakePurchase = props => {
                   <View style = {{justifyContent: 'center', alignItems : 'center', }}>
                       <Text style = {styles.modalTitle}>Make a Purchase</Text>
                       <View>
-                        <TextInput onChangeText={onChangeProductName} style={styles.input} placeholder="Product" autoCorrect={false} />
+
+                      <View style = {{borderWidth: 2, borderRadius: 40,borderColor: "#008394",width: Dimensions.get('window').width * 0.65, top: 60, height: 40, fontSize: 8,  }}>
+                        <Picker
+                          style = {{top:6, color: 'grey', fontFamily: 'Roboto'}}
+                          itemStyle={{ fontWeight: '100' }}
+                          selectedValue = {productName}
+                          onValueChange={(itemValue, itemIndex) =>
+                            setProductName(itemValue)
+                          }
+                        >
+                          <Picker.Item label="PVC" value="Transparent" />
+                          <Picker.Item label="White" value="White" />
+                          <Picker.Item label="Black" value="Black" />
+                          <Picker.Item label="Blue" value="Blue" />
+                          <Picker.Item label="Brown" value="Brown" />
+                          <Picker.Item label="Pink" value="Pink" />
+                        </Picker>
+                      </View>
+                      <View style = {{marginTop: 20}}>
                         <TextInput onChangeText={onChangeQuantity} style={styles.input} placeholder="Quantity" autoCorrect={false} />
                         <TextInput onChangeText={onChangeAmount} style={styles.input} placeholder="Amount" autoCorrect={false} />
-                        <TextInput onChangeText={onChangeClientName} style={styles.input} placeholder="Client" autoCorrect={false} />
                         <TextInput onChangeText={onChangeNotes} style={styles.input} placeholder="Notes" autoCorrect={false} />
                       </View>
-                      <View style = {{flexDirection: 'row',  alignItems : 'center', top: 45}}>
+                      <View style = {{borderWidth: 2, borderRadius: 40,borderColor: "#008394",width: Dimensions.get('window').width * 0.65, top: 60, height: 40, fontSize: 8,  }}>
+                        <Picker
+                          style = {{top:6, color: 'grey', fontFamily: 'Roboto'}}
+                          itemStyle={{ fontWeight: '100' }}
+                          selectedValue = {clientName}
+                          onValueChange={(itemValue, itemIndex) =>
+                            setClientName(itemValue)
+                          }
+                        >
+                          <Picker.Item label="Ahmed Ateeq" value="Ahmed Ateeq" />
+                          <Picker.Item label="Sameer Nadeem" value="Sameer Nadeem" />
+                          <Picker.Item label="Raahem Asghar" value="Raahem Asghar" />
+                          <Picker.Item label="Ali Hassan Maqsood" value="Ali Hassan Maqsood" />
+                          <Picker.Item label="Haseeb Abid" value="Haseeb Abid" />
+                          <Picker.Item label="Babar Azam" value="Babar Azam" />
+                        </Picker>
+                      </View>
+
+                        
+                      </View>
+                      <View style = {{flexDirection: 'row',  alignItems : 'center', top: 65}}>
                         <TouchableOpacity style={{alignSelf: 'flex-start'}} onPress = {() => {setModalVisible(false)}}>
                           <View>
                             <View style={styles.buttonModalContainerCross}>
