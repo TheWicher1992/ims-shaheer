@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useEffect, useState } from 'react'
 import { StyleSheet, Text, View, Button, Dimensions, TextInput, TouchableOpacity, KeyboardAvoidingView, ScrollView} from 'react-native'; 
 import HeaderButton from '../components/HeaderButton';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
@@ -8,11 +9,43 @@ import Modal from 'react-native-modal';
 import PickerCheckBox from 'react-native-picker-checkbox';
 import TableDetailModal from '../components/TableDetailModal';
 import FilterButton from '../components/FilterButton';
+import { uri } from '../api.json'
+import axios from "axios"
 
 
 const optionsPerPage = [2, 3, 4];
 
 const Suppliers = props => {
+  const [suppliers, setSuppliers] = useState([])
+  const [touchedSupplier, setTouchedSuppliers] = useState([])
+
+  const [filters, setFilters] = useState({
+    page: 1,
+    query: '*',
+    userName: '*',
+    date: '*',
+    sort: '*',
+    sortBy: '*'
+  })
+
+  const onPressModal = (supplier) => {
+    setTableDetailModalVisible(true), 
+    setTouchedSuppliers(supplier)
+  }
+
+  const getSuppliers = async () => {
+    const res = await axios.get(
+      `${uri}/api/supplier`
+    )
+    //console.log('here',res.data.client)
+    setSuppliers(res.data.client)
+  }
+
+
+  useEffect(() => {
+    getSuppliers()
+  }, [])
+
 
 
   const handleConfirm = (pItems) => { // temporary for picker
@@ -137,7 +170,7 @@ const Suppliers = props => {
                 </View>
             </View>
         </Modal>
-        <TableDetailModal state={isTableDetailModalVisible} handleClose={handleClose} title='Employee Information' name='Raahem Asghar' email='raahemasghar97@gmail.com' occupation="Employee" />
+        <TableDetailModal state={isTableDetailModalVisible} handleClose={handleClose} title='Supplier Information' object={[touchedSupplier]} attributes={['Name','Balance','Phone','Date']} />
         <View style = {styles.screen}>
           <View>
             <Text style={styles.title}>Suppliers</Text>
@@ -179,13 +212,19 @@ const Suppliers = props => {
               <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Phone Number</Text></DataTable.Title>
             </DataTable.Header>
 
-            <TouchableOpacity onPress={() => setTableDetailModalVisible(true)}>
-              <DataTable.Row>
-                <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>Ahmed Ateeq</Text></DataTable.Cell>
-                <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>59000</Text></DataTable.Cell>
-                <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>0347-0545035</Text></DataTable.Cell>
+            {
+            suppliers.map((supplier, i) => (
+              <TouchableOpacity key={i} onPress={() => onPressModal(supplier)}>
+                <DataTable.Row>
+                  <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{supplier.userName}</Text></DataTable.Cell>
+                  <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{supplier.balance}</Text></DataTable.Cell>
+                  <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{supplier.phone}</Text></DataTable.Cell>
               </DataTable.Row>
-            </TouchableOpacity>
+              </TouchableOpacity>
+
+            ))
+          }
+
             <DataTable.Pagination
               page={page}
               numberOfPages={3}

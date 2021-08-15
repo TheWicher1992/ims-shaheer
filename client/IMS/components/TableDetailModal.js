@@ -34,9 +34,19 @@ const TableDetailModal = props => {
                 <View style={styles.modalView}>
                     <Text style={styles.modalTitle}>{props.title}</Text>
                     <View style={styles.modalBody}>
-                        <Text style={styles.bodyText}>Name: {props.name}</Text>
-                        <Text style={styles.bodyText}>Email: {props.email}</Text>
-                        <Text style={styles.bodyText}>Occupation: {props.occupation}</Text>
+                      {
+                        // props.object !== [] ? (props.object.map((obj, i) => (
+                        //   <View key={i}>
+                        //   <Text style={styles.bodyText}>{Object.keys(obj).find(key => obj[key] === obj.userName)}: {obj.userName}</Text>
+                        //   <Text style={styles.bodyText}>{Object.keys(obj).find(key => obj[key] === obj.balance)}: {obj.balance}</Text>
+                        //   <Text style={styles.bodyText}>{Object.keys(obj).find(key => obj[key] === obj.phone)}: {obj.phone}</Text>
+                        //   {/* <Text style={styles.bodyText}>{Object.keys(obj).find(key => obj[key] === obj.date)}: {obj.date}</Text> */}
+                        //   </View>
+                        // ))) : (null)
+                      }
+                          <Text style={styles.bodyText}>Name: Raahem</Text>
+                          <Text style={styles.bodyText}>Occupation: King</Text>
+                          <Text style={styles.bodyText}>Email: raahemasghar97@gmail.com</Text>
                     </View>
                     <View style={{flexDirection: 'row', justifyContent: 'space-evenly', alignItems : 'center'}}>
                         <TouchableOpacity onPress={() => props.handleClose()}>
