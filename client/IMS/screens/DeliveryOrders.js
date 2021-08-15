@@ -1,18 +1,18 @@
 import * as React from 'react';
-import { StyleSheet, Text, View, Button, Dimensions, TextInput, TouchableOpacity, KeyboardAvoidingView, ScrollView} from 'react-native'; 
+import { StyleSheet, Text, View, Button, Dimensions, TextInput, TouchableOpacity, KeyboardAvoidingView, ScrollView, CheckBox } from 'react-native'; 
 import HeaderButton from '../components/HeaderButton';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { FontAwesome } from '@expo/vector-icons';
 import { DataTable } from 'react-native-paper';
 import Modal from 'react-native-modal';
-import { Picker } from '@react-native-picker/picker';
+import PickerCheckBox from 'react-native-picker-checkbox';
 import TableDetailModal from '../components/TableDetailModal';
 import FilterButton from '../components/FilterButton';
 
 
 const optionsPerPage = [2, 3, 4];
 
-const MakePurchase = props => {
+const DeliveryOrders = props => {
 
 
   const handleConfirm = (pItems) => { // temporary for picker
@@ -36,7 +36,7 @@ const MakePurchase = props => {
 
   const [page, setPage] = React.useState(0); //for pages of table
   const [itemsPerPage, setItemsPerPage] = React.useState(optionsPerPage[0]); //for items per page on table
-
+  const [isSelected, setSelection] = React.useState(false);
   const [isModalVisible, setModalVisible] = React.useState(false); //to set modal on and off
 
   const toggleModal = () => { //to toggle model on and off -- function
@@ -64,7 +64,7 @@ const MakePurchase = props => {
   // make a sale variables below:
   const [productName, setProductName] = React.useState(``)
   const [quantityVal, setQuantityVal] = React.useState(0)
-  const [amountVal, setAmountVal] = React.useState(0)
+  const [location, setLocation] = React.useState(``)
   const [clientName, setClientName] = React.useState(``)
   const [notes, setNotes] = React.useState(``)
 
@@ -77,10 +77,10 @@ const MakePurchase = props => {
     setQuantityVal(quant);
   }
 
-  const onChangeAmount = (amount) => {
-    setAmountVal(amount);
-  }
 
+  const onChangeLocation = (locationVal) => {
+    setLocation(locationVal);
+  }
   const onChangeClientName = (clName) => {
     setClientName(clName);
   }
@@ -89,10 +89,11 @@ const MakePurchase = props => {
     setNotes(noteVal);
   }
 
-  const addPurchase = () => {
+
+  const addDeliveryOrder = () => {
     console.log(productName);
     console.log(quantityVal);
-    console.log(amountVal);
+    console.log(location);
     console.log(clientName);
     console.log(notes);
     setModalVisible(false); //closing modal on done for now
@@ -121,52 +122,15 @@ const MakePurchase = props => {
             <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
                 <View style={styles.modalStyle}>
                   <View style = {{justifyContent: 'center', alignItems : 'center', }}>
-                      <Text style = {styles.modalTitle}>Make a Purchase</Text>
+                      <Text style = {styles.modalTitle}>Add Order</Text>
                       <View>
-
-                      <View style = {{borderWidth: 2, borderRadius: 40,borderColor: "#008394",width: Dimensions.get('window').width * 0.65, top: 60, height: 40, fontSize: 8,  }}>
-                        <Picker
-                          style = {{top:6, color: 'grey', fontFamily: 'Roboto'}}
-                          itemStyle={{ fontWeight: '100' }}
-                          selectedValue = {productName}
-                          onValueChange={(itemValue, itemIndex) =>
-                            setProductName(itemValue)
-                          }
-                        >
-                          <Picker.Item label="PVC" value="Transparent" />
-                          <Picker.Item label="White" value="White" />
-                          <Picker.Item label="Black" value="Black" />
-                          <Picker.Item label="Blue" value="Blue" />
-                          <Picker.Item label="Brown" value="Brown" />
-                          <Picker.Item label="Pink" value="Pink" />
-                        </Picker>
-                      </View>
-                      <View style = {{marginTop: 20}}>
+                        <TextInput onChangeText={onChangeProductName} style={styles.input} placeholder="Product" autoCorrect={false} />
                         <TextInput onChangeText={onChangeQuantity} style={styles.input} placeholder="Quantity" autoCorrect={false} />
-                        <TextInput onChangeText={onChangeAmount} style={styles.input} placeholder="Amount" autoCorrect={false} />
+                        <TextInput onChangeText={onChangeLocation} style={styles.input} placeholder="Location" autoCorrect={false} />
+                        <TextInput onChangeText={onChangeClientName} style={styles.input} placeholder="Client" autoCorrect={false} />
                         <TextInput onChangeText={onChangeNotes} style={styles.input} placeholder="Notes" autoCorrect={false} />
                       </View>
-                      <View style = {{borderWidth: 2, borderRadius: 40,borderColor: "#008394",width: Dimensions.get('window').width * 0.65, top: 60, height: 40, fontSize: 8,  }}>
-                        <Picker
-                          style = {{top:6, color: 'grey', fontFamily: 'Roboto'}}
-                          itemStyle={{ fontWeight: '100' }}
-                          selectedValue = {clientName}
-                          onValueChange={(itemValue, itemIndex) =>
-                            setClientName(itemValue)
-                          }
-                        >
-                          <Picker.Item label="Ahmed Ateeq" value="Ahmed Ateeq" />
-                          <Picker.Item label="Sameer Nadeem" value="Sameer Nadeem" />
-                          <Picker.Item label="Raahem Asghar" value="Raahem Asghar" />
-                          <Picker.Item label="Ali Hassan Maqsood" value="Ali Hassan Maqsood" />
-                          <Picker.Item label="Haseeb Abid" value="Haseeb Abid" />
-                          <Picker.Item label="Babar Azam" value="Babar Azam" />
-                        </Picker>
-                      </View>
-
-                        
-                      </View>
-                      <View style = {{flexDirection: 'row',  alignItems : 'center', top: 65}}>
+                      <View style = {{flexDirection: 'row',  alignItems : 'center', top: 45}}>
                         <TouchableOpacity style={{alignSelf: 'flex-start'}} onPress = {() => {setModalVisible(false)}}>
                           <View>
                             <View style={styles.buttonModalContainerCross}>
@@ -176,7 +140,7 @@ const MakePurchase = props => {
                             </View>
                           </View>
                         </TouchableOpacity>   
-                        <TouchableOpacity onPress = {() => {addPurchase()}}>
+                        <TouchableOpacity onPress = {() => {addDeliveryOrder()}}>
                           <View>
                             <View style={styles.buttonModalContainer}>
                               <View>
@@ -190,16 +154,16 @@ const MakePurchase = props => {
                 </View>
             </View>
         </Modal>
-        <TableDetailModal state={isTableDetailModalVisible} handleClose={handleClose} title='Employee Information' name='Raahem Asghar' email='raahemasghar97@gmail.com' occupation="Employee" />
+        <TableDetailModal state={isTableDetailModalVisible} handleClose={handleClose} title='Delivery Information' name='ABC1234' email='raahemasghar97@gmail.com' occupation="Employee" />
         <View style = {styles.screen}>
           <View>
-            <Text style={styles.title}>Purchases</Text>
+            <Text style={styles.title}>Delivery Orders</Text>
           </View>
         </View>
         <View style = {styles.containerButton}>
           <TouchableOpacity onPress = {() => {setModalVisible(true)}}>
             <View style={styles.buttonContainer}>
-              <Text style={styles.buttonText}>Add Purchase</Text>
+              <Text style={styles.buttonText}>Add a Order</Text>
             </View>
           </TouchableOpacity>
           <View style = {{flexDirection: 'row', justifyContent: 'center',}}>
@@ -222,25 +186,36 @@ const MakePurchase = props => {
           </View>
 
         </View>
+
         <FilterButton/>
         <ScrollView>
         
           <DataTable>
             <DataTable.Header>
               <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Product</Text></DataTable.Title>
-              <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Quantity</Text></DataTable.Title>
-              <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Amount</Text></DataTable.Title>
               <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Client</Text></DataTable.Title>
+              <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Quantity</Text></DataTable.Title>
+              <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Location</Text></DataTable.Title>
+              <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Status</Text></DataTable.Title>
             </DataTable.Header>
 
-            <TouchableOpacity onPress={() => setTableDetailModalVisible(true)}>
+            {/* <TouchableOpacity onPress={() => setTableDetailModalVisible(true)}> */}
               <DataTable.Row>
-                <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>ABC34013-133</Text></DataTable.Cell>
-                <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>59</Text></DataTable.Cell>
-                <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>69000</Text></DataTable.Cell>
-                <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>Ahmed Ateeq</Text></DataTable.Cell>
+              <TouchableOpacity style={styles.cells} onPress={() => setTableDetailModalVisible(true)}><DataTable.Cell style={styles.cells}><Text style={styles.tableText} numberOfLines={2}>09/08/2021{'\n'}ABC34013-133</Text></DataTable.Cell></TouchableOpacity>
+              <TouchableOpacity style={styles.cells} onPress={() => setTableDetailModalVisible(true)}><DataTable.Cell style={styles.cells}><Text style={styles.tableText}>Raahem</Text></DataTable.Cell></TouchableOpacity>
+              <TouchableOpacity style={styles.cells} onPress={() => setTableDetailModalVisible(true)}><DataTable.Cell style={styles.cells}><Text style={styles.tableText}>69000</Text></DataTable.Cell></TouchableOpacity>
+              <TouchableOpacity style={styles.cells} onPress={() => setTableDetailModalVisible(true)}><DataTable.Cell style={styles.cells}><Text style={styles.tableText}>Model Town, Lahore</Text></DataTable.Cell></TouchableOpacity>
+                <DataTable.Cell style={styles.cells}>
+                    <View style={styles.checkboxContainer}>
+        <CheckBox
+          value={isSelected}
+          onValueChange={setSelection}
+          style={styles.checkbox}
+        />
+            </View>
+            </DataTable.Cell>
               </DataTable.Row>
-            </TouchableOpacity>
+            {/* </TouchableOpacity> */}
             <DataTable.Pagination
               page={page}
               numberOfPages={3}
@@ -262,8 +237,7 @@ const MakePurchase = props => {
     )
 }
 
-
-MakePurchase.navigationOptions = navigationData => {
+DeliveryOrders.navigationOptions = navigationData => {
     return {
         headerTitle: 'Zaki Sons',
         headerTitleAlign: 'center',
@@ -285,7 +259,8 @@ MakePurchase.navigationOptions = navigationData => {
     };
   };
 
-export default MakePurchase
+
+export default DeliveryOrders
 
 
 const styles = StyleSheet.create({
@@ -477,5 +452,8 @@ const styles = StyleSheet.create({
     elevation: 5,
     width: Dimensions.get('window').height > 900 ? Dimensions.get('window').width * 0.7 : Dimensions.get('window').width * 0.80,
     height: Dimensions.get('window').height > 900 ? Dimensions.get('window').height* 0.5 : Dimensions.get('window').height * 0.60
+  },
+  checkbox: {
+    alignSelf: "center",
   },
 })

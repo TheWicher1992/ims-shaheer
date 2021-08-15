@@ -1,88 +1,156 @@
 import { createStackNavigator } from 'react-navigation-stack'
 import { createAppContainer } from 'react-navigation';
 import { createDrawerNavigator } from 'react-navigation-drawer'
-// import { createBottomTabNavigator } from 'react-navigation-tabs'
+import { Dimensions } from 'react-native';
 import React from 'react'
 import AdminDashboard from '../screens/AdminDashboard';
 import AdminLogin from '../screens/AdminLogin';
 import EmployeeLogin from '../screens/EmployeeLogin';
 import MakeSale from '../screens/MakeSale';
 import MakePurchase from '../screens/MakePurchase';
+import Employee from '../screens/Employee';
+import Product from '../screens/Product'
+import Warehouse from '../screens/Warehouses';
+import DeliveryOrders from '../screens/DeliveryOrders';
+import Suppliers from '../screens/Suppliers';
+import Clients from '../screens/Clients';
 
+const dash = createStackNavigator({
+  Dashboard: {
+    screen: AdminDashboard
+  },
+  Sales: {
+    screen: MakeSale,
+  },
+  MakePurchase: {
+    screen: MakePurchase,
+  },
+  Products: {
+    screen: Product
+  },
+  Warehouse: {
+    screen: Warehouse
+  },
+  Delivery: {
+    screen: DeliveryOrders
+  },
+  Suppliers: {
+    screen: Suppliers
+  },
+  Employee: {
+    screen: Employee
+  },
+  Clients: {
+    screen: Clients
+  }
+}, {initialRouteName: 'Dashboard'});
 
-const defaultStackNavOptions = {
-    mode: 'modal'
-}
-// const MainStack = createStackNavigator({
-//     Dashboard: {
-//         screen: AdminDashboard,
-//     },
-//     Sales: {
-//       screen: MakeSale,
-//     },
-//     MakePurchase: {
-//       screen: MakePurchase,
-//     }, 
-//   }, { headerMode: 'screen' } );  
+// Drawer Navigator
+const Drawer = createDrawerNavigator({
+  dashboard: {
+    screen: dash,
+    navigationOptions: ({ navigation }) => ({
+      drawerLabel: () => null,
+    })
+  },
+  Dashboard: {
+    screen: AdminDashboard,
+    navigationOptions: ({ navigation }) => ({
+      drawerLabel: 'Dashboard',
+    })
+  },
+  Sales: {
+    screen: MakeSale,
+    navigationOptions: ({ navigation }) => ({
+      drawerLabel: 'Sales',
+    })
+  },
+  MakePurchase: {
+    screen: MakePurchase,
+    navigationOptions: ({ navigation }) => ({
+      drawerLabel: 'Purchases',
+    })
+  },
+  Products: {
+    screen: Product,
+    navigationOptions: ({ navigation }) => ({
+      drawerLabel: 'Products',
+    })
+  },
+  Warehouse: {
+    screen: Warehouse,
+    navigationOptions: ({ navigation }) => ({
+      drawerLabel: 'Warehouses',
+    })
+  },
+  Delivery: {
+    screen: DeliveryOrders,
+    navigationOptions: ({ navigation }) => ({
+      drawerLabel: 'Delivery Orders',
+    })
+  },
+  Suppliers: {
+    screen: Suppliers,
+    navigationOptions: ({ navigation }) => ({
+      drawerLabel: 'Suppliers',
+    })
+  },
+  Clients: {
+    screen: Clients,
+    navigationOptions: ({ navigation }) => ({ 
+      drawerLabel: 'Clients',
+    })
+  },
+  Employee: {
+    screen: Employee,
+    navigationOptions: ({ navigation }) => ({
+      drawerLabel: 'Employees',
+    })
+  }, 
 
-// const Drawer = createDrawerNavigator({ 
-//     MainStack: {
-//       screen: MainStack  
-//     },
-//     Dashboard: {
-//         screen: AdminDashboard,
-//     },      
-//   });
-
-// const AppNavigation = createStackNavigator({
-//     Login : {
-//         screen: AdminLogin,
-//     },
-//     Dashboard: {
-//         screen: AdminDashboard,
-//     },
-//     Drawer: {
-//         screen: Drawer,   
-//     } 
-// }, defaultStackNavOptions)
-         
-const MainStack = createStackNavigator({
-    
-    Dashboard: {
-        screen: AdminDashboard,
-    },
-    Sales: {
-        screen: MakeSale,
-      }, 
-    
-  }, defaultStackNavOptions );  
-const AppNavigation = createDrawerNavigator({
-    Login : {
-        screen: AdminLogin, 
-        navigationOptions: {
-            drawerLabel: () => null, // hides from the drawer
-            drawerLockMode: 'locked-closed', // prevent user from opening the drawer in Bar 
-          },
-    },
-    employeeLogin : {
-        screen: EmployeeLogin,
-        navigationOptions: {
-            drawerLabel: () => null, // hides from the drawer
-            drawerLockMode: 'locked-closed', // prevent user from opening the drawer in Bar
-          }, 
-    }, 
-    main: {
-        screen: MainStack,
-        navigationOptions: {
-            drawerLabel: () => null, // hides from the drawer
-          },
-    },
-    Sales: {
-        screen: MakeSale,
+  },
+  {
+    contentOptions: {
+      activeTintColor: 'none',
+      activeBackgroundColor :'none',
+      
+      headerTitleStyle: {
+        color: 'white'
       },
-      MakePurchase: {
-        screen: MakePurchase,
-      }, 
-}, defaultStackNavOptions)
+      headerStyle: {
+        backgroundColor: '#006270'
+      },
+      itemsContainerStyle: {
+        paddingVertical: Dimensions.get('window').height < 900 ? 95 : 120, 
+      },
+      labelStyle: {
+        color: 'white',
+        fontSize: Dimensions.get('window').height > 900 ? 20: 15,
+        marginTop: Dimensions.get('window').height > 900 ? "16%": "8%",
+      },
+      
+
+
+    },
+    drawerBackgroundColor: '#008394',
+
+  }
+);
+
+
+// Main App Navigation
+const AppNavigation = createStackNavigator({
+  Login: {
+    screen: AdminLogin,
+  },
+  employeeLogin : {
+    screen: EmployeeLogin,
+  },
+
+  Drawer: {
+    screen: Drawer,
+  }
+}, { headerMode: 'none' } );
+
 
 export default createAppContainer(AppNavigation)

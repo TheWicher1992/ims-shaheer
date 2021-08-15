@@ -5,14 +5,14 @@ import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { FontAwesome } from '@expo/vector-icons';
 import { DataTable } from 'react-native-paper';
 import Modal from 'react-native-modal';
-import { Picker } from '@react-native-picker/picker';
+import PickerCheckBox from 'react-native-picker-checkbox';
 import TableDetailModal from '../components/TableDetailModal';
 import FilterButton from '../components/FilterButton';
 
 
 const optionsPerPage = [2, 3, 4];
 
-const MakePurchase = props => {
+const Clients = props => {
 
 
   const handleConfirm = (pItems) => { // temporary for picker
@@ -62,39 +62,25 @@ const MakePurchase = props => {
 
   
   // make a sale variables below:
-  const [productName, setProductName] = React.useState(``)
-  const [quantityVal, setQuantityVal] = React.useState(0)
-  const [amountVal, setAmountVal] = React.useState(0)
-  const [clientName, setClientName] = React.useState(``)
-  const [notes, setNotes] = React.useState(``)
+  const [name, setName] = React.useState(``)
+  const [balance, setBalance] = React.useState(``)
+  const [phoneNumber, setPhoneNumber] = React.useState(0)
 
 
-  const onChangeProductName = (prodName) => {
-    setProductName(prodName);
+  const onChangeName = (supplierName) => {
+    setName(supplierName);
   }
 
-  const onChangeQuantity = (quant) => {
-    setQuantityVal(quant);
+  const onChangeBalnace = (bal) => {
+    setBalance(bal);
   }
 
-  const onChangeAmount = (amount) => {
-    setAmountVal(amount);
+  const onChangePhoneNumber = (phNumber) => {
+    setPhoneNumber(phNumber);
   }
 
-  const onChangeClientName = (clName) => {
-    setClientName(clName);
-  }
 
-  const onChangeNotes = (noteVal) => {
-    setNotes(noteVal);
-  }
-
-  const addPurchase = () => {
-    console.log(productName);
-    console.log(quantityVal);
-    console.log(amountVal);
-    console.log(clientName);
-    console.log(notes);
+  const addClient = () => {
     setModalVisible(false); //closing modal on done for now
   }
   
@@ -121,52 +107,13 @@ const MakePurchase = props => {
             <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
                 <View style={styles.modalStyle}>
                   <View style = {{justifyContent: 'center', alignItems : 'center', }}>
-                      <Text style = {styles.modalTitle}>Make a Purchase</Text>
+                      <Text style = {styles.modalTitle}>Add Supplier</Text>
                       <View>
-
-                      <View style = {{borderWidth: 2, borderRadius: 40,borderColor: "#008394",width: Dimensions.get('window').width * 0.65, top: 60, height: 40, fontSize: 8,  }}>
-                        <Picker
-                          style = {{top:6, color: 'grey', fontFamily: 'Roboto'}}
-                          itemStyle={{ fontWeight: '100' }}
-                          selectedValue = {productName}
-                          onValueChange={(itemValue, itemIndex) =>
-                            setProductName(itemValue)
-                          }
-                        >
-                          <Picker.Item label="PVC" value="Transparent" />
-                          <Picker.Item label="White" value="White" />
-                          <Picker.Item label="Black" value="Black" />
-                          <Picker.Item label="Blue" value="Blue" />
-                          <Picker.Item label="Brown" value="Brown" />
-                          <Picker.Item label="Pink" value="Pink" />
-                        </Picker>
+                        <TextInput onChangeText={onChangeName} style={styles.input} placeholder="Name" autoCorrect={false} />
+                        <TextInput onChangeText={onChangeBalnace} style={styles.input} placeholder="Balance" autoCorrect={false} />
+                        <TextInput onChangeText={onChangePhoneNumber} style={styles.input} placeholder="Phone Number" autoCorrect={false} />
                       </View>
-                      <View style = {{marginTop: 20}}>
-                        <TextInput onChangeText={onChangeQuantity} style={styles.input} placeholder="Quantity" autoCorrect={false} />
-                        <TextInput onChangeText={onChangeAmount} style={styles.input} placeholder="Amount" autoCorrect={false} />
-                        <TextInput onChangeText={onChangeNotes} style={styles.input} placeholder="Notes" autoCorrect={false} />
-                      </View>
-                      <View style = {{borderWidth: 2, borderRadius: 40,borderColor: "#008394",width: Dimensions.get('window').width * 0.65, top: 60, height: 40, fontSize: 8,  }}>
-                        <Picker
-                          style = {{top:6, color: 'grey', fontFamily: 'Roboto'}}
-                          itemStyle={{ fontWeight: '100' }}
-                          selectedValue = {clientName}
-                          onValueChange={(itemValue, itemIndex) =>
-                            setClientName(itemValue)
-                          }
-                        >
-                          <Picker.Item label="Ahmed Ateeq" value="Ahmed Ateeq" />
-                          <Picker.Item label="Sameer Nadeem" value="Sameer Nadeem" />
-                          <Picker.Item label="Raahem Asghar" value="Raahem Asghar" />
-                          <Picker.Item label="Ali Hassan Maqsood" value="Ali Hassan Maqsood" />
-                          <Picker.Item label="Haseeb Abid" value="Haseeb Abid" />
-                          <Picker.Item label="Babar Azam" value="Babar Azam" />
-                        </Picker>
-                      </View>
-
-                        
-                      </View>
-                      <View style = {{flexDirection: 'row',  alignItems : 'center', top: 65}}>
+                      <View style = {{flexDirection: 'row',  alignItems : 'center', top: 45}}>
                         <TouchableOpacity style={{alignSelf: 'flex-start'}} onPress = {() => {setModalVisible(false)}}>
                           <View>
                             <View style={styles.buttonModalContainerCross}>
@@ -176,7 +123,7 @@ const MakePurchase = props => {
                             </View>
                           </View>
                         </TouchableOpacity>   
-                        <TouchableOpacity onPress = {() => {addPurchase()}}>
+                        <TouchableOpacity onPress = {() => {addClient()}}>
                           <View>
                             <View style={styles.buttonModalContainer}>
                               <View>
@@ -193,13 +140,13 @@ const MakePurchase = props => {
         <TableDetailModal state={isTableDetailModalVisible} handleClose={handleClose} title='Employee Information' name='Raahem Asghar' email='raahemasghar97@gmail.com' occupation="Employee" />
         <View style = {styles.screen}>
           <View>
-            <Text style={styles.title}>Purchases</Text>
+            <Text style={styles.title}>Clients</Text>
           </View>
         </View>
         <View style = {styles.containerButton}>
           <TouchableOpacity onPress = {() => {setModalVisible(true)}}>
             <View style={styles.buttonContainer}>
-              <Text style={styles.buttonText}>Add Purchase</Text>
+              <Text style={styles.buttonText}>Add Client</Text>
             </View>
           </TouchableOpacity>
           <View style = {{flexDirection: 'row', justifyContent: 'center',}}>
@@ -227,18 +174,16 @@ const MakePurchase = props => {
         
           <DataTable>
             <DataTable.Header>
-              <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Product</Text></DataTable.Title>
-              <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Quantity</Text></DataTable.Title>
-              <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Amount</Text></DataTable.Title>
-              <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Client</Text></DataTable.Title>
+              <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Name</Text></DataTable.Title>
+              <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Balance</Text></DataTable.Title>
+              <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Phone Number</Text></DataTable.Title>
             </DataTable.Header>
 
             <TouchableOpacity onPress={() => setTableDetailModalVisible(true)}>
               <DataTable.Row>
-                <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>ABC34013-133</Text></DataTable.Cell>
-                <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>59</Text></DataTable.Cell>
-                <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>69000</Text></DataTable.Cell>
                 <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>Ahmed Ateeq</Text></DataTable.Cell>
+                <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>59000</Text></DataTable.Cell>
+                <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>0347-0545035</Text></DataTable.Cell>
               </DataTable.Row>
             </TouchableOpacity>
             <DataTable.Pagination
@@ -263,7 +208,7 @@ const MakePurchase = props => {
 }
 
 
-MakePurchase.navigationOptions = navigationData => {
+Clients.navigationOptions = navigationData => {
     return {
         headerTitle: 'Zaki Sons',
         headerTitleAlign: 'center',
@@ -285,7 +230,7 @@ MakePurchase.navigationOptions = navigationData => {
     };
   };
 
-export default MakePurchase
+export default Clients
 
 
 const styles = StyleSheet.create({
@@ -307,7 +252,7 @@ const styles = StyleSheet.create({
   modalStyle: {
     backgroundColor: "#fff",
     width: Dimensions.get('window').height > 900 ? 600 : 320,
-    height: Dimensions.get('window').height > 900 ? 540: 480,
+    height: Dimensions.get('window').height > 900 ? 380: 360,
     borderWidth: 2,
     borderRadius: 20,
     marginBottom: 20,

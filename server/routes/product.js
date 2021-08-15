@@ -72,7 +72,6 @@ router.post('/', async (req, res) => {
             serial,
             brand: brandID,
             colour: colourID,
-            stock,
             warehouse,
             description
         })
@@ -188,6 +187,7 @@ router.get('/:page/:query/:colour/:brand/:warehouse/:sort/:sortBy', async (req, 
             products
         })
     } catch (err) {
+        console.log(err)
         return res.status(400).json({
             error: 'SERVER_ERROR'
         })
@@ -298,7 +298,7 @@ router.put('/:id', async (req, res) => {
         product.serial = serial
         product.brand = brandID
         product.colour = colourID
-        product.stock = stock
+        // product.stock = stock
         product.warehouse = warehouse
         product.description = description
 
