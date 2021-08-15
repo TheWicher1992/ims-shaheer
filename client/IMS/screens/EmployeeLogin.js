@@ -44,7 +44,7 @@ const EmployeeLogin = props => {
                             <TextInput style={styles.input} placeholder="Email" autoCorrect={false}/>
                             <TextInput style={styles.input} placeholder="Password" secureTextEntry={true} autoCorrect={false}/>
                             <View >
-                                <TouchableOpacity onPress={() => props.navigation.navigate({routeName: 'Dashboard'})}>
+                                <TouchableOpacity onPress={() => props.navigation.navigate({routeName: 'EmployeeDashboard'})}>
                                     <View style={styles.buttonContainer}>
                                         <Text style={styles.buttonText}>Login</Text>
                                     </View>
