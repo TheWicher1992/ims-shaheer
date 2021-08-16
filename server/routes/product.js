@@ -232,6 +232,7 @@ router.get('/:page/:query/:colour/:brand/:warehouse/:sort/:sortBy', async (req, 
 
         const products = await Product
             .find(filters)
+            .populate(['brand', 'colour'])
             .sort(sortOptions)
             .skip(itemsPerPage * page)
             .limit(itemsPerPage)
