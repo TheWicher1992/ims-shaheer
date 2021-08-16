@@ -34,14 +34,19 @@ const FilterModal = props => {
                 </View>
                     
                 <View style = {styles.TextBox}>
-                    <View style = {{justifyContent: 'center', alignItems: 'flex-start', marginTop: '9.5%', paddingLeft: '5%'}}>
-                        <View style = {{flexDirection: 'row', alignSelf: 'stretch'}}>
-                            <Text style = {styles.normalText}>
-                                Color
+                    <View style = {{marginTop: '9.5%', paddingLeft: '5%'}}>
+                        <View style = {{flexDirection: 'row', justifyContent: 'space-between'}}>
+                        <View style={{justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-start'}}>
+                            <Text style = {styles.sideText}>
+                                Colors
                             </Text>
+                            </View>
+                            <View style={{justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-end', paddingRight: '8%'}}>
                             <Text style = {styles.sideText}>
                                 All
                             </Text>
+                            </View>
+                            
                         </View>
                         
                     </View>
@@ -77,27 +82,27 @@ const FilterModal = props => {
                     </View>
                 </View>
                 
-                <View style = {styles.TextBox}>
+                {/* <View style = {styles.TextBox}>
                     <View style = {{justifyContent: 'center', alignItems: 'flex-start', marginTop: '9.5%', paddingLeft: '5%'}}>
                         <Text style = {styles.normalText}>
                             Ahmed is great
                         </Text>
                     </View>
-                </View>
+                </View> */}
 
                 <View style = {styles.bottomBox}>
-                    <View style = {{ justifyContent: 'center', alignItems: 'center',}}>
-                    {/* <TouchableOpacity> */}
+                    {/* <View style = {{ justifyContent: 'center', alignItems: 'center',}}> */}
+                    <TouchableOpacity>
                         <View style = {styles.bottomButton}>  
                             <Text style = {styles.footerText}>
                                 View Items
                             </Text>
                         </View>
-                    {/* </TouchableOpacity> */}
+                    </TouchableOpacity>
                        
                         
                         
-                    </View>
+                    {/* </View> */}
                 </View>
 
             </View>
@@ -134,8 +139,8 @@ const styles = StyleSheet.create({
         fontWeight: '600',
         color: "#008394",
         textAlign: 'right',
-        alignSelf: 'flex-end',
-        alignItems: 'flex-end',
+        ///alignSelf: 'flex-end',
+        //alignItems: 'flex-end',
         // marginLeft: '65%',
     },
     topTextBox: {
@@ -163,13 +168,14 @@ const styles = StyleSheet.create({
         width: '100%',
         height: '100%',
         backgroundColor: '#D3D3D3',
+        alignItems: 'center',
          
     },
     bottomButton: {
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#00E0C7',
-        width: '90%',
+        width: '100%',
         height: Dimensions.get('window').height*0.08,
         marginTop: Dimensions.get('window').height*0.18,
         borderWidth: 2,
