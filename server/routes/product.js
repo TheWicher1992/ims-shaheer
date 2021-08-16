@@ -4,7 +4,9 @@ const ProductColour = require('../models/ProductColour')
 const Brand = require('../models/Brand')
 const Product = require('../models/Product')
 const config = require('config')
-
+const Warehouse = require('../models/Warehouse')
+const Stock = require('../models/Stock')
+const DeliveryOrder = require('../models/DeliveryOrder')
 router.post('/', async (req, res) => {
     try {
         var {
@@ -87,6 +89,58 @@ router.post('/', async (req, res) => {
             error: 'SERVER_ERROR'
         })
     }
+})
+router.get('/filters', async (req, res) => {
+    //brand, colour, warehouse, date, price
+
+    //get brands
+
+    const brands = await Brand.find()
+
+    //get colours
+
+    const colours = await ProductColour.find()
+
+    //get warehouses
+
+    const warehouses = await Warehouse.find()
+
+    const filters = {
+        brands,
+        colours,
+        warehouses
+    }
+
+
+    return res.status(200).json({
+        filters
+    })
+
+
+})
+
+router.get('/stock/:id', async (req, res) => {
+
+    const productID = req.params.id
+
+    const warehouseStock = await Stock.find({
+        product: productID
+    })
+
+    const deliverOrderStocks = await DeliveryOrder.find({
+        product: productID
+    })
+
+    const stocks = {
+        warehouseStock,
+        deliverOrderStocks
+    }
+
+    return res.status(200).json({
+        stocks
+    })
+
+
 })
 
 router.get('/:id', async (req, res) => {
@@ -301,5 +355,7 @@ router.put('/:id', async (req, res) => {
         })
     }
 })
+
+
 
 module.exports = router

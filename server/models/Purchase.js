@@ -21,6 +21,9 @@ const purchaseSchema = new Schema({
     total: {
         type: Number
     },
+    received: {
+        type: Number
+    },
     note: {
         type: String,
         trim: true

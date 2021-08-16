@@ -10,9 +10,8 @@ const clientSchema = new Schema({
         trim: true
     },
     balance: {
-        type: String,
-        require: true,
-        trim: true
+        type: Number,
+        default: 0,
     },
     phone: {
         type: String,

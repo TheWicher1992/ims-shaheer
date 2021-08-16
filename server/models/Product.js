@@ -26,6 +26,10 @@ const productSchema = new Schema({
         type: String,
         trim: true
     },
+    totalStock: {
+        type: Number,
+        default: 0
+    },
     date: {
         type: Date,
         default: Date.now

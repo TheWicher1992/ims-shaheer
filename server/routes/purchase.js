@@ -5,6 +5,7 @@ const Product = require('../models/Product')
 const DeliveryOrder = require('../models/DeliveryOrder')
 const Warehouse = require('../models/Warehouse')
 const Stock = require('../models/Stock')
+const Client = require('../models/Client')
 router.post('/', async (req, res) => {
     const {
         product,
@@ -19,15 +20,24 @@ router.post('/', async (req, res) => {
         warehouseID
     } = req.body
 
+
+    //set received appropriately
+    if (payment === 'Credit') received = 0
+    if (payment === 'Full') received = total
+
+    //New purchase
     const purchase = new Purchase({
         product,
         quantity,
         client,
         payment,
         total,
+        received,
         note
     })
 
+
+    //if DeliveryOrder
     if (isDeliveryOrder) {
         const deliveryOrder = new DeliveryOrder({
             client,
@@ -38,7 +48,10 @@ router.post('/', async (req, res) => {
         })
         await deliveryOrder.save()
     }
+    //if physical stock
     else {
+
+        //update warehouse with correct amount of stock and product
         const warehouse = await Warehouse.findOne({
             _id: warehouseID
         })
@@ -63,6 +76,27 @@ router.post('/', async (req, res) => {
 
     await purchase.save()
 
+
+    //Update totalstock
+    const prod = await Product.findOne({
+        _id: product
+    })
+
+    prod.totalStock += quantity
+
+    await prod.save()
+    //End update totalstock
+
+    //Update client balance
+    const clientDB = await Client.findOne({
+        _id: client
+    })
+
+    clientDB.balance = total - received
+
+    await clientDB.save()
+    //  End update client balance
+
     return res.status(200).json({
         purchase
     })
@@ -70,6 +104,11 @@ router.post('/', async (req, res) => {
 
 
 })
+
+
+
+
+
 
 // router.put('/:id', async (req, res) => {
 
