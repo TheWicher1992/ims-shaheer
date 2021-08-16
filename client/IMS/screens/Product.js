@@ -289,7 +289,7 @@ const Product = props => {
       </Modal>
 
       {/* modal for adding brand*/}
-      <View style={styles.centeredView}>
+      <View>
         <Modal 
           onSwipeComplete={() => setAddBrandModal(false)}
           swipeDirection="left"
@@ -322,7 +322,7 @@ const Product = props => {
       </View>
 
       {/* modal for adding color */}
-      <View style={styles.centeredView}>
+      <View>
         <Modal 
           onSwipeComplete={() => setAddColorModal(false)}
           swipeDirection="left"
@@ -419,15 +419,7 @@ const Product = props => {
 
             ))
           }
-          {/* <DataTable.Row>
-              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>122</Text></DataTable.Cell>
-              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>Abcdecec</Text></DataTable.Cell>
-              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>PVC</Text></DataTable.Cell>
-              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>Transparent</Text></DataTable.Cell>
-              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>59</Text></DataTable.Cell>
-              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>69000</Text></DataTable.Cell>
-              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>11-B</Text></DataTable.Cell>
-            </DataTable.Row> */}
+
           <DataTable.Pagination
             page={page}
             numberOfPages={3}

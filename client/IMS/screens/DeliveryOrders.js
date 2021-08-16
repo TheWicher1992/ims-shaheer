@@ -5,7 +5,7 @@ import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { FontAwesome } from '@expo/vector-icons';
 import { DataTable } from 'react-native-paper';
 import Modal from 'react-native-modal';
-import PickerCheckBox from 'react-native-picker-checkbox';
+import { Picker } from '@react-native-picker/picker';
 import TableDetailModal from '../components/TableDetailModal';
 import FilterButton from '../components/FilterButton';
 
@@ -127,10 +127,29 @@ const DeliveryOrders = props => {
                         <TextInput onChangeText={onChangeProductName} style={styles.input} placeholder="Product" autoCorrect={false} />
                         <TextInput onChangeText={onChangeQuantity} style={styles.input} placeholder="Quantity" autoCorrect={false} />
                         <TextInput onChangeText={onChangeLocation} style={styles.input} placeholder="Location" autoCorrect={false} />
-                        <TextInput onChangeText={onChangeClientName} style={styles.input} placeholder="Client" autoCorrect={false} />
-                        <TextInput onChangeText={onChangeNotes} style={styles.input} placeholder="Notes" autoCorrect={false} />
+                        <TextInput multiline={true} numberOfLines={5} onChangeText={onChangeNotes} style={styles.input} placeholder="Notes" autoCorrect={false} />
+
+                        <View style = {{borderWidth: 2, borderRadius: 40,borderColor: "#008394",width: Dimensions.get('window').width * 0.65, height: 40, fontSize: 8, justifyContent: 'space-between', marginTop: 60  }}>
+                          <Picker
+                            style = {{top:6, color: 'grey', fontFamily: 'Roboto'}}
+                            itemStyle={{ fontWeight: '100' }}
+                            placeholder = "Select a Client"
+                            selectedValue = {clientName}
+                            onValueChange={(itemValue, itemIndex) =>
+                              setClientName(itemValue)
+                            }
+                          >
+                            <Picker.Item label="Ahmed Ateeq" value="Ahmed Ateeq" />
+                            <Picker.Item label="Nigger" value="Nigger" />
+                            <Picker.Item label="Raaking" value="Raaking" />
+                            <Picker.Item label="Witcher" value="Witcher" />
+                            <Picker.Item label="Ali noob" value="Ali noob" />
+                          </Picker>
+                        </View>
+
+
                       </View>
-                      <View style = {{flexDirection: 'row',  alignItems : 'center', top: 45}}>
+                      <View style = {{flexDirection: 'row',  alignItems : 'center', }}>
                         <TouchableOpacity style={{alignSelf: 'flex-start'}} onPress = {() => {setModalVisible(false)}}>
                           <View>
                             <View style={styles.buttonModalContainerCross}>
