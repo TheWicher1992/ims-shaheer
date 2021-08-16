@@ -1,193 +1,35 @@
-import * as React from 'react';
-import { useEffect, useState } from 'react'
-import { StyleSheet, Text, View, Button, Dimensions, TextInput, TouchableOpacity, KeyboardAvoidingView, ScrollView, Pressable } from 'react-native';
-import HeaderButton from '../components/HeaderButton';
-import { HeaderButtons, Item } from 'react-navigation-header-buttons';
-import { FontAwesome } from '@expo/vector-icons';
-import { DataTable } from 'react-native-paper';
-import Modal from 'react-native-modal';
-import ProductDetailModal from '../components/ProductDetailModal';
-import FilterButton from '../components/FilterButton';
-import { Picker } from '@react-native-picker/picker';
-import DropDownPicker from 'react-native-dropdown-picker';
+import React, { useState, useEffect } from "react";
+import { Modal, StyleSheet, Text, View, TouchableOpacity, Dimensions, TextInput, KeyboardAvoidingView, ScrollView } from "react-native";
+import {Picker} from '@react-native-picker/picker';
 import { uri } from '../api.json'
 import axios from "axios"
-
-
-const optionsPerPage = [2, 3, 4];
-
-const Product = props => {
-
-
-  const [products, setProducts] = useState([])
-  const [touchedProduct, setTouchedProduct] = useState([])
-  const [brandsAndColours, setBrandAndColours] = useState({
-    brands: [],
-    colours: []
-  })
-  const [filters, setFilters] = useState({
-    page: 1,
-    query: '*',
-    colour: '*',
-    brand: '*',
-    ware: '*',
-    sort: '*',
-    sortBy: '*'
-  })
-
-  const getProducts = async () => {
-    const res = await axios.get(
-      `${uri}/api/product/${filters.page}/${filters.query}/${filters.colour}/${filters.brand}/${filters.ware}/${filters.sort}/${filters.sortBy}`
-    )
-
-    setProducts(res.data.products)
-  }
-
-
-  const getBrandColours = async () => {
-    const res = await axios.get(
-      `${uri}/api/product/cb`
-    )
-
-    setBrandAndColours(res.data)
-
-    setColor(res.data.colours[0]._id)
-    setBrand(res.data.brands[0]._id)
-
-    console.log(res.data)
-
-
-  }
-
-
-  useEffect(() => {
-    getProducts()
-  }, [])
-
-
-  const [page, setPage] = React.useState(0); //for pages of table
-  const [itemsPerPage, setItemsPerPage] = React.useState(optionsPerPage[0]); //for items per page on table
-
-  const [isModalVisible, setModalVisible] = React.useState(false); //to set modal on and off
-
-  const toggleModal = () => { //to toggle model on and off -- function
-    setModalVisible(!isModalVisible);
-  };
-
-
-
-  React.useEffect(() => { //for table
-    setPage(0);
-  }, [itemsPerPage]);
-
-
-  const [search, setSearch] = React.useState(``) //for keeping track of search
-  const onChangeSearch = (searchVal) => { //function to keep track of search as the user types
-    setSearch(searchVal);
-
-    setFilters({ ...filters, query: searchVal })
-    console.log(search);
-  }
-
-  const searchFunc = () => {
-    //printing search value for now
-    getProducts()
-  }
-
-
-  // make a sale variables below:
-  const [serialNo, setSerialNo] = React.useState(``)
-  const [productName, setProductName] = React.useState(``)
-  const [amountVal, setAmountVal] = React.useState(0)
+const ProductUpdateModal = props => {
+  const [isModalVisible, setModalVisible] = useState(false);
   const [color, setColor] = React.useState()
   const [brand, setBrand] = React.useState(``)
-  const [description, setDescription] = React.useState(``)
-  const addProduct = () => {
-    setModalVisible(false); //closing modal on done for now
-    console.log(color, brand)
-
-    const body = {
-      title: productName,
-      serial: serialNo,
-      brandID: brand,
-      colourID: color,
-      description,
-      price: amountVal
-    }
-
-    axios.post(`${uri}/api/product`, body, {
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-      .then(res => getProducts())
-      .catch(err => console.log(err))
-
-
-
-
-  }
-  const onChangeSerialNo = (serial) => {
-    setSerialNo(serial);
-  }
-
-  const onChangeProductName = (prodName) => {
-    setProductName(prodName);
-  }
-
-
-  const onChangeAmount = (amount) => {
-    setAmountVal(amount);
-  }
-
-
-
-  const onChangeDescription = (desc) => {
-    setDescription(desc);
-  }
-
-
-
-
-  const [isTableDetailModalVisible, setTableDetailModalVisible] = React.useState(false);
-
-  const onPressModal = (prod) => {
-    setTableDetailModalVisible(true), 
-    setTouchedProduct(prod)
-  }
-
-  const handleClose = () => {
-    setTableDetailModalVisible(false)
-  }
-
-
-  const [openColor, setOpenColor] = useState(false);
-  const [openBrand, setOpenBrand] = useState(false);
-  const [openWarehouse, setOpenWarehouse] = useState(false);
-  const [itemsColor, setItemsColor] = useState([
-    { label: 'Transparent', value: 'Transparent' },
-    { label: 'White', value: 'transparent' }
-  ]);
-  const [itemsBrand, setItemsBrand] = useState([
-    { label: 'PVC', value: 'PVC' },
-    { label: 'PVCC', value: 'PVCC' }
-  ]);
-  const [itemsWarehouse, setItemsWarehouse] = useState([
-    { label: '1b', value: '1b' },
-    { label: '1c', value: '1c' },
-    { label: '1d', value: '1d' },
-  ]);
-
   const [addBrandModal, setAddBrandModal] = useState(false);
   const brandModal = () => { //to toggle model on and off -- function
     setAddBrandModal(!addBrandModal);
   };
-
   const [addBrand, setAddBrand] = useState(``);
+  const [brandsAndColours, setBrandAndColours] = useState({
+    brands: [],
+    colours: []
+  })
+  //console.log('hete')
+  useEffect(() => {
+    setModalVisible(props.state);
+    getBrandColours()
+  }, [props.state]);
+  const [addColorModal, setAddColorModal] = useState(false);
+  
+  const colorModal = () => {
+    setAddColorModal(!addColorModal);
+  }
   const onChangeNewBrand = (newBrandd) => {
     setAddBrand(newBrandd);
   }
-
+  const [addColor, setAddColor] = useState(``);
   const addNewBrand = () => {
     axios.post(`${uri}/api/product/brand`, {
       brand: addBrand
@@ -200,15 +42,6 @@ const Product = props => {
     getBrandColours().then(() => setAddBrandModal(false))
 
   }
-
-
-
-  const [addColorModal, setAddColorModal] = useState(false);
-  const colorModal = () => {
-    setAddColorModal(!addColorModal);
-  }
-
-  const [addColor, setAddColor] = useState(``);
   const onChangeNewColor = (newColor => {
     setAddColor(newColor);
   })
@@ -224,29 +57,48 @@ const Product = props => {
 
     getBrandColours().then(() => setAddColorModal(false))
   }
+  function handleClose() {
+    setModalVisible(false);
+  }
+  const onChangeSerialNo = (serial) => {
+    setSerialNo(serial);
+  }
 
-  const showAddProductForm = () => {
-
-    getBrandColours().then(() => setModalVisible(true))
+  const onChangeProductName = (prodName) => {
+    setProductName(prodName);
   }
 
 
-  return (
-    // <KeyboardAvoidingView style = {styles.containerView} behavior = "padding">
+  const onChangeAmount = (amount) => {
+    setAmountVal(amount);
+  }
 
-    <View>
-      <Modal
-        onSwipeComplete={() => setModalVisible(false)}
+  const onChangeDescription = (desc) => {
+    setDescription(desc);
+  }
+  const getBrandColours = async () => {
+    const res = await axios.get(
+      `${uri}/api/product/cb`
+    )
+    setBrandAndColours(res.data)
+    setColor(res.data.colours[0]._id)
+    setBrand(res.data.brands[0]._id)
+    //console.log(res.data)
+  }
+  return (
+    <KeyboardAvoidingView>
+    <Modal
+        onSwipeComplete={() => props.handleClose()}
         swipeDirection="left"
         presentationStyle="overFullScreen"
         transparent
-        visible={isModalVisible}>
+        visible={props.state}>
 
         <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', }}>
           <ScrollView>
             <View style={styles.modalStyle}>
               <View style={{ justifyContent: 'center', alignItems: 'center', }}>
-                <Text style={styles.modalTitle}>Add a Product</Text>
+                <Text style={styles.modalTitle}>Update Product</Text>
                 <View style={{ marginTop: 50 }}>
                   <TextInput onChangeText={onChangeSerialNo} style={styles.input} placeholder="Serial" autoCorrect={false} />
                   <TextInput onChangeText={onChangeProductName} style={styles.input} placeholder="Product" autoCorrect={false} />
@@ -269,12 +121,6 @@ const Product = props => {
                           <Picker.Item key={c._id} label={c.title} value={c._id} />
                         )))
                       }
-                      {/* // <Picker.Item label="Transparent" value="Transparent" />
-                      // <Picker.Item label="White" value="White" />
-                      // <Picker.Item label="Black" value="Black" />
-                      // <Picker.Item label="Blue" value="Blue" />
-                      // <Picker.Item label="Brown" value="Brown" />
-                      // <Picker.Item label="Pink" value="Pink" /> */}
                     </Picker>
                     <View>
                       <TouchableOpacity onPress={() => { setAddColorModal(true) }}>
@@ -287,17 +133,10 @@ const Product = props => {
                         </View>
                       </TouchableOpacity>
                     </View>
-
-
-
-
-
-
                   </View>
                   <View style={{ borderWidth: 2, borderRadius: 40, borderColor: "#008394", width: Dimensions.get('window').width * 0.65, marginTop: 40, height: 40, fontSize: 8, }}>
                     <Picker
                       style={{ top: 6, color: 'grey', fontFamily: 'Roboto' }}
-                      //itemStyle={{ transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }]}}
                       itemStyle={{ fontWeight: '100' }}
 
                       selectedValue={brand}
@@ -310,9 +149,6 @@ const Product = props => {
                           <Picker.Item key={b._id} label={b.title} value={b._id} />
                         )))
                       }
-                      {/* <Picker.Item label="PVC" value="PVC" />
-                      <Picker.Item label="PVCC" value="PVCC" /> */}
-
                     </Picker>
                     <TouchableOpacity onPress={() => { setAddBrandModal(true) }}>
                       <View style={styles.addButton}>
@@ -323,14 +159,10 @@ const Product = props => {
                         </View>
                       </View>
                     </TouchableOpacity>
-
                   </View>
-
-
                 </View>
-
                 <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 30, }}>
-                  <TouchableOpacity style={{ alignSelf: 'flex-start' }} onPress={() => { setModalVisible(false) }}>
+                  <TouchableOpacity style={{ alignSelf: 'flex-start' }} onPress={() => { props.handleClose() }}>
                     <View>
                       <View style={styles.buttonModalContainerCross}>
                         <View>
@@ -353,7 +185,6 @@ const Product = props => {
             </View>
           </ScrollView>
         </View>
-
       </Modal>
 
       {/* modal for adding brand*/}
@@ -423,117 +254,9 @@ const Product = props => {
       </View>
 
 
-
-      <ProductDetailModal state={isTableDetailModalVisible} handleClose={handleClose} object={touchedProduct} title='Product Detail' getProducts={getProducts}/>
-      <View style={styles.screen}>
-        <View>
-          <Text style={styles.title}>Products</Text>
-        </View>
-      </View>
-      <View style={styles.containerButton}>
-        <TouchableOpacity onPress={() => { showAddProductForm() }}>
-          <View style={styles.buttonContainer}>
-            <Text style={styles.buttonText}>Add Product</Text>
-          </View>
-        </TouchableOpacity>
-        <View style={{ flexDirection: 'row', justifyContent: 'center', }}>
-          <View style={styles.searchBar}>
-            <TextInput onChangeText={onChangeSearch} style={styles.buttonInput} placeholder="type here..." autoCorrect={false} />
-          </View>
-          <View style={{ top: 14 }}>
-            <TouchableOpacity onPress={() => { searchFunc() }}>
-              <View style={styles.searchButton}>
-                <FontAwesome
-                  name={"search"}
-                  size={16}
-                  color={"#006270"}
-                  style={{ right: 10, top: 3 }}
-                />
-                <Text style={styles.searchButtonText}>Search</Text>
-              </View>
-            </TouchableOpacity>
-          </View>
-        </View>
-
-      </View>
-      <FilterButton />
-      <View style={{ flexDirection: 'row', }}>
-        {/* <ScrollView horizontal = {true}> */}
-        <DataTable>
-          <DataTable.Header>
-            <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Serial No.</Text></DataTable.Title>
-            <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Product</Text></DataTable.Title>
-            <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Brand</Text></DataTable.Title>
-            <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Color</Text></DataTable.Title>
-            {/* <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Quantity</Text></DataTable.Title> */}
-            <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Amount</Text></DataTable.Title>
-            {/* <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Warehouse</Text></DataTable.Title> */}
-
-          </DataTable.Header>
-
-
-          {
-            products.map((product, i) => (
-              <TouchableOpacity key={i} onPress={() => onPressModal(product)}>
-                <DataTable.Row>
-                  <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{product.serial === undefined ? 0 : product.serial}</Text></DataTable.Cell>
-                  <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{product.title}</Text></DataTable.Cell>
-                  <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{product.brand.title === undefined ? '--' : product.brand.title}</Text></DataTable.Cell>
-                  <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{product.colour.title === undefined ? '--' : product.colour.title}</Text></DataTable.Cell>
-                  <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{product.price === undefined ? 0 : product.price}</Text></DataTable.Cell>
-                  {/* <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{product.serial}</Text></DataTable.Cell> */}
-                </DataTable.Row>
-              </TouchableOpacity>
-
-            ))
-          }
-
-          <DataTable.Pagination
-            page={page}
-            numberOfPages={3}
-            onPageChange={(page) => setPage(page)}
-            label="1-2 of 6"
-            optionsPerPage={optionsPerPage}
-            itemsPerPage={itemsPerPage}
-            setItemsPerPage={setItemsPerPage}
-            showFastPagination
-            optionsLabel={'Rows per page'}
-          />
-        </DataTable>
-
-        {/* </ScrollView> */}
-      </View>
-    </View>
-    // </KeyboardAvoidingView>
-
-
-  )
-}
-
-
-Product.navigationOptions = navigationData => {
-  return {
-    headerTitle: 'Zaki Sons',
-    headerTitleAlign: 'center',
-    headerTitleStyle: { color: 'white' },
-    headerStyle: {
-      backgroundColor: '#008394',
-    },
-    headerLeft: (
-      <HeaderButtons HeaderButtonComponent={HeaderButton}>
-        <Item
-          title="Menu"
-          iconName="ios-menu"
-          onPress={() => {
-            navigationData.navigation.toggleDrawer();
-          }}
-        />
-      </HeaderButtons>
-    ),
-  };
+    </KeyboardAvoidingView>
+  );
 };
-
-export default Product
 
 
 const styles = StyleSheet.create({
@@ -558,9 +281,9 @@ const styles = StyleSheet.create({
     height: Dimensions.get('window').height > 900 ? 680 : 600,
     borderWidth: 2,
     borderRadius: 20,
-    marginBottom: 20,
+    //marginBottom: 20,
     borderColor: "#008394",
-    marginTop: Dimensions.get('window').height > 750 ? Dimensions.get('window').height * 0.1 : 0
+    marginTop: Dimensions.get('window').height > 750 ? Dimensions.get('window').height * 0.25 : 0
   },
   subtitle: {
     color: '#008394',
@@ -764,4 +487,7 @@ const styles = StyleSheet.create({
     display: 'flex',
 
   },
-})
+  
+});
+
+export default ProductUpdateModal;
