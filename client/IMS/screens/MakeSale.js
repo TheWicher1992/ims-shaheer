@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, Button, Dimensions, TextInput, TouchableOpacity, KeyboardAvoidingView, ScrollView} from 'react-native'; 
 import HeaderButton from '../components/HeaderButton';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
@@ -9,7 +10,7 @@ import PickerCheckBox from 'react-native-picker-checkbox';
 import TableDetailModal from '../components/TableDetailModal';
 import FilterModal from '../components/FilterModal';
 import FilterButton from '../components/FilterButton';
-
+import { Picker } from '@react-native-picker/picker';
 
 const optionsPerPage = [2, 3, 4];
 
@@ -18,21 +19,26 @@ const MakeSale = props => {
 
   const handleConfirm = (pItems) => { // temporary for picker
     console.log('pItems =>', pItems);
+    setSelectedWarehouse(pItems);
   }
  
-  const items = [ //temporary for picker for filter
+  const items = [ //temporary for picker of warehouse or delivery order
     {
       itemKey:1,
-      itemDescription:'Item 1'
+      itemDescription:'W1'
       },
     {
       itemKey:2,
-      itemDescription:'Item 2'
+      itemDescription:'W2'
       },
     {
       itemKey:3,
-      itemDescription:'Item 3'
-      }
+      itemDescription:'W3'
+    },
+    {
+      itemKey:4,
+      itemDescription:'Delivery Orders'
+    },
   ];
 
   const [page, setPage] = React.useState(0); //for pages of table
@@ -65,9 +71,12 @@ const MakeSale = props => {
   // make a sale variables below:
   const [productName, setProductName] = React.useState(``)
   const [quantityVal, setQuantityVal] = React.useState(0)
-  const [amountVal, setAmountVal] = React.useState(0)
+  const [totalAmount, setTotalAmount] = React.useState(0) //this is total amount
+  const [amountReceived, setAmountReceived] = React.useState(0) //this is amount received
+  const [paymentType,setPaymentType] = React.useState(``) //this is the type of payment
   const [clientName, setClientName] = React.useState(``)
   const [notes, setNotes] = React.useState(``)
+  const [selectedWarehouse, setSelectedWarehouse] = useState({})
 
 
   const onChangeProductName = (prodName) => {
@@ -78,8 +87,16 @@ const MakeSale = props => {
     setQuantityVal(quant);
   }
 
-  const onChangeAmount = (amount) => {
-    setAmountVal(amount);
+  const onChangeAmountReceived = (amount) => { //for amount received
+    setAmountReceived(amount);
+  }
+
+  const onChangeTotalAmount = (amount) => { // for total amount
+    setTotalAmount(amount);
+  }
+
+  const onChangePaymentType = (type) => { // for payment type
+    setPaymentType(type);
   }
 
   const onChangeClientName = (clName) => {
@@ -93,9 +110,12 @@ const MakeSale = props => {
   const addSale = () => {
     console.log(productName);
     console.log(quantityVal);
-    console.log(amountVal);
+    console.log(amountReceived);
+    console.log(totalAmount);
     console.log(clientName);
     console.log(notes);
+    console.log(paymentType);
+    console.log(selectedWarehouse);
     setModalVisible(false); //closing modal on done for now
   }
   
@@ -121,14 +141,83 @@ const MakeSale = props => {
                 <View style={styles.modalStyle}>
                   <View style = {{justifyContent: 'center', alignItems : 'center', }}>
                       <Text style = {styles.modalTitle}>Make a Sale</Text>
-                      <View>
-                        <TextInput onChangeText={onChangeProductName} style={styles.input} placeholder="Product" autoCorrect={false} />
-                        <TextInput onChangeText={onChangeQuantity} style={styles.input} placeholder="Quantity" autoCorrect={false} />
-                        <TextInput onChangeText={onChangeAmount} style={styles.input} placeholder="Amount" autoCorrect={false} />
-                        <TextInput onChangeText={onChangeClientName} style={styles.input} placeholder="Client" autoCorrect={false} />
-                        <TextInput onChangeText={onChangeNotes} style={styles.input} placeholder="Notes" autoCorrect={false} />
-                      </View>
-                      <View style = {{flexDirection: 'row',  alignItems : 'center', top: 45}}>
+                        <View style={{ marginTop: 40,borderWidth: 2, borderRadius: 40, borderColor: "#008394", width: Dimensions.get('window').width * 0.65, height: 40, fontSize: 8, justifyContent: 'space-between' }}>
+
+                          <Picker
+                            style={{ top: 6, color: 'grey', fontFamily: 'Roboto' }}
+                            itemStyle={{ fontWeight: '100' }}
+                            placeholder="Select a Product"
+                            selectedValue={productName}
+                            onValueChange={(itemValue, itemIndex) =>
+                              setProductName(itemValue)
+                            }
+                          >
+                            <Picker.Item label="PVC" value="PVC" />
+                            <Picker.Item label="PVCC" value="PVCC" />
+                          </Picker>
+
+                        </View>
+                        <View style={{marginTop: 20,borderWidth: 2, borderRadius: 40, borderColor: "#008394", width: Dimensions.get('window').width * 0.65, height: 40, fontSize: 8, justifyContent: 'space-between' }}>
+
+                          <Picker
+                            style={{ top: 6, color: 'grey', fontFamily: 'Roboto' }}
+                            itemStyle={{ fontWeight: '100' }}
+                            placeholder="Select a Client"
+                            selectedValue={clientName}
+                            onValueChange={(itemValue, itemIndex) =>
+                              setClientName(itemValue)
+                            }
+                          >
+                            <Picker.Item label="Ahmed Ateeq" value="Ahmed Ateeq" />
+                            <Picker.Item label="Sameer Don" value="Sameer Don" />
+                          </Picker>
+
+                        </View>
+
+                        <View style = {{marginTop: 20}}>
+                          <TextInput onChangeText={onChangeQuantity} style={styles.input} placeholder="Quantity" autoCorrect={false} />
+                          <TextInput onChangeText={onChangeTotalAmount} style={styles.input} placeholder="Total Amount" autoCorrect={false} />
+                          <TextInput onChangeText={onChangeAmountReceived} style={styles.input} placeholder="Amount Received" autoCorrect={false} />
+                          <TextInput multiline = {true} numberOfLines = {5} onChangeText={onChangeNotes} style={styles.input} placeholder="Notes" autoCorrect={false} />
+
+                          <View style={{borderWidth: 2, borderRadius: 40, borderColor: "#008394", width: Dimensions.get('window').width * 0.65, height: 40, fontSize: 8, justifyContent: 'space-between' }}>
+
+                            <Picker
+                              style={{ top: 6, color: 'grey', fontFamily: 'Roboto' }}
+                              itemStyle={{ fontWeight: '100' }}
+                              placeholder="Select a Payment Type"
+                              selectedValue={paymentType}
+                              onValueChange={(itemValue, itemIndex) =>
+                                setPaymentType(itemValue)
+                              }
+                            >
+                              <Picker.Item label="Cash" value="Cash" />
+                              <Picker.Item label="Credit" value="Credit" />
+                              <Picker.Item label="Cheque" value="Cheque" />
+                            </Picker>
+
+                          </View>
+                          <View style={{marginTop: 20, borderWidth: 2, borderRadius: 40, borderColor: "#008394", width: Dimensions.get('window').width * 0.65, height: 40, fontSize: 8, justifyContent: 'space-between' }}>
+                          <View style = {{bottom: 5}}>
+                            <PickerCheckBox
+                              data={items}
+                              headerComponent={<Text style={{fontSize:32,color: "black", fontWeight: 'bold'}} >Items</Text>}
+                              OnConfirm={(pItems) => handleConfirm(pItems)}
+                              ConfirmButtonTitle='OK'
+                              DescriptionField='itemDescription'
+                              KeyField='itemKey'
+                              placeholder='Select Warehouse'
+                              arrowColor='#008394'
+                              arrowSize={18}
+                              
+                            />
+                          </View>
+                            
+                          </View>
+                        </View>
+
+                      
+                      <View style = {{flexDirection: 'row',  alignItems : 'center',}}>
                         <TouchableOpacity style={{alignSelf: 'flex-start'}} onPress = {() => {setModalVisible(false)}}>
                           <View>
                             <View style={styles.buttonModalContainerCross}>
@@ -189,50 +278,6 @@ const MakeSale = props => {
 
         </View>
         <FilterButton filters = "hello"/>
-        
-        {/* <View style = {{flexDirection: 'row', top: 35, justifyContent: 'space-around',alignItems: 'stretch'}}>
-          <PickerCheckBox
-            data={items}
-            headerComponent={<Text style={{fontSize:25}} >Items</Text>}
-            OnConfirm={(pItems) => {handleConfirm(pItems)}}
-            ConfirmButtonTitle='OK'
-            DescriptionField='itemDescription' 
-            KeyField='itemKey'
-            placeholder='Quantity'
-            arrowColor='#006270'
-            arrowSize={20}
-            placeholderSelectedItems ='$count selected item(s)'
-            containerStyle = {styles.filterInput}
-          />
-          <PickerCheckBox
-            data={items}
-            headerComponent={<Text style={{fontSize:25}} >Items</Text>}
-            OnConfirm={(pItems) => {handleConfirm(pItems)}}
-            ConfirmButtonTitle='OK'
-            DescriptionField='itemDescription' 
-            KeyField='itemKey'
-            placeholder='Amount'
-            arrowColor='#006270'
-            arrowSize={20}
-            placeholderSelectedItems ='$count selected item(s)'
-            containerStyle = {styles.filterInput}
-          />
-        </View>
-        <View style = {{flexDirection: 'row', top: 35, justifyContent: 'space-around',alignItems: 'stretch'}}>
-          <PickerCheckBox
-            data={items}
-            headerComponent={<Text style={{fontSize:25}} >Items</Text>}
-            OnConfirm={(pItems) => {handleConfirm(pItems)}}
-            ConfirmButtonTitle='OK'
-            DescriptionField='itemDescription' 
-            KeyField='itemKey'
-            placeholder='Time'
-            arrowColor='#006270'
-            arrowSize={20}
-            placeholderSelectedItems ='$count selected item(s)'
-            containerStyle = {styles.filterInput}
-          />          
-        </View> */}
         <ScrollView>
         
           <DataTable>
@@ -317,7 +362,7 @@ const styles = StyleSheet.create({
   modalStyle: {
     backgroundColor: "#fff",
     width: Dimensions.get('window').height > 900 ? 600 : 320,
-    height: Dimensions.get('window').height > 900 ? 540: 480,
+    height: Dimensions.get('window').height > 900 ? 700: 620,
     borderWidth: 2,
     borderRadius: 20,
     marginBottom: 20,
@@ -397,7 +442,6 @@ const styles = StyleSheet.create({
     marginBottom:20,
     fontSize: 12,
     borderColor: "#008394",
-    top: 60,
     height: 40,
     padding: 10,
   },
