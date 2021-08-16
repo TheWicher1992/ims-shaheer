@@ -12,13 +12,12 @@ router.post('/', async (req, res) => {
             serial,
             brandID,
             colourID,
-            stock,
-            warehouse,
             description,
             isNewColour,
             newColour,
             isNewBrand,
-            newBrand
+            newBrand,
+            price
         } = req.body
 
         const exists = await Product.exists({
@@ -72,8 +71,8 @@ router.post('/', async (req, res) => {
             serial,
             brand: brandID,
             colour: colourID,
-            warehouse,
-            description
+            description,
+            price
         })
 
         await product.save()
@@ -229,13 +228,12 @@ router.put('/:id', async (req, res) => {
             serial,
             brandID,
             colourID,
-            stock,
-            warehouse,
             description,
             isNewColour,
             newColour,
             isNewBrand,
-            newBrand
+            newBrand,
+            price
         } = req.body
 
         const product = await Product.findOne({
@@ -283,23 +281,11 @@ router.put('/:id', async (req, res) => {
             }
         }
 
-
-        // const product = new Product({
-        //     title,
-        //     serial,
-        //     brand: brandID,
-        //     colour: colourID,
-        //     stock,
-        //     warehouse,
-        //     description
-        // })
-
         product.title = title
         product.serial = serial
         product.brand = brandID
         product.colour = colourID
-        // product.stock = stock
-        product.warehouse = warehouse
+        product.price = price
         product.description = description
 
         await product.save()

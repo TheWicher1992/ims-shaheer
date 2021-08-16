@@ -1,15 +1,6 @@
 const mongoose = require('mongoose')
 
 const Schema = mongoose.Schema
-// "Purchase":{
-//     "Time":"Date",
-//     "Product":"Ref Product",
-//     "Quantity":"Number",
-//     "Amount":"Number",
-//     "Client":"Ref Client",
-//     "Payment":["Partial", "Credit","Full"],
-//     "Note":"String"
-// }
 
 const purchaseSchema = new Schema({
     product: {

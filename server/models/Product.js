@@ -19,20 +19,8 @@ const productSchema = new Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'ProductColour'
     },
-    stock: {
-        type: Number,
-        default: 0
-    },
-    physicalStock: {
-        type: Number,
-        default: 0
-    },
     price: {
         type: Number
-    },
-    warehouse: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Warehouse'
     },
     description: {
         type: String,
