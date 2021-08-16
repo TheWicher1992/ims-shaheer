@@ -90,6 +90,18 @@ router.post('/', async (req, res) => {
         })
     }
 })
+
+router.get('/cb', async (req, res) => {
+    const brands = await Brand.find()
+    const colours = await ProductColour.find()
+
+
+    return res.json({
+        brands,
+        colours
+    })
+})
+
 router.get('/filters', async (req, res) => {
     //brand, colour, warehouse, date, price
 
@@ -355,6 +367,27 @@ router.put('/:id', async (req, res) => {
             error: 'SERVER_ERROR'
         })
     }
+})
+
+router.post('/colour', async (req, res) => {
+    const { colour } = req.body
+
+    const productColour = new ProductColour({
+        title: colour
+    })
+
+    await productColour.save()
+
+})
+router.post('/brand', async (req, res) => {
+    const { brand } = req.body
+
+    const brandC = new Brand({
+        title: brand
+    })
+
+    await brandC.save()
+
 })
 
 

@@ -11,9 +11,10 @@ router.get('/:id', async (req, res) => {
 
         const warehouse = await Warehouse.findById(id)
         if (warehouse) {
-        return res.status(200).json({
-            warehouse
-        })}
+            return res.status(200).json({
+                warehouse
+            })
+        }
         else {
             return res.status(400).json({
                 error: 'SERVER_ERROR'
@@ -31,23 +32,21 @@ router.post('/', async (req, res) => {
     try {
         var {
             name,
-            totalProducts,
-            totalStock,
+
         } = req.body
-        
+
         let checkWarehouse = await Warehouse.exists({
             name
         })
         console.log(checkWarehouse)
-        if(checkWarehouse){
+        if (checkWarehouse) {
             return res.status(400).json({
                 error: 'WAREHOUSE_ALREADY_EXIST'
             })
         }
         const warehouse = new Warehouse({
-            name,
-            totalProducts,
-            totalStock,
+            name
+
         })
 
         await warehouse.save()
@@ -62,7 +61,7 @@ router.post('/', async (req, res) => {
             error: 'SERVER_ERROR'
         })
     }
-    })
+})
 
 router.delete('/:id', async (req, res) => {
     try {
@@ -84,7 +83,7 @@ router.delete('/:id', async (req, res) => {
         })
 
         return res.status(200).json({
-        status : 'SUCCESSFULY_DELETED'
+            status: 'SUCCESSFULY_DELETED'
         })
     } catch (err) {
         return res.status(400).json({
@@ -106,10 +105,10 @@ router.put('/:id', async (req, res) => {
 
 
         let warehouse = await Warehouse.findOne({
-            _id : id
+            _id: id
         })
         console.log(warehouse)
-        if(!warehouse){
+        if (!warehouse) {
             return res.status(400).json({
                 error: 'WAREHOUSE_DOES_NOT_EXIST'
             })
@@ -121,7 +120,7 @@ router.put('/:id', async (req, res) => {
         // })
 
         // await warehouse.save()
-        warehouse.name= name
+        warehouse.name = name
         warehouse.totalProducts = totalProducts
         warehouse.totalStock = totalStock
 
@@ -137,6 +136,6 @@ router.put('/:id', async (req, res) => {
             error: 'SERVER_ERROR'
         })
     }
-    })
+})
 
-    module.exports = router
+module.exports = router

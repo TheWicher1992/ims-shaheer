@@ -15,7 +15,7 @@ const warehouseSchema = new Schema({
     },
     totalStock: {
         type: Number,
-        require: 0
+        default: 0
     },
     date: {
         type: Date,

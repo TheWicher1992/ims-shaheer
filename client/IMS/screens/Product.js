@@ -8,7 +8,7 @@ import { DataTable } from 'react-native-paper';
 import Modal from 'react-native-modal';
 import TableDetailModal from '../components/TableDetailModal';
 import FilterButton from '../components/FilterButton';
-import {Picker} from '@react-native-picker/picker';
+import { Picker } from '@react-native-picker/picker';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { uri } from '../api.json'
 import axios from "axios"
@@ -20,7 +20,10 @@ const Product = props => {
 
 
   const [products, setProducts] = useState([])
-
+  const [brandsAndColours, setBrandAndColours] = useState({
+    brands: [],
+    colours: []
+  })
   const [filters, setFilters] = useState({
     page: 1,
     query: '*',
@@ -37,6 +40,22 @@ const Product = props => {
     )
 
     setProducts(res.data.products)
+  }
+
+
+  const getBrandColours = async () => {
+    const res = await axios.get(
+      `${uri}/api/product/cb`
+    )
+
+    setBrandAndColours(res.data)
+
+    setColor(res.data.colours[0]._id)
+    setBrand(res.data.brands[0]._id)
+
+    console.log(res.data)
+
+
   }
 
 
@@ -64,24 +83,49 @@ const Product = props => {
   const [search, setSearch] = React.useState(``) //for keeping track of search
   const onChangeSearch = (searchVal) => { //function to keep track of search as the user types
     setSearch(searchVal);
+
+    setFilters({ ...filters, query: searchVal })
     console.log(search);
   }
 
   const searchFunc = () => {
-    console.log(search); //printing search value for now
+    //printing search value for now
+    getProducts()
   }
 
 
   // make a sale variables below:
   const [serialNo, setSerialNo] = React.useState(``)
   const [productName, setProductName] = React.useState(``)
-  const [quantityVal, setQuantityVal] = React.useState(0)
   const [amountVal, setAmountVal] = React.useState(0)
-  const [color, setColor] = React.useState(``)
+  const [color, setColor] = React.useState()
   const [brand, setBrand] = React.useState(``)
-  const [warehouse, setWarehouse] = React.useState(``)
   const [description, setDescription] = React.useState(``)
+  const addProduct = () => {
+    setModalVisible(false); //closing modal on done for now
+    console.log(color, brand)
 
+    const body = {
+      title: productName,
+      serial: serialNo,
+      brandID: brand,
+      colourID: color,
+      description,
+      price: amountVal
+    }
+
+    axios.post(`${uri}/api/product`, body, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+      .then(res => getProducts())
+      .catch(err => console.log(err))
+
+
+
+
+  }
   const onChangeSerialNo = (serial) => {
     setSerialNo(serial);
   }
@@ -90,34 +134,18 @@ const Product = props => {
     setProductName(prodName);
   }
 
-  const onChangeQuantity = (quant) => {
-    setQuantityVal(quant);
-  }
 
   const onChangeAmount = (amount) => {
     setAmountVal(amount);
   }
 
-  const onChangeColor = (colorName) => {
-    console.log(colorname)
-    setColor(colorName);
-  }
 
-  const onChangeBrand = (brandName) => {
-    setBrand(brandName);
-  }
-
-  const onChangeWarehouse = (warehouseName) => {
-    setWarehouse(warehouseName);
-  }
 
   const onChangeDescription = (desc) => {
     setDescription(desc);
   }
 
-  const addProduct = () => {
-    setModalVisible(false); //closing modal on done for now
-  }
+
 
 
   const [isTableDetailModalVisible, setTableDetailModalVisible] = React.useState(false);
@@ -126,22 +154,22 @@ const Product = props => {
     setTableDetailModalVisible(false)
   }
 
-  
+
   const [openColor, setOpenColor] = useState(false);
-  const [openBrand, setOpenBrand] = useState(false);  
+  const [openBrand, setOpenBrand] = useState(false);
   const [openWarehouse, setOpenWarehouse] = useState(false);
   const [itemsColor, setItemsColor] = useState([
-    {label: 'Transparent', value: 'Transparent'},
-    {label: 'White', value: 'transparent'}
+    { label: 'Transparent', value: 'Transparent' },
+    { label: 'White', value: 'transparent' }
   ]);
   const [itemsBrand, setItemsBrand] = useState([
-    {label: 'PVC', value: 'PVC'},
-    {label: 'PVCC', value: 'PVCC'}
+    { label: 'PVC', value: 'PVC' },
+    { label: 'PVCC', value: 'PVCC' }
   ]);
   const [itemsWarehouse, setItemsWarehouse] = useState([
-    {label: '1b', value: '1b'},
-    {label: '1c', value: '1c'},
-    {label: '1d', value: '1d'},
+    { label: '1b', value: '1b' },
+    { label: '1c', value: '1c' },
+    { label: '1d', value: '1d' },
   ]);
 
   const [addBrandModal, setAddBrandModal] = useState(false);
@@ -150,14 +178,24 @@ const Product = props => {
   };
 
   const [addBrand, setAddBrand] = useState(``);
-  const onChangeNewBrand = (newBrandd) =>{
+  const onChangeNewBrand = (newBrandd) => {
     setAddBrand(newBrandd);
   }
 
   const addNewBrand = () => {
-    console.log(addBrand);
-    setAddBrandModal(false);
+    axios.post(`${uri}/api/product/brand`, {
+      brand: addBrand
+    }, {
+      headers: {
+        "Content-Type": 'application/json'
+      }
+    }).then(res => console.log(res.data))
+
+    getBrandColours().then(() => setAddBrandModal(false))
+
   }
+
+
 
   const [addColorModal, setAddColorModal] = useState(false);
   const colorModal = () => {
@@ -168,11 +206,24 @@ const Product = props => {
   const onChangeNewColor = (newColor => {
     setAddColor(newColor);
   })
-  const addNewColor = () =>{
-    console.log(addColor);
-    setAddColorModal(false);
+  const addNewColor = () => {
+
+    axios.post(`${uri}/api/product/colour`, {
+      colour: addColor
+    }, {
+      headers: {
+        "Content-Type": 'application/json'
+      }
+    }).then(res => console.log(res.data))
+
+    getBrandColours().then(() => setAddColorModal(false))
   }
-  
+
+  const showAddProductForm = () => {
+
+    getBrandColours().then(() => setModalVisible(true))
+  }
+
 
   return (
     // <KeyboardAvoidingView style = {styles.containerView} behavior = "padding">
@@ -190,66 +241,77 @@ const Product = props => {
             <View style={styles.modalStyle}>
               <View style={{ justifyContent: 'center', alignItems: 'center', }}>
                 <Text style={styles.modalTitle}>Add a Product</Text>
-                <View style = {{marginTop: 50}}>
+                <View style={{ marginTop: 50 }}>
                   <TextInput onChangeText={onChangeSerialNo} style={styles.input} placeholder="Serial" autoCorrect={false} />
                   <TextInput onChangeText={onChangeProductName} style={styles.input} placeholder="Product" autoCorrect={false} />
                   <TextInput onChangeText={onChangeAmount} style={styles.input} placeholder="Amount" autoCorrect={false} />
-                    <TextInput multiline={true} numberOfLines={5} onChangeText={onChangeDescription} style={styles.input} placeholder="Description" autoCorrect={false} />
-                  
-                  <View style = {{borderWidth: 2, borderRadius: 40,borderColor: "#008394",width: Dimensions.get('window').width * 0.65, height: 40, fontSize: 8, justifyContent: 'space-between'  }}>
+                  <TextInput multiline={true} numberOfLines={5} onChangeText={onChangeDescription} style={styles.input} placeholder="Description" autoCorrect={false} />
+
+                  <View style={{ borderWidth: 2, borderRadius: 40, borderColor: "#008394", width: Dimensions.get('window').width * 0.65, height: 40, fontSize: 8, justifyContent: 'space-between' }}>
                     <Picker
-                      style = {{top:6, color: 'grey', fontFamily: 'Roboto'}}
+                      style={{ top: 6, color: 'grey', fontFamily: 'Roboto' }}
                       itemStyle={{ fontWeight: '100' }}
-                      placeholder = "Select a brand"
-                      selectedValue = {color}
+                      placeholder="Select a brand"
+                      selectedValue={color}
                       onValueChange={(itemValue, itemIndex) =>
                         setColor(itemValue)
                       }
                     >
-                      <Picker.Item label="Transparent" value="Transparent" />
-                      <Picker.Item label="White" value="White" />
-                      <Picker.Item label="Black" value="Black" />
-                      <Picker.Item label="Blue" value="Blue" />
-                      <Picker.Item label="Brown" value="Brown" />
-                      <Picker.Item label="Pink" value="Pink" />
+
+                      {
+                        brandsAndColours.colours.map((c => (
+                          <Picker.Item key={c._id} label={c.title} value={c._id} />
+                        )))
+                      }
+                      {/* // <Picker.Item label="Transparent" value="Transparent" />
+                      // <Picker.Item label="White" value="White" />
+                      // <Picker.Item label="Black" value="Black" />
+                      // <Picker.Item label="Blue" value="Blue" />
+                      // <Picker.Item label="Brown" value="Brown" />
+                      // <Picker.Item label="Pink" value="Pink" /> */}
                     </Picker>
                     <View>
-                      <TouchableOpacity onPress={() => { setAddColorModal(true) }}> 
-                      <View style = {styles.addButton}>
-                        <View style = {{justifyContent: 'center', alignContent: 'center' , alignItems: 'center', }}>
-                          <Text style = {styles.modalbuttonText}>
-                            + Add
-                          </Text>
+                      <TouchableOpacity onPress={() => { setAddColorModal(true) }}>
+                        <View style={styles.addButton}>
+                          <View style={{ justifyContent: 'center', alignContent: 'center', alignItems: 'center', }}>
+                            <Text style={styles.modalbuttonText}>
+                              + Add
+                            </Text>
+                          </View>
                         </View>
-                      </View>
-                    </TouchableOpacity>
+                      </TouchableOpacity>
                     </View>
-                      
-                  
-                      
-                    
-                      
+
+
+
+
+
 
                   </View>
-                  <View style = {{borderWidth: 2, borderRadius: 40,borderColor: "#008394",width: Dimensions.get('window').width * 0.65, marginTop: 40, height: 40, fontSize: 8,  }}>
+                  <View style={{ borderWidth: 2, borderRadius: 40, borderColor: "#008394", width: Dimensions.get('window').width * 0.65, marginTop: 40, height: 40, fontSize: 8, }}>
                     <Picker
-                      style = {{top:6, color: 'grey', fontFamily: 'Roboto'}}
+                      style={{ top: 6, color: 'grey', fontFamily: 'Roboto' }}
                       //itemStyle={{ transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }]}}
                       itemStyle={{ fontWeight: '100' }}
-                      
-                      selectedValue = {brand}
+
+                      selectedValue={brand}
                       onValueChange={(itemValue, itemIndex) =>
                         setBrand(itemValue)
                       }
                     >
-                      <Picker.Item label="PVC" value="PVC" />
-                      <Picker.Item label="PVCC" value="PVCC" />
-                      
+                      {
+                        brandsAndColours.brands.map((b => (
+                          <Picker.Item key={b._id} label={b.title} value={b._id} />
+                        )))
+                      }
+                      {/* <Picker.Item label="PVC" value="PVC" />
+                      <Picker.Item label="PVCC" value="PVCC" /> */}
+
                     </Picker>
-                    <TouchableOpacity  onPress={() => { setAddBrandModal(true) }}>
-                      <View style = {styles.addButton}>
-                        <View style = {{justifyContent: 'center', alignContent: 'center' , alignItems: 'center'}}>
-                          <Text style = {styles.modalbuttonText}>
+                    <TouchableOpacity onPress={() => { setAddBrandModal(true) }}>
+                      <View style={styles.addButton}>
+                        <View style={{ justifyContent: 'center', alignContent: 'center', alignItems: 'center' }}>
+                          <Text style={styles.modalbuttonText}>
                             + Add
                           </Text>
                         </View>
@@ -257,11 +319,11 @@ const Product = props => {
                     </TouchableOpacity>
 
                   </View>
-                  
-                  
+
+
                 </View>
 
-                <View style={{ flexDirection: 'row', alignItems: 'center',marginTop: 30, }}>
+                <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 30, }}>
                   <TouchableOpacity style={{ alignSelf: 'flex-start' }} onPress={() => { setModalVisible(false) }}>
                     <View>
                       <View style={styles.buttonModalContainerCross}>
@@ -285,36 +347,36 @@ const Product = props => {
             </View>
           </ScrollView>
         </View>
-      
+
       </Modal>
 
       {/* modal for adding brand*/}
       <View>
-        <Modal 
+        <Modal
           onSwipeComplete={() => setAddBrandModal(false)}
           swipeDirection="left"
           presentationStyle="overFullScreen"
           visible={addBrandModal}
           transparent
         >
-          <View styles = {styles.centeredView}>
-            <View style = {styles.modalView}>
-            <Text style={styles.modalTitle}>Add a Brand</Text>
+          <View styles={styles.centeredView}>
+            <View style={styles.modalView}>
+              <Text style={styles.modalTitle}>Add a Brand</Text>
               <View style={styles.modalBody}>
-                  <TextInput onChangeText={onChangeNewBrand} placeholder="Add a Brand" style={styles.input}/>
+                <TextInput onChangeText={onChangeNewBrand} placeholder="Add a Brand" style={styles.input} />
               </View>
-              <View style={{flexDirection: 'row', justifyContent: 'space-evenly', alignItems : 'center'}}>
-                  <TouchableOpacity onPress={() => brandModal() }>
-                      <View style={styles.buttonModalContainer}>
-                          <Text style={styles.buttonModalText}>Back</Text>
-                      </View>
-                  </TouchableOpacity>
-                  <TouchableOpacity onPress={() => addNewBrand() }>
-                      <View style={styles.backButtonModalContainer}>
-                          <Text style={styles.buttonModalText}>Done</Text>
-                      </View>
-                  </TouchableOpacity>
-                  
+              <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center' }}>
+                <TouchableOpacity onPress={() => brandModal()}>
+                  <View style={styles.buttonModalContainer}>
+                    <Text style={styles.buttonModalText}>Back</Text>
+                  </View>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => addNewBrand()}>
+                  <View style={styles.backButtonModalContainer}>
+                    <Text style={styles.buttonModalText}>Done</Text>
+                  </View>
+                </TouchableOpacity>
+
               </View>
             </View>
           </View>
@@ -323,31 +385,31 @@ const Product = props => {
 
       {/* modal for adding color */}
       <View>
-        <Modal 
+        <Modal
           onSwipeComplete={() => setAddColorModal(false)}
           swipeDirection="left"
           presentationStyle="overFullScreen"
           visible={addColorModal}
           transparent
         >
-          <View styles = {styles.centeredView}>
-            <View style = {styles.modalView}>
-            <Text style={styles.modalTitle}>Add a Color</Text>
+          <View styles={styles.centeredView}>
+            <View style={styles.modalView}>
+              <Text style={styles.modalTitle}>Add a Color</Text>
               <View style={styles.modalBody}>
-                  <TextInput onChangeText={onChangeNewColor} placeholder="Add a Color" style={styles.input}/>
+                <TextInput onChangeText={onChangeNewColor} placeholder="Add a Color" style={styles.input} />
               </View>
-              <View style={{flexDirection: 'row', justifyContent: 'space-evenly', alignItems : 'center'}}>
-                  <TouchableOpacity onPress={() => colorModal() }>
-                      <View style={styles.buttonModalContainer}>
-                          <Text style={styles.buttonModalText}>Back</Text>
-                      </View>
-                  </TouchableOpacity>
-                  <TouchableOpacity onPress={() => addNewColor() }>
-                      <View style={styles.backButtonModalContainer}>
-                          <Text style={styles.buttonModalText}>Done</Text>
-                      </View>
-                  </TouchableOpacity>
-                  
+              <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center' }}>
+                <TouchableOpacity onPress={() => colorModal()}>
+                  <View style={styles.buttonModalContainer}>
+                    <Text style={styles.buttonModalText}>Back</Text>
+                  </View>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => addNewColor()}>
+                  <View style={styles.backButtonModalContainer}>
+                    <Text style={styles.buttonModalText}>Done</Text>
+                  </View>
+                </TouchableOpacity>
+
               </View>
             </View>
           </View>
@@ -363,7 +425,7 @@ const Product = props => {
         </View>
       </View>
       <View style={styles.containerButton}>
-        <TouchableOpacity onPress={() => { setModalVisible(true) }}>
+        <TouchableOpacity onPress={() => { showAddProductForm() }}>
           <View style={styles.buttonContainer}>
             <Text style={styles.buttonText}>Add Product</Text>
           </View>
@@ -666,34 +728,34 @@ const styles = StyleSheet.create({
     width: Dimensions.get('window').height > 900 ? Dimensions.get('window').width * 0.7 : Dimensions.get('window').width * 0.80,
     height: Dimensions.get('window').height > 900 ? Dimensions.get('window').height * 0.5 : Dimensions.get('window').height * 0.60
   },
-  addButton : {
+  addButton: {
     borderRadius: 40,
     backgroundColor: '#00E0C7',
     height: 24,
-    width: 80,    
-    
+    width: 80,
+
   },
-  modalbuttonText : {
+  modalbuttonText: {
     fontWeight: 'bold',
     color: 'white',
     fontSize: 12,
     marginTop: 3.5,
   },
-  modalBody:{
-    paddingVertical:'30%',
-    paddingHorizontal:10
+  modalBody: {
+    paddingVertical: '30%',
+    paddingHorizontal: 10
   },
-  backButtonModalContainer : {
+  backButtonModalContainer: {
     justifyContent: 'center',
     alignItems: 'center',
     alignContent: 'space-between',
-    borderRadius : 40,
+    borderRadius: 40,
     backgroundColor: '#008394',
     paddingVertical: 8,
     paddingHorizontal: 24,
-    top: Dimensions.get('window').height > 900 ? (Dimensions.get('window').width > 480 ? 35 : null): null,
+    top: Dimensions.get('window').height > 900 ? (Dimensions.get('window').width > 480 ? 35 : null) : null,
     margin: 20,
     display: 'flex',
-    
+
   },
 })
