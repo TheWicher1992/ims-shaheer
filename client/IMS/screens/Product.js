@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react'
-import { StyleSheet, Text, View, Button, Dimensions, TextInput, TouchableOpacity, KeyboardAvoidingView, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, Button, Dimensions, TextInput, TouchableOpacity, KeyboardAvoidingView, ScrollView, Pressable } from 'react-native';
 import HeaderButton from '../components/HeaderButton';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { FontAwesome } from '@expo/vector-icons';
@@ -144,6 +144,35 @@ const Product = props => {
     {label: '1d', value: '1d'},
   ]);
 
+  const [addBrandModal, setAddBrandModal] = useState(false);
+  const brandModal = () => { //to toggle model on and off -- function
+    setAddBrandModal(!addBrandModal);
+  };
+
+  const [addBrand, setAddBrand] = useState(``);
+  const onChangeNewBrand = (newBrandd) =>{
+    setAddBrand(newBrandd);
+  }
+
+  const addNewBrand = () => {
+    console.log(addBrand);
+    setAddBrandModal(false);
+  }
+
+  const [addColorModal, setAddColorModal] = useState(false);
+  const colorModal = () => {
+    setAddColorModal(!addColorModal);
+  }
+
+  const [addColor, setAddColor] = useState(``);
+  const onChangeNewColor = (newColor => {
+    setAddColor(newColor);
+  })
+  const addNewColor = () =>{
+    console.log(addColor);
+    setAddColorModal(false);
+  }
+  
 
   return (
     // <KeyboardAvoidingView style = {styles.containerView} behavior = "padding">
@@ -161,69 +190,17 @@ const Product = props => {
             <View style={styles.modalStyle}>
               <View style={{ justifyContent: 'center', alignItems: 'center', }}>
                 <Text style={styles.modalTitle}>Add a Product</Text>
-                <View>
+                <View style = {{marginTop: 50}}>
                   <TextInput onChangeText={onChangeSerialNo} style={styles.input} placeholder="Serial" autoCorrect={false} />
                   <TextInput onChangeText={onChangeProductName} style={styles.input} placeholder="Product" autoCorrect={false} />
                   <TextInput onChangeText={onChangeAmount} style={styles.input} placeholder="Amount" autoCorrect={false} />
                     <TextInput multiline={true} numberOfLines={5} onChangeText={onChangeDescription} style={styles.input} placeholder="Description" autoCorrect={false} />
-                  {/* dropdown */}
-                  {/* <TextInput onChangeText={onChangeBrand} style={styles.input} placeholder="Brand" autoCorrect={false} /> */}
-                  {/* dropdown */}
-                  {/* <TextInput onChangeText={onChangeColor} style={styles.input} placeholder="Color" autoCorrect={false} /> */}
-                  {/* <TextInput onChangeText={onChangeQuantity} style={styles.input} placeholder="Quantity" autoCorrect={false} /> */}
                   
-                  {/* dropdown */}
-                  {/* <TextInput onChangeText={onChangeWarehouse} style={styles.input} placeholder="Warehouse" autoCorrect={false} /> */}
-                  {/* <DropDownPicker
-                    defaultIndex={0}
-                    placeholder = "Select a Color"
-                    dropDownContainerStyle = {{widht : 10,}}
-                    containerStyle = {{height: 40,width: Dimensions.get('window').width * 0.65,}}
-                    style = {{borderWidth: 2, borderRadius: 40,borderColor: "#008394",width: Dimensions.get('window').width * 0.65, top: 60, height: 40, fontSize: 8,  }}
-                    labelStyle={{fontSize: 12, color: 'grey'}}
-                    placeholderStyle={{ color: 'grey',}}
-                    open={openColor}
-                    value={color}
-                    items={itemsColor}
-                    setOpen={setOpenColor}
-                    setValue={setColor}
-                    setItems={setItemsColor}                    
-                  />
-                  <DropDownPicker
-                    defaultIndex={0}
-                    placeholder = "Select a Brand"
-                    containerStyle = {{height: 40,width: Dimensions.get('window').width * 0.65,}}
-                    style = {{borderWidth: 2, borderRadius: 40,borderColor: "#008394",width: Dimensions.get('window').width * 0.65, top: 80, height: 40, fontSize: 8,  }}
-                    labelStyle={{fontSize: 12, color: 'grey'}}
-                    placeholderStyle={{ color: 'grey',}}
-                    open={openBrand}
-                    value={brand}
-                    items={itemsBrand}
-                    setOpen={setOpenBrand}
-                    setValue={setBrand}
-                    setItems={setItemsBrand}                    
-                  />
-                  <DropDownPicker
-                    defaultIndex={0}
-                    placeholder = "Select a Warehouse"
-                    dropDownContainerStyle = {{}}
-                    containerStyle = {{height: 40,width: Dimensions.get('window').width * 0.65,}}
-                    style = {{borderWidth: 2, borderRadius: 40,borderColor: "#008394",width: Dimensions.get('window').width * 0.65, top: 100, height: 40, fontSize: 8,  }}
-                    labelStyle={{fontSize: 12, color: 'grey'}}
-                    placeholderStyle={{ color: 'grey',}}
-                    open={openWarehouse}
-                    value={warehouse}
-                    items={itemsWarehouse}
-                    defaultIndex = {1}
-                    setOpen={setOpenWarehouse}
-                    setValue={setWarehouse}
-                    setItems={setItemsWarehouse}                    
-                  /> */}
-                  
-                  <View style = {{borderWidth: 2, borderRadius: 40,borderColor: "#008394",width: Dimensions.get('window').width * 0.65, top: 60, height: 40, fontSize: 8,  }}>
+                  <View style = {{borderWidth: 2, borderRadius: 40,borderColor: "#008394",width: Dimensions.get('window').width * 0.65, height: 40, fontSize: 8, justifyContent: 'space-between'  }}>
                     <Picker
                       style = {{top:6, color: 'grey', fontFamily: 'Roboto'}}
                       itemStyle={{ fontWeight: '100' }}
+                      placeholder = "Select a brand"
                       selectedValue = {color}
                       onValueChange={(itemValue, itemIndex) =>
                         setColor(itemValue)
@@ -236,9 +213,25 @@ const Product = props => {
                       <Picker.Item label="Brown" value="Brown" />
                       <Picker.Item label="Pink" value="Pink" />
                     </Picker>
+                    <View>
+                      <TouchableOpacity onPress={() => { setAddColorModal(true) }}> 
+                      <View style = {styles.addButton}>
+                        <View style = {{justifyContent: 'center', alignContent: 'center' , alignItems: 'center', }}>
+                          <Text style = {styles.modalbuttonText}>
+                            + Add
+                          </Text>
+                        </View>
+                      </View>
+                    </TouchableOpacity>
+                    </View>
+                      
+                  
+                      
+                    
+                      
 
                   </View>
-                  <View style = {{borderWidth: 2, borderRadius: 40,borderColor: "#008394",width: Dimensions.get('window').width * 0.65, top: 80, height: 40, fontSize: 8,  }}>
+                  <View style = {{borderWidth: 2, borderRadius: 40,borderColor: "#008394",width: Dimensions.get('window').width * 0.65, marginTop: 40, height: 40, fontSize: 8,  }}>
                     <Picker
                       style = {{top:6, color: 'grey', fontFamily: 'Roboto'}}
                       //itemStyle={{ transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }]}}
@@ -253,30 +246,22 @@ const Product = props => {
                       <Picker.Item label="PVCC" value="PVCC" />
                       
                     </Picker>
-
-                  </View>
-                  <View style = {{borderWidth: 2, borderRadius: 40,borderColor: "#008394",width: Dimensions.get('window').width * 0.65, top: 100, height: 40, fontSize: 8,  }}>
-                    <Picker
-                      style = {{top:6, color: 'grey', fontFamily: 'Roboto'}}
-                      //itemStyle={{ transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }]}}
-                      itemStyle={{  }}
-                      selectedValue = {warehouse}
-                      onValueChange={(itemValue, itemIndex) =>
-                        setWarehouse(itemValue)
-                      }
-                    >
-                      <Picker.Item label="1b" value="1b" />
-                      <Picker.Item label="1c" value="1c" />
-                      <Picker.Item label="1d" value="1d" />
-                      
-                    </Picker>
+                    <TouchableOpacity  onPress={() => { setAddBrandModal(true) }}>
+                      <View style = {styles.addButton}>
+                        <View style = {{justifyContent: 'center', alignContent: 'center' , alignItems: 'center'}}>
+                          <Text style = {styles.modalbuttonText}>
+                            + Add
+                          </Text>
+                        </View>
+                      </View>
+                    </TouchableOpacity>
 
                   </View>
                   
                   
                 </View>
 
-                <View style={{ flexDirection: 'row', alignItems: 'center', top: 105 }}>
+                <View style={{ flexDirection: 'row', alignItems: 'center',marginTop: 30, }}>
                   <TouchableOpacity style={{ alignSelf: 'flex-start' }} onPress={() => { setModalVisible(false) }}>
                     <View>
                       <View style={styles.buttonModalContainerCross}>
@@ -300,8 +285,76 @@ const Product = props => {
             </View>
           </ScrollView>
         </View>
-
+      
       </Modal>
+
+      {/* modal for adding brand*/}
+      <View style={styles.centeredView}>
+        <Modal 
+          onSwipeComplete={() => setAddBrandModal(false)}
+          swipeDirection="left"
+          presentationStyle="overFullScreen"
+          visible={addBrandModal}
+          transparent
+        >
+          <View styles = {styles.centeredView}>
+            <View style = {styles.modalView}>
+            <Text style={styles.modalTitle}>Add a Brand</Text>
+              <View style={styles.modalBody}>
+                  <TextInput onChangeText={onChangeNewBrand} placeholder="Add a Brand" style={styles.input}/>
+              </View>
+              <View style={{flexDirection: 'row', justifyContent: 'space-evenly', alignItems : 'center'}}>
+                  <TouchableOpacity onPress={() => brandModal() }>
+                      <View style={styles.buttonModalContainer}>
+                          <Text style={styles.buttonModalText}>Back</Text>
+                      </View>
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={() => addNewBrand() }>
+                      <View style={styles.backButtonModalContainer}>
+                          <Text style={styles.buttonModalText}>Done</Text>
+                      </View>
+                  </TouchableOpacity>
+                  
+              </View>
+            </View>
+          </View>
+        </Modal>
+      </View>
+
+      {/* modal for adding color */}
+      <View style={styles.centeredView}>
+        <Modal 
+          onSwipeComplete={() => setAddColorModal(false)}
+          swipeDirection="left"
+          presentationStyle="overFullScreen"
+          visible={addColorModal}
+          transparent
+        >
+          <View styles = {styles.centeredView}>
+            <View style = {styles.modalView}>
+            <Text style={styles.modalTitle}>Add a Color</Text>
+              <View style={styles.modalBody}>
+                  <TextInput onChangeText={onChangeNewColor} placeholder="Add a Color" style={styles.input}/>
+              </View>
+              <View style={{flexDirection: 'row', justifyContent: 'space-evenly', alignItems : 'center'}}>
+                  <TouchableOpacity onPress={() => colorModal() }>
+                      <View style={styles.buttonModalContainer}>
+                          <Text style={styles.buttonModalText}>Back</Text>
+                      </View>
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={() => addNewColor() }>
+                      <View style={styles.backButtonModalContainer}>
+                          <Text style={styles.buttonModalText}>Done</Text>
+                      </View>
+                  </TouchableOpacity>
+                  
+              </View>
+            </View>
+          </View>
+        </Modal>
+      </View>
+
+
 
       <TableDetailModal state={isTableDetailModalVisible} handleClose={handleClose} title='Employee Information' name='Raahem Asghar' email='raahemasghar97@gmail.com' occupation="Employee" />
       <View style={styles.screen}>
@@ -523,7 +576,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     fontSize: 12,
     borderColor: "#008394",
-    top: 60,
+    //top: 60,
     height: 40,
     padding: 10,
   },
@@ -620,5 +673,35 @@ const styles = StyleSheet.create({
     elevation: 5,
     width: Dimensions.get('window').height > 900 ? Dimensions.get('window').width * 0.7 : Dimensions.get('window').width * 0.80,
     height: Dimensions.get('window').height > 900 ? Dimensions.get('window').height * 0.5 : Dimensions.get('window').height * 0.60
+  },
+  addButton : {
+    borderRadius: 40,
+    backgroundColor: '#00E0C7',
+    height: 24,
+    width: 80,    
+    
+  },
+  modalbuttonText : {
+    fontWeight: 'bold',
+    color: 'white',
+    fontSize: 12,
+    marginTop: 3.5,
+  },
+  modalBody:{
+    paddingVertical:'30%',
+    paddingHorizontal:10
+  },
+  backButtonModalContainer : {
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignContent: 'space-between',
+    borderRadius : 40,
+    backgroundColor: '#008394',
+    paddingVertical: 8,
+    paddingHorizontal: 24,
+    top: Dimensions.get('window').height > 900 ? (Dimensions.get('window').width > 480 ? 35 : null): null,
+    margin: 20,
+    display: 'flex',
+    
   },
 })

@@ -1,12 +1,24 @@
 import React, { useState, useEffect } from "react";
 import { Text, View, TouchableOpacity, Dimensions, StyleSheet } from "react-native";
 import { FontAwesome } from '@expo/vector-icons';
+import FilterModal from "./FilterModal";
 
+const FilterButton = (props) => {
 
-const FilterButton = () => {
+  // filter modal 
+  const [isFilterModalVisible, setFilterModalVisible] = React.useState(false);
+
+  const closeFilterModal = () => { //turn off
+    setFilterModalVisible(false);
+  }
+
+  const openFilterModal = () => { // turn on 
+    setFilterModalVisible(true);
+  }
+
     return (
         <View style = {{flexDirection: 'row', justifyContent: 'center',marginTop: 35,left: Dimensions.get('window').height > 900 ? Dimensions.get('window').width * 0.36 : Dimensions.get('window').width * 0.34,}}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => setFilterModalVisible(true)}>
             <View style = {styles.buttonFilter} >
               <View style = {{flexDirection: 'row',}}>
                 <FontAwesome
@@ -20,8 +32,13 @@ const FilterButton = () => {
                 </Text>
               </View>
             </View>
-          </TouchableOpacity>  
+          </TouchableOpacity> 
+          <View>
+            <FilterModal state = {isFilterModalVisible} handleClose = {closeFilterModal} filters = {props}/>
+          </View> 
         </View>
+        
+
     )
 };
 

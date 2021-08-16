@@ -7,7 +7,7 @@ import { DataTable } from 'react-native-paper';
 import Modal from 'react-native-modal';
 import PickerCheckBox from 'react-native-picker-checkbox';
 import TableDetailModal from '../components/TableDetailModal';
-import { Icon } from 'react-native-elements'
+import FilterModal from '../components/FilterModal';
 import FilterButton from '../components/FilterButton';
 
 
@@ -101,12 +101,10 @@ const MakeSale = props => {
   
 
   const [isTableDetailModalVisible, setTableDetailModalVisible] = React.useState(false);
-
-  const handleClose = ()=>{
+ 
+  const handleClose = () => {
     setTableDetailModalVisible(false)
   }
-
-
 
 
     return(
@@ -190,8 +188,8 @@ const MakeSale = props => {
           </View>
 
         </View>
-
-        <FilterButton/>
+        <FilterButton filters = "hello"/>
+        
         {/* <View style = {{flexDirection: 'row', top: 35, justifyContent: 'space-around',alignItems: 'stretch'}}>
           <PickerCheckBox
             data={items}
