@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Alert, Modal, StyleSheet, Text, View, TouchableOpacity, Dimensions, KeyboardAvoidingView } from "react-native";
+import { Alert, Modal, StyleSheet, Text, View, TouchableOpacity, Dimensions, KeyboardAvoidingView, ScrollView } from "react-native";
 import ProductUpdateModal from "./ProductUpdateModal";
 import { uri } from '../api.json'
 import axios from "axios"
@@ -43,6 +43,7 @@ const ProductDetailModal = props => {
                 {console.log("printing object ",props.object)}
                 <View style={styles.modalView}>
                     <Text style={styles.modalTitle}>{props.title}</Text>
+                    <ScrollView>
                     <View style={styles.modalBody}>
                           {props.object !== [] && (<View><Text style={styles.bodyText}>Product Name: {props.object.title}</Text>
                           <Text style={styles.bodyText}>Serial: {props.object.serial}</Text>
@@ -53,6 +54,7 @@ const ProductDetailModal = props => {
                           <Text style={styles.bodyText}>Date Added: {props.object.date}</Text>
                           <Text style={styles.bodyText}>Description: {props.object.description}</Text></View>)}
                     </View>
+                    </ScrollView>
                     <View style={{flexDirection: 'row', justifyContent: 'space-evenly', alignItems : 'center'}}>
                         <TouchableOpacity onPress={() => props.handleClose()}>
                             <View style={styles.buttonModalContainer}>
@@ -171,14 +173,13 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 35,
     alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2
-    },
+    //shadowColor: "#000",
+    borderColor: "#008394",
+    borderWidth: 2,
+    //
     //shadowOpacity: 0.25,
     //shadowRadius: 4,
-    elevation: 5,
+    //elevation: 5,
     width: '80%',
     height: Dimensions.get('window').height > 900 ? '65%' : Dimensions.get('window').height * 0.60
   },
