@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { StyleSheet, Text, View, Button, Dimensions, TextInput, TouchableOpacity, KeyboardAvoidingView, ScrollView} from 'react-native'; 
+import { useState, useEffect } from 'react';
+import { StyleSheet, Text, View, Button, Dimensions, TextInput, TouchableOpacity, KeyboardAvoidingView, ScrollView, Switch} from 'react-native'; 
 import HeaderButton from '../components/HeaderButton';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { FontAwesome } from '@expo/vector-icons';
@@ -13,26 +14,6 @@ import FilterButton from '../components/FilterButton';
 const optionsPerPage = [2, 3, 4];
 
 const MakePurchase = props => {
-
-
-  const handleConfirm = (pItems) => { // temporary for picker
-    console.log('pItems =>', pItems);
-  }
- 
-  const items = [ //temporary for picker for filter
-    {
-      itemKey:1,
-      itemDescription:'Item 1'
-      },
-    {
-      itemKey:2,
-      itemDescription:'Item 2'
-      },
-    {
-      itemKey:3,
-      itemDescription:'Item 3'
-      }
-  ];
 
   const [page, setPage] = React.useState(0); //for pages of table
   const [itemsPerPage, setItemsPerPage] = React.useState(optionsPerPage[0]); //for items per page on table
@@ -62,37 +43,46 @@ const MakePurchase = props => {
 
   
   // make a sale variables below:
-  const [productName, setProductName] = React.useState(``)
-  const [quantityVal, setQuantityVal] = React.useState(0)
-  const [amountVal, setAmountVal] = React.useState(0)
-  const [clientName, setClientName] = React.useState(``)
-  const [notes, setNotes] = React.useState(``)
+  const [productName, setProductName] = useState(``)
+  const [quantityVal, setQuantityVal] = useState(0)
+  const [amountReceived, setAmountReceived] = useState(0)
+  const [totalAmount, setTotalAmount] = useState(0)
+  const [clientName, setClientName] = useState(``)
+  const [notes, setNotes] = useState(``)
+  const [paymentType,setPaymentType] = useState(``) //this is the type of payment
+  const [warehouse,setWarehouse] = useState(``)
+  const [location, setLocation] = useState(``)
+  const [isWarehouse ,setIsWarehouse] = useState(false)
+  const [isEnabled, setIsEnabled] = useState(false);
 
-
-  const onChangeProductName = (prodName) => {
-    setProductName(prodName);
-  }
 
   const onChangeQuantity = (quant) => {
     setQuantityVal(quant);
   }
 
-  const onChangeAmount = (amount) => {
-    setAmountVal(amount);
+  const onChangeAmountReceived = (amount) => {
+    setAmountReceived(amount);
   }
 
-  const onChangeClientName = (clName) => {
-    setClientName(clName);
+  const onChangeTotalAmount = (amount) => {
+    setTotalAmount(amount);
   }
 
   const onChangeNotes = (noteVal) => {
     setNotes(noteVal);
   }
 
+  const onChangeLocation = (loc) => {
+    setLocation(loc);
+  }
+
   const addPurchase = () => {
     console.log(productName);
     console.log(quantityVal);
-    console.log(amountVal);
+    console.log(amountReceived);
+    console.log(totalAmount);
+    console.log(clientName);
+    console.log(paymentType);
     console.log(clientName);
     console.log(notes);
     setModalVisible(false); //closing modal on done for now
@@ -104,6 +94,12 @@ const MakePurchase = props => {
   const handleClose = ()=>{
     setTableDetailModalVisible(false)
   }
+
+
+  const toggleSwitch = () => {
+    setIsWarehouse(!isWarehouse);
+    console.log(`switched`);
+  };
 
 
 
@@ -124,7 +120,7 @@ const MakePurchase = props => {
                       <Text style = {styles.modalTitle}>Make a Purchase</Text>
                       <View>
 
-                      <View style = {{borderWidth: 2, borderRadius: 40,borderColor: "#008394",width: Dimensions.get('window').width * 0.65, top: 60, height: 40, fontSize: 8,  }}>
+                      <View style = {{borderWidth: 2, borderRadius: 40,borderColor: "#008394",width: Dimensions.get('window').width * 0.65, top: 50, height: 40, fontSize: 8,  }}>
                         <Picker
                           style = {{top:6, color: 'grey', fontFamily: 'Roboto'}}
                           itemStyle={{ fontWeight: '100' }}
@@ -141,12 +137,30 @@ const MakePurchase = props => {
                           <Picker.Item label="Pink" value="Pink" />
                         </Picker>
                       </View>
-                      <View style = {{marginTop: 20}}>
+                      <View style = {{marginTop: 10}}>
                         <TextInput onChangeText={onChangeQuantity} style={styles.input} placeholder="Quantity" autoCorrect={false} />
-                        <TextInput onChangeText={onChangeAmount} style={styles.input} placeholder="Amount" autoCorrect={false} />
+                        <TextInput onChangeText={onChangeAmountReceived} style={styles.input} placeholder="Amount Received" autoCorrect={false} />
+                        <TextInput onChangeText={onChangeTotalAmount} style={styles.input} placeholder="Total Amount" autoCorrect={false} />
                         <TextInput onChangeText={onChangeNotes} style={styles.input} placeholder="Notes" autoCorrect={false} />
                       </View>
+                      
                       <View style = {{borderWidth: 2, borderRadius: 40,borderColor: "#008394",width: Dimensions.get('window').width * 0.65, top: 60, height: 40, fontSize: 8,  }}>
+                          <Picker
+                            style={{ top: 6, color: 'grey', fontFamily: 'Roboto' }}
+                            itemStyle={{ fontWeight: '100' }}
+                            placeholder="Select a Payment Type"
+                            selectedValue={paymentType}
+                            onValueChange={(itemValue, itemIndex) =>
+                              setPaymentType(itemValue)
+                            }
+                          >
+                            <Picker.Item label="Cash" value="Cash" />
+                            <Picker.Item label="Credit" value="Credit" />
+                            <Picker.Item label="Cheque" value="Cheque" />
+                          </Picker>
+                        </View>
+
+                      <View style = {{borderWidth: 2, borderRadius: 40,borderColor: "#008394",width: Dimensions.get('window').width * 0.65, top: 80, height: 40, fontSize: 8,  }}>
                         <Picker
                           style = {{top:6, color: 'grey', fontFamily: 'Roboto'}}
                           itemStyle={{ fontWeight: '100' }}
@@ -164,9 +178,47 @@ const MakePurchase = props => {
                         </Picker>
                       </View>
 
+
+                      <View style = {{ marginTop: 90,}}>
+                        <View style={styles.label}>
+                          <Text style={styles.switch}>D/O</Text>
+                          <Switch
+                              trackColor={{ false: "#00E0C7", true: "#006270" }}
+                              thumbColor={isEnabled ? "white" : "#006270"}
+                              onValueChange={toggleSwitch}
+                              value={isWarehouse}
+                          />
+                          <Text style={styles.switch}>W</Text>
+                        </View>
+                      </View>
+
+                      {/* DELIVERY ORDER LOCATION OR  */}
+                      <View> 
+                        {/* this is for either warehouse selection  */}
+                        {isWarehouse ?
+                                    <View style = {{borderWidth: 2, borderRadius: 40,borderColor: "#008394",width: Dimensions.get('window').width * 0.65, height: 40, fontSize: 8, marginBottom:20 }}>
+                                      <Picker
+                                        style = {{top:6, color: 'grey', fontFamily: 'Roboto'}}
+                                        itemStyle={{ fontWeight: '100' }}
+                                        selectedValue = {warehouse}
+                                        onValueChange={(itemValue, itemIndex) =>
+                                          setWarehouse(itemValue)
+                                        }
+                                      >
+                                        <Picker.Item label="W1" value="W1" />
+                                        <Picker.Item label="W2" value="W2" />
+                                        <Picker.Item label="W3" value="W3" />
+                                        
+                                      </Picker>
+                                    </View>
+
+                                  :
+                                  <TextInput onChangeText={onChangeLocation} style={styles.inputLast} placeholder="Location" autoCorrect={false} />
+                      }</View>
+
                         
                       </View>
-                      <View style = {{flexDirection: 'row',  alignItems : 'center', top: 65}}>
+                      <View style = {{flexDirection: 'row',  alignItems : 'center', bottom: Dimensions.get('window').height < 700 ? 25: 15,}}>
                         <TouchableOpacity style={{alignSelf: 'flex-start'}} onPress = {() => {setModalVisible(false)}}>
                           <View>
                             <View style={styles.buttonModalContainerCross}>
@@ -302,12 +354,12 @@ const styles = StyleSheet.create({
     fontFamily: 'Roboto',
     fontWeight: 'bold',
     fontSize: Dimensions.get('window').height === 1232 ? 36 : 28,
-    top: 20,
+    top: 30,
   },
   modalStyle: {
     backgroundColor: "#fff",
     width: Dimensions.get('window').height > 900 ? 600 : 320,
-    height: Dimensions.get('window').height > 900 ? 540: 480,
+    height: Dimensions.get('window').height > 900 ? 720: 640,
     borderWidth: 2,
     borderRadius: 20,
     marginBottom: 20,
@@ -388,6 +440,18 @@ const styles = StyleSheet.create({
     fontSize: 12,
     borderColor: "#008394",
     top: 60,
+    height: 40,
+    padding: 10,
+  },
+  inputLast: {
+    width: Dimensions.get('window').width * 0.65,
+    borderColor: 'gray',
+    borderWidth: 2,
+    borderRadius: 40,
+    marginBottom:20,
+    fontSize: 12,
+    borderColor: "#008394",
+    top: 0,
     height: 40,
     padding: 10,
   },
@@ -477,5 +541,16 @@ const styles = StyleSheet.create({
     elevation: 5,
     width: Dimensions.get('window').height > 900 ? Dimensions.get('window').width * 0.7 : Dimensions.get('window').width * 0.80,
     height: Dimensions.get('window').height > 900 ? Dimensions.get('window').height* 0.5 : Dimensions.get('window').height * 0.60
+  },
+  switch: {
+    color: '#008394',
+    fontSize: Dimensions.get('window').height === 1232 ? 18 : 16,
+    fontFamily: 'Roboto',
+  },
+  label: {
+    alignSelf: 'center',
+    flexDirection: 'row',
+    fontWeight: 'bold',
+    marginRight: Dimensions.get('window').width *0.80/2
   },
 })
