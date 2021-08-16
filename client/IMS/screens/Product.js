@@ -6,7 +6,7 @@ import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { FontAwesome } from '@expo/vector-icons';
 import { DataTable } from 'react-native-paper';
 import Modal from 'react-native-modal';
-import TableDetailModal from '../components/TableDetailModal';
+import ProductDetailModal from '../components/ProductDetailModal';
 import FilterButton from '../components/FilterButton';
 import { Picker } from '@react-native-picker/picker';
 import DropDownPicker from 'react-native-dropdown-picker';
@@ -20,6 +20,7 @@ const Product = props => {
 
 
   const [products, setProducts] = useState([])
+  const [touchedProduct, setTouchedProduct] = useState([])
   const [brandsAndColours, setBrandAndColours] = useState({
     brands: [],
     colours: []
@@ -149,6 +150,11 @@ const Product = props => {
 
 
   const [isTableDetailModalVisible, setTableDetailModalVisible] = React.useState(false);
+
+  const onPressModal = (prod) => {
+    setTableDetailModalVisible(true), 
+    setTouchedProduct(prod)
+  }
 
   const handleClose = () => {
     setTableDetailModalVisible(false)
@@ -418,7 +424,7 @@ const Product = props => {
 
 
 
-      <TableDetailModal state={isTableDetailModalVisible} handleClose={handleClose} title='Employee Information' name='Raahem Asghar' email='raahemasghar97@gmail.com' occupation="Employee" />
+      <ProductDetailModal state={isTableDetailModalVisible} handleClose={handleClose} object={touchedProduct} title='Product Detail' getProducts={getProducts}/>
       <View style={styles.screen}>
         <View>
           <Text style={styles.title}>Products</Text>
@@ -468,7 +474,7 @@ const Product = props => {
 
           {
             products.map((product, i) => (
-              <TouchableOpacity key={i} onPress={() => setTableDetailModalVisible(true)}>
+              <TouchableOpacity key={i} onPress={() => onPressModal(product)}>
                 <DataTable.Row>
                   <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{product.serial === undefined ? 0 : product.serial}</Text></DataTable.Cell>
                   <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{product.title}</Text></DataTable.Cell>
