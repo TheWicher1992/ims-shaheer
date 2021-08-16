@@ -14,6 +14,10 @@ import Warehouse from '../screens/Warehouses';
 import DeliveryOrders from '../screens/DeliveryOrders';
 import Suppliers from '../screens/Suppliers';
 import Clients from '../screens/Clients';
+import EmployeeDashboard from '../screens/EmployeeDashboard'
+import EmployeeWarehouses from '../screens/EmployeeWarehouses'
+import EmployeeProducts from '../screens/EmployeeProducts'
+import EmployeeOrders from '../screens/EmployeeOrders'
 
 const dash = createStackNavigator({
   Dashboard: {
@@ -45,8 +49,23 @@ const dash = createStackNavigator({
   }
 }, {initialRouteName: 'Dashboard'});
 
+const employeeDash = createStackNavigator({
+  EmployeeDashboard: {
+    screen: EmployeeDashboard
+  },
+  EmployeeProducts: {
+    screen: EmployeeProducts
+  },
+  EmployeeWarehouses: {
+    screen: EmployeeWarehouses
+  },
+  EmployeeOrders: {
+    screen: EmployeeOrders
+  }
+}, {initialRouteName: 'EmployeeDashboard'});
+
 // Drawer Navigator
-const Drawer = createDrawerNavigator({
+const AdminSide = createDrawerNavigator({
   dashboard: {
     screen: dash,
     navigationOptions: ({ navigation }) => ({
@@ -137,6 +156,66 @@ const Drawer = createDrawerNavigator({
   }
 );
 
+const EmployeeSide = createDrawerNavigator({
+  employeedashboard: {
+    screen: employeeDash,
+    navigationOptions: ({ navigation }) => ({
+      drawerLabel: () => null,
+    })
+  },
+  EmployeeDashboard: {
+    screen: EmployeeDashboard,
+    navigationOptions: ({ navigation }) => ({
+      drawerLabel: 'Dashboard',
+    })
+  }, 
+  EmployeeProducts: {
+    screen: EmployeeProducts, 
+    navigationOptions: ({ navigation }) => ({
+      drawerLabel: 'Products',
+    })
+  },
+  EmployeeWarehouses: {
+    screen: EmployeeWarehouses,
+    navigationOptions: ({ navigation }) => ({
+      drawerLabel: 'Warehouses', 
+    })
+  },
+  EmployeeOrders: {
+    screen: EmployeeOrders,
+    navigationOptions: ({ navigation }) => ({
+      drawerLabel: 'Delivery Orders',
+    })
+  },
+  },
+  {
+    contentOptions: {
+      activeTintColor: 'none',
+      activeBackgroundColor :'none',
+      
+      headerTitleStyle: {
+        color: 'white'
+      },
+      headerStyle: {
+        backgroundColor: '#006270'
+      },
+      itemsContainerStyle: {
+        paddingVertical: Dimensions.get('window').height < 900 ? 95 : 120, 
+      },
+      labelStyle: {
+        color: 'white',
+        fontSize: Dimensions.get('window').height > 900 ? 20: 15,
+        marginTop: Dimensions.get('window').height > 900 ? "16%": "8%",
+      },
+      
+
+
+    },
+    drawerBackgroundColor: '#008394',
+
+  }
+);
+
 
 // Main App Navigation
 const AppNavigation = createStackNavigator({
@@ -146,9 +225,11 @@ const AppNavigation = createStackNavigator({
   employeeLogin : {
     screen: EmployeeLogin,
   },
-
-  Drawer: {
-    screen: Drawer,
+  adminSide: {
+    screen: AdminSide,
+  },
+  employeeSide: {
+    screen: EmployeeSide 
   }
 }, { headerMode: 'none' } );
 

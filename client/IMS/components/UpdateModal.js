@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Modal, StyleSheet, Text, View, TouchableOpacity, Dimensions, TextInput } from "react-native";
+import {Picker} from '@react-native-picker/picker';
 
 const UpdateModal = props => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -24,8 +25,34 @@ const UpdateModal = props => {
             props.handleClose();
             }}
         > 
+       
             <View style={styles.centeredView}>
-                <View style={styles.modalView}>
+               {
+                  props.title==='Select Warehouse' ? (<View style={styles.modalView}>
+                    <Text style={styles.modalTitle}>{props.title}</Text>
+                    <View style={styles.modalBody}>
+                      <View style={{borderWidth: 2, borderRadius: 40,borderColor: "#008394",width: Dimensions.get('window').width * 0.65, top: Dimensions.get('window').height * 0.03, height: 40, fontSize: 8,  }}> 
+                        <Picker selectedValue='wa' style={{top:6, color: 'grey', fontFamily: 'Roboto'}}>
+                          <Picker.Item label="Warehouse A" value="wa" />
+                          <Picker.Item label="Warehouse B" value="wb" />
+                          <Picker.Item label="Warehouse C" value="wc" />
+                        </Picker>
+                        </View>
+                    </View>
+                    <View style={{flexDirection: 'row', justifyContent: 'space-evenly', alignItems : 'center', justifyContent: 'flex-end'}}>
+                        <TouchableOpacity onPress={() => props.handleClose()}>
+                            <View style={styles.buttonModalContainer2}>
+                                <Text style={styles.buttonModalText}>Back</Text>
+                            </View>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => props.handleClose()}>
+                            <View style={styles.backButtonModalContainer2}>
+                                <Text style={styles.buttonModalText}>Done</Text>
+                            </View>
+                        </TouchableOpacity>
+                        
+                    </View>
+                </View>) : (<View style={styles.modalView}>
                     <Text style={styles.modalTitle}>{props.title}</Text>
                     <View style={styles.modalBody}>
                         <TextInput placeholder="Username" style={styles.input}/>
@@ -45,7 +72,9 @@ const UpdateModal = props => {
                         </TouchableOpacity>
                         
                     </View>
-                </View>
+                </View>)
+                }
+                
                 
             
             </View>
@@ -95,6 +124,32 @@ const styles = StyleSheet.create({
     display: 'flex',
     
   },
+  buttonModalContainer2 : {
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignContent: 'space-between',
+    borderRadius : 40,
+    backgroundColor: '#00E0C7',
+    paddingVertical: 8,
+    paddingHorizontal: 24,
+    top: Dimensions.get('window').height > 900 ? (Dimensions.get('window').width > 480 ? 60 : 35): 35,
+    margin: 20,
+    display: 'flex',
+
+  },
+  backButtonModalContainer2 : {
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignContent: 'space-between',
+    borderRadius : 40,
+    backgroundColor: '#008394',
+    paddingVertical: 8,
+    paddingHorizontal: 24,
+    top: Dimensions.get('window').height > 900 ? (Dimensions.get('window').width > 480 ? 60 : 35): 35,
+    margin: 20,
+    display: 'flex',
+    
+  },
   deleteButtonModalContainer : {
     justifyContent: 'center',
     alignItems: 'center',
@@ -140,6 +195,8 @@ const styles = StyleSheet.create({
     elevation: 5,
     width: Dimensions.get('window').height > 900 ? Dimensions.get('window').width * 0.7 : Dimensions.get('window').width * 0.80,
     height: Dimensions.get('window').height > 900 ? Dimensions.get('window').height* 0.5 : Dimensions.get('window').height * 0.60
+    // width: '80%',
+    // height: Dimensions.get('window').height > 900 ? '65%' : Dimensions.get('window').height * 0.60
   },
 
   input: {

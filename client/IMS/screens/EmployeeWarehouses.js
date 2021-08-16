@@ -7,13 +7,12 @@ import { DataTable } from 'react-native-paper';
 import Modal from 'react-native-modal';
 import PickerCheckBox from 'react-native-picker-checkbox';
 import TableDetailModal from '../components/TableDetailModal';
-import FilterModal from '../components/FilterModal';
 import FilterButton from '../components/FilterButton';
 
 
 const optionsPerPage = [2, 3, 4];
 
-const MakeSale = props => {
+const EmployeeWarehouses = props => {
 
 
   const handleConfirm = (pItems) => { // temporary for picker
@@ -63,48 +62,36 @@ const MakeSale = props => {
 
   
   // make a sale variables below:
-  const [productName, setProductName] = React.useState(``)
-  const [quantityVal, setQuantityVal] = React.useState(0)
-  const [amountVal, setAmountVal] = React.useState(0)
-  const [clientName, setClientName] = React.useState(``)
-  const [notes, setNotes] = React.useState(``)
+  const [warehouseName, setWarehouseName] = React.useState(``)
+  const [totalProducts, setTotalProducts] = React.useState(0)
+  const [stock, setStock] = React.useState(0)
 
 
-  const onChangeProductName = (prodName) => {
-    setProductName(prodName);
+  const onChangeWarehouseName = (warehousename) => {
+    setWarehouseName(warehousename);
   }
 
-  const onChangeQuantity = (quant) => {
-    setQuantityVal(quant);
+  const onChangeTotalProducts = (totalproducts) => {
+    setTotalProducts(totalproducts);
   }
 
-  const onChangeAmount = (amount) => {
-    setAmountVal(amount);
+  const onChangeStock = (stocks) => {
+    setStock(stocks);
   }
 
-  const onChangeClientName = (clName) => {
-    setClientName(clName);
-  }
-
-  const onChangeNotes = (noteVal) => {
-    setNotes(noteVal);
-  }
-
-  const addSale = () => {
-    console.log(productName);
-    console.log(quantityVal);
-    console.log(amountVal);
-    console.log(clientName);
-    console.log(notes);
+  const addWarehouse = () => {
+    console.log(`add warehouse`)
     setModalVisible(false); //closing modal on done for now
   }
   
 
   const [isTableDetailModalVisible, setTableDetailModalVisible] = React.useState(false);
- 
-  const handleClose = () => {
+
+  const handleClose = ()=>{
     setTableDetailModalVisible(false)
   }
+
+
 
 
     return(
@@ -120,13 +107,11 @@ const MakeSale = props => {
             <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
                 <View style={styles.modalStyle}>
                   <View style = {{justifyContent: 'center', alignItems : 'center', }}>
-                      <Text style = {styles.modalTitle}>Make a Sale</Text>
+                      <Text style = {styles.modalTitle}>Add Warehouse</Text>
                       <View>
-                        <TextInput onChangeText={onChangeProductName} style={styles.input} placeholder="Product" autoCorrect={false} />
-                        <TextInput onChangeText={onChangeQuantity} style={styles.input} placeholder="Quantity" autoCorrect={false} />
-                        <TextInput onChangeText={onChangeAmount} style={styles.input} placeholder="Amount" autoCorrect={false} />
-                        <TextInput onChangeText={onChangeClientName} style={styles.input} placeholder="Client" autoCorrect={false} />
-                        <TextInput onChangeText={onChangeNotes} style={styles.input} placeholder="Notes" autoCorrect={false} />
+                        <TextInput onChangeText={onChangeWarehouseName} style={styles.input} placeholder="Name" autoCorrect={false} />
+                        <TextInput onChangeText={onChangeTotalProducts} style={styles.input} placeholder="Total Products" autoCorrect={false} />
+                        <TextInput onChangeText={onChangeStock} style={styles.input} placeholder="Stock" autoCorrect={false} />
                       </View>
                       <View style = {{flexDirection: 'row',  alignItems : 'center', top: 45}}>
                         <TouchableOpacity style={{alignSelf: 'flex-start'}} onPress = {() => {setModalVisible(false)}}>
@@ -138,7 +123,7 @@ const MakeSale = props => {
                             </View>
                           </View>
                         </TouchableOpacity>   
-                        <TouchableOpacity onPress = {() => {addSale()}}>
+                        <TouchableOpacity onPress = {() => {addWarehouse()}}>
                           <View>
                             <View style={styles.buttonModalContainer}>
                               <View>
@@ -155,19 +140,15 @@ const MakeSale = props => {
         <TableDetailModal state={isTableDetailModalVisible} handleClose={handleClose} title='Employee Information' name='Raahem Asghar' email='raahemasghar97@gmail.com' occupation="Employee" />
         <View style = {styles.screen}>
           <View>
-            <Text style={styles.title}>Sales</Text>
+            <Text style={styles.title}>Employee Warehouses</Text>
           </View>
         </View>
         <View style = {styles.containerButton}>
-          <View style = {{flexDirection: 'row', justifyContent: 'space-around',alignItems: 'stretch'}}>
-            <View>
-              <TouchableOpacity onPress = {() => {setModalVisible(true)}}>
-                <View style={styles.buttonContainer}>
-                  <Text style={styles.buttonText}>Make a Sale</Text>
-                </View>
-              </TouchableOpacity>
-            </View>            
-          </View>
+          <TouchableOpacity onPress = {() => {setModalVisible(true)}}>
+            <View style={styles.buttonContainer}>
+              <Text style={styles.buttonText}>Add Warehouse</Text>
+            </View>
+          </TouchableOpacity>
           <View style = {{flexDirection: 'row', justifyContent: 'center',}}>
             <View style = {styles.searchBar}>
               <TextInput onChangeText={onChangeSearch}  style={styles.buttonInput} placeholder="type here..." autoCorrect={false} />
@@ -188,59 +169,15 @@ const MakeSale = props => {
           </View>
 
         </View>
-        <FilterButton filters = "hello"/>
-        
-        {/* <View style = {{flexDirection: 'row', top: 35, justifyContent: 'space-around',alignItems: 'stretch'}}>
-          <PickerCheckBox
-            data={items}
-            headerComponent={<Text style={{fontSize:25}} >Items</Text>}
-            OnConfirm={(pItems) => {handleConfirm(pItems)}}
-            ConfirmButtonTitle='OK'
-            DescriptionField='itemDescription' 
-            KeyField='itemKey'
-            placeholder='Quantity'
-            arrowColor='#006270'
-            arrowSize={20}
-            placeholderSelectedItems ='$count selected item(s)'
-            containerStyle = {styles.filterInput}
-          />
-          <PickerCheckBox
-            data={items}
-            headerComponent={<Text style={{fontSize:25}} >Items</Text>}
-            OnConfirm={(pItems) => {handleConfirm(pItems)}}
-            ConfirmButtonTitle='OK'
-            DescriptionField='itemDescription' 
-            KeyField='itemKey'
-            placeholder='Amount'
-            arrowColor='#006270'
-            arrowSize={20}
-            placeholderSelectedItems ='$count selected item(s)'
-            containerStyle = {styles.filterInput}
-          />
-        </View>
-        <View style = {{flexDirection: 'row', top: 35, justifyContent: 'space-around',alignItems: 'stretch'}}>
-          <PickerCheckBox
-            data={items}
-            headerComponent={<Text style={{fontSize:25}} >Items</Text>}
-            OnConfirm={(pItems) => {handleConfirm(pItems)}}
-            ConfirmButtonTitle='OK'
-            DescriptionField='itemDescription' 
-            KeyField='itemKey'
-            placeholder='Time'
-            arrowColor='#006270'
-            arrowSize={20}
-            placeholderSelectedItems ='$count selected item(s)'
-            containerStyle = {styles.filterInput}
-          />          
-        </View> */}
+        <FilterButton/>
         <ScrollView>
         
           <DataTable>
             <DataTable.Header>
-              <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Product</Text></DataTable.Title>
-              <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Quantity</Text></DataTable.Title>
-              <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Amount</Text></DataTable.Title>
-              <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Client</Text></DataTable.Title>
+              <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Name</Text></DataTable.Title>
+              <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Total Products</Text></DataTable.Title>
+              <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Stock</Text></DataTable.Title>
+              
             </DataTable.Header>
 
             <TouchableOpacity onPress={() => setTableDetailModalVisible(true)}>
@@ -248,7 +185,6 @@ const MakeSale = props => {
                 <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>ABC34013-133</Text></DataTable.Cell>
                 <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>59</Text></DataTable.Cell>
                 <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>69000</Text></DataTable.Cell>
-                <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>Ahmed Ateeq</Text></DataTable.Cell>
               </DataTable.Row>
             </TouchableOpacity>
             <DataTable.Pagination
@@ -273,7 +209,7 @@ const MakeSale = props => {
 }
 
 
-MakeSale.navigationOptions = navigationData => {
+EmployeeWarehouses.navigationOptions = navigationData => {
     return {
         headerTitle: 'Zaki Sons',
         headerTitleAlign: 'center',
@@ -295,7 +231,7 @@ MakeSale.navigationOptions = navigationData => {
     };
   };
 
-export default MakeSale
+export default EmployeeWarehouses
 
 
 const styles = StyleSheet.create({
@@ -317,7 +253,7 @@ const styles = StyleSheet.create({
   modalStyle: {
     backgroundColor: "#fff",
     width: Dimensions.get('window').height > 900 ? 600 : 320,
-    height: Dimensions.get('window').height > 900 ? 540: 480,
+    height: Dimensions.get('window').height > 900 ? "35%": "60%",
     borderWidth: 2,
     borderRadius: 20,
     marginBottom: 20,
