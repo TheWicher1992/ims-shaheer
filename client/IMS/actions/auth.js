@@ -20,7 +20,7 @@ export const login = (userName, password, navigation) => async dispatch => {
             password,
             type: 'admin'
         }
-        const res = await axios.post(`http://192.168.0.102:5000/api/auth/login`, formData, {
+        const res = await axios.post(`http://192.168.0.101:5000/api/auth/login`, formData, {
             headers: {
                 'Content-Type': 'application/json'
             }
@@ -54,7 +54,7 @@ export const loadUser = (navigation) => async dispatch => {
         setAuthToken(token)
     }
     try {
-        const res = await axios.get(`http://192.168.0.102:5000/api/auth`)
+        const res = await axios.get(`http://192.168.0.101:5000/api/auth`)
         dispatch({
             type: USER_LOADED,
             payload: res.data.user
