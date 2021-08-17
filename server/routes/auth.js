@@ -121,6 +121,21 @@ router.get("/", auth, async (req, res) => {
 
 })
 
+router.get('/all', async (req, res) => {
+    try {
+        const admins = await Admin.find()
+        const employees = await Employee.find()
+
+        return res.json({
+            admins,
+            employees
+        })
+    } catch (err) {
+        return res.status(500).json({
+            error: 'SERVER_ERROR'
+        })
+    }
+})
 
 router.post('/login', async (req, res) => {
     console.log('/login')
