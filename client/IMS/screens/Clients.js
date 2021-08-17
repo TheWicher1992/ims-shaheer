@@ -227,9 +227,9 @@ const Clients = props => {
 
           {
             clients.map(c => (
-              <TouchableOpacity onPress={() => setTableDetailModalVisible(true)}>
+              <TouchableOpacity key={c._id} onPress={() => setTableDetailModalVisible(true)}>
 
-                <DataTable.Row key={c._id}>
+                <DataTable.Row>
                   <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{c.userName}</Text></DataTable.Cell>
                   <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{c.balance}</Text></DataTable.Cell>
                   <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{c.phone}</Text></DataTable.Cell>

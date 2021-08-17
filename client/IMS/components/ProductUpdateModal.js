@@ -1,13 +1,62 @@
 import React, { useState, useEffect } from "react";
 import { Modal, StyleSheet, Text, View, TouchableOpacity, Dimensions, TextInput, KeyboardAvoidingView, ScrollView } from "react-native";
-import {Picker} from '@react-native-picker/picker';
+import { Picker } from '@react-native-picker/picker';
 import { uri } from '../api.json'
 import axios from "axios"
 const ProductUpdateModal = props => {
   const [isModalVisible, setModalVisible] = useState(false);
-  const [color, setColor] = React.useState()
-  const [brand, setBrand] = React.useState(``)
+  // const [color, setColor] = React.useState(``)
+  // const [brand, setBrand] = React.useState(``)
   const [addBrandModal, setAddBrandModal] = useState(false);
+
+  const [serialNo, setSerialNo] = React.useState(``)
+  const [productName, setProductName] = React.useState(``)
+  const [amountVal, setAmountVal] = React.useState(0)
+  const [color, setColor] = React.useState(``)
+  const [brand, setBrand] = React.useState(``)
+  const [description, setDescription] = React.useState(``)
+  const [id, setID] = useState(``)
+  const updateProduct = () => {
+    const body = {
+      title: productName,
+      serial: serialNo,
+      brandID: brand,
+      colourID: color,
+      description,
+      price: amountVal
+    }
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json"
+      }
+    }
+
+    axios.put(`${uri}/api/product/${id}`, body, config)
+      .then(() => props.getProducts())
+      .catch(err => console.log(err.response))
+      .finally(() => props.handleClose())
+
+
+
+    // console.log(body)
+    // props.handleClose()
+
+  }
+
+  useEffect(() => {
+
+    setSerialNo(props.obj.serial)
+    setID(props.obj._id)
+    setProductName(props.obj.title)
+    setAmountVal(props.obj.price)
+    setDescription(props.obj.description)
+    setColor(props.obj.colour !== undefined && props.obj.colour._id)
+    setBrand(props.obj.brand !== undefined && props.obj.brand._id)
+
+  }, [props.obj])
+
+
   const brandModal = () => { //to toggle model on and off -- function
     setAddBrandModal(!addBrandModal);
   };
@@ -22,7 +71,7 @@ const ProductUpdateModal = props => {
     getBrandColours()
   }, [props.state]);
   const [addColorModal, setAddColorModal] = useState(false);
-  
+
   const colorModal = () => {
     setAddColorModal(!addColorModal);
   }
@@ -81,13 +130,13 @@ const ProductUpdateModal = props => {
       `${uri}/api/product/cb`
     )
     setBrandAndColours(res.data)
-    setColor(res.data.colours[0]._id)
-    setBrand(res.data.brands[0]._id)
+    // setColor(res.data.colours[0]._id)
+    // setBrand(res.data.brands[0]._id)
     //console.log(res.data)
   }
   return (
     <KeyboardAvoidingView>
-    <Modal
+      <Modal
         onSwipeComplete={() => props.handleClose()}
         swipeDirection="left"
         presentationStyle="overFullScreen"
@@ -96,14 +145,15 @@ const ProductUpdateModal = props => {
 
         <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', }}>
           <ScrollView>
+            {console.log("up-->", props.obj.price)}
             <View style={styles.modalStyle}>
               <View style={{ justifyContent: 'center', alignItems: 'center', }}>
                 <Text style={styles.modalTitle}>Update Product</Text>
                 <View style={{ marginTop: 50 }}>
-                  <TextInput onChangeText={onChangeSerialNo} style={styles.input} placeholder="Serial" autoCorrect={false} />
-                  <TextInput onChangeText={onChangeProductName} style={styles.input} placeholder="Product" autoCorrect={false} />
-                  <TextInput onChangeText={onChangeAmount} style={styles.input} placeholder="Amount" autoCorrect={false} />
-                  <TextInput multiline={true} numberOfLines={5} onChangeText={onChangeDescription} style={styles.input} placeholder="Description" autoCorrect={false} />
+                  <TextInput onChangeText={onChangeSerialNo} style={styles.input} placeholder="Serial" value={serialNo} autoCorrect={false} />
+                  <TextInput onChangeText={onChangeProductName} style={styles.input} placeholder="Product" value={productName} autoCorrect={false} />
+                  <TextInput onChangeText={onChangeAmount} style={styles.input} placeholder="Amount" value={amountVal === undefined ? '0' : amountVal.toString()} autoCorrect={false} />
+                  <TextInput multiline={true} numberOfLines={5} onChangeText={onChangeDescription} value={description} style={styles.input} placeholder="Description" autoCorrect={false} />
 
                   <View style={{ borderWidth: 2, borderRadius: 40, borderColor: "#008394", width: Dimensions.get('window').width * 0.65, height: 40, fontSize: 8, justifyContent: 'space-between' }}>
                     <Picker
@@ -116,9 +166,11 @@ const ProductUpdateModal = props => {
                       }
                     >
 
+                      <Picker.Item label={props.obj.colour === undefined ? "" : props.obj.colour.title} value={props.obj.colour === undefined ? "" : props.obj.colour._id} />
+
                       {
                         brandsAndColours.colours.map((c => (
-                          <Picker.Item key={c._id} label={c.title} value={c._id} />
+                          c.title !== (props.obj.colour === undefined ? "" : props.obj.colour.title) && <Picker.Item key={c._id} label={c.title} value={c._id} />
                         )))
                       }
                     </Picker>
@@ -144,9 +196,11 @@ const ProductUpdateModal = props => {
                         setBrand(itemValue)
                       }
                     >
+                      <Picker.Item label={props.obj.brand === undefined ? "" : props.obj.brand.title} value={props.obj.brand === undefined ? "" : props.obj.brand._id} />
+
                       {
                         brandsAndColours.brands.map((b => (
-                          <Picker.Item key={b._id} label={b.title} value={b._id} />
+                          b.title !== (props.obj.brand === undefined ? "" : props.obj.brand.title) && <Picker.Item key={b._id} label={b.title} value={b._id} />
                         )))
                       }
                     </Picker>
@@ -171,7 +225,7 @@ const ProductUpdateModal = props => {
                       </View>
                     </View>
                   </TouchableOpacity>
-                  <TouchableOpacity onPress={() => { addProduct() }}>
+                  <TouchableOpacity onPress={() => { updateProduct() }}>
                     <View>
                       <View style={styles.buttonModalContainer}>
                         <View>
@@ -254,7 +308,7 @@ const ProductUpdateModal = props => {
       </View>
 
 
-    </KeyboardAvoidingView>
+    </KeyboardAvoidingView >
   );
 };
 
@@ -487,7 +541,7 @@ const styles = StyleSheet.create({
     display: 'flex',
 
   },
-  
+
 });
 
 export default ProductUpdateModal;
