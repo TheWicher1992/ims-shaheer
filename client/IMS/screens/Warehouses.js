@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useEffect, useState } from 'react'
 import { StyleSheet, Text, View, Button, Dimensions, TextInput, TouchableOpacity, KeyboardAvoidingView, ScrollView } from 'react-native';
 import HeaderButton from '../components/HeaderButton';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
@@ -13,6 +14,26 @@ import { uri } from '../api.json'
 const optionsPerPage = [2, 3, 4];
 
 const Warehouse = props => {
+
+  const [warehouses, setWarehouses] = useState([])
+  const [filters, setFilters] = useState({
+    page: 1,
+    query: '*',
+    sort: '*',
+    sortBy: '*'
+  })
+
+  const getWarehouses = async () => {
+    const res = await axios.get(
+      `${uri}/api/warehouse/${filters.page}/${filters.query}/${filters.sort}/${filters.sortBy}`
+    )
+    setWarehouses(res.data.warehouse)
+    console.log(warehouses)
+  }
+
+  useEffect(() => {
+    getWarehouses()
+  }, [])
 
 
   const handleConfirm = (pItems) => { // temporary for picker
@@ -191,13 +212,18 @@ const Warehouse = props => {
 
           </DataTable.Header>
 
-          <TouchableOpacity onPress={() => setTableDetailModalVisible(true)}>
+          {
+            warehouses.map((warehouse, i) => (
+          <TouchableOpacity key={i} onPress={() => setTableDetailModalVisible(true)}>
             <DataTable.Row>
-              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>ABC34013-133</Text></DataTable.Cell>
-              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>59</Text></DataTable.Cell>
-              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>69000</Text></DataTable.Cell>
+              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{warehouse.name}</Text></DataTable.Cell>
+              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{warehouse.totalProducts}</Text></DataTable.Cell>
+              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{warehouse.totalStock}</Text></DataTable.Cell>
             </DataTable.Row>
           </TouchableOpacity>
+            ))
+          }
+          
           <DataTable.Pagination
             page={page}
             numberOfPages={3}
