@@ -3,10 +3,12 @@ import { StyleSheet, Text, View, Button, Dimensions, TextInput, TouchableOpacity
 import styles from '../components/LoginStyles'
 import { connect } from 'react-redux'
 import { login, loadUser } from '../actions/auth'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const EmployeeLogin = props => {
     useEffect(() => {
         props.loadUser(props.navigation)
+        AsyncStorage.getItem('token').then(token => console.log("token--->", token))
     }, [])
     const [isEnabled, setIsEnabled] = useState(false);
     const toggleSwitch = () => {

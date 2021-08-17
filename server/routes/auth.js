@@ -54,7 +54,7 @@ router.post('/add-admin', adminAuth, async (req, res) => {
 
 })
 
-router.post('/add-employee', adminAuth, async (req, res) => {
+router.post('/add-employee', /*adminAuth,*/ async (req, res) => {
     try {
         const {
             userName,
@@ -105,7 +105,7 @@ router.get("/", auth, async (req, res) => {
     try {
         const User = req.user.type === 'admin' ? Admin : Employee
         const user = await User.findById(req.user.id)
-
+        user.type = req.user.type
 
         return res.status(200).json({
             user

@@ -52,16 +52,21 @@ export const loadUser = (navigation) => async dispatch => {
     let token = await AsyncStorage.getItem('token')
     // const navigation = useNavigation()
     console.log('load')
-    if (token) {
-        setAuthToken(token)
-    }
+    console.log('toke in ->', token)
+    // if (token) {
+    setAuthToken(token)
+    // }
+    console.log('header->', axios.defaults.headers.common['x-auth-token'])
+
     try {
         const res = await axios.get(`${uri}/api/auth`)
         dispatch({
             type: USER_LOADED,
             payload: res.data.user
         })
-        navigation.navigate({ routeName: 'Dashboard' })
+
+
+        res.data.user.type === 'admin' ? navigation.navigate({ routeName: 'Dashboard' }) : navigation.navigate({ routeName: 'EmployeeDashboard' })
         // navigation.navigate({ routeName: 'main' })
 
 
