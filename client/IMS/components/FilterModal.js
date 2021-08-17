@@ -21,7 +21,7 @@ const FilterModal = props => {
 
         <View style={styles.centeredView}>
             <Modal
-                animationType="fade"
+                // animationType="fade"
                 onSwipeComplete={() => setModalVisible(false)}
                 swipeDirection="left"
                 presentationStyle="overFullScreen"
@@ -29,88 +29,130 @@ const FilterModal = props => {
                 visible={modalVisible}>
                 <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
                     <View style={styles.modalStyle}>
+                            
                         <View style={styles.topTextBox}>
-                            <View style={{ justifyContent: 'center', alignItems: 'flex-start', marginTop: '6.25%', paddingLeft: '5%' }}>
-                                <Text style={styles.topText}>
-                                    Filter
-                                </Text>
-                            </View>
-                        </View>
-
-                        <View style={styles.TextBox}>
-                            <View style={{ marginTop: '9.5%', paddingLeft: '5%' }}>
-                                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                                    <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-start' }}>
-                                        <Text style={styles.sideText}>
-                                            Colors
-                                        </Text>
-                                    </View>
-                                    <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-end', paddingRight: '8%' }}>
-                                        <Text style={styles.sideText}>
-                                            All
-                                        </Text>
-                                    </View>
-
+                            <View style= {{flexDirection: 'row', justifyContent: 'space-between'}}>
+                                <View style={{ justifyContent: 'center', alignItems: 'flex-start', marginTop: '6.25%', paddingLeft: '5%' }}>
+                                    <Text style={styles.topText}>
+                                        Filter
+                                    </Text>
                                 </View>
-
-                            </View>
-                        </View>
-
-                        <View style={styles.TextBox}>
-                            <View style={{ justifyContent: 'center', alignItems: 'flex-start', marginTop: '9.5%', paddingLeft: '5%' }}>
-                                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'stretch', }}>
-                                    <Text style={styles.normalText}>
-                                        Brand
-                                    </Text>
-                                    <Text style={styles.sideText}>
-                                        All
-                                    </Text>
-
+                                <View style = {{justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-end', paddingRight: '8%' }}>
+                                    <TouchableOpacity>
+                                        <View style = {styles.clearButton}>
+                                            <Text style = {styles.clearButtonText}>
+                                                Clear 
+                                            </Text>
+                                        </View>
+                                    </TouchableOpacity>
+                                        
                                 </View>
                             </View>
+                            
                         </View>
 
-                        <View style={styles.TextBox}>
-                            <View style={{ justifyContent: 'center', alignItems: 'flex-start', marginTop: '9.5%', paddingLeft: '5%' }}>
-                                <Text style={styles.normalText}>
-                                    Amount
-                                </Text>
-                            </View>
-                        </View>
+                            
+                        <TouchableOpacity style = {styles.TextBox}>
+                                <View style={{ marginTop: '9.5%', paddingLeft: '5%' }}>
+                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                                        <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-start' }}>
+                                            <Text style={styles.normalText}>
+                                                Color
+                                            </Text>
+                                        </View>
+                                        <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-end', paddingRight: '8%' }}>
+                                            <Text style={styles.sideText}>
+                                                All
+                                            </Text>
+                                        </View>
+                                    </View>
+                                </View>
+                        </TouchableOpacity>
+                        
 
-                        <View style={styles.TextBox}>
-                            <View style={{ justifyContent: 'center', alignItems: 'flex-start', marginTop: '9.5%', paddingLeft: '5%' }}>
-                                <Text style={styles.normalText}>
-                                    Warehouse
-                                </Text>
-                            </View>
-                        </View>
+                        
 
-                        {/* <View style = {styles.TextBox}>
-                    <View style = {{justifyContent: 'center', alignItems: 'flex-start', marginTop: '9.5%', paddingLeft: '5%'}}>
-                        <Text style = {styles.normalText}>
-                            Ahmed is great
-                        </Text>
-                    </View>
-                </View> */}
+                        <TouchableOpacity style = {styles.TextBox}>
+                                <View style={{ marginTop: '9.5%', paddingLeft: '5%' }}>
+                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                                        <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-start' }}>
+                                            <Text style={styles.normalText}>
+                                                Brand
+                                            </Text>
+                                        </View>
+                                        <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-end', paddingRight: '8%' }}>
+                                            <Text style={styles.sideText}>
+                                                All
+                                            </Text>
+                                        </View>
+                                    </View>
+                                </View>
+                        </TouchableOpacity>
+
+
+                        <TouchableOpacity style = {styles.TextBox}>
+                                <View style={{ marginTop: '9.5%', paddingLeft: '5%' }}>
+                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                                        <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-start' }}>
+                                            <Text style={styles.normalText}>
+                                                Warehouse
+                                            </Text>
+                                        </View>
+                                        <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-end', paddingRight: '8%' }}>
+                                            <Text style={styles.sideText}>
+                                                All
+                                            </Text>
+                                        </View>
+                                    </View>
+                                </View>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity style = {styles.TextBox}>
+                                <View style={{ marginTop: '9.5%', paddingLeft: '5%' }}>
+                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                                        <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-start' }}>
+                                            <Text style={styles.normalText}>
+                                                Time
+                                            </Text>
+                                        </View>
+                                        <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-end', paddingRight: '8%' }}>
+                                            <Text style={styles.sideText}>
+                                                All
+                                            </Text>
+                                        </View>
+                                    </View>
+                                </View>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity style = {styles.TextBox}>
+                                <View style={{ marginTop: '9.5%', paddingLeft: '5%' }}>
+                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                                        <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-start' }}>
+                                            <Text style={styles.normalText}>
+                                                Ahmed is fucking great
+                                            </Text>
+                                        </View>
+                                        <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-end', paddingRight: '8%' }}>
+                                            <Text style={styles.sideText}>
+                                                All
+                                            </Text>
+                                        </View>
+                                    </View>
+                                </View>
+                        </TouchableOpacity>
 
                         <View style={styles.bottomBox}>
-                            {/* <View style = {{ justifyContent: 'center', alignItems: 'center',}}> */}
-                            <TouchableOpacity>
+                            <TouchableOpacity onPress = {() => props.handleClose()} style = {{width: '90%', position: "absolute",top: '20%'}}>
                                 <View style={styles.bottomButton}>
-                                    <Text style={styles.footerText}>
-                                        View Items
-                                    </Text>
+                                    <View>
+                                        <Text style={styles.footerText}>
+                                            View Items
+                                        </Text>
+                                    </View>
                                 </View>
                             </TouchableOpacity>
-
-
-
-                            {/* </View> */}
                         </View>
-
                     </View>
-
                 </View>
             </Modal>
         </View>
@@ -129,17 +171,17 @@ const styles = StyleSheet.create({
     },
     topText: {
         fontWeight: 'bold',
-        fontSize: 24,
+        fontSize: Dimensions.get('window').height > 900 ? 36:24,
         color: "#008394",
     },
     normalText: {
-        fontSize: 18,
+        fontSize: Dimensions.get('window').height > 900 ? 26:18,
         fontWeight: '600',
         color: "#008394",
 
     },
     sideText: {
-        fontSize: 18,
+        fontSize: Dimensions.get('window').height > 900 ? 26:18,
         fontWeight: '600',
         color: "#008394",
         textAlign: 'right',
@@ -180,8 +222,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: '#00E0C7',
         width: '100%',
+        // marginTop: '40%',
         height: Dimensions.get('window').height * 0.08,
-        marginTop: Dimensions.get('window').height * 0.18,
         borderWidth: 2,
         borderRadius: 20,
         marginBottom: 20,
@@ -189,11 +231,29 @@ const styles = StyleSheet.create({
 
     },
     footerText: {
-        fontSize: 22,
+        fontSize: Dimensions.get('window').height > 900 ? 36:22,
         fontWeight: 'bold',
         color: "#008394",
 
     },
+    clearButtonText :{
+        fontSize: Dimensions.get('window').height > 900 ? 26:16,
+        fontWeight: 'bold',
+        color: "#008394",
+    },
+    clearButton : {
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#00E0C7',
+        width: Dimensions.get('window').height > 900 ? 100:70,
+        height: Dimensions.get('window').height > 900 ? 50:30,
+        borderWidth: 2,
+        borderRadius: 20,
+        borderColor: "#008394",
+        marginTop: Dimensions.get('window').height > 900 ? 30: 0,
+        // left: Dimensions.get('window').width * 0.4,
+
+    }
 
 });
 
