@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, Button, Dimensions, TextInput, TouchableOpacity, KeyboardAvoidingView, useWindowDimensions } from 'react-native'; 
 import HeaderButton from '../components/HeaderButton';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
@@ -6,8 +7,10 @@ import { FontAwesome } from '@expo/vector-icons';
 import { DataTable } from 'react-native-paper';
 import Modal from 'react-native-modal';
 import {Picker} from '@react-native-picker/picker';
-import TableDetailModal from '../components/TableDetailModal'
+import EmployeeDetailModal from '../components/EmployeeDetailModal'
 import UpdateModal from '../components/UpdateModal'
+import { uri } from '../api.json'
+import axios from "axios"
 
 const optionsPerPage = [2, 3, 4];
 
@@ -20,7 +23,21 @@ const Employee = props => {
   const [selectedOccupation, setSelectedOccupation] = React.useState(``);
   const [userName, setUserName] = React.useState(``)
   const [password, setPassword] = React.useState(``)
+  const [touchedEmployee, setTouchedEmployee] = React.useState([])
+  const [touchedAdmin, setTouchedAdmin] = React.useState([])
+  const [occupation, setSelectedOccupationModal] = React.useState(``)
+ 
+  const onPressModal = (emp) => {
+    setTableDetailModalVisible(true),
+    setTouchedEmployee(emp)
+    setSelectedOccupationModal('Employee')
+  }
 
+  const onPressModalAdmin = (admin) => {
+    setTableDetailModalVisible(true),
+    setTouchedEmployee(admin)
+    setSelectedOccupationModal('Admin')
+  }
 
   const onChangePassword = (pass) => { // setting password on change
       setPassword(pass)
@@ -49,6 +66,21 @@ const Employee = props => {
   const toggleModal = () => { //to switch modal on
     setModalVisible(!isModalVisible);
   };
+
+  const [employees, setEmployees] = useState([])
+  const [admins, setAdmins] = useState([])
+
+  const getEmployees = async () => {
+
+    const res = await axios.get(`${uri}/api/auth/all`)
+    setEmployees(res.data.employees)
+    setAdmins(res.data.admins)
+
+  }
+
+  useEffect(() => {
+    getEmployees()
+  }, [])
 
 
 
@@ -98,8 +130,8 @@ const Employee = props => {
                             onValueChange={(itemValue, itemIndex) =>
                                 setSelectedOccupation(itemValue)
                             }>
-                            <Picker.Item label="Manager" value="Manager" fontSize = {8}/>
-                            <Picker.Item label="Receptionist" value="Receptionist" />
+                            <Picker.Item label="Admin" value="Admin" fontSize = {8}/>
+                            <Picker.Item label="Employee" value="Employee" />
                         </Picker>
                       </View>
                     </View>
@@ -134,7 +166,7 @@ const Employee = props => {
                 </View>
             </View>
         </Modal>
-        <TableDetailModal state={isTableDetailModalVisible} handleClose={handleClose} title='Employee Information' name='Raahem Asghar' email='raahemasghar97@gmail.com' occupation="Employee" />
+        <EmployeeDetailModal state={isTableDetailModalVisible} handleClose={handleClose} title='Employee Information' object={touchedEmployee} occupation={occupation} />
         <View style = {styles.screen}>
           <View>
             <Text style={styles.title}>Employees</Text>
@@ -150,19 +182,35 @@ const Employee = props => {
         <View>
           <DataTable style = {{top: 30}}>
             <DataTable.Header>
-              <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Email</Text></DataTable.Title>
-              <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Name</Text></DataTable.Title>
+              {/* <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Email</Text></DataTable.Title> */}
+              <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Username</Text></DataTable.Title>
               <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Occupation</Text></DataTable.Title>
             </DataTable.Header>
 
-            <TouchableOpacity onPress={() => setTableDetailModalVisible(true)}>
-              <DataTable.Row>
-                <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>raahemasghar97@gmail.com</Text></DataTable.Cell>
-                <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>Raahem Asghar</Text></DataTable.Cell>
-                <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>Employee</Text></DataTable.Cell>
-              </DataTable.Row>
-            </TouchableOpacity>
-            <DataTable.Pagination
+            {
+            employees.map((employee, i) => (
+              <TouchableOpacity key={i} onPress={() => onPressModal(employee)}>
+                <DataTable.Row>
+                  <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{employees === undefined ? 'Empty' : employee.userName}</Text></DataTable.Cell>
+                  <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>Employee</Text></DataTable.Cell>
+                </DataTable.Row>
+              </TouchableOpacity>
+
+            ))
+          }
+          {
+            admins === undefined ? (null) : (admins.map((admin, i) => (
+              <TouchableOpacity key={i} onPress={() => onPressModalAdmin(admin)}>
+                <DataTable.Row>
+                  <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{admin.userName === undefined ? 'Empty' : admin.userName}</Text></DataTable.Cell>
+                  <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>Admin</Text></DataTable.Cell>
+                </DataTable.Row>
+              </TouchableOpacity>
+
+            )))
+          }
+
+            {/* <DataTable.Pagination
               page={page}
               numberOfPages={3}
               onPageChange={(page) => setPage(page)}
@@ -172,7 +220,7 @@ const Employee = props => {
               setItemsPerPage={setItemsPerPage}
               showFastPagination
               optionsLabel={'Rows per page'}
-            />
+            /> */}
           </DataTable>
 
         </View>
@@ -203,16 +251,6 @@ Employee.navigationOptions = navigationData => {
               />
             </HeaderButtons>
         ),
-        headerRight: (
-          <HeaderButtons HeaderButtonComponent = {HeaderButton}>
-            <FontAwesome
-              name = {"user"}
-              size = {24}
-              color = {"white"}
-              style = {{right: 10}}
-            />
-          </HeaderButtons>
-        )
     };
   };
 

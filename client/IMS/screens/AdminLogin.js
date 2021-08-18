@@ -4,6 +4,7 @@ import styles from '../components/LoginStyles'
 import axios from 'axios'
 import { connect } from 'react-redux'
 import { login, loadUser } from '../actions/auth'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 const AdminLogin = props => {
@@ -32,7 +33,8 @@ const AdminLogin = props => {
 
 
     const toggleSwitch = () => {
-        props.navigation.navigate({ routeName: 'employeeLogin', params: { switchVal1: true } })
+        // props.navigation.navigate({ routeName: 'employeeLogin', params: { switchVal1: true } })
+        AsyncStorage.removeItem('token').then(() => props.navigation.navigate({ routeName: 'employeeLogin', params: { switchVal1: true } }))
     };
     return (
         <View>
@@ -88,18 +90,18 @@ const AdminLogin = props => {
                         </View>
 
                     </View>
-                    
+
                 </View>
-        </KeyboardAvoidingView>
-        <View style={styles.circleNumber4}>
+            </KeyboardAvoidingView>
+            <View style={styles.circleNumber4}>
 
-        </View>
-        <View style={styles.circleNumber5}>
+            </View>
+            <View style={styles.circleNumber5}>
 
-        </View>
-        <View style={styles.container}>
+            </View>
+            <View style={styles.container}>
                 {Dimensions.get('window').height === 1232 ? <Text style={styles.footer}>Zaki Sons</Text> : console.log(Dimensions.get('window').height)}
-        </View>
+            </View>
         </View>
 
 

@@ -54,7 +54,7 @@ router.post('/add-admin', adminAuth, async (req, res) => {
 
 })
 
-router.post('/add-employee', async (req, res) => {
+router.post('/add-employee', /*adminAuth,*/ async (req, res) => {
     try {
         const {
             userName,
@@ -104,15 +104,17 @@ router.get("/", auth, async (req, res) => {
     console.log('/get-user')
     try {
         const User = req.user.type === 'admin' ? Admin : Employee
-        const user = await User.findById(req.user.id)
+        let user = JSON.parse(JSON.stringify(await User.findById(req.user.id)))
+        user = { ...user, type: req.user.type }
+        console.log(user)
 
-
+        // user.type = req.user.type
         return res.status(200).json({
             user
         })
     }
     catch (err) {
-        console.log('sasas')
+        console.log(err)
 
         return res.status(500).json({
             error: 'SERVER_ERROR'
@@ -121,6 +123,21 @@ router.get("/", auth, async (req, res) => {
 
 })
 
+router.get('/all', async (req, res) => {
+    try {
+        const admins = await Admin.find()
+        const employees = await Employee.find()
+
+        return res.json({
+            admins,
+            employees
+        })
+    } catch (err) {
+        return res.status(500).json({
+            error: 'SERVER_ERROR'
+        })
+    }
+})
 
 router.post('/login', async (req, res) => {
     console.log('/login')
