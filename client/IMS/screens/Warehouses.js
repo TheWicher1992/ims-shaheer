@@ -27,12 +27,8 @@ const Warehouse = props => {
     const res = await axios.get(
       `${uri}/api/warehouse/${filters.page}/${filters.query}/${filters.sort}/${filters.sortBy}`
     )
-<<<<<<< HEAD
     setWarehouses(res.data.warehouse.reverse())
     console.log(warehouses)
-=======
-    setWarehouses(res.data.warehouse)
->>>>>>> 692be3947380ea708d2c148f1eabd8b9026492a4
   }
 
   useEffect(() => {
@@ -62,7 +58,7 @@ const Warehouse = props => {
   const [page, setPage] = React.useState(0); //for pages of table
   const [isModalVisible, setModalVisible] = React.useState(false); //to set modal on and off
 
-  
+
 
   const toggleModal = () => { //to toggle model on and off -- function
     setModalVisible(!isModalVisible);
@@ -104,17 +100,17 @@ const Warehouse = props => {
     setStock(stocks);
   }
 
-  const addWarehouse = async() => {
+  const addWarehouse = async () => {
 
     const body = {
-      name : warehouseName,
-      totalProducts : totalProducts,
-      totalStock : stock
+      name: warehouseName,
+      totalProducts: totalProducts,
+      totalStock: stock
     }
     console.log(body)
     console.log(`///////////////////////////////////////add warehouse`)
 
-    await axios.post(`${uri}/api/warehouse`, body, 
+    await axios.post(`${uri}/api/warehouse`, body,
       {
         headers: {
           "Content-Type": "application/json"
@@ -134,8 +130,8 @@ const Warehouse = props => {
   const [isTableDetailModalVisible, setTableDetailModalVisible] = React.useState(false);
 
   const onPressModal = (prod) => {
-    setTableDetailModalVisible(true), 
-    setTouchedWarehouse(prod)
+    setTableDetailModalVisible(true),
+      setTouchedWarehouse(prod)
   }
 
 
@@ -234,23 +230,13 @@ const Warehouse = props => {
 
           {
             warehouses.map((warehouse, i) => (
-<<<<<<< HEAD
-              <TouchableOpacity key={i} onPress={() => setTableDetailModalVisible(true)}>
+              <TouchableOpacity key={i} onPress={() => onPressModal(warehouse)}>
                 <DataTable.Row>
                   <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{warehouse.name}</Text></DataTable.Cell>
                   <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{warehouse.totalProducts}</Text></DataTable.Cell>
                   <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{warehouse.totalStock}</Text></DataTable.Cell>
                 </DataTable.Row>
               </TouchableOpacity>
-=======
-          <TouchableOpacity key={i} onPress={() => onPressModal(warehouse)}>
-            <DataTable.Row>
-              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{warehouse.name}</Text></DataTable.Cell>
-              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{warehouse.totalProducts}</Text></DataTable.Cell>
-              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{warehouse.totalStock}</Text></DataTable.Cell>
-            </DataTable.Row>
-          </TouchableOpacity>
->>>>>>> 692be3947380ea708d2c148f1eabd8b9026492a4
             ))
           }
 
