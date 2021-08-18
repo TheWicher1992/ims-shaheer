@@ -6,8 +6,10 @@ import { FontAwesome } from '@expo/vector-icons';
 import { DataTable } from 'react-native-paper';
 import Modal from 'react-native-modal';
 import { Picker } from '@react-native-picker/picker';
-import TableDetailModal from '../components/TableDetailModal';
+import DeliveryOrderModal from '../components/DeliveryOrderModal';
 import FilterButton from '../components/FilterButton';
+import { Ionicons } from '@expo/vector-icons';
+import { Entypo } from '@expo/vector-icons';
 
 
 const optionsPerPage = [2, 3, 4];
@@ -173,7 +175,7 @@ const DeliveryOrders = props => {
                 </View>
             </View>
         </Modal>
-        <TableDetailModal state={isTableDetailModalVisible} handleClose={handleClose} title='Delivery Information' name='ABC1234' email='raahemasghar97@gmail.com' occupation="Employee" />
+        <DeliveryOrderModal state={isTableDetailModalVisible} handleClose={handleClose} title='Delivery Information' name='ABC' email='raahemasghar97@gmail.com' occupation="Employee" />
         <View style = {styles.screen}>
           <View>
             <Text style={styles.title}>Delivery Orders</Text>
@@ -218,23 +220,20 @@ const DeliveryOrders = props => {
               <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Status</Text></DataTable.Title>
             </DataTable.Header>
 
-            {/* <TouchableOpacity onPress={() => setTableDetailModalVisible(true)}> */}
+            <TouchableOpacity onPress={() => setTableDetailModalVisible(true)}>
               <DataTable.Row>
-              <TouchableOpacity style={styles.cells} onPress={() => setTableDetailModalVisible(true)}><DataTable.Cell style={styles.cells}><Text style={styles.tableText} numberOfLines={2}>09/08/2021{'\n'}ABC34013-133</Text></DataTable.Cell></TouchableOpacity>
-              <TouchableOpacity style={styles.cells} onPress={() => setTableDetailModalVisible(true)}><DataTable.Cell style={styles.cells}><Text style={styles.tableText}>Raahem</Text></DataTable.Cell></TouchableOpacity>
-              <TouchableOpacity style={styles.cells} onPress={() => setTableDetailModalVisible(true)}><DataTable.Cell style={styles.cells}><Text style={styles.tableText}>69000</Text></DataTable.Cell></TouchableOpacity>
-              <TouchableOpacity style={styles.cells} onPress={() => setTableDetailModalVisible(true)}><DataTable.Cell style={styles.cells}><Text style={styles.tableText}>Model Town, Lahore</Text></DataTable.Cell></TouchableOpacity>
+              <DataTable.Cell style={styles.cells}><Text style={styles.tableText} numberOfLines={2}>09/08/2021{'\n'}ABC34013-133</Text></DataTable.Cell>
+              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>Raahem</Text></DataTable.Cell>
+              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>69000</Text></DataTable.Cell>
+              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>Model Town, Lahore</Text></DataTable.Cell>
                 <DataTable.Cell style={styles.cells}>
                     <View style={styles.checkboxContainer}>
-        <CheckBox
-          value={isSelected}
-          onValueChange={setSelection}
-          style={styles.checkbox}
-        />
+                      <Ionicons name={"checkmark"} size={30} color={'#008394'}/>
+                      {/* <Entypo name={"cross"} size={30} color={'red'}/> */}
             </View>
             </DataTable.Cell>
               </DataTable.Row>
-            {/* </TouchableOpacity> */}
+            </TouchableOpacity>
             <DataTable.Pagination
               page={page}
               numberOfPages={3}
