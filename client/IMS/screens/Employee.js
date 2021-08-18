@@ -26,6 +26,39 @@ const Employee = props => {
   const [touchedEmployee, setTouchedEmployee] = React.useState([])
   const [touchedAdmin, setTouchedAdmin] = React.useState([])
   const [occupation, setSelectedOccupationModal] = React.useState(``)
+  const addEmployee = () => {
+    setModalVisible(false); //closing modal on done for now
+
+    const body = {
+      userName: userName,
+      password: password,
+    }
+
+    axios.post(`${uri}/api/auth/add-employee`, body, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+      .then(res => getEmployees())
+      .catch(err => console.log(err))
+  }
+
+  const addAdmin = () => {
+    setModalVisible(false); //closing modal on done for now
+
+    const body = {
+      userName: userName,
+      password: password,
+    }
+
+    axios.post(`${uri}/api/auth/add-admin`, body, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+      .then(res => getEmployees())
+      .catch(err => console.log(err))
+  }
  
   const onPressModal = (emp) => {
     setTableDetailModalVisible(true),
@@ -51,17 +84,7 @@ const Employee = props => {
 
   const onChangeUserName = (userName) => { //setting username on change
       setUserName(userName)
-      //console.log(userName)
   }
-
-  const addEmployee = () => { //when add button is clicked
-      console.log(password)
-      console.log(userName)
-      console.log(selectedOccupation)
-      setModalVisible(!isModalVisible); //closing modal for now
-
-  }
-
 
   const toggleModal = () => { //to switch modal on
     setModalVisible(!isModalVisible);
@@ -152,7 +175,7 @@ const Employee = props => {
                         </TouchableOpacity>
                       </View> 
                       <View style = {{top:45}}>
-                        <TouchableOpacity onPress={() => { addEmployee() }}>
+                        <TouchableOpacity onPress={() => { selectedOccupation === 'Employee' ? addEmployee() : addAdmin() }}>
                           <View style={styles.buttonModalContainer}>
                             <View>
                               <Text style={styles.buttonModalText}>Done</Text>
@@ -166,7 +189,7 @@ const Employee = props => {
                 </View>
             </View>
         </Modal>
-        <EmployeeDetailModal state={isTableDetailModalVisible} handleClose={handleClose} title='Employee Information' object={touchedEmployee} occupation={occupation} />
+        <EmployeeDetailModal state={isTableDetailModalVisible} handleClose={handleClose} title='Employee Information' object={touchedEmployee} occupation={occupation} getEmployees={getEmployees} />
         <View style = {styles.screen}>
           <View>
             <Text style={styles.title}>Employees</Text>

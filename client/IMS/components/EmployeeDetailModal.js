@@ -21,8 +21,9 @@ const EmployeeDetailModal = props => {
     setModalVisible(false);
   }
 
-  const deleteProduct = (id) => {
-    axios.delete(`${uri}/api/product/${id}`).then(() => props.getProducts())
+  const deleteEmployee = (id) => {
+    console.log('del this ',id)
+    axios.delete(`${uri}/api/auth/employee/${id}`).then(() => props.getEmployees())
     props.handleClose()
 
   }
@@ -72,7 +73,7 @@ const EmployeeDetailModal = props => {
                         text: "No",
                         style: "cancel"
                       },
-                      { text: "Yes", onPress: () => deleteProduct(props.object._id) }
+                      { text: "Yes", onPress: () => deleteEmployee(props.object._id) }
                     ],
                     { cancelable: true }
 
@@ -161,7 +162,7 @@ const styles = StyleSheet.create({
     marginTop: 22
   },
   modalBody: {
-    paddingVertical: '10%',
+    paddingVertical: '30%',
     paddingHorizontal: 10
   },
   modalView: {
