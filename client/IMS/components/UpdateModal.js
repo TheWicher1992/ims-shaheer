@@ -41,12 +41,12 @@ const UpdateModal = props => {
                     </View>
                     <View style={{flexDirection: 'row', justifyContent: 'space-evenly', alignItems : 'center', justifyContent: 'flex-end'}}>
                         <TouchableOpacity onPress={() => props.handleClose()}>
-                            <View style={styles.buttonModalContainer2}>
+                            <View style={styles.buttonModalContainer}>
                                 <Text style={styles.buttonModalText}>Back</Text>
                             </View>
                         </TouchableOpacity>
                         <TouchableOpacity onPress={() => props.handleClose()}>
-                            <View style={styles.backButtonModalContainer2}>
+                            <View style={styles.backButtonModalContainer}>
                                 <Text style={styles.buttonModalText}>Done</Text>
                             </View>
                         </TouchableOpacity>

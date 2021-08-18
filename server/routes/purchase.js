@@ -7,7 +7,7 @@ const Warehouse = require('../models/Warehouse')
 const Stock = require('../models/Stock')
 const Client = require('../models/Client')
 router.post('/', async (req, res) => {
-    const {
+    let {
         product,
         quantity,
         client,
@@ -71,6 +71,7 @@ router.post('/', async (req, res) => {
             stock.stock += quantity
         }
         warehouse.totalStock += quantity
+        warehouse.totalProducts += 1
         await warehouse.save()
     }
 
@@ -105,8 +106,30 @@ router.post('/', async (req, res) => {
 
 })
 
+router.get(`/`, async (req, res) => {
+    const purchases = await Purchase.find().populate(['client', 'product'])
+
+    return res.status(200).json({
+        purchases
+    })
+
+})
 
 
+router.get('/form-inputs', async (req, res) => {
+
+    //clients, warehouses, products
+
+    const clients = await Client.find().select('userName')
+    const warehouses = await Warehouse.find().select('name')
+    const products = await Product.find().select('title')
+
+    return res.json({
+        clients, warehouses, products
+    })
+
+
+})
 
 
 
