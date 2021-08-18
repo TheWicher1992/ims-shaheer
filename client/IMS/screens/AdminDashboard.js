@@ -1,10 +1,42 @@
-import React from 'react'
+import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, View, TouchableOpacity, Dimensions } from 'react-native';
 import HeaderButton from '../components/HeaderButton';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import HeaderNavigation from '../components/HeaderNavigation';
+import { uri } from '../api.json'
+import axios from "axios"
 
 const AdminDashboard = props => {
+
+  const [outOfStock, setOutOfStock] = React.useState(0);
+  const [todayRevenue, settodayRevenue] = React.useState(0);
+
+  const getOutofStock = async () => {
+    const res = await axios.get(
+      `${uri}/api/dashboard/outOfStock`
+    )
+  
+    console.log('/////////////', res.data.outOfStock)
+    setOutOfStock(res.data.outOfStock)
+  }
+
+  const getToday = async () => {
+    const res = await axios.get(
+      `${uri}/api/dashboard/todayRevenue`
+    )
+  
+    console.log('//////revenue', res.data.todayRevenue)
+    settodayRevenue(res.data.todayRevenue)
+  }
+
+  useEffect(() => {
+    getOutofStock()
+    getToday()
+    
+  }, [])
+
+
+
     return(
       <View style={{marginTop: Dimensions.get('window').height < 900 ? 5 : 60}}>
         <View style={{justifyContent: 'center', alignSelf: 'center',}}>
@@ -12,7 +44,7 @@ const AdminDashboard = props => {
         </View>
         <TouchableOpacity>
           <View style={styles.containers}>
-            <Text style={styles.containerText}>Goods out of stock 8</Text>
+            <Text style={styles.containerText}>Goods out of stock {outOfStock}</Text>
           </View>
         </TouchableOpacity>        
         <TouchableOpacity>

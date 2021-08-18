@@ -9,7 +9,7 @@ router.get('/outOfStock', async (req, res) => {
 
 
         const outOfStock = await Product.count({
-            stock : 0 
+            totalStock : 0 
         })
 
         return res.status(200).json({
@@ -38,9 +38,10 @@ router.get('/todayRevenue', async (req, res) => {
             _id : null,
             revenue : {$sum : "$total"}}}
         ])
+        const todaysRevenue = todayRevenue[0]
 
         return res.status(200).json({
-            todayRevenue
+            todaysRevenue
         })
     }
     catch (err) {

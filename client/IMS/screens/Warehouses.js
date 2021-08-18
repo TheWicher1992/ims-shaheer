@@ -7,7 +7,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import { DataTable } from 'react-native-paper';
 import Modal from 'react-native-modal';
 import PickerCheckBox from 'react-native-picker-checkbox';
-import TableDetailModal from '../components/TableDetailModal';
+import WarehouseDetailModal from '../components/WarehouseDetailModal';
 import FilterButton from '../components/FilterButton';
 import axios from 'axios'
 import { uri } from '../api.json'
@@ -27,8 +27,12 @@ const Warehouse = props => {
     const res = await axios.get(
       `${uri}/api/warehouse/${filters.page}/${filters.query}/${filters.sort}/${filters.sortBy}`
     )
+<<<<<<< HEAD
     setWarehouses(res.data.warehouse.reverse())
     console.log(warehouses)
+=======
+    setWarehouses(res.data.warehouse)
+>>>>>>> 692be3947380ea708d2c148f1eabd8b9026492a4
   }
 
   useEffect(() => {
@@ -56,9 +60,9 @@ const Warehouse = props => {
   ];
 
   const [page, setPage] = React.useState(0); //for pages of table
-  const [itemsPerPage, setItemsPerPage] = React.useState(optionsPerPage[0]); //for items per page on table
-
   const [isModalVisible, setModalVisible] = React.useState(false); //to set modal on and off
+
+  
 
   const toggleModal = () => { //to toggle model on and off -- function
     setModalVisible(!isModalVisible);
@@ -100,12 +104,17 @@ const Warehouse = props => {
     setStock(stocks);
   }
 
-  const addWarehouse = () => {
-    console.log(`add warehouse`)
-    axios.post(`${uri}/api/warehouse`,
-      {
-        name: warehouseName
-      },
+  const addWarehouse = async() => {
+
+    const body = {
+      name : warehouseName,
+      totalProducts : totalProducts,
+      totalStock : stock
+    }
+    console.log(body)
+    console.log(`///////////////////////////////////////add warehouse`)
+
+    await axios.post(`${uri}/api/warehouse`, body, 
       {
         headers: {
           "Content-Type": "application/json"
@@ -115,11 +124,20 @@ const Warehouse = props => {
     )
       .then(res => console.log(res))
       .catch(err => console.log(err))
+
+    getWarehouses()
     setModalVisible(false); //closing modal on done for now
   }
 
-
+  const [itemsPerPage, setItemsPerPage] = React.useState(optionsPerPage[0]); //for items per page on table
+  const [toucedWarehouse, setTouchedWarehouse] = React.useState([])
   const [isTableDetailModalVisible, setTableDetailModalVisible] = React.useState(false);
+
+  const onPressModal = (prod) => {
+    setTableDetailModalVisible(true), 
+    setTouchedWarehouse(prod)
+  }
+
 
   const handleClose = () => {
     setTableDetailModalVisible(false)
@@ -144,6 +162,8 @@ const Warehouse = props => {
               <Text style={styles.modalTitle}>Add Warehouse</Text>
               <View>
                 <TextInput onChangeText={onChangeWarehouseName} style={styles.input} placeholder="Name" autoCorrect={false} />
+                <TextInput onChangeText={onChangeTotalProducts} style={styles.input} placeholder="Total Products" autoCorrect={false} />
+                <TextInput onChangeText={onChangeStock} style={styles.input} placeholder="Total Stocks" autoCorrect={false} />
               </View>
               <View style={{ flexDirection: 'row', alignItems: 'center', top: 45 }}>
                 <TouchableOpacity style={{ alignSelf: 'flex-start' }} onPress={() => { setModalVisible(false) }}>
@@ -169,7 +189,7 @@ const Warehouse = props => {
           </View>
         </View>
       </Modal>
-      <TableDetailModal state={isTableDetailModalVisible} handleClose={handleClose} title='Employee Information' name='Raahem Asghar' email='raahemasghar97@gmail.com' occupation="Employee" />
+      <WarehouseDetailModal state={isTableDetailModalVisible} handleClose={handleClose} title='Warehouse Information' object={toucedWarehouse} getWarehouses={getWarehouses} />
       <View style={styles.screen}>
         <View>
           <Text style={styles.title}>Warehouses</Text>
@@ -214,6 +234,7 @@ const Warehouse = props => {
 
           {
             warehouses.map((warehouse, i) => (
+<<<<<<< HEAD
               <TouchableOpacity key={i} onPress={() => setTableDetailModalVisible(true)}>
                 <DataTable.Row>
                   <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{warehouse.name}</Text></DataTable.Cell>
@@ -221,6 +242,15 @@ const Warehouse = props => {
                   <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{warehouse.totalStock}</Text></DataTable.Cell>
                 </DataTable.Row>
               </TouchableOpacity>
+=======
+          <TouchableOpacity key={i} onPress={() => onPressModal(warehouse)}>
+            <DataTable.Row>
+              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{warehouse.name}</Text></DataTable.Cell>
+              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{warehouse.totalProducts}</Text></DataTable.Cell>
+              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{warehouse.totalStock}</Text></DataTable.Cell>
+            </DataTable.Row>
+          </TouchableOpacity>
+>>>>>>> 692be3947380ea708d2c148f1eabd8b9026492a4
             ))
           }
 
