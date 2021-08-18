@@ -27,7 +27,7 @@ const Warehouse = props => {
     const res = await axios.get(
       `${uri}/api/warehouse/${filters.page}/${filters.query}/${filters.sort}/${filters.sortBy}`
     )
-    setWarehouses(res.data.warehouse)
+    setWarehouses(res.data.warehouse.reverse())
     console.log(warehouses)
   }
 
@@ -214,16 +214,16 @@ const Warehouse = props => {
 
           {
             warehouses.map((warehouse, i) => (
-          <TouchableOpacity key={i} onPress={() => setTableDetailModalVisible(true)}>
-            <DataTable.Row>
-              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{warehouse.name}</Text></DataTable.Cell>
-              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{warehouse.totalProducts}</Text></DataTable.Cell>
-              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{warehouse.totalStock}</Text></DataTable.Cell>
-            </DataTable.Row>
-          </TouchableOpacity>
+              <TouchableOpacity key={i} onPress={() => setTableDetailModalVisible(true)}>
+                <DataTable.Row>
+                  <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{warehouse.name}</Text></DataTable.Cell>
+                  <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{warehouse.totalProducts}</Text></DataTable.Cell>
+                  <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{warehouse.totalStock}</Text></DataTable.Cell>
+                </DataTable.Row>
+              </TouchableOpacity>
             ))
           }
-          
+
           <DataTable.Pagination
             page={page}
             numberOfPages={3}
