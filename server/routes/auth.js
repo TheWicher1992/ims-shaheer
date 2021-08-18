@@ -216,4 +216,34 @@ router.get('/default-admin', async (req, res) => {
 
 })
 
+router.delete('/employee/:id', async (req, res) => {
+    try {
+
+        const id = req.params.id
+
+        const exists = await Employee.exists({
+            _id: id
+        })
+
+        if (!exists) {
+            return res.status(400).json({
+                error: 'EMPLOYEE_DOES_NOT_EXIST'
+            })
+        }
+
+        await Employee.deleteOne({
+            _id: id
+        })
+
+        return res.status(200).json({
+            status: 'SUCCESSFULY_DELETED'
+        })
+    } catch (err) {
+        return res.status(400).json({
+            error: 'SERVER_ERROR'
+        })
+    }
+
+})
+
 module.exports = router
