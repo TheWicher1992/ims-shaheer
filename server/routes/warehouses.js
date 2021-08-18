@@ -32,6 +32,8 @@ router.post('/', async (req, res) => {
     try {
         var {
             name,
+            totalProducts,
+            totalStock
 
         } = req.body
 
@@ -45,7 +47,9 @@ router.post('/', async (req, res) => {
             })
         }
         const warehouse = new Warehouse({
-            name
+            name,
+            totalProducts,
+            totalStock
 
         })
 
