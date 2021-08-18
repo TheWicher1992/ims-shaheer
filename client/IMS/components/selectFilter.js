@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Modal, StyleSheet, Text, View, TouchableOpacity, Dimensions, TextInput, Button } from "react-native";
-import SelectFilter from "./selectFilter";
+import { Slider } from 'react-native-elements';
+import { FontAwesome } from "@expo/vector-icons";
 
-const FilterModal = props => {
+const SelectFilter = props => {
 
     const [modalVisible, setModalVisible] = useState(false);
-    const [selectFilterModal, setSelectFilterModal] = useState(false);
+    const [amountVal, setAmountVal] = useState(0);
 
     useEffect(() => {
         setModalVisible(props.state);
@@ -13,10 +14,6 @@ const FilterModal = props => {
 
     function handleClose() {
         setModalVisible(false);
-    }
-
-    const closeSelectFilterModal = () => {
-        setSelectFilterModal(false);
     }
     return (
 
@@ -32,10 +29,19 @@ const FilterModal = props => {
                     <View style={styles.modalStyle}>
                             
                         <View style={styles.topTextBox}>
-                            <View style= {{flexDirection: 'row', justifyContent: 'space-between'}}>
-                                <View style={{ justifyContent: 'center', alignItems: 'flex-start', marginTop: '6.25%', paddingLeft: '5%' }}>
+                            <View style= {{flexDirection: 'row', justifyContent: 'space-between', alignContent: 'center'}}>
+                                <TouchableOpacity onPress = {() => props.handleClose()} style = {{marginTop: Dimensions.get('window').height > 900 ? '7%':'7%', paddingLeft: '5%'}}>
+                                    <FontAwesome
+                                    name = {"arrow-left"}
+                                    size = {Dimensions.get('window').height > 900 ? 40:25}
+                                    color = {"#008394"}
+                                    />
+                                </TouchableOpacity>
+                                
+                                <View style={{ justifyContent: 'center', alignItems: 'flex-start', marginTop: '6.25%',}}>
+                                
                                     <Text style={styles.topText}>
-                                        Filter
+                                        Amount
                                     </Text>
                                 </View>
                                 <View style = {{justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-end', paddingRight: '8%' }}>
@@ -53,7 +59,7 @@ const FilterModal = props => {
                         </View>
 
                             
-                        <TouchableOpacity style = {styles.TextBox} onPress={() => setSelectFilterModal(true)}>
+                        <TouchableOpacity style = {styles.TextBox}>
                                 <View style={{ marginTop: '9.5%', paddingLeft: '5%' }}>
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                         <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-start' }}>
@@ -124,25 +130,35 @@ const FilterModal = props => {
                                     </View>
                                 </View>
                         </TouchableOpacity>
-
-                        <TouchableOpacity style = {styles.TextBox}>
-                                <View style={{ marginTop: '9.5%', paddingLeft: '5%' }}>
-                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                                        <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-start' }}>
-                                            <Text style={styles.normalText}>
-                                                Ahmed is fucking great
-                                            </Text>
-                                        </View>
-                                        <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-end', paddingRight: '8%' }}>
-                                            <Text style={styles.sideText}>
-                                                All
-                                            </Text>
-                                        </View>
-                                    </View>
+                        
+                        <View style = {styles.TextBox}>
+                            <View style={{ flex: 1, alignItems: 'stretch', justifyContent: 'center' }}>
+                            <View style={{borderRadius: 50, overflow: 'hidden'}}>       
+                                <View style={{flexDirection: 'row', position: 'absolute'}}>
+                                    <View style={styles.sliderDummy}></View>
+                                    <View style={styles.sliderReal}></View>
                                 </View>
-                        </TouchableOpacity>
+                                <Slider 
+                                    style={{width: 300, height: 30, borderRadius: 50}}
+                                    minimumValue={0}
+                                    maximumValue={50}
+                                    value ={amountVal}
+                                    onValueChange= {(value) => setAmountVal(value)}
+                                    maximumTrackTintColor='transparent'  
+                                    minimumTrackTintColor='transparent'
+                                    />  
+
+                                </View>
+                            </View>
+                                  
+                        </View>
+                        
 
                         <View style={styles.bottomBox}>
+
+                        </View>
+
+                        {/* <View style={styles.bottomBox}>
                             <TouchableOpacity onPress = {() => props.handleClose()} style = {{width: '90%', position: "absolute",top: '20%'}}>
                                 <View style={styles.bottomButton}>
                                     <View>
@@ -152,13 +168,10 @@ const FilterModal = props => {
                                     </View>
                                 </View>
                             </TouchableOpacity>
-                        </View>
-
-                        
+                        </View> */}
                     </View>
                 </View>
             </Modal>
-            <SelectFilter state = {selectFilterModal} handleClose = {closeSelectFilterModal} filters = {props}/>
         </View>
     );
 };
@@ -257,8 +270,20 @@ const styles = StyleSheet.create({
         marginTop: Dimensions.get('window').height > 900 ? 30: 0,
         // left: Dimensions.get('window').width * 0.4,
 
+    },
+    sliderDummy: {
+        backgroundColor: '#d3d3d3',
+        width: 300,
+        height:30,
+        borderRadius: 50,
+        position: 'absolute',                
+    },
+    sliderReal: {
+        backgroundColor: '#119EC2',
+        // width: {(amountVal/50) * 300},
+        height:30,
     }
 
 });
 
-export default FilterModal;
+export default SelectFilter;

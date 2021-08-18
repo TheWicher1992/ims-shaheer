@@ -221,22 +221,37 @@ router.delete('/employee/:id', async (req, res) => {
 
         const id = req.params.id
 
-        const exists = await Employee.exists({
+        const existsEmployee = await Employee.exists({
             _id: id
         })
 
-        if (!exists) {
-            return res.status(400).json({
-                error: 'EMPLOYEE_DOES_NOT_EXIST'
-            })
-        }
+        const existsAdmin = await Admin.exists({
+            _id: id
+        })
 
+        if (existsEmployee) {
+            
         await Employee.deleteOne({
             _id: id
         })
 
         return res.status(200).json({
             status: 'SUCCESSFULY_DELETED'
+        })
+        }
+        else if (existsAdmin) {
+            await Admin.deleteOne({
+                _id: id
+            })
+    
+            return res.status(200).json({
+                status: 'SUCCESSFULY_DELETED'
+            })
+        }
+
+
+        return res.status(400).json({
+            status: 'DOES_NOT_EXIST'
         })
     } catch (err) {
         return res.status(400).json({
