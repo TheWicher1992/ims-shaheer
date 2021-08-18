@@ -22,7 +22,8 @@ const EmployeeDetailModal = props => {
   }
 
   const deleteEmployee = (id) => {
-    //axios.delete(`${uri}/api/product/${id}`).then(() => props.getEmployees())
+    console.log('del this ',id)
+    axios.delete(`${uri}/api/auth/employee/${id}`).then(() => props.getEmployees())
     props.handleClose()
 
   }
