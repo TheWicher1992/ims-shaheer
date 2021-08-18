@@ -66,12 +66,13 @@ router.post('/', async (req, res) => {
                 warehouse: warehouseID,
                 stock: quantity
             }).save()
+            warehouse.totalProducts += 1
         }
         else {
             stock.stock += quantity
+            await stock.save()
         }
         warehouse.totalStock += quantity
-        warehouse.totalProducts += 1
         await warehouse.save()
     }
 

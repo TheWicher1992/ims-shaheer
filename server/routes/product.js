@@ -91,6 +91,125 @@ router.post('/', async (req, res) => {
     }
 })
 
+
+
+const moveDeliveryToWarehouse = async (sourceID, destID, productID) => {
+
+    //update delivery status
+    const deliverOrder = await DeliveryOrder.findOne({
+        _id: sourceID
+    })
+    deliverOrder.status = true
+    await deliverOrder.save()
+
+    //update warehouse totalStock
+    const warehouse = await Warehouse.findOne({
+        _id: destID
+    })
+
+    const stock = await Stock.findOne({
+        warehouse: destID,
+        product: productID
+    })
+
+    if (!stock) {
+        await new Stock({
+            product: productID,
+            warehouse: destID,
+            stock: deliverOrder.quantity
+        }).save()
+        warehouse.totalProducts += 1
+    }
+    else {
+        stock.stock += quantity
+    }
+    warehouse.totalStock += quantity
+    await warehouse.save()
+    await stock.save()
+}
+
+const moveWarehouseToWarehouse = async (sourceID, destID, productID, quantity) => {
+
+    //get both warehouses
+    const sourceWarehouse = await Warehouse.findOne({
+        _id: sourceID
+    })
+
+    const destWarehouse = await Warehouse.findOne({
+        _id: destID
+    })
+
+    //get src stock
+    const srcStock = await Stock.findOne({
+        product: productID,
+        warehouse: sourceID
+    })
+
+
+    //check if product available or stock is enough
+    if (!srcStock || srcStock.stock < quantity)
+        return "NOT_ENOUGH_STOCK"
+
+
+
+    //get dst stock
+    const dstStock = await Stock.findOne({
+        product: productID,
+        warehouse: destID
+    })
+
+    //if dst stock is not available update dst warehouse
+    if (!dstStock) {
+        await new Stock({
+            product: productID,
+            warehouse: destID,
+            stock: quantity
+        }).save()
+        destWarehouse.totalProducts += 1
+    }
+    //if available update stock at both ends
+    else {
+        dstStock.stock += quantity
+        srcStock.stock -= quantity
+        await dstStock.save()
+        await srcStock.save()
+    }
+    //update stock count in both warehouses
+    destWarehouse.totalStock += quantity
+    sourceWarehouse.totalStock -= quantity
+
+    if (srcStock.stock === 0) sourceWarehouse.totalProducts--
+
+    await sourceWarehouse.save()
+    await destWarehouse.save()
+
+    return
+
+
+}
+
+router.post('/move', async (req, res) => {
+    const {
+        type,
+        sourceID,
+        destID,
+        productID,
+        quantity
+    } = req.body
+
+    let result = true
+
+    if (type === 'delivery') moveDeliveryToWarehouse(sourceID, destID, productID)
+    if (type === 'warehouse') {
+        if (await moveWarehouseToWarehouse(sourceID, destID, productID, quantity) === 'NOT_ENOUGH_STOCK') {
+            result = false
+        }
+    }
+    return result ? res.end() : res.status(400).json({
+        error: 'NOT_ENOUGH_STOCK'
+    })
+
+})
 router.get('/cb', async (req, res) => {
     const brands = await Brand.find()
     const colours = await ProductColour.find()

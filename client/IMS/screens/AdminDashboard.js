@@ -15,7 +15,7 @@ const AdminDashboard = props => {
     const res = await axios.get(
       `${uri}/api/dashboard/outOfStock`
     )
-  
+
     console.log('/////////////', res.data.outOfStock)
     setOutOfStock(res.data.outOfStock)
   }
@@ -24,7 +24,7 @@ const AdminDashboard = props => {
     const res = await axios.get(
       `${uri}/api/dashboard/todayRevenue`
     )
-  
+
     console.log('//////revenue', res.data.todayRevenue)
     settodayRevenue(res.data.todayRevenue)
   }
@@ -32,74 +32,74 @@ const AdminDashboard = props => {
   useEffect(() => {
     getOutofStock()
     getToday()
-    
+
   }, [])
 
 
 
-    return(
-      <View style={{marginTop: Dimensions.get('window').height < 900 ? 5 : 60}}>
-        <View style={{justifyContent: 'center', alignSelf: 'center',}}>
-          <Text style={styles.titleText}>Admin Dashboard</Text>
+  return (
+    <View style={{ marginTop: Dimensions.get('window').height < 900 ? 5 : 60 }}>
+      <View style={{ justifyContent: 'center', alignSelf: 'center', }}>
+        <Text style={styles.titleText}>Admin Dashboard</Text>
+      </View>
+      <TouchableOpacity>
+        <View style={styles.containers}>
+          <Text style={styles.containerText}>Goods out of stock {outOfStock}</Text>
         </View>
-        <TouchableOpacity>
-          <View style={styles.containers}>
-            <Text style={styles.containerText}>Goods out of stock {outOfStock}</Text>
-          </View>
-        </TouchableOpacity>        
-        <TouchableOpacity>
-          <View style={styles.containers}>
-            <Text style={styles.containerText}>Today's Revenue 458,000</Text>
-          </View>
-        </TouchableOpacity>  
-        <TouchableOpacity>
-          <View style={styles.containers}>
-            <Text style={styles.containerText}>Pending Deliveries 9</Text>
+      </TouchableOpacity>
+      <TouchableOpacity>
+        <View style={styles.containers}>
+          <Text style={styles.containerText}>Today's Revenue 458,000</Text>
+        </View>
+      </TouchableOpacity>
+      <TouchableOpacity>
+        <View style={styles.containers}>
+          <Text style={styles.containerText}>Pending Deliveries 9</Text>
+        </View>
+      </TouchableOpacity>
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity onPress={() => props.navigation.navigate({ routeName: 'Sales' })}>
+          <View elevation={5} style={styles.buttons}>
+            <Text style={styles.buttonContainerText}>Make a Sale</Text>
           </View>
         </TouchableOpacity>
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity onPress={() => props.navigation.navigate({routeName: 'Sales'})}>
-            <View elevation={5} style={styles.buttons}>
-                <Text style={styles.buttonContainerText}>Make a Sale</Text>
-            </View>
-          </TouchableOpacity>
-          <View style={{paddingLeft: 20}}></View>
-          <TouchableOpacity onPress={() => props.navigation.navigate({routeName: 'MakePurchase'})}>
-            <View elevation={5} style={styles.buttons}>
-                <Text style={styles.buttonContainerText}>Make a Purchase</Text>
-            </View>
-          </TouchableOpacity>
-        </View>  
+        <View style={{ paddingLeft: 20 }}></View>
+        <TouchableOpacity onPress={() => props.navigation.navigate({ routeName: 'MakePurchase' })}>
+          <View elevation={5} style={styles.buttons}>
+            <Text style={styles.buttonContainerText}>Make a Purchase</Text>
+          </View>
+        </TouchableOpacity>
       </View>
-      
-    )
+    </View>
+
+  )
 }
 
 AdminDashboard.navigationOptions = navigationData => {
-    return {
-        headerTitle: 'Zaki Sons',
-        headerTitleAlign: 'center',
-        headerTitleStyle: { color: 'white' },
-        headerStyle: {
-            backgroundColor: '#008394', 
-        },
-        headerLeft: (
-            <HeaderButtons HeaderButtonComponent={HeaderButton}>
-              <Item
-                title="Menu"
-                iconName="ios-menu"
-                onPress={() => {
-                    navigationData.navigation.toggleDrawer();
-                  }}
-              />
-            </HeaderButtons>
-          ),
-          headerRight: (
-            <HeaderNavigation/>
-          )
-    };
+  return {
+    headerTitle: 'Zaki Sons',
+    headerTitleAlign: 'center',
+    headerTitleStyle: { color: 'white' },
+    headerStyle: {
+      backgroundColor: '#008394',
+    },
+    headerLeft: (
+      <HeaderButtons HeaderButtonComponent={HeaderButton}>
+        <Item
+          title="Menu"
+          iconName="ios-menu"
+          onPress={() => {
+            navigationData.navigation.toggleDrawer();
+          }}
+        />
+      </HeaderButtons>
+    ),
+    headerRight: (
+      <HeaderNavigation />
+    )
   };
-  
+};
+
 const styles = StyleSheet.create({
   titleText: {
     color: '#008394',
