@@ -36,6 +36,8 @@ const Product = props => {
   })
 
   const getProducts = async () => {
+
+
     const res = await axios.get(
       `${uri}/api/product/${filters.page}/${filters.query}/${filters.colour}/${filters.brand}/${filters.ware}/${filters.sort}/${filters.sortBy}`
     )
@@ -269,7 +271,7 @@ const Product = props => {
                           <Picker.Item key={c._id} label={c.title} value={c._id} />
                         )))
                       }
-    
+
                     </Picker>
                     <View>
                       <TouchableOpacity onPress={() => { setAddColorModal(true) }}>
