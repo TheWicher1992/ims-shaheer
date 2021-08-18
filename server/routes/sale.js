@@ -23,12 +23,12 @@ router.post('/', async (req, res) => {
 
     
 
-
+        console.log(req.body)
         const sale =  new Sale({
-            productID,
+            product:productID,
             quantity,
             totalWithOutDiscount,
-            clientID,
+            client: clientID,
             payment,
             discount,
             total,
@@ -115,7 +115,7 @@ router.get('/:page/:query/:client/:deliveryStatus/:date/:quantity/:total/:sort/:
 router.get('/', async (req, res) => {
     try {
 
-        const sale = await Sale.find({})
+        const sale = await Sale.find({}).populate(['product','client'])
 
         return res.status(200).json({
             sale

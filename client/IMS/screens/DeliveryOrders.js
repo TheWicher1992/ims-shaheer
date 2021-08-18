@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, Button, Dimensions, TextInput, TouchableOpacity, KeyboardAvoidingView, ScrollView, CheckBox } from 'react-native'; 
 import HeaderButton from '../components/HeaderButton';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
@@ -10,11 +11,73 @@ import DeliveryOrderModal from '../components/DeliveryOrderModal';
 import FilterButton from '../components/FilterButton';
 import { Ionicons } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
-
+import { uri } from '../api.json'
+import axios from "axios"
 
 const optionsPerPage = [2, 3, 4];
 
 const DeliveryOrders = props => {
+const [orders,setOrders] = useState([])
+const [products,setProducts] = useState([])
+  const [clients,setClients]  = useState([])
+
+  const [Pfilters, setPFilters] = useState({
+    page: 1,
+    query: '*',
+    colour: '*',
+    brand: '*',
+    ware: '*',
+    sort: '*',
+    sortBy: '*'
+  })
+
+  const getOrders = async () => {
+    const res = await axios.get(
+      `${uri}/api/order`
+    )
+
+    console.log('logging arriving order',res.data.deliveryOrder)
+    setOrders(res.data.deliveryOrder)
+    
+  }
+
+  const getProducts = async () => {
+    const res = await axios.get(
+      `${uri}/api/product/${Pfilters.page}/${Pfilters.query}/${Pfilters.colour}/${Pfilters.brand}/${Pfilters.ware}/${Pfilters.sort}/${Pfilters.sortBy}`
+    )
+
+
+    setProducts(res.data.products)
+    
+
+    
+  }
+
+
+  const getClients = async () => {
+    const res = await axios.get(
+      `${uri}/api/client/*`
+    )
+
+
+    setClients(res.data.clients)
+
+    
+  }
+
+  useEffect(() => {
+    getClients()
+  },[])
+
+  useEffect(() => {
+    getProducts()
+  }, [])
+
+
+
+  useEffect(() => {
+    getOrders()
+  },[])
 
 
   const handleConfirm = (pItems) => { // temporary for picker
@@ -93,12 +156,25 @@ const DeliveryOrders = props => {
 
 
   const addDeliveryOrder = () => {
-    console.log(productName);
-    console.log(quantityVal);
-    console.log(location);
-    console.log(clientName);
-    console.log(notes);
     setModalVisible(false); //closing modal on done for now
+    console.log('Printing productName',productName)
+    const body = {
+      productID: productName,
+      quantity: quantityVal,
+      location: location,
+      clientID: clientName,
+      note : notes
+    }
+
+    console.log(body)
+
+    axios.post(`${uri}/api/order`, body, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+      .then(res => getOrders())
+      .catch(err => console.log(err))
   }
   
 
@@ -126,7 +202,26 @@ const DeliveryOrders = props => {
                   <View style = {{justifyContent: 'center', alignItems : 'center', }}>
                       <Text style = {styles.modalTitle}>Add Order</Text>
                       <View>
-                        <TextInput onChangeText={onChangeProductName} style={styles.input} placeholder="Product" autoCorrect={false} />
+                        <View style={{ marginTop: 40,borderWidth: 2, borderRadius: 40, borderColor: "#008394", width: Dimensions.get('window').width * 0.65, height: 40, fontSize: 8, justifyContent: 'space-between' }}>
+
+                          <Picker
+                            style={{ top: 6, color: 'grey', fontFamily: 'Roboto' }}
+                            itemStyle={{ fontWeight: '100' }}
+                            placeholder="Select a Product"
+                            selectedValue={productName}
+                            onValueChange={(itemValue, itemIndex) =>
+                              setProductName(itemValue)
+                            }
+                          >
+                           {
+                            products.map((product,i) => (
+                            
+                            <Picker.Item label= {product.title === undefined ? 0 : product.title} value={product._id === undefined ? 0 : product._id}  key = {product._id === undefined ? 0 : product._id}/>
+                            
+                            ))} 
+                          </Picker>
+
+                        </View>
                         <TextInput onChangeText={onChangeQuantity} style={styles.input} placeholder="Quantity" autoCorrect={false} />
                         <TextInput onChangeText={onChangeLocation} style={styles.input} placeholder="Location" autoCorrect={false} />
                         <TextInput multiline={true} numberOfLines={5} onChangeText={onChangeNotes} style={styles.input} placeholder="Notes" autoCorrect={false} />
@@ -141,11 +236,10 @@ const DeliveryOrders = props => {
                               setClientName(itemValue)
                             }
                           >
-                            <Picker.Item label="Ahmed Ateeq" value="Ahmed Ateeq" />
-                            <Picker.Item label="Nigger" value="Nigger" />
-                            <Picker.Item label="Raaking" value="Raaking" />
-                            <Picker.Item label="Witcher" value="Witcher" />
-                            <Picker.Item label="Ali noob" value="Ali noob" />
+                           {
+                            clients.map((client,i) => (
+                            <Picker.Item label={client.userName === undefined ? 0 : client.userName} value={client._id === undefined ? 0 : client._id}/>
+                            ))}
                           </Picker>
                         </View>
 
@@ -220,20 +314,21 @@ const DeliveryOrders = props => {
               <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Status</Text></DataTable.Title>
             </DataTable.Header>
 
+            {   
+             orders.map((order,i) => (           
             <TouchableOpacity onPress={() => setTableDetailModalVisible(true)}>
               <DataTable.Row>
-              <DataTable.Cell style={styles.cells}><Text style={styles.tableText} numberOfLines={2}>09/08/2021{'\n'}ABC34013-133</Text></DataTable.Cell>
-              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>Raahem</Text></DataTable.Cell>
-              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>69000</Text></DataTable.Cell>
-              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>Model Town, Lahore</Text></DataTable.Cell>
-                <DataTable.Cell style={styles.cells}>
-                    <View style={styles.checkboxContainer}>
-                      <Ionicons name={"checkmark"} size={30} color={'#008394'}/>
-                      {/* <Entypo name={"cross"} size={30} color={'red'}/> */}
-            </View>
-            </DataTable.Cell>
+                <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{order.product.title === null ? '--' : order.product.title}</Text></DataTable.Cell>
+                <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{order.client.userName === undefined ? '--' : order.client.userName}</Text></DataTable.Cell>
+                <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{order.quantity === undefined ? '--' : order.quantity}</Text></DataTable.Cell>
+                <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{order.location === undefined ? '--' : order.location}</Text></DataTable.Cell>
+                <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{order.deliveryStatus === null ? '--' : order.deliveryStatus}</Text></DataTable.Cell>
               </DataTable.Row>
             </TouchableOpacity>
+               ))
+
+             }
+
             <DataTable.Pagination
               page={page}
               numberOfPages={3}
