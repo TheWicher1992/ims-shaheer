@@ -99,7 +99,7 @@ const Product = props => {
   const [serialNo, setSerialNo] = React.useState(``)
   const [productName, setProductName] = React.useState(``)
   const [amountVal, setAmountVal] = React.useState(0)
-  const [color, setColor] = React.useState()
+  const [color, setColor] = React.useState(``)
   const [brand, setBrand] = React.useState(``)
   const [description, setDescription] = React.useState(``)
   const addProduct = () => {
@@ -152,8 +152,8 @@ const Product = props => {
   const [isTableDetailModalVisible, setTableDetailModalVisible] = React.useState(false);
 
   const onPressModal = (prod) => {
-    setTableDetailModalVisible(true), 
-    setTouchedProduct(prod)
+    setTableDetailModalVisible(true),
+      setTouchedProduct(prod)
   }
 
   const handleClose = () => {
@@ -424,7 +424,7 @@ const Product = props => {
 
 
 
-      <ProductDetailModal state={isTableDetailModalVisible} handleClose={handleClose} object={touchedProduct} title='Product Detail' getProducts={getProducts}/>
+      <ProductDetailModal state={isTableDetailModalVisible} handleClose={handleClose} object={touchedProduct} title='Product Detail' getProducts={getProducts} />
       <View style={styles.screen}>
         <View>
           <Text style={styles.title}>Products</Text>

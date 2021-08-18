@@ -302,16 +302,26 @@ router.put('/:id', async (req, res) => {
             newBrand,
             price
         } = req.body
-
+        const id = req.params.id
         const product = await Product.findOne({
             _id: id
         })
 
-        if (!product) {
-            return res.status(400).json({
-                error: 'PRODUCT_NOT_EXISTENT'
+        if (product.serial !== serial) {
+            const exists = await Product.exists({
+                serial
             })
+
+            if (exists) {
+                return res.status(400).json({
+                    error: 'PRODUCT_ALREADY_EXIST'
+                })
+            }
         }
+
+
+
+
 
         if (isNewColour) {
             newColour = newColour.toUpperCase()
@@ -348,12 +358,25 @@ router.put('/:id', async (req, res) => {
             }
         }
 
+
         product.title = title
         product.serial = serial
         product.brand = brandID
         product.colour = colourID
-        product.price = price
         product.description = description
+        product.price = price
+
+
+        // const product = new Product({
+        //     title,
+        //     serial,
+        //     brand: brandID,
+        //     colour: colourID,
+        //     description,
+        //     price
+        // })
+
+
 
         await product.save()
 

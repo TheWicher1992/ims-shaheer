@@ -4,7 +4,7 @@ import ProductUpdateModal from "./ProductUpdateModal";
 import { uri } from '../api.json'
 import axios from "axios"
 
-const ProductDetailModal = props => {
+const EmployeeDetailModal = props => {
   const [modalVisible, setModalVisible] = useState(false);
   const [isUpdateModalVisible, setUpdateModalVisible] = React.useState(false);
   console.log('hete', Dimensions.get('window').width)
@@ -29,7 +29,7 @@ const ProductDetailModal = props => {
   return (
     <KeyboardAvoidingView>
       <View style={styles.centeredView}>
-        <ProductUpdateModal state={isUpdateModalVisible} handleClose={handleCloseUpdate} title='Update Information' name='Raahem Asghar' email='raahemasghar97@gmail.com' occupation="Employee" getProducts={props.getProducts} obj={props.object} />
+        {/* <ProductUpdateModal state={isUpdateModalVisible} handleClose={handleCloseUpdate} title='Update Information' name='Raahem Asghar' email='raahemasghar97@gmail.com' occupation="Employee" getProducts={props.getProducts} obj={props.object} /> */}
         <Modal
           animationType="slide"
           transparent={true}
@@ -46,14 +46,10 @@ const ProductDetailModal = props => {
               <Text style={styles.modalTitle}>{props.title}</Text>
               <ScrollView>
                 <View style={styles.modalBody}>
-                  {props.object !== [] && (<View><Text style={styles.bodyText}>Product Name: {props.object.title}</Text>
-                    <Text style={styles.bodyText}>Serial: {props.object.serial}</Text>
-                    <Text style={styles.bodyText}>Color: {props.object.colour === undefined ? '--' : props.object.colour.title}</Text>
-                    <Text style={styles.bodyText}>Brand: {props.object.brand === undefined ? '--' : props.object.brand.title}</Text>
-                    <Text style={styles.bodyText}>Price: {props.object.price}</Text>
-                    <Text style={styles.bodyText}>Stock: {props.object.totalStock}</Text>
+                  {props.object !== [] && (<View><Text style={styles.bodyText}>Username: {props.object.userName}</Text>
+                    <Text style={styles.bodyText}>Occupation: {props.occupation === 'Admin' ? 'Admin' : 'Employee'}</Text>
                     <Text style={styles.bodyText}>Date Added: {props.object.date}</Text>
-                    <Text style={styles.bodyText}>Description: {props.object.description}</Text></View>)}
+                    </View>)}
                 </View>
               </ScrollView>
               <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center' }}>
@@ -62,11 +58,11 @@ const ProductDetailModal = props => {
                     <Text style={styles.buttonModalText}>Back</Text>
                   </View>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => { setUpdateModalVisible(true) }}>
+                {/* <TouchableOpacity onPress={() => { setUpdateModalVisible(true) }}>
                   <View style={styles.backButtonModalContainer}>
                     <Text style={styles.buttonModalText}>Update</Text>
                   </View>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
                 <TouchableOpacity onPress={() =>
                   Alert.alert(
                     "Confirmation",
@@ -187,4 +183,4 @@ const styles = StyleSheet.create({
 
 });
 
-export default ProductDetailModal;
+export default EmployeeDetailModal;

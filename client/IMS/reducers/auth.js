@@ -12,13 +12,13 @@ const initialState = {
     token: null,
     user: null,
     loading: true,
-    isAuthenticated: false
+    isAuthenticated: false,
 }
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const authReducer = async (state = initialState, action) => {
-    // console.log(action.type)
+    console.log('payload-->', action.payload)
 
     switch (action.type) {
         case ADMIN_LOGIN_SUCCESS:
@@ -33,7 +33,7 @@ const authReducer = async (state = initialState, action) => {
                 ...state,
                 isAuthenticated: true,
                 user: action.payload,
-                loading: false
+                loading: false,
             }
 
         case AUTH_ERROR:
