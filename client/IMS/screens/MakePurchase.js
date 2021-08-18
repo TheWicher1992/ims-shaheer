@@ -8,6 +8,7 @@ import { DataTable } from 'react-native-paper';
 import Modal from 'react-native-modal';
 import { Picker } from '@react-native-picker/picker';
 import TableDetailModal from '../components/TableDetailModal';
+import PurchaseDetailModal from '../components/PurchaseDetailModal';
 import FilterButton from '../components/FilterButton';
 import axios from 'axios'
 import { uri } from '../api.json'
@@ -150,6 +151,13 @@ const MakePurchase = props => {
     console.log(`switched`);
   };
 
+  const [touchedPurchase,setTouchedPurchase] = useState([])
+
+  const selectedPurchaseRecord = (purchase) =>{
+    setTouchedPurchase(purchase)
+    setTableDetailModalVisible(true)
+    console.log("hello" ,touchedPurchase)
+  }
 
 
 
@@ -306,7 +314,7 @@ const MakePurchase = props => {
           </View>
         </View>
       </Modal>
-      <TableDetailModal state={isTableDetailModalVisible} handleClose={handleClose} title='Employee Information' name='Raahem Asghar' email='raahemasghar97@gmail.com' occupation="Employee" />
+      <PurchaseDetailModal state={isTableDetailModalVisible} handleClose={handleClose} title='Purchase Detail' object = {touchedPurchase}  />
       <View style={styles.screen}>
         <View>
           <Text style={styles.title}>Purchases</Text>
@@ -351,7 +359,7 @@ const MakePurchase = props => {
 
           {
             purchases.map(p => (
-              <TouchableOpacity onPress={() => setTableDetailModalVisible(true)}>
+              <TouchableOpacity onPress={() => selectedPurchaseRecord(p)}>
                 <DataTable.Row>
                   <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{p.product.title}</Text></DataTable.Cell>
                   <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{p.quantity}</Text></DataTable.Cell>
