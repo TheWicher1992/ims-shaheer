@@ -135,5 +135,48 @@ router.put('/:id', async (req, res) => {
 
 
 
+router.get('/:page/:query/:sort/:sortBy', async (req, res) => {
+    try {
 
-module.exports = router
+        const page = req.params.page - 1
+        const query = req.params.query === '*' ? ['.*'] : req.params.query.split(" ")
+        const sort = req.params.sort === '*' ? 'date' : req.params.sort
+        const sortBy = req.params.sortBy === '*' ? 'desc' : req.params.sortBy
+
+        const sortOptions = {
+            [sort]: sortBy
+        }
+        console.log(query)
+        const filters = {}
+        filters['$or'] = [ 
+        {
+            userName: {
+                $in: query.map(q => new RegExp(q, "i"))
+            }
+        }]
+
+
+        const itemsPerPage = config.get('rows-per-page')
+
+        const warehouse = await Client
+        .find(filters)
+        .sort(sortOptions)
+        .skip(itemsPerPage * page)
+        .limit(itemsPerPage)
+
+        return res.status(200).json({
+            warehouse})
+
+
+    }
+    catch (err) {
+        console.log(err)
+        return res.status(400).json({
+            error: 'SERVER_ERROR_SEARCH'
+        })
+    }
+
+})
+
+  module.exports = router
+
