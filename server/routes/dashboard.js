@@ -12,6 +12,7 @@ router.get('/outOfStock', async (req, res) => {
             totalStock : 0 
         })
 
+        console.log('./././././././',outOfStock)
         return res.status(200).json({
             outOfStock
         })
@@ -40,6 +41,7 @@ router.get('/todayRevenue', async (req, res) => {
         ])
         const todaysRevenue = todayRevenue[0]
 
+        console.log('#/#/#/#/#/#/',todaysRevenue)
         return res.status(200).json({
             todaysRevenue
         })

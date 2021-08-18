@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Modal, StyleSheet, Text, View, TouchableOpacity, Dimensions, ScrollView } from "react-native";
-import UpdateModal from "./UpdateModal";
+import ClientUpdateModal from "./ClientUpdateModal";
 
 
 const ClientDetailModal = props => {
@@ -13,6 +13,7 @@ const ClientDetailModal = props => {
   }, [props.state]);
 
   const handleCloseUpdate = ()=>{
+    props.handleClose()
     setUpdateModalVisible(false)
   }
 
@@ -26,7 +27,7 @@ const ClientDetailModal = props => {
   return (
     
     <View style={styles.centeredView}>
-        <UpdateModal state={isUpdateModalVisible} handleClose={handleCloseUpdate} title='Update Information' name='Raahem Asghar' email='raahemasghar97@gmail.com' occupation="Employee" />
+        <ClientUpdateModal state={isUpdateModalVisible} handleClose={handleCloseUpdate} title='Update Client Information' getClients={props.getClients} object={props.object} />
         <Modal
             animationType="slide"
             transparent={true}
@@ -56,16 +57,11 @@ const ClientDetailModal = props => {
                                 <Text style={styles.buttonModalText}>Back</Text>
                             </View>
                         </TouchableOpacity>
-                        {/* <TouchableOpacity onPress = {() => {setUpdateModalVisible(true)}}>
+                        <TouchableOpacity onPress = {() => {setUpdateModalVisible(true)}}>
                             <View style={styles.backButtonModalContainer}>
                                 <Text style={styles.buttonModalText}>Update</Text>
                             </View>
-                        </TouchableOpacity> */}
-                        {/* <TouchableOpacity onPress={() => props.handleClose()}>
-                            <View style={styles.deleteButtonModalContainer}>
-                                <Text style={styles.buttonModalText}>Delete</Text>
-                            </View>
-                        </TouchableOpacity> */}
+                        </TouchableOpacity>
                     </View>
                 </View>
                 
