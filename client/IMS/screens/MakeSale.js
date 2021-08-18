@@ -11,10 +11,87 @@ import TableDetailModal from '../components/TableDetailModal';
 import FilterModal from '../components/FilterModal';
 import FilterButton from '../components/FilterButton';
 import { Picker } from '@react-native-picker/picker';
+import { uri } from '../api.json'
+import axios from "axios"
 
 const optionsPerPage = [2, 3, 4];
 
 const MakeSale = props => {
+
+  const [sales, setSales] = useState([])
+  const [products,setProducts] = useState([])
+  const [clients,setClients]  = useState([])
+
+  const [Pfilters, setPFilters] = useState({
+    page: 1,
+    query: '*',
+    colour: '*',
+    brand: '*',
+    ware: '*',
+    sort: '*',
+    sortBy: '*'
+  })
+
+  const [filters, setFilters] = useState({
+    page: 1,
+    query: '*',
+    client: '*',
+    deliveryStatus: '*',
+    date: '*',
+    quantity:'*',
+    total:'*',
+    sort: '*',
+    sortBy: '*'
+  })
+  
+
+  const getProducts = async () => {
+    const res = await axios.get(
+      `${uri}/api/product/${Pfilters.page}/${Pfilters.query}/${Pfilters.colour}/${Pfilters.brand}/${Pfilters.ware}/${Pfilters.sort}/${Pfilters.sortBy}`
+    )
+
+
+    setProducts(res.data.products)
+    
+
+    
+  }
+
+
+  const getClients = async () => {
+    const res = await axios.get(
+      `${uri}/api/client/*`
+    )
+
+
+    setClients(res.data.clients)
+
+    
+  }
+
+  const getSales = async () => {
+    const res = await axios.get(
+      `${uri}/api/sale`
+    )
+
+
+    setSales(res.data.sale)
+
+    console.log(res.data.sale)
+  }
+
+
+  useEffect(() => {
+    getProducts()
+  },[])
+
+  useEffect(() => {
+    getClients()
+  },[])
+
+  useEffect(() => {
+    getSales()
+  }, [])
 
 
   const handleConfirm = (pItems) => { // temporary for picker
@@ -108,15 +185,26 @@ const MakeSale = props => {
   }
 
   const addSale = () => {
-    console.log(productName);
-    console.log(quantityVal);
-    console.log(amountReceived);
-    console.log(totalAmount);
-    console.log(clientName);
-    console.log(notes);
-    console.log(paymentType);
-    console.log(selectedWarehouse);
     setModalVisible(false); //closing modal on done for now
+    console.log('Printing productName',productName)
+    const body = {
+      productID: productName,
+      quantity: quantityVal,
+      total: totalAmount,
+      payment: paymentType,
+      clientID: clientName,
+      note : notes
+    }
+
+    console.log(body)
+
+    axios.post(`${uri}/api/sale`, body, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+      .then(res => getSales())
+      .catch(err => console.log(err))
   }
   
 
@@ -152,8 +240,12 @@ const MakeSale = props => {
                               setProductName(itemValue)
                             }
                           >
-                            <Picker.Item label="PVC" value="PVC" />
-                            <Picker.Item label="PVCC" value="PVCC" />
+                           {
+                            products.map((product,i) => (
+                            
+                            <Picker.Item label= {product.title === undefined ? 0 : product.title} value={product._id === undefined ? 0 : product._id}  key = {product._id === undefined ? 0 : product._id}/>
+                            
+                            ))} 
                           </Picker>
 
                         </View>
@@ -168,8 +260,10 @@ const MakeSale = props => {
                               setClientName(itemValue)
                             }
                           >
-                            <Picker.Item label="Ahmed Ateeq" value="Ahmed Ateeq" />
-                            <Picker.Item label="Sameer Don" value="Sameer Don" />
+                            {
+                            clients.map((client,i) => (
+                            <Picker.Item label={client.userName === undefined ? 0 : client.userName} value={client._id === undefined ? 0 : client._id}/>
+                            ))}
                           </Picker>
 
                         </View>
@@ -288,14 +382,19 @@ const MakeSale = props => {
               <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Client</Text></DataTable.Title>
             </DataTable.Header>
 
+            {   
+             sales.map((sale,i) => (           
             <TouchableOpacity onPress={() => setTableDetailModalVisible(true)}>
               <DataTable.Row>
-                <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>ABC34013-133</Text></DataTable.Cell>
-                <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>59</Text></DataTable.Cell>
+                <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{sale.product === null ? '--' : sale.product.title}</Text></DataTable.Cell>
+                <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{sale.quantity === undefined ? '--' : sale.quantity}</Text></DataTable.Cell>
                 <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>69000</Text></DataTable.Cell>
-                <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>Ahmed Ateeq</Text></DataTable.Cell>
+                <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{sale.client === null ? '--' : sale.client.userName}</Text></DataTable.Cell>
               </DataTable.Row>
             </TouchableOpacity>
+               ))
+
+             }
             <DataTable.Pagination
               page={page}
               numberOfPages={3}
