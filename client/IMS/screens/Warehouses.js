@@ -74,11 +74,13 @@ const Warehouse = props => {
   const [search, setSearch] = React.useState(``) //for keeping track of search
   const onChangeSearch = (searchVal) => { //function to keep track of search as the user types
     setSearch(searchVal);
+    setFilters({ ...filters, query: searchVal })
     console.log(search);
   }
 
   const searchFunc = () => {
-    console.log(search); //printing search value for now
+    //console.log(search); //printing search value for now
+    getWarehouses();
   }
 
 

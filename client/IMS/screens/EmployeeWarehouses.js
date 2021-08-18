@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { StyleSheet, Text, View, Button, Dimensions, TextInput, TouchableOpacity, KeyboardAvoidingView, ScrollView} from 'react-native'; 
+import { useEffect, useState } from 'react'
+import { StyleSheet, Text, View, Button, Dimensions, TextInput, TouchableOpacity, KeyboardAvoidingView, ScrollView } from 'react-native';
 import HeaderButton from '../components/HeaderButton';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { FontAwesome } from '@expo/vector-icons';
@@ -8,36 +9,56 @@ import Modal from 'react-native-modal';
 import PickerCheckBox from 'react-native-picker-checkbox';
 import WarehouseDetailModal from '../components/WarehouseDetailModal';
 import FilterButton from '../components/FilterButton';
-
-
+import axios from 'axios'
+import { uri } from '../api.json'
 const optionsPerPage = [2, 3, 4];
 
-const EmployeeWarehouses = props => {
+const Warehouse = props => {
+
+  const [warehouses, setWarehouses] = useState([])
+  const [filters, setFilters] = useState({
+    page: 1,
+    query: '*',
+    sort: '*',
+    sortBy: '*'
+  })
+
+  const getWarehouses = async () => {
+    const res = await axios.get(
+      `${uri}/api/warehouse/${filters.page}/${filters.query}/${filters.sort}/${filters.sortBy}`
+    )
+    setWarehouses(res.data.warehouse.reverse())
+    console.log(warehouses)
+  }
+
+  useEffect(() => {
+    getWarehouses()
+  }, [])
 
 
   const handleConfirm = (pItems) => { // temporary for picker
     console.log('pItems =>', pItems);
   }
- 
+
   const items = [ //temporary for picker for filter
     {
-      itemKey:1,
-      itemDescription:'Item 1'
-      },
+      itemKey: 1,
+      itemDescription: 'Item 1'
+    },
     {
-      itemKey:2,
-      itemDescription:'Item 2'
-      },
+      itemKey: 2,
+      itemDescription: 'Item 2'
+    },
     {
-      itemKey:3,
-      itemDescription:'Item 3'
-      }
+      itemKey: 3,
+      itemDescription: 'Item 3'
+    }
   ];
 
   const [page, setPage] = React.useState(0); //for pages of table
-  const [itemsPerPage, setItemsPerPage] = React.useState(optionsPerPage[0]); //for items per page on table
-
   const [isModalVisible, setModalVisible] = React.useState(false); //to set modal on and off
+
+
 
   const toggleModal = () => { //to toggle model on and off -- function
     setModalVisible(!isModalVisible);
@@ -53,14 +74,16 @@ const EmployeeWarehouses = props => {
   const [search, setSearch] = React.useState(``) //for keeping track of search
   const onChangeSearch = (searchVal) => { //function to keep track of search as the user types
     setSearch(searchVal);
+    setFilters({ ...filters, query: searchVal })
     console.log(search);
   }
 
   const searchFunc = () => {
-    console.log(search); //printing search value for now
+    //console.log(search); //printing search value for now
+    getWarehouses();
   }
 
-  
+
   // make a sale variables below:
   const [warehouseName, setWarehouseName] = React.useState(``)
   const [totalProducts, setTotalProducts] = React.useState(0)
@@ -79,159 +102,189 @@ const EmployeeWarehouses = props => {
     setStock(stocks);
   }
 
-  const addWarehouse = () => {
-    console.log(`add warehouse`)
+  const addWarehouse = async () => {
+
+    const body = {
+      name: warehouseName,
+      totalProducts: totalProducts,
+      totalStock: stock
+    }
+    console.log(body)
+    console.log(`///////////////////////////////////////add warehouse`)
+
+    await axios.post(`${uri}/api/warehouse`, body,
+      {
+        headers: {
+          "Content-Type": "application/json"
+        }
+      }
+
+    )
+      .then(res => console.log(res))
+      .catch(err => console.log(err))
+
+    getWarehouses()
     setModalVisible(false); //closing modal on done for now
   }
-  
 
+  const [itemsPerPage, setItemsPerPage] = React.useState(optionsPerPage[0]); //for items per page on table
+  const [toucedWarehouse, setTouchedWarehouse] = React.useState([])
   const [isTableDetailModalVisible, setTableDetailModalVisible] = React.useState(false);
 
-  const handleClose = ()=>{
+  const onPressModal = (prod) => {
+    setTableDetailModalVisible(true),
+      setTouchedWarehouse(prod)
+  }
+
+
+  const handleClose = () => {
     setTableDetailModalVisible(false)
   }
 
 
 
 
-    return(
-      // <KeyboardAvoidingView style = {styles.containerView} behavior = "padding">
-      
-      <View>
-        <Modal
-            onSwipeComplete={() => setModalVisible(false)}
-            swipeDirection="left"
-            presentationStyle="overFullScreen"
-            transparent
-            visible={isModalVisible}>
-            <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-                <View style={styles.modalStyle}>
-                  <View style = {{justifyContent: 'center', alignItems : 'center', }}>
-                      <Text style = {styles.modalTitle}>Add Warehouse</Text>
+  return (
+    // <KeyboardAvoidingView style = {styles.containerView} behavior = "padding">
+
+    <View>
+      <Modal
+        onSwipeComplete={() => setModalVisible(false)}
+        swipeDirection="left"
+        presentationStyle="overFullScreen"
+        transparent
+        visible={isModalVisible}>
+        <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+          <View style={styles.modalStyle}>
+            <View style={{ justifyContent: 'center', alignItems: 'center', }}>
+              <Text style={styles.modalTitle}>Add Warehouse</Text>
+              <View>
+                <TextInput onChangeText={onChangeWarehouseName} style={styles.input} placeholder="Name" autoCorrect={false} />
+                <TextInput onChangeText={onChangeTotalProducts} style={styles.input} placeholder="Total Products" autoCorrect={false} />
+                <TextInput onChangeText={onChangeStock} style={styles.input} placeholder="Total Stocks" autoCorrect={false} />
+              </View>
+              <View style={{ flexDirection: 'row', alignItems: 'center', top: 45 }}>
+                <TouchableOpacity style={{ alignSelf: 'flex-start' }} onPress={() => { setModalVisible(false) }}>
+                  <View>
+                    <View style={styles.buttonModalContainerCross}>
                       <View>
-                        <TextInput onChangeText={onChangeWarehouseName} style={styles.input} placeholder="Name" autoCorrect={false} />
-                        <TextInput onChangeText={onChangeTotalProducts} style={styles.input} placeholder="Total Products" autoCorrect={false} />
-                        <TextInput onChangeText={onChangeStock} style={styles.input} placeholder="Stock" autoCorrect={false} />
+                        <Text style={styles.buttonModalText}>Cancel</Text>
                       </View>
-                      <View style = {{flexDirection: 'row',  alignItems : 'center', top: 45}}>
-                        <TouchableOpacity style={{alignSelf: 'flex-start'}} onPress = {() => {setModalVisible(false)}}>
-                          <View>
-                            <View style={styles.buttonModalContainerCross}>
-                              <View>
-                                <Text style={styles.buttonModalText}>Cancel</Text>
-                              </View>
-                            </View>
-                          </View>
-                        </TouchableOpacity>   
-                        <TouchableOpacity onPress = {() => {addWarehouse()}}>
-                          <View>
-                            <View style={styles.buttonModalContainer}>
-                              <View>
-                                <Text style={styles.buttonModalText}>Done</Text>
-                              </View>
-                            </View>
-                          </View>
-                        </TouchableOpacity>
-                      </View>
+                    </View>
                   </View>
-                </View>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => { addWarehouse() }}>
+                  <View>
+                    <View style={styles.buttonModalContainer}>
+                      <View>
+                        <Text style={styles.buttonModalText}>Done</Text>
+                      </View>
+                    </View>
+                  </View>
+                </TouchableOpacity>
+              </View>
             </View>
-        </Modal>
-        <WarehouseDetailModal state={isTableDetailModalVisible} handleClose={handleClose} title='Warehouse Detail' name='Raahem Asghar' email='raahemasghar97@gmail.com' occupation="Employee" />
-        <View style = {styles.screen}>
-          <View>
-            <Text style={styles.title}>Employee Warehouses</Text>
           </View>
         </View>
-        <View style = {styles.containerButton}>
-          <TouchableOpacity onPress = {() => {setModalVisible(true)}}>
-            <View style={styles.buttonContainer}>
-              <Text style={styles.buttonText}>Add Warehouse</Text>
-            </View>
-          </TouchableOpacity>
-          <View style = {{flexDirection: 'row', justifyContent: 'center',}}>
-            <View style = {styles.searchBar}>
-              <TextInput onChangeText={onChangeSearch}  style={styles.buttonInput} placeholder="type here..." autoCorrect={false} />
-            </View>
-            <View style = {{top:14}}>
-            <TouchableOpacity onPress = {() => { searchFunc() }}>
-              <View style = {styles.searchButton}>   
-                  <FontAwesome
-                    name = {"search"}
-                    size = {16}
-                    color = {"#006270"}
-                    style = {{right: 10, top: 3}}
-                  />                  
-                  <Text style = {styles.searchButtonText}>Search</Text>             
+      </Modal>
+      <WarehouseDetailModal state={isTableDetailModalVisible} handleClose={handleClose} title='Warehouse Information' object={toucedWarehouse} getWarehouses={getWarehouses} occupation={'Employee'}/>
+      <View style={styles.screen}>
+        <View>
+          <Text style={styles.title}>Warehouses</Text>
+        </View>
+      </View>
+      <View style={styles.containerButton}>
+        <TouchableOpacity onPress={() => { setModalVisible(true) }}>
+          <View style={styles.buttonContainer}>
+            <Text style={styles.buttonText}>Add Warehouse</Text>
+          </View>
+        </TouchableOpacity>
+        <View style={{ flexDirection: 'row', justifyContent: 'center', }}>
+          <View style={styles.searchBar}>
+            <TextInput onChangeText={onChangeSearch} style={styles.buttonInput} placeholder="type here..." autoCorrect={false} />
+          </View>
+          <View style={{ top: 14 }}>
+            <TouchableOpacity onPress={() => { searchFunc() }}>
+              <View style={styles.searchButton}>
+                <FontAwesome
+                  name={"search"}
+                  size={16}
+                  color={"#006270"}
+                  style={{ right: 10, top: 3 }}
+                />
+                <Text style={styles.searchButtonText}>Search</Text>
               </View>
             </TouchableOpacity>
-            </View> 
           </View>
-
         </View>
-        <FilterButton/>
-        <ScrollView>
-        
-          <DataTable>
-            <DataTable.Header>
-              <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Name</Text></DataTable.Title>
-              <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Total Products</Text></DataTable.Title>
-              <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Stock</Text></DataTable.Title>
-              
-            </DataTable.Header>
 
-            <TouchableOpacity onPress={() => setTableDetailModalVisible(true)}>
-              <DataTable.Row>
-                <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>ABC34013-133</Text></DataTable.Cell>
-                <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>59</Text></DataTable.Cell>
-                <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>69000</Text></DataTable.Cell>
-              </DataTable.Row>
-            </TouchableOpacity>
-            <DataTable.Pagination
-              page={page}
-              numberOfPages={3}
-              onPageChange={(page) => setPage(page)}
-              label="1-2 of 6"
-              optionsPerPage={optionsPerPage}
-              itemsPerPage={itemsPerPage}
-              setItemsPerPage={setItemsPerPage}
-              showFastPagination
-              optionsLabel={'Rows per page'}
-            />
-          </DataTable>
+      </View>
+      <ScrollView style = {{top: 30}}>
+        <DataTable>
+          <DataTable.Header>
+            <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Name</Text></DataTable.Title>
+            <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Total Products</Text></DataTable.Title>
+            <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Stock</Text></DataTable.Title>
 
-        </ScrollView>
-      </View>        
-      // </KeyboardAvoidingView>
-        
-        
-    )
+          </DataTable.Header>
+
+          {
+            warehouses.map((warehouse, i) => (
+              <TouchableOpacity key={i} onPress={() => onPressModal(warehouse)}>
+                <DataTable.Row>
+                  <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{warehouse.name}</Text></DataTable.Cell>
+                  <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{warehouse.totalProducts}</Text></DataTable.Cell>
+                  <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{warehouse.totalStock}</Text></DataTable.Cell>
+                </DataTable.Row>
+              </TouchableOpacity>
+            ))
+          }
+
+          {/* <DataTable.Pagination
+            page={page}
+            numberOfPages={3}
+            onPageChange={(page) => setPage(page)}
+            label="1-2 of 6"
+            optionsPerPage={optionsPerPage}
+            itemsPerPage={itemsPerPage}
+            setItemsPerPage={setItemsPerPage}
+            showFastPagination
+            optionsLabel={'Rows per page'}
+          /> */}
+        </DataTable>
+
+      </ScrollView>
+    </View>
+    // </KeyboardAvoidingView>
+
+
+  )
 }
 
 
-EmployeeWarehouses.navigationOptions = navigationData => {
-    return {
-        headerTitle: 'Zaki Sons',
-        headerTitleAlign: 'center',
-        headerTitleStyle: { color: 'white' },
-        headerStyle: {
-            backgroundColor: '#008394',
-        },
-        headerLeft: (
-            <HeaderButtons HeaderButtonComponent={HeaderButton}>
-              <Item
-                title="Menu"
-                iconName="ios-menu"
-                onPress={() => {
-                    navigationData.navigation.toggleDrawer();
-                  }}
-              />
-            </HeaderButtons>
-        ),
-    };
+Warehouse.navigationOptions = navigationData => {
+  return {
+    headerTitle: 'Zaki Sons',
+    headerTitleAlign: 'center',
+    headerTitleStyle: { color: 'white' },
+    headerStyle: {
+      backgroundColor: '#008394',
+    },
+    headerLeft: (
+      <HeaderButtons HeaderButtonComponent={HeaderButton}>
+        <Item
+          title="Menu"
+          iconName="ios-menu"
+          onPress={() => {
+            navigationData.navigation.toggleDrawer();
+          }}
+        />
+      </HeaderButtons>
+    ),
   };
+};
 
-export default EmployeeWarehouses
+export default Warehouse
 
 
 const styles = StyleSheet.create({
@@ -242,7 +295,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: Dimensions.get('window').height === 1232 ? 36 : 28,
   },
-  modalTitle : {
+  modalTitle: {
     color: '#006270',
     fontSize: 30,
     fontFamily: 'Roboto',
@@ -253,7 +306,7 @@ const styles = StyleSheet.create({
   modalStyle: {
     backgroundColor: "#fff",
     width: Dimensions.get('window').height > 900 ? 600 : 320,
-    height: Dimensions.get('window').height > 900 ? "35%": "60%",
+    height: Dimensions.get('window').height > 900 ? "35%" : "60%",
     borderWidth: 2,
     borderRadius: 20,
     marginBottom: 20,
@@ -281,11 +334,11 @@ const styles = StyleSheet.create({
     // right: Dimensions.get('window').width / 5
     // we can also change the container to center and implement the right styling
   },
-  buttonModalContainer : {
+  buttonModalContainer: {
     justifyContent: 'center',
     alignItems: 'center',
     alignContent: 'space-between',
-    borderRadius : 40,
+    borderRadius: 40,
     backgroundColor: '#00E0C7',
     paddingVertical: 8,
     paddingHorizontal: 24,
@@ -293,11 +346,11 @@ const styles = StyleSheet.create({
     margin: 20,
     display: 'flex'
   },
-  buttonModalContainerCross : {
+  buttonModalContainerCross: {
     justifyContent: 'center',
     alignItems: 'center',
     alignContent: 'space-between',
-    borderRadius : 40,
+    borderRadius: 40,
     backgroundColor: '#ff0000',
     paddingVertical: 8,
     paddingHorizontal: 24,
@@ -305,7 +358,7 @@ const styles = StyleSheet.create({
     margin: 20,
     display: 'flex'
   },
-  buttonModalText :{
+  buttonModalText: {
     color: '#ffffff',
     fontSize: 16,
     fontFamily: 'Roboto',
@@ -313,15 +366,15 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 24,
     textAlign: 'center',
-    color:'white',
+    color: 'white',
     fontWeight: 'bold'
   },
-  container :{
+  container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  containerButton:{
+  containerButton: {
     alignItems: 'flex-start',
     justifyContent: 'flex-start',
   },
@@ -330,7 +383,7 @@ const styles = StyleSheet.create({
     borderColor: 'gray',
     borderWidth: 2,
     borderRadius: 40,
-    marginBottom:20,
+    marginBottom: 20,
     fontSize: 12,
     borderColor: "#008394",
     top: 60,
@@ -343,7 +396,7 @@ const styles = StyleSheet.create({
     borderColor: 'gray',
     borderWidth: 2,
     borderRadius: 4,
-    marginBottom:20,
+    marginBottom: 20,
     fontSize: 12,
     borderColor: "#008394",
   },
@@ -352,8 +405,8 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     flexDirection: 'row',
     bottom: 30,
-    left: Dimensions.get('window').height > 900 ? Dimensions.get('window').width /11:0,
-    
+    left: Dimensions.get('window').height > 900 ? Dimensions.get('window').width / 11 : 0,
+
   },
   searchButton: {
     flexDirection: 'row',
@@ -366,9 +419,9 @@ const styles = StyleSheet.create({
     right: 20,
   },
   searchButtonText: {
-    fontSize:15,
+    fontSize: 15,
     textAlign: 'center',
-    color:'white',
+    color: 'white',
     fontWeight: 'bold',
   },
   buttonInput: {
@@ -376,7 +429,7 @@ const styles = StyleSheet.create({
     borderColor: 'gray',
     borderWidth: 2,
     borderRadius: 40,
-    marginBottom:20,
+    marginBottom: 20,
     fontSize: 14,
     borderColor: "#008394",
     top: 60,
@@ -386,7 +439,7 @@ const styles = StyleSheet.create({
     paddingBottom: 13,
   },
   cells: {
-    justifyContent:'center', 
+    justifyContent: 'center',
     flexDirection: 'row',
     flex: 1
   },
@@ -403,9 +456,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 22
   },
-  modalBody:{
-    paddingVertical:Dimensions.get('window').height < 900 ? Dimensions.get('window').height * 0.11 : Dimensions.get('window').height * 0.1,
-    paddingHorizontal:10
+  modalBody: {
+    paddingVertical: Dimensions.get('window').height < 900 ? Dimensions.get('window').height * 0.11 : Dimensions.get('window').height * 0.1,
+    paddingHorizontal: 10
   },
   modalView: {
     margin: 20,
@@ -422,6 +475,6 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
     width: Dimensions.get('window').height > 900 ? Dimensions.get('window').width * 0.7 : Dimensions.get('window').width * 0.80,
-    height: Dimensions.get('window').height > 900 ? Dimensions.get('window').height* 0.5 : Dimensions.get('window').height * 0.60
+    height: Dimensions.get('window').height > 900 ? Dimensions.get('window').height * 0.5 : Dimensions.get('window').height * 0.60
   },
 })
