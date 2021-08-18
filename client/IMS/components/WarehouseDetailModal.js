@@ -33,6 +33,7 @@ const WarehouseDetailModal= props => {
             animationType="slide"
             transparent={true}
             swipeDirection="left"
+            avoidKeyboard={false}
             visible={modalVisible}
             onSwipeComplete={() => props.handleClose()}
             onRequestClose={() => {
@@ -45,9 +46,9 @@ const WarehouseDetailModal= props => {
                     <View>
                     <View style={styles.modalBody}>
                           {props.object !== [] && (<View> 
-                          <Text style={styles.bodyText}>Warehouse name: </Text>
-                          <Text style={styles.bodyText}>Total Products: </Text>
-                          <Text style={styles.bodyText}>Total Stock: </Text></View>)}
+                          <Text style={styles.bodyText}>Warehouse name: {props.object.name}</Text>
+                          <Text style={styles.bodyText}>Total Products: {props.object.totalProducts}</Text>
+                          <Text style={styles.bodyText}>Total Stock: {props.object.totalStock}</Text></View>)}
                     </View>
                     </View>
                     <View style={{flexDirection: 'row', justifyContent: 'space-evenly', alignItems : 'center'}}>
@@ -67,9 +68,9 @@ const WarehouseDetailModal= props => {
                     <View>
                     <View style={styles.modalBody}>
                           {props.object !== [] && (<View> 
-                          <Text style={styles.bodyText}>Warehouse name: </Text>
-                          <Text style={styles.bodyText}>Total Products: </Text>
-                          <Text style={styles.bodyText}>Total Stock:</Text></View>)}
+                          <Text style={styles.bodyText}>Warehouse name: {props.object.name}</Text>
+                          <Text style={styles.bodyText}>Total Products: {props.object.totalProducts}</Text>
+                          <Text style={styles.bodyText}>Total Stock: {props.object.totalStock}</Text></View>)}
                     </View>
                     </View>
                     <View style={{flexDirection: 'row', justifyContent: 'space-evenly', alignItems : 'center'}}>
