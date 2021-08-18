@@ -18,11 +18,11 @@ const deliveryOrderSchema = new Schema({
     },
     client: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'client'
+        ref: 'Client'
     },
     product: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'product'
+        ref: 'Product'
     },
     quantity: {
         type: Number
