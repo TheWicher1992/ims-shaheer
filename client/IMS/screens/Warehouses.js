@@ -216,9 +216,7 @@ const Warehouse = props => {
         </View>
 
       </View>
-      <FilterButton />
-      <ScrollView>
-
+      <ScrollView style = {{top: 30}}>
         <DataTable>
           <DataTable.Header>
             <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Name</Text></DataTable.Title>
