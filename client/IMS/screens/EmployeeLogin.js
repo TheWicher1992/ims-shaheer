@@ -12,7 +12,10 @@ const EmployeeLogin = props => {
     }, [])
     const [isEnabled, setIsEnabled] = useState(false);
     const toggleSwitch = () => {
-        props.navigation.navigate({ routeName: 'Login', params: { switchVal: false } })
+        AsyncStorage.removeItem('token').then(() => props.navigation.navigate({ routeName: 'Login', params: { switchVal: false } })
+        )
+
+        // props.navigation.navigate({ routeName: 'Login', params: { switchVal: false } })
     };
 
     const [userName, setUserName] = useState(``)

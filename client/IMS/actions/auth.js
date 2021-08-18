@@ -65,6 +65,7 @@ export const loadUser = (navigation) => async dispatch => {
             payload: res.data.user
         })
 
+        console.log('USER TYPE', res.data.user.type)
 
         res.data.user.type === 'admin' ? navigation.navigate({ routeName: 'Dashboard' }) : navigation.navigate({ routeName: 'EmployeeDashboard' })
         // navigation.navigate({ routeName: 'main' })

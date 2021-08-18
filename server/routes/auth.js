@@ -104,15 +104,17 @@ router.get("/", auth, async (req, res) => {
     console.log('/get-user')
     try {
         const User = req.user.type === 'admin' ? Admin : Employee
-        const user = await User.findById(req.user.id)
-        user.type = req.user.type
+        let user = JSON.parse(JSON.stringify(await User.findById(req.user.id)))
+        user = { ...user, type: req.user.type }
+        console.log(user)
 
+        // user.type = req.user.type
         return res.status(200).json({
             user
         })
     }
     catch (err) {
-        console.log('sasas')
+        console.log(err)
 
         return res.status(500).json({
             error: 'SERVER_ERROR'
