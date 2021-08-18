@@ -269,12 +269,7 @@ const Product = props => {
                           <Picker.Item key={c._id} label={c.title} value={c._id} />
                         )))
                       }
-                      {/* // <Picker.Item label="Transparent" value="Transparent" />
-                      // <Picker.Item label="White" value="White" />
-                      // <Picker.Item label="Black" value="Black" />
-                      // <Picker.Item label="Blue" value="Blue" />
-                      // <Picker.Item label="Brown" value="Brown" />
-                      // <Picker.Item label="Pink" value="Pink" /> */}
+    
                     </Picker>
                     <View>
                       <TouchableOpacity onPress={() => { setAddColorModal(true) }}>

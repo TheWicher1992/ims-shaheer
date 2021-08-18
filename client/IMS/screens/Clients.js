@@ -8,7 +8,7 @@ import { DataTable } from 'react-native-paper';
 import Modal from 'react-native-modal';
 import { ToastAndroid } from 'react-native'
 import PickerCheckBox from 'react-native-picker-checkbox';
-import TableDetailModal from '../components/TableDetailModal';
+import ClientDetailModal from '../components/ClientDetailModal';
 import FilterButton from '../components/FilterButton';
 import { uri } from '../api.json'
 import axios from 'axios'
@@ -18,29 +18,9 @@ const optionsPerPage = [2, 3, 4];
 
 const Clients = props => {
 
-
-  const handleConfirm = (pItems) => { // temporary for picker
-    console.log('pItems =>', pItems);
-  }
-
-  const items = [ //temporary for picker for filter
-    {
-      itemKey: 1,
-      itemDescription: 'Item 1'
-    },
-    {
-      itemKey: 2,
-      itemDescription: 'Item 2'
-    },
-    {
-      itemKey: 3,
-      itemDescription: 'Item 3'
-    }
-  ];
-
   const [page, setPage] = React.useState(0); //for pages of table
   const [itemsPerPage, setItemsPerPage] = React.useState(optionsPerPage[0]); //for items per page on table
-  // const [query, setQuery] = useState('*')
+  const [touchedClient, setTouchedClient] = useState([])
   const [isModalVisible, setModalVisible] = React.useState(false); //to set modal on and off
 
   const toggleModal = () => { //to toggle model on and off -- function
@@ -137,6 +117,11 @@ const Clients = props => {
     setTableDetailModalVisible(false)
   }
 
+  const onPressRecord = (client) => {
+    setTableDetailModalVisible(true),
+    setTouchedClient(client)
+  }
+
 
 
 
@@ -156,7 +141,6 @@ const Clients = props => {
               <Text style={styles.modalTitle}>Add Supplier</Text>
               <View>
                 <TextInput onChangeText={onChangeName} style={styles.input} placeholder="Name" autoCorrect={false} />
-                {/* <TextInput onChangeText={onChangeBalnace} style={styles.input} placeholder="Balance" autoCorrect={false} /> */}
                 <TextInput onChangeText={onChangePhoneNumber} style={styles.input} placeholder="Phone Number" autoCorrect={false} />
               </View>
               <View style={{ flexDirection: 'row', alignItems: 'center', top: 45 }}>
@@ -183,7 +167,7 @@ const Clients = props => {
           </View>
         </View>
       </Modal>
-      <TableDetailModal state={isTableDetailModalVisible} handleClose={handleClose} title='Employee Information' name='Raahem Asghar' email='raahemasghar97@gmail.com' occupation="Employee" />
+      <ClientDetailModal state={isTableDetailModalVisible} handleClose={handleClose} object = {touchedClient} title='Client Details' getClients={getClients}/>
       <View style={styles.screen}>
         <View>
           <Text style={styles.title}>Clients</Text>
@@ -215,7 +199,6 @@ const Clients = props => {
         </View>
 
       </View>
-      {/* <FilterButton /> */}
       <ScrollView style={styles.p2}>
 
         <DataTable>
@@ -227,7 +210,7 @@ const Clients = props => {
 
           {
             clients.map(c => (
-              <TouchableOpacity key={c._id} onPress={() => setTableDetailModalVisible(true)}>
+              <TouchableOpacity key={c._id} onPress={() => onPressRecord(c)}>
 
                 <DataTable.Row>
                   <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{c.userName}</Text></DataTable.Cell>
@@ -238,23 +221,6 @@ const Clients = props => {
 
             ))
           }
-
-          {/* <DataTable.Row>
-              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>Ahmed Ateeq</Text></DataTable.Cell>
-              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>59000</Text></DataTable.Cell>
-              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>0347-0545035</Text></DataTable.Cell>
-            </DataTable.Row> */}
-          {/* <DataTable.Pagination
-              page={page}
-              numberOfPages={3}
-              onPageChange={(page) => setPage(page)}
-              label="1-2 of 6"
-              optionsPerPage={optionsPerPage}
-              itemsPerPage={itemsPerPage}
-              setItemsPerPage={setItemsPerPage}
-              showFastPagination
-              optionsLabel={'Rows per page'}
-            /> */}
         </DataTable>
 
       </ScrollView>
@@ -293,7 +259,7 @@ export default Clients
 
 const styles = StyleSheet.create({
   p2: {
-    paddingTop: 10
+    paddingTop: 40
   },
   title: {
     color: '#006270',
