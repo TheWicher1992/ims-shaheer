@@ -34,6 +34,10 @@ const deliveryOrderSchema = new Schema({
     note: {
         type: String,
         trim: true
+    },
+    status: {
+        type: Boolean,
+        default: false
     }
 })
 
