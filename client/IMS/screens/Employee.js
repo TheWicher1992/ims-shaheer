@@ -166,7 +166,7 @@ const Employee = props => {
                 </View>
             </View>
         </Modal>
-        <EmployeeDetailModal state={isTableDetailModalVisible} handleClose={handleClose} title='Employee Information' object={touchedEmployee} occupation={occupation} />
+        <EmployeeDetailModal state={isTableDetailModalVisible} handleClose={handleClose} title='Employee Information' object={touchedEmployee} occupation={occupation} getEmployees={getEmployees} />
         <View style = {styles.screen}>
           <View>
             <Text style={styles.title}>Employees</Text>
