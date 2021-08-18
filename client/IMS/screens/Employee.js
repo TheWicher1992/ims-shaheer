@@ -51,15 +51,13 @@ const Employee = props => {
       password: password,
     }
 
-    console.log('Admin here')
-
-    // axios.post(`${uri}/api/auth/add-employee`, body, {
-    //   headers: {
-    //     'Content-Type': 'application/json'
-    //   }
-    // })
-    //   .then(res => getEmployees())
-    //   .catch(err => console.log(err))
+    axios.post(`${uri}/api/auth/add-admin`, body, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+      .then(res => getEmployees())
+      .catch(err => console.log(err))
   }
  
   const onPressModal = (emp) => {
