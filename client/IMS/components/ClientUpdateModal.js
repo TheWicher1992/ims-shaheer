@@ -1,10 +1,40 @@
 import React, { useState, useEffect } from "react";
 import { Modal, StyleSheet, Text, View, TouchableOpacity, Dimensions, TextInput } from "react-native";
-import {Picker} from '@react-native-picker/picker';
+import { uri } from '../api.json'
+import axios from "axios"
 
-const UpdateModal = props => {
+const ClientUpdateModal = props => {
   const [modalVisible, setModalVisible] = useState(false);
-  //console.log('hete')
+  const [clientName, setClientName] = useState(``);
+  const [phoneNumber,setPhoneNumber] = useState(``);
+  const [balance, setBalance] = useState(0);
+  const [id, setID] = useState(``)
+
+  const updateClient = () => {
+      const body = {
+        userName: clientName,
+        balance: balance,
+        phone: phoneNumber,
+      }
+      const config = {
+        headers: {
+          "Content-Type": "application/json"
+        }
+      }
+      
+      axios.put(`${uri}/api/client/${id}`, body, config)
+      .then(() => props.getClients())
+      .catch(err => console.log(err.response))
+      .finally(() => props.handleClose())
+  }
+  
+  useEffect(() => {
+    setClientName(props.object.userName)
+    setPhoneNumber(props.object.phone)
+    setBalance(props.object.balance)
+    setID(props.object._id)
+  }, [props.object])
+  
   useEffect(() => {
     setModalVisible(props.state);
   }, [props.state]);
@@ -12,6 +42,13 @@ const UpdateModal = props => {
   function handleClose() {
     setModalVisible(false);
   }
+  const onChangeClientName = (name) => {
+    setClientName(name)
+  }
+  const onChangePhoneNumber = (phoneNum) => {
+    setPhoneNumber(phoneNum);
+  }
+
   return (
     
     <View style={styles.centeredView}>
@@ -27,54 +64,27 @@ const UpdateModal = props => {
         > 
        
             <View style={styles.centeredView}>
-               {
-                  props.title==='Select Warehouse' ? (<View style={styles.modalView}>
-                    <Text style={styles.modalTitle}>{props.title}</Text>
-                    <View style={styles.modalBody}>
-                      <View style={{borderWidth: 2, borderRadius: 40,borderColor: "#008394",width: Dimensions.get('window').width * 0.65, top: Dimensions.get('window').height * 0.03, height: 40, fontSize: 8,  }}> 
-                        <Picker selectedValue='wa' style={{top:6, color: 'grey', fontFamily: 'Roboto'}}>
-                          <Picker.Item label="Warehouse A" value="wa" />
-                          <Picker.Item label="Warehouse B" value="wb" />
-                          <Picker.Item label="Warehouse C" value="wc" />
-                        </Picker>
+                <View style={styles.modalView}>
+                <Text style={styles.modalTitle}>{props.title}</Text>
+                <View style={styles.modalBody}>
+                    <TextInput placeholder="Username" onChangeText= {onChangeClientName} style={styles.input} value = {clientName}/>
+                    <TextInput placeholder="PhoneNumber" onChangeText= {onChangePhoneNumber}  style={styles.input} value = {phoneNumber}/>
+                </View>
+                <View style={{flexDirection: 'row', justifyContent: 'space-evenly', alignItems : 'center'}}>
+                    <TouchableOpacity onPress={() => props.handleClose()}>
+                        <View style={styles.buttonModalContainer}>
+                            <Text style={styles.buttonModalText}>Back</Text>
                         </View>
-                    </View>
-                    <View style={{flexDirection: 'row', justifyContent: 'space-evenly', alignItems : 'center', justifyContent: 'flex-end'}}>
-                        <TouchableOpacity onPress={() => props.handleClose()}>
-                            <View style={styles.buttonModalContainer}>
-                                <Text style={styles.buttonModalText}>Back</Text>
-                            </View>
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={() => props.handleClose()}>
-                            <View style={styles.backButtonModalContainer}>
-                                <Text style={styles.buttonModalText}>Done</Text>
-                            </View>
-                        </TouchableOpacity>
-                        
-                    </View>
-                </View>) : (<View style={styles.modalView}>
-                    <Text style={styles.modalTitle}>{props.title}</Text>
-                    <View style={styles.modalBody}>
-                        <TextInput placeholder="Username" style={styles.input}/>
-                        <TextInput placeholder="Email" style={styles.input}/>
-                        <TextInput placeholder="Status" style={styles.input}/>
-                    </View>
-                    <View style={{flexDirection: 'row', justifyContent: 'space-evenly', alignItems : 'center'}}>
-                        <TouchableOpacity onPress={() => props.handleClose()}>
-                            <View style={styles.buttonModalContainer}>
-                                <Text style={styles.buttonModalText}>Back</Text>
-                            </View>
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={() => props.handleClose()}>
-                            <View style={styles.backButtonModalContainer}>
-                                <Text style={styles.buttonModalText}>Done</Text>
-                            </View>
-                        </TouchableOpacity>
-                        
-                    </View>
-                </View>)
-                }
-                
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => updateClient()}>
+                        <View style={styles.backButtonModalContainer}>
+                            <Text style={styles.buttonModalText}>Done</Text>
+                        </View>
+                    </TouchableOpacity>
+                    
+                </View>
+            </View>
+            
                 
             
             </View>
@@ -214,4 +224,4 @@ const styles = StyleSheet.create({
   
 });
 
-export default UpdateModal;
+export default ClientUpdateModal;

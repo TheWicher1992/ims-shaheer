@@ -10,6 +10,8 @@ const AdminDashboard = props => {
 
   const [outOfStock, setOutOfStock] = React.useState(0);
   const [todayRevenue, settodayRevenue] = React.useState(0);
+  const [pendingDeliveries, setPendingDeliveries] = React.useState(0);
+
 
   const getOutofStock = async () => {
     const res = await axios.get(
@@ -25,14 +27,26 @@ const AdminDashboard = props => {
       `${uri}/api/dashboard/todayRevenue`
     )
 
-    console.log('//////revenue', res.data.todayRevenue)
-    settodayRevenue(res.data.todayRevenue)
+  
+    console.log('//////revenue', res.data.todaysRevenue.revenue)
+    settodayRevenue(res.data.todaysRevenue.revenue)
+  }
+
+  const getPending = async () => {
+    const res = await axios.get(
+      `${uri}/api/dashboard/pendingDeliveries`
+    )
+  
+    console.log('//////pending', res.data.pendingDeliveries)
+    setPendingDeliveries(res.data.pendingDeliveries)
+
+
   }
 
   useEffect(() => {
     getOutofStock()
     getToday()
-
+    getPending()
   }, [])
 
 
@@ -48,15 +62,15 @@ const AdminDashboard = props => {
         </View>
       </TouchableOpacity>
       <TouchableOpacity>
-        <View style={styles.containers}>
-          <Text style={styles.containerText}>Today's Revenue 458,000</Text>
-        </View>
+          <View style={styles.containers}>
+            <Text style={styles.containerText}>Today's Revenue {todayRevenue}</Text>
+          </View>
       </TouchableOpacity>
       <TouchableOpacity>
-        <View style={styles.containers}>
-          <Text style={styles.containerText}>Pending Deliveries 9</Text>
-        </View>
-      </TouchableOpacity>
+          <View style={styles.containers}>
+            <Text style={styles.containerText}>Pending Deliveries {pendingDeliveries}</Text>
+          </View>
+        </TouchableOpacity>
       <View style={styles.buttonContainer}>
         <TouchableOpacity onPress={() => props.navigation.navigate({ routeName: 'Sales' })}>
           <View elevation={5} style={styles.buttons}>
@@ -67,8 +81,9 @@ const AdminDashboard = props => {
         <TouchableOpacity onPress={() => props.navigation.navigate({ routeName: 'MakePurchase' })}>
           <View elevation={5} style={styles.buttons}>
             <Text style={styles.buttonContainerText}>Make a Purchase</Text>
-          </View>
-        </TouchableOpacity>
+        </TouchableOpacity>        
+          
+        
       </View>
     </View>
 

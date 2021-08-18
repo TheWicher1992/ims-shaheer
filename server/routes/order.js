@@ -3,21 +3,63 @@ const router = express.Router()
 const DeliveryOrder = require('../models/DeliveryOrder')
 const config = require('config')
 
+// make an order
+router.post('/', async (req, res) => {
+    try {
+        var {
+            productID,
+            quantity,
+            clientID,
+            location,
+            note,
+            date,        
+        } = req.body
+
+    
+
+        console.log(req.body)
+        const order =  new DeliveryOrder({
+            product:productID,
+            quantity,
+            location,
+            client: clientID,
+            note,
+            date,
+        })
+
+        await order.save()
+
+        return res.status(200).json({
+            order
+        })
+    }
+    catch (err) {
+        console.log(err)
+        return res.status(400).json({
+            error: 'SERVER_ERROR'
+        })
+    }
+})
+
+
 
 // view delivery orders
 
 router.get('/', async (req, res) => {
     try {
 
-        const deliveryOrder = await DeliveryOrder.find({})
+        const deliveryOrder = await DeliveryOrder.find({}).populate(['product','client'])
 
         return res.status(200).json({
             deliveryOrder
         })
     }
     catch (err) {
+        
+        console.log('logging',err)
         return res.status(400).json({
             error: 'SERVER_ERROR'
+            
         })
     }
 })

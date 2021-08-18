@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Modal, StyleSheet, Text, View, TouchableOpacity, Dimensions, TextInput } from "react-native";
 import {Picker} from '@react-native-picker/picker';
 
-const UpdateModal = props => {
+const ShiftWarehouseModal = props => {
   const [modalVisible, setModalVisible] = useState(false);
   //console.log('hete')
   useEffect(() => {
@@ -28,18 +28,26 @@ const UpdateModal = props => {
        
             <View style={styles.centeredView}>
                {
-                  props.title==='Select Warehouse' ? (<View style={styles.modalView}>
+                  props.occupation==='Admin' ? (<View style={styles.modalView}>
                     <Text style={styles.modalTitle}>{props.title}</Text>
                     <View style={styles.modalBody}>
-                      <View style={{borderWidth: 2, borderRadius: 40,borderColor: "#008394",width: Dimensions.get('window').width * 0.65, top: Dimensions.get('window').height * 0.03, height: 40, fontSize: 8,  }}> 
+                    <TextInput placeholder="Current Warehouse" style={styles.input}/>
+                      <View style={{borderWidth: 2, borderRadius: 40,borderColor: "#008394",width: Dimensions.get('window').width * 0.65, top: Dimensions.get('window').height * 0.02, height: 40, fontSize: 8,  }}> 
                         <Picker selectedValue='wa' style={{top:6, color: 'grey', fontFamily: 'Roboto'}}>
                           <Picker.Item label="Warehouse A" value="wa" />
                           <Picker.Item label="Warehouse B" value="wb" />
                           <Picker.Item label="Warehouse C" value="wc" />
                         </Picker>
                         </View>
+                      <View style={{borderWidth: 2, borderRadius: 40,borderColor: "#008394",width: Dimensions.get('window').width * 0.65, top: Dimensions.get('window').height * 0.04, height: 40, fontSize: 8,  }}> 
+                        <Picker selectedValue='wa' style={{top:6, color: 'grey', fontFamily: 'Roboto'}}>
+                          <Picker.Item label="Select Destination Warehouse" value="wa" />
+                          <Picker.Item label="Warehouse B" value="wb" />
+                          <Picker.Item label="Warehouse C" value="wc" />
+                        </Picker>
                     </View>
-                    <View style={{flexDirection: 'row', justifyContent: 'space-evenly', alignItems : 'center', justifyContent: 'flex-end'}}>
+                    </View>
+                    <View style={{flexDirection: 'row', justifyContent: 'space-evenly', alignItems : 'center'}}>
                         <TouchableOpacity onPress={() => props.handleClose()}>
                             <View style={styles.buttonModalContainer}>
                                 <Text style={styles.buttonModalText}>Back</Text>
@@ -55,9 +63,21 @@ const UpdateModal = props => {
                 </View>) : (<View style={styles.modalView}>
                     <Text style={styles.modalTitle}>{props.title}</Text>
                     <View style={styles.modalBody}>
-                        <TextInput placeholder="Username" style={styles.input}/>
-                        <TextInput placeholder="Email" style={styles.input}/>
-                        <TextInput placeholder="Status" style={styles.input}/>
+                        <TextInput placeholder="Current Warehouse" style={styles.input}/>
+                      <View style={{borderWidth: 2, borderRadius: 40,borderColor: "#008394",width: Dimensions.get('window').width * 0.65, top: Dimensions.get('window').height * 0.02, height: 40, fontSize: 8,  }}> 
+                        <Picker selectedValue='wa' style={{top:6, color: 'grey', fontFamily: 'Roboto'}}>
+                          <Picker.Item label="Warehouse A" value="wa" />
+                          <Picker.Item label="Warehouse B" value="wb" />
+                          <Picker.Item label="Warehouse C" value="wc" />
+                        </Picker>
+                        </View>
+                      <View style={{borderWidth: 2, borderRadius: 40,borderColor: "#008394",width: Dimensions.get('window').width * 0.65, top: Dimensions.get('window').height * 0.04, height: 40, fontSize: 8,  }}> 
+                        <Picker selectedValue='wa' style={{top:6, color: 'grey', fontFamily: 'Roboto'}}>
+                          <Picker.Item label="Select Destination Warehouse" value="wa" />
+                          <Picker.Item label="Warehouse B" value="wb" />
+                          <Picker.Item label="Warehouse C" value="wc" />
+                        </Picker>
+                    </View>
                     </View>
                     <View style={{flexDirection: 'row', justifyContent: 'space-evenly', alignItems : 'center'}}>
                         <TouchableOpacity onPress={() => props.handleClose()}>
@@ -214,4 +234,4 @@ const styles = StyleSheet.create({
   
 });
 
-export default UpdateModal;
+export default ShiftWarehouseModal;
