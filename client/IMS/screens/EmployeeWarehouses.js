@@ -6,7 +6,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import { DataTable } from 'react-native-paper';
 import Modal from 'react-native-modal';
 import PickerCheckBox from 'react-native-picker-checkbox';
-import TableDetailModal from '../components/TableDetailModal';
+import WarehouseDetailModal from '../components/WarehouseDetailModal';
 import FilterButton from '../components/FilterButton';
 
 
@@ -137,7 +137,7 @@ const EmployeeWarehouses = props => {
                 </View>
             </View>
         </Modal>
-        <TableDetailModal state={isTableDetailModalVisible} handleClose={handleClose} title='Employee Information' name='Raahem Asghar' email='raahemasghar97@gmail.com' occupation="Employee" />
+        <WarehouseDetailModal state={isTableDetailModalVisible} handleClose={handleClose} title='Warehouse Detail' name='Raahem Asghar' email='raahemasghar97@gmail.com' occupation="Employee" />
         <View style = {styles.screen}>
           <View>
             <Text style={styles.title}>Employee Warehouses</Text>

@@ -185,7 +185,7 @@ const Warehouse = props => {
           </View>
         </View>
       </Modal>
-      <WarehouseDetailModal state={isTableDetailModalVisible} handleClose={handleClose} title='Warehouse Information' object={toucedWarehouse} getWarehouses={getWarehouses} />
+      <WarehouseDetailModal state={isTableDetailModalVisible} handleClose={handleClose} title='Warehouse Information' object={toucedWarehouse} getWarehouses={getWarehouses} occupation={'Admin'}/>
       <View style={styles.screen}>
         <View>
           <Text style={styles.title}>Warehouses</Text>

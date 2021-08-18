@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Alert, Modal, StyleSheet, Text, View, TouchableOpacity, Dimensions, KeyboardAvoidingView, ScrollView } from "react-native";
-import ProductUpdateModal from "./ProductUpdateModal";
+import ShiftWarehouseModal from "./ShiftWarehouseModal";
 import { uri } from '../api.json'
 import axios from "axios"
 
@@ -28,7 +28,7 @@ const WarehouseDetailModal= props => {
   return (
     <KeyboardAvoidingView>
     <View style={styles.centeredView}>
-        <ProductUpdateModal state={isUpdateModalVisible} handleClose={handleCloseUpdate} title='Update Information' name='Raahem Asghar' email='raahemasghar97@gmail.com' occupation="Employee" obj={props.object}/>
+        <ShiftWarehouseModal state={isUpdateModalVisible} handleClose={handleCloseUpdate} title='Shift Warehouse' name='Raahem Asghar' email='raahemasghar97@gmail.com' occupation="Employee" occupation={props.occupation}/>
         <Modal
             animationType="slide"
             transparent={true}
@@ -40,17 +40,16 @@ const WarehouseDetailModal= props => {
             }}
         > 
             <View style={styles.centeredView}>
-                {console.log("printing object ",props.object)}
-                <View style={styles.modalView}>
+                {props.occupation === 'Admin' ? (<View style={styles.modalView}>
                     <Text style={styles.modalTitle}>{props.title}</Text>
-                    <ScrollView>
+                    <View>
                     <View style={styles.modalBody}>
                           {props.object !== [] && (<View> 
-                          <Text style={styles.bodyText}>Warehouse name: {props.object.name}</Text>
-                          <Text style={styles.bodyText}>Total Products: {props.object.totalProducts }</Text>
-                          <Text style={styles.bodyText}>Total Stock: {props.object.totalStock}</Text></View>)}
+                          <Text style={styles.bodyText}>Warehouse name: </Text>
+                          <Text style={styles.bodyText}>Total Products: </Text>
+                          <Text style={styles.bodyText}>Total Stock: </Text></View>)}
                     </View>
-                    </ScrollView>
+                    </View>
                     <View style={{flexDirection: 'row', justifyContent: 'space-evenly', alignItems : 'center'}}>
                         <TouchableOpacity onPress={() => props.handleClose()}>
                             <View style={styles.buttonModalContainer}>
@@ -59,30 +58,34 @@ const WarehouseDetailModal= props => {
                         </TouchableOpacity>
                         <TouchableOpacity onPress = {() => {setUpdateModalVisible(true)}}>
                             <View style={styles.backButtonModalContainer}>
-                                <Text style={styles.buttonModalText}>Update</Text>
-                            </View>
-                        </TouchableOpacity>
-                        <TouchableOpacity onPress={() =>
-                        Alert.alert(
-                            "Confirmation",
-                            "Are you sure you want to delete?",
-                            [
-                              {
-                                text: "No",
-                                style: "cancel"
-                              },
-                              { text: "Yes", onPress: () => deleteProduct(props.object._id) }
-                            ],
-                            { cancelable: true }
-                            
-                          )
-                        }>
-                            <View style={styles.deleteButtonModalContainer}>
-                                <Text style={styles.buttonModalText}>Delete</Text>
+                                <Text style={styles.buttonModalText}>Shift</Text>
                             </View>
                         </TouchableOpacity>
                     </View>
-                </View>
+                </View>) : (<View style={styles.modalView}>
+                    <Text style={styles.modalTitle}>{props.title}</Text>
+                    <View>
+                    <View style={styles.modalBody}>
+                          {props.object !== [] && (<View> 
+                          <Text style={styles.bodyText}>Warehouse name: </Text>
+                          <Text style={styles.bodyText}>Total Products: </Text>
+                          <Text style={styles.bodyText}>Total Stock:</Text></View>)}
+                    </View>
+                    </View>
+                    <View style={{flexDirection: 'row', justifyContent: 'space-evenly', alignItems : 'center'}}>
+                        <TouchableOpacity onPress={() => props.handleClose()}>
+                            <View style={styles.buttonModalContainer}>
+                                <Text style={styles.buttonModalText}>Back</Text>
+                            </View>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress = {() => {setUpdateModalVisible(true)}}>
+                            <View style={styles.backButtonModalContainer}>
+                                <Text style={styles.buttonModalText}>Shift</Text>
+                            </View>
+                        </TouchableOpacity>
+                    </View>
+                </View>)}
+                
                 
             
             </View>
@@ -160,7 +163,7 @@ const styles = StyleSheet.create({
     marginTop: 22
   },
   modalBody:{
-    paddingVertical:'10%',
+    paddingVertical:'30%',
     paddingHorizontal:10
   },
   modalView: {
