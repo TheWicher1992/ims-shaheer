@@ -166,60 +166,6 @@ const EmployeeProducts = props => {
                   <TextInput onChangeText={onChangeProductName} style={styles.input} placeholder="Product" autoCorrect={false} />
                   <TextInput onChangeText={onChangeAmount} style={styles.input} placeholder="Amount" autoCorrect={false} />
                     <TextInput multiline={true} numberOfLines={5} onChangeText={onChangeDescription} style={styles.input} placeholder="Description" autoCorrect={false} />
-                  {/* dropdown */}
-                  {/* <TextInput onChangeText={onChangeBrand} style={styles.input} placeholder="Brand" autoCorrect={false} /> */}
-                  {/* dropdown */}
-                  {/* <TextInput onChangeText={onChangeColor} style={styles.input} placeholder="Color" autoCorrect={false} /> */}
-                  {/* <TextInput onChangeText={onChangeQuantity} style={styles.input} placeholder="Quantity" autoCorrect={false} /> */}
-                  
-                  {/* dropdown */}
-                  {/* <TextInput onChangeText={onChangeWarehouse} style={styles.input} placeholder="Warehouse" autoCorrect={false} /> */}
-                  {/* <DropDownPicker
-                    defaultIndex={0}
-                    placeholder = "Select a Color"
-                    dropDownContainerStyle = {{widht : 10,}}
-                    containerStyle = {{height: 40,width: Dimensions.get('window').width * 0.65,}}
-                    style = {{borderWidth: 2, borderRadius: 40,borderColor: "#008394",width: Dimensions.get('window').width * 0.65, top: 60, height: 40, fontSize: 8,  }}
-                    labelStyle={{fontSize: 12, color: 'grey'}}
-                    placeholderStyle={{ color: 'grey',}}
-                    open={openColor}
-                    value={color}
-                    items={itemsColor}
-                    setOpen={setOpenColor}
-                    setValue={setColor}
-                    setItems={setItemsColor}                    
-                  />
-                  <DropDownPicker
-                    defaultIndex={0}
-                    placeholder = "Select a Brand"
-                    containerStyle = {{height: 40,width: Dimensions.get('window').width * 0.65,}}
-                    style = {{borderWidth: 2, borderRadius: 40,borderColor: "#008394",width: Dimensions.get('window').width * 0.65, top: 80, height: 40, fontSize: 8,  }}
-                    labelStyle={{fontSize: 12, color: 'grey'}}
-                    placeholderStyle={{ color: 'grey',}}
-                    open={openBrand}
-                    value={brand}
-                    items={itemsBrand}
-                    setOpen={setOpenBrand}
-                    setValue={setBrand}
-                    setItems={setItemsBrand}                    
-                  />
-                  <DropDownPicker
-                    defaultIndex={0}
-                    placeholder = "Select a Warehouse"
-                    dropDownContainerStyle = {{}}
-                    containerStyle = {{height: 40,width: Dimensions.get('window').width * 0.65,}}
-                    style = {{borderWidth: 2, borderRadius: 40,borderColor: "#008394",width: Dimensions.get('window').width * 0.65, top: 100, height: 40, fontSize: 8,  }}
-                    labelStyle={{fontSize: 12, color: 'grey'}}
-                    placeholderStyle={{ color: 'grey',}}
-                    open={openWarehouse}
-                    value={warehouse}
-                    items={itemsWarehouse}
-                    defaultIndex = {1}
-                    setOpen={setOpenWarehouse}
-                    setValue={setWarehouse}
-                    setItems={setItemsWarehouse}                    
-                  /> */}
-                  
                   <View style = {{borderWidth: 2, borderRadius: 40,borderColor: "#008394",width: Dimensions.get('window').width * 0.65, top: 60, height: 40, fontSize: 8,  }}>
                     <Picker
                       style = {{top:6, color: 'grey', fontFamily: 'Roboto'}}
@@ -310,11 +256,8 @@ const EmployeeProducts = props => {
         </View>
       </View>
       <View style={styles.containerButton}>
-        <TouchableOpacity onPress={() => { setModalVisible(true) }}>
           <View style={styles.buttonContainer}>
-            <Text style={styles.buttonText}>Add Product</Text>
           </View>
-        </TouchableOpacity>
         <View style={{ flexDirection: 'row', justifyContent: 'center', }}>
           <View style={styles.searchBar}>
             <TextInput onChangeText={onChangeSearch} style={styles.buttonInput} placeholder="type here..." autoCorrect={false} />
@@ -343,11 +286,7 @@ const EmployeeProducts = props => {
             <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Serial No.</Text></DataTable.Title>
             <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Product</Text></DataTable.Title>
             <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Brand</Text></DataTable.Title>
-            <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Color</Text></DataTable.Title>
-            {/* <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Quantity</Text></DataTable.Title> */}
-            <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Amount</Text></DataTable.Title>
-            {/* <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Warehouse</Text></DataTable.Title> */}
-
+            <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Color</Text></DataTable.Title>  
           </DataTable.Header>
 
 
@@ -359,22 +298,11 @@ const EmployeeProducts = props => {
                   <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{product.title}</Text></DataTable.Cell>
                   <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{product.brand.title === undefined ? '--' : product.brand.title}</Text></DataTable.Cell>
                   <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{product.colour.title === undefined ? '--' : product.colour.title}</Text></DataTable.Cell>
-                  <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{product.price === undefined ? 0 : product.price}</Text></DataTable.Cell>
-                  {/* <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{product.serial}</Text></DataTable.Cell> */}
                 </DataTable.Row>
               </TouchableOpacity>
 
             ))
           }
-          {/* <DataTable.Row>
-              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>122</Text></DataTable.Cell>
-              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>Abcdecec</Text></DataTable.Cell>
-              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>PVC</Text></DataTable.Cell>
-              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>Transparent</Text></DataTable.Cell>
-              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>59</Text></DataTable.Cell>
-              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>69000</Text></DataTable.Cell>
-              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>11-B</Text></DataTable.Cell>
-            </DataTable.Row> */}
           <DataTable.Pagination
             page={page}
             numberOfPages={3}
@@ -464,7 +392,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginTop: Dimensions.get('window').height > 900 ? 80 : 60,
     borderRadius: 40,
-    backgroundColor: '#00E0C7',
     paddingVertical: 12,
     paddingHorizontal: 32,
     left: 15

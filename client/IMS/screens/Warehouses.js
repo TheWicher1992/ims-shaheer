@@ -28,7 +28,7 @@ const Warehouse = props => {
       `${uri}/api/warehouse/${filters.page}/${filters.query}/${filters.sort}/${filters.sortBy}`
     )
     setWarehouses(res.data.warehouse.reverse())
-    console.log(warehouses)
+    console.log('wwwwwwwwwwwwwwwwwww',warehouses)
   }
 
   useEffect(() => {
@@ -129,7 +129,7 @@ const Warehouse = props => {
   }
 
   const [itemsPerPage, setItemsPerPage] = React.useState(optionsPerPage[0]); //for items per page on table
-  const [toucedWarehouse, setTouchedWarehouse] = React.useState([])
+  const [touchedWarehouse, setTouchedWarehouse] = React.useState([])
   const [isTableDetailModalVisible, setTableDetailModalVisible] = React.useState(false);
 
   const onPressModal = (prod) => {
@@ -188,7 +188,7 @@ const Warehouse = props => {
           </View>
         </View>
       </Modal>
-      <WarehouseDetailModal state={isTableDetailModalVisible} handleClose={handleClose} title='Warehouse Information' object={toucedWarehouse} getWarehouses={getWarehouses} occupation={'Admin'} />
+      <WarehouseDetailModal state={isTableDetailModalVisible} handleClose={handleClose} title='Warehouse Information' object={touchedWarehouse === [] ? [] : touchedWarehouse} getWarehouses={getWarehouses} occupation={'Admin'} />
       <View style={styles.screen}>
         <View>
           <Text style={styles.title}>Warehouses</Text>
