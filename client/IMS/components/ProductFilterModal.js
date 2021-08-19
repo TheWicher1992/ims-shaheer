@@ -4,8 +4,8 @@ import ColorFilterModal from "./ColorFilterModal";
 import BrandFilterModal from "./BrandFilterModal";
 import WarehouseFilterModal from "./WarehouseFilterModal";
 import DateFilterModal from "./DateFilterModal";
-import TitleFilterModal from "./TitleFilterModal";
 import QuantityFilterModal from "./QuantityFilterModal";
+import PriceFilterModal from "./PriceFilterModal";
 const ProductFilterModal = props => {
 
     const [modalVisible, setModalVisible] = useState(false);
@@ -13,8 +13,8 @@ const ProductFilterModal = props => {
     const [brandFilterModal, setBrandFilterModal] = useState(false);
     const [warehouseFilterModal, setWarehouseFilterModal] = useState(false);
     const [dateFilterModal, setDateFilterModal] = useState(false);
-    const [productFilterModal,setProductFilterModal] = useState(false);
     const [quantityFilterModal, setQuantityFilterModal] = useState(false);
+    const [priceFilterModal, setPriceFilterModal] = useState(false);
     useEffect(() => {
         setModalVisible(props.state);
         
@@ -36,11 +36,11 @@ const ProductFilterModal = props => {
     const closeDateFilterModal = () => {
         setDateFilterModal(false);
     }
-    const closeProductFilterModal = () => {
-        setProductFilterModal(false);
-    }
     const closeQuantityFilterModal = () => {
         setQuantityFilterModal(false);
+    }
+    const closePriceFilterModal = () => {
+        setPriceFilterModal(false);
     }
     return (
 
@@ -114,25 +114,8 @@ const ProductFilterModal = props => {
                                 </View>
                         </TouchableOpacity>
 
-                        <TouchableOpacity style = {styles.TextBox} onPress={() => setProductFilterModal(true)}>
-                                <View style={{ marginTop: '9.5%', paddingLeft: '5%' }}>
-                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                                        <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-start' }}>
-                                            <Text style={styles.normalText}>
-                                                Products
-                                            </Text>
-                                        </View>
-                                        <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-end', paddingRight: '8%' }}>
-                                            <Text style={styles.sideText}>
-                                                All
-                                            </Text>
-                                        </View>
-                                    </View>
-                                </View>
-                        </TouchableOpacity>
 
-
-                        <TouchableOpacity style = {styles.TextBox}>
+                        <TouchableOpacity style = {styles.TextBox} onPress={() => setPriceFilterModal(true)}>
                                 <View style={{ marginTop: '9.5%', paddingLeft: '5%' }}>
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                         <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-start' }}>
@@ -216,12 +199,13 @@ const ProductFilterModal = props => {
                     </View>
                 </View>
             </Modal>
-            <ColorFilterModal state = {colorFilterModal} handleClose = {closeColorFilterModal} object = {props.object}/>
-            <BrandFilterModal state = {brandFilterModal} handleClose = {closeBrandFilterModal} object = {props.object}/>
-            <WarehouseFilterModal state = {warehouseFilterModal} handleClose = {closeWarehouseFilterModal} object = {props.object}/>
-            <DateFilterModal state = {dateFilterModal} handleClose = {closeDateFilterModal} object = {props.object}/>
-            <QuantityFilterModal state = {quantityFilterModal} handleClose = {closeQuantityFilterModal} object = {props.object}/>
-            <TitleFilterModal state = {productFilterModal} handleClose = {closeProductFilterModal} object = {props.object} Title = "Products"/>
+            <ColorFilterModal state = {colorFilterModal} handleClose = {closeColorFilterModal} title = "product" object = {props.object}/>
+            <BrandFilterModal state = {brandFilterModal} handleClose = {closeBrandFilterModal} title = "product" object = {props.object}/>
+            <WarehouseFilterModal state = {warehouseFilterModal} handleClose = {closeWarehouseFilterModal} title = "product" object = {props.object}/>
+            <DateFilterModal state = {dateFilterModal} handleClose = {closeDateFilterModal} title = "product" object = {props.object}/>
+            <QuantityFilterModal state = {quantityFilterModal} handleClose = {closeQuantityFilterModal} title = "product" object = {props.object}/>
+            <PriceFilterModal state = {priceFilterModal} handleClose = {closePriceFilterModal} title = "product" object = {props.object}/>
+
         </View>
     );
 };
@@ -268,7 +252,7 @@ const styles = StyleSheet.create({
     },
     TextBox: {
         width: '100%',
-        height: '10%',
+        height: '12%',
         shadowColor: '#000000',
         backgroundColor: '#fff',
         shadowOffset: { width: 1, height: 1 },
