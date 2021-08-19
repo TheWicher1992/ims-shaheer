@@ -6,6 +6,7 @@ const Employee = require('../models/Employee')
 const jwt = require('jsonwebtoken')
 const config = require('config')
 const { auth, adminAuth, employeeAuth } = require('../middlewares/auth')
+const { USER_ALREADY_EXIST, SERVER_ERROR, DOES_NOT_EXIST, INVALID_CREDITS, SUCCESSFULY_DELETED } = require('../misc/errors')
 
 router.post('/add-admin', adminAuth, async (req, res) => {
     try {
@@ -20,7 +21,7 @@ router.post('/add-admin', adminAuth, async (req, res) => {
 
         if (exists) {
             return res.status(400).json({
-                error: "USER_ALREADY_EXIST"
+                error: USER_ALREADY_EXIST
             })
         }
 
@@ -47,8 +48,9 @@ router.post('/add-admin', adminAuth, async (req, res) => {
         })
     }
     catch (err) {
+        console.log(err)
         return res.status(500).json({
-            error: 'SERVER_ERROR'
+            error: SERVER_ERROR
         })
     }
 
@@ -66,7 +68,7 @@ router.post('/add-employee', /*adminAuth,*/ async (req, res) => {
 
         if (exists) {
             return res.status(400).json({
-                error: "USER_ALREADY_EXIST"
+                error: USER_ALREADY_EXIST
             })
         }
 
@@ -92,8 +94,9 @@ router.post('/add-employee', /*adminAuth,*/ async (req, res) => {
         })
     }
     catch (err) {
+        console.log(err)
         return res.status(500).json({
-            error: 'SERVER_ERROR'
+            error: SERVER_ERROR
         })
     }
 
@@ -101,23 +104,22 @@ router.post('/add-employee', /*adminAuth,*/ async (req, res) => {
 })
 
 router.get("/", auth, async (req, res) => {
-    console.log('/get-user')
     try {
         const User = req.user.type === 'admin' ? Admin : Employee
-        let user = JSON.parse(JSON.stringify(await User.findById(req.user.id)))
-        user = { ...user, type: req.user.type }
-        console.log(user)
 
-        // user.type = req.user.type
+        let user = JSON.parse(JSON.stringify(await User.findById(req.user.id)))
+
+        user = { ...user, type: req.user.type }
+
         return res.status(200).json({
             user
         })
     }
     catch (err) {
-        console.log(err)
 
+        console.log(err)
         return res.status(500).json({
-            error: 'SERVER_ERROR'
+            error: SERVER_ERROR
         })
     }
 
@@ -133,17 +135,16 @@ router.get('/all', async (req, res) => {
             employees
         })
     } catch (err) {
+
+        console.log(err)
         return res.status(500).json({
-            error: 'SERVER_ERROR'
+            error: SERVER_ERROR
         })
     }
 })
 
 router.post('/login', async (req, res) => {
-    console.log('/login')
     try {
-
-
         const {
             userName,
             password,
@@ -163,7 +164,7 @@ router.post('/login', async (req, res) => {
 
         if (!exists) {
             return res.status(400).json({
-                error: "INVALID_CREDITS"
+                error: INVALID_CREDITS
             })
         }
 
@@ -186,33 +187,43 @@ router.post('/login', async (req, res) => {
         }
         else {
             return res.status(400).json({
-                error: 'INVALID_CREDITS'
+                error: INVALID_CREDITS
             })
         }
     }
     catch (err) {
+        console.log(err)
         return res.status(500).json({
-            error: 'SERVER_ERROR'
+            error: SERVER_ERROR
         })
     }
 
 })
 
-
 router.get('/default-admin', async (req, res) => {
-    const userName = 'admin'
-    const password = 'admin'
+    try {
 
-    const salt = await bcrypt.genSalt(10)
-    const hashedPassword = await bcrypt.hash(password, salt)
+        const userName = 'admin'
+        const password = 'admin'
 
-    const admin = new Admin({
-        userName,
-        password: hashedPassword
-    })
+        const salt = await bcrypt.genSalt(10)
+        const hashedPassword = await bcrypt.hash(password, salt)
 
-    await admin.save()
-    res.end()
+        const admin = new Admin({
+            userName,
+            password: hashedPassword
+        })
+
+        await admin.save()
+        return res.end()
+    }
+    catch (err) {
+        console.log(err)
+        return res.status(500).json({
+            error: SERVER_ERROR
+        })
+    }
+
 
 })
 
@@ -230,32 +241,33 @@ router.delete('/employee/:id', async (req, res) => {
         })
 
         if (existsEmployee) {
-            
-        await Employee.deleteOne({
-            _id: id
-        })
 
-        return res.status(200).json({
-            status: 'SUCCESSFULY_DELETED'
-        })
+            await Employee.deleteOne({
+                _id: id
+            })
+
+            return res.status(200).json({
+                status: SUCCESSFULY_DELETED
+            })
         }
         else if (existsAdmin) {
             await Admin.deleteOne({
                 _id: id
             })
-    
+
             return res.status(200).json({
-                status: 'SUCCESSFULY_DELETED'
+                status: SUCCESSFULY_DELETED
             })
         }
 
 
         return res.status(400).json({
-            status: 'DOES_NOT_EXIST'
+            status: DOES_NOT_EXIST
         })
     } catch (err) {
-        return res.status(400).json({
-            error: 'SERVER_ERROR'
+        console.log(err)
+        return res.status(500).json({
+            error: SERVER_ERROR
         })
     }
 

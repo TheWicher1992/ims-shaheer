@@ -7,6 +7,7 @@ const config = require('config')
 const Warehouse = require('../models/Warehouse')
 const Stock = require('../models/Stock')
 const DeliveryOrder = require('../models/DeliveryOrder')
+const errors = require('../misc/errors')
 router.post('/', async (req, res) => {
     try {
         var {
@@ -28,7 +29,7 @@ router.post('/', async (req, res) => {
 
         if (exists) {
             return res.status(400).json({
-                error: 'PRODUCT_ALREADY_EXIST'
+                error: errors.PRODUCT_ALREADY_EXIST
             })
         }
 
@@ -85,8 +86,8 @@ router.post('/', async (req, res) => {
     }
     catch (err) {
         console.log(err)
-        return res.status(400).json({
-            error: 'SERVER_ERROR'
+        return res.status(500).json({
+            error: errors.SERVER_ERROR
         })
     }
 })
@@ -148,7 +149,7 @@ const moveWarehouseToWarehouse = async (sourceID, destID, productID, quantity) =
 
     //check if product available or stock is enough
     if (!srcStock || srcStock.stock < quantity)
-        return "NOT_ENOUGH_STOCK"
+        return errors.NOT_ENOUGH_STOCK
 
 
 
@@ -189,88 +190,110 @@ const moveWarehouseToWarehouse = async (sourceID, destID, productID, quantity) =
 }
 
 router.post('/move', async (req, res) => {
-    const {
-        type,
-        sourceID,
-        destID,
-        productID,
-        quantity
-    } = req.body
+    try {
 
-    let result = true
+        const {
+            type,
+            sourceID,
+            destID,
+            productID,
+            quantity
+        } = req.body
 
-    if (type === 'delivery') moveDeliveryToWarehouse(sourceID, destID, productID)
-    if (type === 'warehouse') {
-        if (await moveWarehouseToWarehouse(sourceID, destID, productID, quantity) === 'NOT_ENOUGH_STOCK') {
-            result = false
+        let result = true
+
+        if (type === 'delivery') moveDeliveryToWarehouse(sourceID, destID, productID)
+        if (type === 'warehouse') {
+            if (await moveWarehouseToWarehouse(sourceID, destID, productID, quantity) === errors.NOT_ENOUGH_STOCK) {
+                result = false
+            }
         }
+        return result ? res.end() : res.status(400).json({
+            error: errors.NOT_ENOUGH_STOCK
+        })
     }
-    return result ? res.end() : res.status(400).json({
-        error: 'NOT_ENOUGH_STOCK'
-    })
+    catch (err) {
+        console.log(err)
+        return res.status(500).json({
+            error: errors.SERVER_ERROR
+        })
+    }
 
 })
 router.get('/cb', async (req, res) => {
-    const brands = await Brand.find()
-    const colours = await ProductColour.find()
-
-
-    return res.json({
-        brands,
-        colours
-    })
+    try {
+        const brands = await Brand.find()
+        const colours = await ProductColour.find()
+        return res.json({
+            brands,
+            colours
+        })
+    }
+    catch (err) {
+        console.log(err)
+        return res.status(500).json({
+            error: errors.SERVER_ERROR
+        })
+    }
 })
 
 router.get('/filters', async (req, res) => {
-    //brand, colour, warehouse, date, price
 
-    //get brands
+    try {
+        const brands = await Brand.find()
+        const colours = await ProductColour.find()
+        const warehouses = await Warehouse.find()
 
-    const brands = await Brand.find()
+        const filters = {
+            brands,
+            colours,
+            warehouses
+        }
 
-    //get colours
 
-    const colours = await ProductColour.find()
-
-    //get warehouses
-
-    const warehouses = await Warehouse.find()
-
-    const filters = {
-        brands,
-        colours,
-        warehouses
+        return res.status(200).json({
+            filters
+        })
     }
-
-
-    return res.status(200).json({
-        filters
-    })
-
+    catch (err) {
+        console.log(err)
+        return res.status(500).json({
+            error: errors.SERVER_ERROR
+        })
+    }
 
 })
 
 router.get('/stock/:id', async (req, res) => {
 
-    const productID = req.params.id
+    try {
 
-    const warehouseStock = await Stock.find({
-        product: productID
-    })
+        const productID = req.params.id
 
-    const deliverOrderStocks = await DeliveryOrder.find({
-        product: productID
-    })
+        const warehouseStock = await Stock.find({
+            product: productID
+        })
 
-    const stocks = {
-        warehouseStock,
-        deliverOrderStocks
+        const deliverOrderStocks = await DeliveryOrder.find({
+            product: productID
+        })
+
+        const stocks = {
+            warehouseStock,
+            deliverOrderStocks
+        }
+
+        return res.status(200).json({
+            stocks
+        })
+
     }
-
-    return res.status(200).json({
-        stocks
-    })
-
+    catch (err) {
+        console.log(err)
+        return res.status(500).json({
+            error: errors.SERVER_ERROR
+        })
+    }
 
 })
 
@@ -287,8 +310,10 @@ router.get('/:id', async (req, res) => {
         })
     }
     catch (err) {
-        return res.status(400).json({
-            error: 'SERVER_ERROR'
+        console.log(err)
+
+        return res.status(500).json({
+            error: errors.SERVER_ERROR
         })
     }
 })
@@ -296,9 +321,6 @@ router.get('/:id', async (req, res) => {
 router.get('/:page/:query/:colour/:brand/:warehouse/:sort/:sortBy', async (req, res) => {
 
     try {
-
-
-
         const page = req.params.page - 1
         const query = req.params.query === '*' ? ['.*'] : req.params.query.split(" ")
         const colour = req.params.colour
@@ -373,8 +395,8 @@ router.get('/:page/:query/:colour/:brand/:warehouse/:sort/:sortBy', async (req, 
         })
     } catch (err) {
         console.log(err)
-        return res.status(400).json({
-            error: 'SERVER_ERROR'
+        return res.status(500).json({
+            error: errors.SERVER_ERROR
         })
     }
 
@@ -391,7 +413,7 @@ router.delete('/:id', async (req, res) => {
 
         if (!exists) {
             return res.status(400).json({
-                error: 'PRODUCT_NOT_EXISTENT'
+                error: errors.PRODUCT_NOT_EXISTENT
             })
         }
 
@@ -401,8 +423,10 @@ router.delete('/:id', async (req, res) => {
 
         res.status(200).end()
     } catch (err) {
-        return res.status(400).json({
-            error: 'SERVER_ERROR'
+        console.log(err)
+
+        return res.status(500).json({
+            error: errors.SERVER_ERROR
         })
     }
 })
@@ -433,7 +457,7 @@ router.put('/:id', async (req, res) => {
 
             if (exists) {
                 return res.status(400).json({
-                    error: 'PRODUCT_ALREADY_EXIST'
+                    error: error.PRODUCT_ALREADY_EXIST
                 })
             }
         }
@@ -486,17 +510,6 @@ router.put('/:id', async (req, res) => {
         product.price = price
 
 
-        // const product = new Product({
-        //     title,
-        //     serial,
-        //     brand: brandID,
-        //     colour: colourID,
-        //     description,
-        //     price
-        // })
-
-
-
         await product.save()
 
         return res.status(200).json({
@@ -505,31 +518,47 @@ router.put('/:id', async (req, res) => {
     }
     catch (err) {
         console.log(err)
-        return res.status(400).json({
-            error: 'SERVER_ERROR'
+        return res.status(500).json({
+            error: errors.SERVER_ERROR
         })
     }
 })
 
 router.post('/colour', async (req, res) => {
-    const { colour } = req.body
+    try {
 
-    const productColour = new ProductColour({
-        title: colour
-    })
+        const { colour } = req.body
 
-    await productColour.save()
+        const productColour = new ProductColour({
+            title: colour
+        })
 
+        await productColour.save()
+    }
+    catch (err) {
+        console.log(err)
+        return res.status(500).json({
+            error: errors.SERVER_ERROR
+        })
+    }
 })
 router.post('/brand', async (req, res) => {
-    const { brand } = req.body
+    try {
 
-    const brandC = new Brand({
-        title: brand
-    })
+        const { brand } = req.body
 
-    await brandC.save()
+        const brandC = new Brand({
+            title: brand
+        })
 
+        await brandC.save()
+    }
+    catch (err) {
+        console.log(err)
+        return res.status(500).json({
+            error: errors.SERVER_ERROR
+        })
+    }
 })
 
 

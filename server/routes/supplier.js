@@ -94,7 +94,7 @@ router.get('/:page/:query/:userName/:date/:sort/:sortBy', async (req, res) => {
 
     const page = req.params.page - 1
     const query = req.params.query === '*' ? ['.*'] : req.params.query.split(" ")
-    
+
     const date = req.params.date
     const userName = req.params.userName
     const sort = req.params.sort === '*' ? 'date' : req.params.sort
@@ -111,7 +111,7 @@ router.get('/:page/:query/:userName/:date/:sort/:sortBy', async (req, res) => {
     if (date !== '*') filters['date'] = date
 
 
-  
+
 
     const itemsPerPage = config.get('rows-per-page')
 

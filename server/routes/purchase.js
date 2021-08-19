@@ -6,128 +6,153 @@ const DeliveryOrder = require('../models/DeliveryOrder')
 const Warehouse = require('../models/Warehouse')
 const Stock = require('../models/Stock')
 const Client = require('../models/Client')
+const errors = require('../misc/errors')
 router.post('/', async (req, res) => {
-    let {
-        product,
-        quantity,
-        client,
-        payment,
-        total,
-        received,
-        note,
-        isDeliveryOrder,
-        location,
-        warehouseID
-    } = req.body
-
-
-    //set received appropriately
-    if (payment === 'Credit') received = 0
-    if (payment === 'Full') received = total
-
-    //New purchase
-    const purchase = new Purchase({
-        product,
-        quantity,
-        client,
-        payment,
-        total,
-        received,
-        note
-    })
-
-
-    //if DeliveryOrder
-    if (isDeliveryOrder) {
-        const deliveryOrder = new DeliveryOrder({
-            client,
+    try {
+        let {
             product,
             quantity,
+            client,
+            payment,
+            total,
+            received,
+            note,
+            isDeliveryOrder,
             location,
+            warehouseID
+        } = req.body
+
+
+        //set received appropriately
+        if (payment === 'Credit') received = 0
+        if (payment === 'Full') received = total
+
+        //New purchase
+        const purchase = new Purchase({
+            product,
+            quantity,
+            client,
+            payment,
+            total,
+            received,
             note
         })
-        await deliveryOrder.save()
-    }
-    //if physical stock
-    else {
 
-        //update warehouse with correct amount of stock and product
-        const warehouse = await Warehouse.findOne({
-            _id: warehouseID
-        })
-        const stock = await Stock.findOne({
-            warehouse: warehouseID,
-            product
-        })
 
-        if (!stock) {
-            await new Stock({
+        //if DeliveryOrder
+        if (isDeliveryOrder) {
+            const deliveryOrder = new DeliveryOrder({
+                client,
                 product,
-                warehouse: warehouseID,
-                stock: quantity
-            }).save()
-            warehouse.totalProducts += 1
+                quantity,
+                location,
+                note
+            })
+            await deliveryOrder.save()
         }
+        //if physical stock
         else {
-            stock.stock += quantity
-            await stock.save()
+
+            //update warehouse with correct amount of stock and product
+            const warehouse = await Warehouse.findOne({
+                _id: warehouseID
+            })
+            const stock = await Stock.findOne({
+                warehouse: warehouseID,
+                product
+            })
+
+            if (!stock) {
+                await new Stock({
+                    product,
+                    warehouse: warehouseID,
+                    stock: quantity
+                }).save()
+                warehouse.totalProducts += 1
+            }
+            else {
+                stock.stock += quantity
+                await stock.save()
+            }
+            warehouse.totalStock += quantity
+            await warehouse.save()
         }
-        warehouse.totalStock += quantity
-        await warehouse.save()
+
+        await purchase.save()
+
+
+        //Update totalstock
+        const prod = await Product.findOne({
+            _id: product
+        })
+
+        prod.totalStock += quantity
+
+        await prod.save()
+        //End update totalstock
+
+        //Update client balance
+        const clientDB = await Client.findOne({
+            _id: client
+        })
+
+        clientDB.balance = total - received
+
+        await clientDB.save()
+        //  End update client balance
+
+        return res.status(200).json({
+            purchase
+        })
+
+
     }
-
-    await purchase.save()
-
-
-    //Update totalstock
-    const prod = await Product.findOne({
-        _id: product
-    })
-
-    prod.totalStock += quantity
-
-    await prod.save()
-    //End update totalstock
-
-    //Update client balance
-    const clientDB = await Client.findOne({
-        _id: client
-    })
-
-    clientDB.balance = total - received
-
-    await clientDB.save()
-    //  End update client balance
-
-    return res.status(200).json({
-        purchase
-    })
-
-
+    catch (err) {
+        console.log(err)
+        return res.status(500).json({
+            error: errors.SERVER_ERROR
+        })
+    }
 
 })
 
 router.get(`/`, async (req, res) => {
-    const purchases = await Purchase.find().populate(['client', 'product'])
+    try {
+        const purchases = await Purchase.find().populate(['client', 'product'])
+        return res.status(200).json({
+            purchases
+        })
 
-    return res.status(200).json({
-        purchases
-    })
+    }
+    catch (err) {
+        console.log(err)
+        return res.status(500).json({
+            error: errors.SERVER_ERROR
+        })
+    }
 
 })
 
 
 router.get('/form-inputs', async (req, res) => {
 
-    //clients, warehouses, products
+    try {
 
-    const clients = await Client.find().select('userName')
-    const warehouses = await Warehouse.find().select('name')
-    const products = await Product.find().select('title')
+        const clients = await Client.find().select('userName')
+        const warehouses = await Warehouse.find().select('name')
+        const products = await Product.find().select('title')
 
-    return res.json({
-        clients, warehouses, products
-    })
+        return res.json({
+            clients, warehouses, products
+        })
+
+    }
+    catch (err) {
+        console.log(err)
+        return res.status(500).json({
+            error: errors.SERVER_ERROR
+        })
+    }
 
 
 })

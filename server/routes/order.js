@@ -2,7 +2,9 @@ const express = require('express')
 const router = express.Router()
 const DeliveryOrder = require('../models/DeliveryOrder')
 const config = require('config')
-
+const {
+    SERVER_ERROR
+} = require('../misc/errors')
 // make an order
 router.post('/', async (req, res) => {
     try {
@@ -12,14 +14,14 @@ router.post('/', async (req, res) => {
             clientID,
             location,
             note,
-            date,        
+            date,
         } = req.body
 
-    
+
 
         console.log(req.body)
-        const order =  new DeliveryOrder({
-            product:productID,
+        const order = new DeliveryOrder({
+            product: productID,
             quantity,
             location,
             client: clientID,
@@ -35,8 +37,8 @@ router.post('/', async (req, res) => {
     }
     catch (err) {
         console.log(err)
-        return res.status(400).json({
-            error: 'SERVER_ERROR'
+        return res.status(500).json({
+            error: SERVER_ERROR
         })
     }
 })
@@ -48,18 +50,18 @@ router.post('/', async (req, res) => {
 router.get('/', async (req, res) => {
     try {
 
-        const deliveryOrder = await DeliveryOrder.find({}).populate(['product','client'])
+        const deliveryOrder = await DeliveryOrder.find({}).populate(['product', 'client'])
 
         return res.status(200).json({
             deliveryOrder
         })
     }
     catch (err) {
-        
-        console.log('logging',err)
-        return res.status(400).json({
-            error: 'SERVER_ERROR'
-            
+
+        console.log(err)
+        return res.status(500).json({
+            error: SERVER_ERROR
+
         })
     }
 })
@@ -79,8 +81,8 @@ router.get('/:id', async (req, res) => {
         })
     }
     catch (err) {
-        return res.status(400).json({
-            error: 'SERVER_ERROR'
+        return res.status(500).json({
+            error: SERVER_ERROR
         })
     }
 })
@@ -89,42 +91,44 @@ router.get('/:id', async (req, res) => {
 
 // filter suppliers
 router.get('/:page/:query/:client/:product/:date/:sort/:sortBy', async (req, res) => {
+    try {
+        const page = req.params.page - 1
+        const query = req.params.query === '*' ? ['.*'] : req.params.query.split(" ")
 
-    const page = req.params.page - 1
-    const query = req.params.query === '*' ? ['.*'] : req.params.query.split(" ")
-    
-    const date = req.params.date
-    const client = req.params.client
-    const product = req.params.product
+        const date = req.params.date
+        const client = req.params.client
+        const product = req.params.product
 
-    const sort = req.params.sort === '*' ? 'date' : req.params.sort
-    const sortBy = req.params.sortBy === '*' ? 'desc' : req.params.sortBy
+        const sort = req.params.sort === '*' ? 'date' : req.params.sort
+        const sortBy = req.params.sortBy === '*' ? 'desc' : req.params.sortBy
 
-    const sortOptions = {
-        [sort]: sortBy
+        const sortOptions = {
+            [sort]: sortBy
+        }
+
+
+        const filters = {}
+
+        if (client !== '*') filters['client'] = client
+        if (product !== '*') filters['product'] = product
+        if (date !== '*') filters['date'] = date
+        const itemsPerPage = config.get('rows-per-page')
+
+        const suppliers = await Client
+            .sort(sortOptions)
+            .skip(itemsPerPage * page)
+            .limit(itemsPerPage)
+
+        return res.status(200).json({
+            suppliers
+        })
     }
-
-
-    const filters = {}
-
-    if (client !== '*') filters['client'] = client
-    if (product !== '*') filters['product'] = product
-    if (date !== '*') filters['date'] = date
-
-
-  
-
-    const itemsPerPage = config.get('rows-per-page')
-
-    const suppliers = await Client
-        .sort(sortOptions)
-        .skip(itemsPerPage * page)
-        .limit(itemsPerPage)
-
-    return res.status(200).json({
-        suppliers
-    })
-
+    catch (err) {
+        console.log(err)
+        return res.status(500).json({
+            error: SERVER_ERROR
+        })
+    }
 })
 
 
