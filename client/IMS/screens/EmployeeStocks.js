@@ -1,64 +1,55 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react'
-import { StyleSheet, Text, View, Button, Dimensions, TextInput, TouchableOpacity, KeyboardAvoidingView, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, Button, Dimensions, TextInput, TouchableOpacity, KeyboardAvoidingView, ScrollView, Pressable } from 'react-native';
 import HeaderButton from '../components/HeaderButton';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { FontAwesome } from '@expo/vector-icons';
 import { DataTable } from 'react-native-paper';
-import Modal from 'react-native-modal';
-import PickerCheckBox from 'react-native-picker-checkbox';
-import WarehouseDetailModal from '../components/WarehouseDetailModal';
+import StockModal from '../components/StockModal';
 import FilterButton from '../components/FilterButton';
-import axios from 'axios'
 import { uri } from '../api.json'
+import axios from "axios"
+
+
 const optionsPerPage = [2, 3, 4];
 
-const EmployeeWarehouses = props => {
+const EmployeeStocks = props => {
 
-  const [warehouses, setWarehouses] = useState([])
+
+  const [products, setProducts] = useState([])
+  const [touchedProduct, setTouchedProduct] = useState([])
   const [filters, setFilters] = useState({
     page: 1,
     query: '*',
+    colour: '*',
+    brand: '*',
+    ware: '*',
     sort: '*',
     sortBy: '*'
   })
 
-  const getWarehouses = async () => {
-    const res = await axios.get(
-      `${uri}/api/warehouse/${filters.page}/${filters.query}/${filters.sort}/${filters.sortBy}`
-    )
-    setWarehouses(res.data.warehouse.reverse())
-  }
-
+  const [stock, setStock] = useState([])
   useEffect(() => {
-    console.log('ware')
-    getWarehouses()
+    setModalVisible(props.state);
+  }, [props.state]);
+  const getStock = async () => {
+    
+    const res = await axios.get(
+      `${uri}/api/product/stocks/`
+    )
+    setProducts(res.data.stocks.reverse())
+    console.log('idddd', res.data)
+    //setSelectedProduct(res.data.warehouse[0]._id)
+  }
+  useEffect(() => {
+    getStock()
   }, [])
 
 
-  const handleConfirm = (pItems) => { // temporary for picker
-    console.log('pItems =>', pItems);
-  }
-
-  const items = [ //temporary for picker for filter
-    {
-      itemKey: 1,
-      itemDescription: 'Item 1'
-    },
-    {
-      itemKey: 2,
-      itemDescription: 'Item 2'
-    },
-    {
-      itemKey: 3,
-      itemDescription: 'Item 3'
-    }
-  ];
-
   const [page, setPage] = React.useState(0); //for pages of table
+  const [itemsPerPage, setItemsPerPage] = React.useState(optionsPerPage[0]); //for items per page on table
+
   const [isModalVisible, setModalVisible] = React.useState(false); //to set modal on and off
-
-
 
   const toggleModal = () => { //to toggle model on and off -- function
     setModalVisible(!isModalVisible);
@@ -74,68 +65,30 @@ const EmployeeWarehouses = props => {
   const [search, setSearch] = React.useState(``) //for keeping track of search
   const onChangeSearch = (searchVal) => { //function to keep track of search as the user types
     setSearch(searchVal);
+
     setFilters({ ...filters, query: searchVal })
     console.log(search);
   }
 
   const searchFunc = () => {
-    //console.log(search); //printing search value for now
-    getWarehouses();
+    //printing search value for now
+    getStock()
   }
 
 
   // make a sale variables below:
-  const [warehouseName, setWarehouseName] = React.useState(``)
-  const [totalProducts, setTotalProducts] = React.useState(0)
-  const [stock, setStock] = React.useState(0)
-
-
-  const onChangeWarehouseName = (warehousename) => {
-    setWarehouseName(warehousename);
-  }
-
-  const onChangeTotalProducts = (totalproducts) => {
-    setTotalProducts(totalproducts);
-  }
-
-  const onChangeStock = (stocks) => {
-    setStock(stocks);
-  }
-
-  const addWarehouse = async () => {
-
-    const body = {
-      name: warehouseName,
-      totalProducts: totalProducts,
-      totalStock: stock
-    }
-    console.log(body)
-    console.log(`///////////////////////////////////////add warehouse`)
-
-    await axios.post(`${uri}/api/warehouse`, body,
-      {
-        headers: {
-          "Content-Type": "application/json"
-        }
-      }
-
-    )
-      .then(res => console.log(res))
-      .catch(err => console.log(err))
-
-    getWarehouses()
-    setModalVisible(false); //closing modal on done for now
-  }
-
-  const [itemsPerPage, setItemsPerPage] = React.useState(optionsPerPage[0]); //for items per page on table
-  const [touchedWarehouse, setTouchedWarehouse] = React.useState([])
+  const [serialNo, setSerialNo] = React.useState(``)
+  const [productName, setProductName] = React.useState(``)
+  const [amountVal, setAmountVal] = React.useState(0)
+  const [color, setColor] = React.useState(``)
+  const [brand, setBrand] = React.useState(``)
+  const [description, setDescription] = React.useState(``)
   const [isTableDetailModalVisible, setTableDetailModalVisible] = React.useState(false);
 
   const onPressModal = (prod) => {
     setTableDetailModalVisible(true),
-      setTouchedWarehouse(prod)
+      setTouchedProduct(prod)
   }
-
 
   const handleClose = () => {
     setTableDetailModalVisible(false)
@@ -146,57 +99,16 @@ const EmployeeWarehouses = props => {
 
   return (
     // <KeyboardAvoidingView style = {styles.containerView} behavior = "padding">
-
     <View>
-      <Modal
-        onSwipeComplete={() => setModalVisible(false)}
-        swipeDirection="left"
-        presentationStyle="overFullScreen"
-        transparent
-        visible={isModalVisible}>
-        <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-          <View style={styles.modalStyle}>
-            <View style={{ justifyContent: 'center', alignItems: 'center', }}>
-              <Text style={styles.modalTitle}>Add Warehouse</Text>
-              <View>
-                <TextInput onChangeText={onChangeWarehouseName} style={styles.input} placeholder="Name" autoCorrect={false} />
-                <TextInput onChangeText={onChangeTotalProducts} style={styles.input} placeholder="Total Products" autoCorrect={false} />
-                <TextInput onChangeText={onChangeStock} style={styles.input} placeholder="Total Stocks" autoCorrect={false} />
-              </View>
-              <View style={{ flexDirection: 'row', alignItems: 'center', top: 45 }}>
-                <TouchableOpacity style={{ alignSelf: 'flex-start' }} onPress={() => { setModalVisible(false) }}>
-                  <View>
-                    <View style={styles.buttonModalContainerCross}>
-                      <View>
-                        <Text style={styles.buttonModalText}>Cancel</Text>
-                      </View>
-                    </View>
-                  </View>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => { addWarehouse() }}>
-                  <View>
-                    <View style={styles.buttonModalContainer}>
-                      <View>
-                        <Text style={styles.buttonModalText}>Done</Text>
-                      </View>
-                    </View>
-                  </View>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </View>
-        </View>
-      </Modal>
-      <WarehouseDetailModal state={isTableDetailModalVisible} handleClose={handleClose} title='Warehouse Information' object={touchedWarehouse === [] ? [] : touchedWarehouse} getWarehouses={getWarehouses} occupation={'Admin'} />
+      <StockModal state={isTableDetailModalVisible} handleClose={handleClose} object={touchedProduct !== [] ? touchedProduct : null} title='Stock Detail' getStock={getStock} />
       <View style={styles.screen}>
         <View>
-          <Text style={styles.title}>Warehouses</Text>
+          <Text style={styles.title}>Stocks</Text>
         </View>
       </View>
       <View style={styles.containerButton}>
-        <TouchableOpacity onPress={() => { setModalVisible(true) }}>
+        <TouchableOpacity onPress={() => { showAddProductForm() }}>
           <View style={styles.buttonContainer}>
-            <Text style={styles.buttonText}>Add Warehouse</Text>
           </View>
         </TouchableOpacity>
         <View style={{ flexDirection: 'row', justifyContent: 'center', }}>
@@ -219,24 +131,32 @@ const EmployeeWarehouses = props => {
         </View>
 
       </View>
-      <ScrollView style={{ top: 30 }}>
+      <FilterButton />
+      <View style={{ flexDirection: 'row', }}>
+        <ScrollView>
         <DataTable>
           <DataTable.Header>
-            <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Name</Text></DataTable.Title>
-            <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Total Products</Text></DataTable.Title>
+            <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Serial No.</Text></DataTable.Title>
+            <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Product</Text></DataTable.Title>
+            <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Warehouse</Text></DataTable.Title>
             <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Stock</Text></DataTable.Title>
+            {/* <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Quantity</Text></DataTable.Title> */}
+            {/* <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Warehouse</Text></DataTable.Title> */}
 
           </DataTable.Header>
 
+
           {
-            warehouses.map((warehouse, i) => (
-              <TouchableOpacity key={i} onPress={() => onPressModal(warehouse)}>
+            products.map((product, i) => (
+              <TouchableOpacity key={i} onPress={() => onPressModal(product)}>
                 <DataTable.Row>
-                  <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{warehouse.name}</Text></DataTable.Cell>
-                  <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{warehouse.totalProducts}</Text></DataTable.Cell>
-                  <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{warehouse.totalStock}</Text></DataTable.Cell>
+                  <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{product.product === undefined ? 0 : product.product.serial}</Text></DataTable.Cell>
+                  <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{product.product === undefined ? 0 : product.product.title}</Text></DataTable.Cell>
+                  <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{product.warehouse === undefined ? '--' : product.warehouse.name}</Text></DataTable.Cell>
+                  <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{product === undefined ? '--' : product.stock}</Text></DataTable.Cell>
                 </DataTable.Row>
               </TouchableOpacity>
+
             ))
           }
 
@@ -253,16 +173,17 @@ const EmployeeWarehouses = props => {
           />
         </DataTable>
 
-      </ScrollView>
+        </ScrollView>
+      </View>
     </View>
-    // </KeyboardAvoidingView>
+    
 
 
   )
 }
 
 
-EmployeeWarehouses.navigationOptions = navigationData => {
+EmployeeStocks.navigationOptions = navigationData => {
   return {
     headerTitle: 'Zaki Sons',
     headerTitleAlign: 'center',
@@ -284,7 +205,7 @@ EmployeeWarehouses.navigationOptions = navigationData => {
   };
 };
 
-export default EmployeeWarehouses
+export default EmployeeStocks
 
 
 const styles = StyleSheet.create({
@@ -306,11 +227,12 @@ const styles = StyleSheet.create({
   modalStyle: {
     backgroundColor: "#fff",
     width: Dimensions.get('window').height > 900 ? 600 : 320,
-    height: Dimensions.get('window').height > 900 ? "35%" : "60%",
+    height: Dimensions.get('window').height > 900 ? 680 : 600,
     borderWidth: 2,
     borderRadius: 20,
     marginBottom: 20,
     borderColor: "#008394",
+    marginTop: Dimensions.get('window').height > 750 ? Dimensions.get('window').height * 0.1 : 0
   },
   subtitle: {
     color: '#008394',
@@ -326,8 +248,6 @@ const styles = StyleSheet.create({
   buttonContainer: {
     flexDirection: 'row',
     marginTop: Dimensions.get('window').height > 900 ? 80 : 60,
-    borderRadius: 40,
-    backgroundColor: '#00E0C7',
     paddingVertical: 12,
     paddingHorizontal: 32,
     left: 15
@@ -386,7 +306,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     fontSize: 12,
     borderColor: "#008394",
-    top: 60,
+    //top: 60,
     height: 40,
     padding: 10,
   },
@@ -441,14 +361,21 @@ const styles = StyleSheet.create({
   cells: {
     justifyContent: 'center',
     flexDirection: 'row',
-    flex: 1
+    flex: 1,
+    //paddingRight: 40,
+    alignItems: 'center',
+    alignContent: 'center',
   },
   tableText: {
     fontSize: Dimensions.get('window').height > 900 ? 18 : 14,
   },
   tableTitleText: {
     fontSize: Dimensions.get('window').height > 900 ? 18 : 14,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    justifyContent: 'center',
+    textAlign: 'center',
+    alignItems: 'center',
+    alignContent: 'center',
   },
   centeredView: {
     flex: 1,
@@ -476,5 +403,35 @@ const styles = StyleSheet.create({
     elevation: 5,
     width: Dimensions.get('window').height > 900 ? Dimensions.get('window').width * 0.7 : Dimensions.get('window').width * 0.80,
     height: Dimensions.get('window').height > 900 ? Dimensions.get('window').height * 0.5 : Dimensions.get('window').height * 0.60
+  },
+  addButton: {
+    borderRadius: 40,
+    backgroundColor: '#00E0C7',
+    height: 24,
+    width: 80,
+
+  },
+  modalbuttonText: {
+    fontWeight: 'bold',
+    color: 'white',
+    fontSize: 12,
+    marginTop: 3.5,
+  },
+  modalBody: {
+    paddingVertical: '30%',
+    paddingHorizontal: 10
+  },
+  backButtonModalContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignContent: 'space-between',
+    borderRadius: 40,
+    backgroundColor: '#008394',
+    paddingVertical: 8,
+    paddingHorizontal: 24,
+    top: Dimensions.get('window').height > 900 ? (Dimensions.get('window').width > 480 ? 35 : null) : null,
+    margin: 20,
+    display: 'flex',
+
   },
 })
