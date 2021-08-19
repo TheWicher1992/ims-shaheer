@@ -1,22 +1,46 @@
 import React, { useState, useEffect } from "react";
 import { Modal, StyleSheet, Text, View, TouchableOpacity, Dimensions, TextInput, Button } from "react-native";
-import SelectFilter from "./selectFilter";
-
-const FilterModal = props => {
+import ColorFilterModal from "./ColorFilterModal";
+import BrandFilterModal from "./BrandFilterModal";
+import WarehouseFilterModal from "./WarehouseFilterModal";
+import DateFilterModal from "./DateFilterModal";
+import QuantityFilterModal from "./QuantityFilterModal";
+import PriceFilterModal from "./PriceFilterModal";
+const ProductFilterModal = props => {
 
     const [modalVisible, setModalVisible] = useState(false);
-    const [selectFilterModal, setSelectFilterModal] = useState(false);
-
+    const [colorFilterModal, setColorFilterModal] = useState(false);
+    const [brandFilterModal, setBrandFilterModal] = useState(false);
+    const [warehouseFilterModal, setWarehouseFilterModal] = useState(false);
+    const [dateFilterModal, setDateFilterModal] = useState(false);
+    const [quantityFilterModal, setQuantityFilterModal] = useState(false);
+    const [priceFilterModal, setPriceFilterModal] = useState(false);
     useEffect(() => {
         setModalVisible(props.state);
+        
     }, [props.state]);
 
     function handleClose() {
         setModalVisible(false);
     }
 
-    const closeSelectFilterModal = () => {
-        setSelectFilterModal(false);
+    const closeColorFilterModal = () => {
+        setColorFilterModal(false);
+    }
+    const closeBrandFilterModal = () => {
+        setBrandFilterModal(false);
+    }
+    const closeWarehouseFilterModal = () => {
+        setWarehouseFilterModal(false);
+    }
+    const closeDateFilterModal = () => {
+        setDateFilterModal(false);
+    }
+    const closeQuantityFilterModal = () => {
+        setQuantityFilterModal(false);
+    }
+    const closePriceFilterModal = () => {
+        setPriceFilterModal(false);
     }
     return (
 
@@ -53,7 +77,7 @@ const FilterModal = props => {
                         </View>
 
                             
-                        <TouchableOpacity style = {styles.TextBox} onPress={() => setSelectFilterModal(true)}>
+                        <TouchableOpacity style = {styles.TextBox} onPress={() => setColorFilterModal(true)}>
                                 <View style={{ marginTop: '9.5%', paddingLeft: '5%' }}>
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                         <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-start' }}>
@@ -73,7 +97,7 @@ const FilterModal = props => {
 
                         
 
-                        <TouchableOpacity style = {styles.TextBox}>
+                        <TouchableOpacity  style = {styles.TextBox} onPress={() => setBrandFilterModal(true)}>
                                 <View style={{ marginTop: '9.5%', paddingLeft: '5%' }}>
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                         <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-start' }}>
@@ -91,7 +115,58 @@ const FilterModal = props => {
                         </TouchableOpacity>
 
 
-                        <TouchableOpacity style = {styles.TextBox}>
+                        <TouchableOpacity style = {styles.TextBox} onPress={() => setPriceFilterModal(true)}>
+                                <View style={{ marginTop: '9.5%', paddingLeft: '5%' }}>
+                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                                        <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-start' }}>
+                                            <Text style={styles.normalText}>
+                                                Price
+                                            </Text>
+                                        </View>
+                                        <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-end', paddingRight: '8%' }}>
+                                            <Text style={styles.sideText}>
+                                                All
+                                            </Text>
+                                        </View>
+                                    </View>
+                                </View>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity style = {styles.TextBox} onPress={() => setDateFilterModal(true)}>
+                                <View style={{ marginTop: '9.5%', paddingLeft: '5%' }}>
+                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                                        <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-start' }}>
+                                            <Text style={styles.normalText}>
+                                                Date
+                                            </Text>
+                                        </View>
+                                        <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-end', paddingRight: '8%' }}>
+                                            <Text style={styles.sideText}>
+                                                All
+                                            </Text>
+                                        </View>
+                                    </View>
+                                </View>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity style = {styles.TextBox} onPress = {() => setQuantityFilterModal(true)}>
+                                <View style={{ marginTop: '9.5%', paddingLeft: '5%' }}>
+                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                                        <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-start' }}>
+                                            <Text style={styles.normalText}>
+                                                Quantity
+                                            </Text>
+                                        </View>
+                                        <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-end', paddingRight: '8%' }}>
+                                            <Text style={styles.sideText}>
+                                                All
+                                            </Text>
+                                        </View>
+                                    </View>
+                                </View>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity style = {styles.TextBox} onPress={() => setWarehouseFilterModal(true)}>
                                 <View style={{ marginTop: '9.5%', paddingLeft: '5%' }}>
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                         <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-start' }}>
@@ -108,46 +183,12 @@ const FilterModal = props => {
                                 </View>
                         </TouchableOpacity>
 
-                        <TouchableOpacity style = {styles.TextBox}>
-                                <View style={{ marginTop: '9.5%', paddingLeft: '5%' }}>
-                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                                        <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-start' }}>
-                                            <Text style={styles.normalText}>
-                                                Time
-                                            </Text>
-                                        </View>
-                                        <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-end', paddingRight: '8%' }}>
-                                            <Text style={styles.sideText}>
-                                                All
-                                            </Text>
-                                        </View>
-                                    </View>
-                                </View>
-                        </TouchableOpacity>
-
-                        <TouchableOpacity style = {styles.TextBox}>
-                                <View style={{ marginTop: '9.5%', paddingLeft: '5%' }}>
-                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                                        <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-start' }}>
-                                            <Text style={styles.normalText}>
-                                                Ahmed is fucking great
-                                            </Text>
-                                        </View>
-                                        <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-end', paddingRight: '8%' }}>
-                                            <Text style={styles.sideText}>
-                                                All
-                                            </Text>
-                                        </View>
-                                    </View>
-                                </View>
-                        </TouchableOpacity>
-
                         <View style={styles.bottomBox}>
-                            <TouchableOpacity onPress = {() => props.handleClose()} style = {{width: '90%', position: "absolute",top: '20%'}}>
+                            <TouchableOpacity onPress = {() => props.handleClose()} style = {{width: '90%', position: "absolute",top: '5%'}}>
                                 <View style={styles.bottomButton}>
                                     <View>
                                         <Text style={styles.footerText}>
-                                            View Items
+                                            View Products 
                                         </Text>
                                     </View>
                                 </View>
@@ -158,7 +199,13 @@ const FilterModal = props => {
                     </View>
                 </View>
             </Modal>
-            <SelectFilter state = {selectFilterModal} handleClose = {closeSelectFilterModal} filters = {props}/>
+            <ColorFilterModal state = {colorFilterModal} handleClose = {closeColorFilterModal} title = "product" object = {props.object}/>
+            <BrandFilterModal state = {brandFilterModal} handleClose = {closeBrandFilterModal} title = "product" object = {props.object}/>
+            <WarehouseFilterModal state = {warehouseFilterModal} handleClose = {closeWarehouseFilterModal} title = "product" object = {props.object}/>
+            <DateFilterModal state = {dateFilterModal} handleClose = {closeDateFilterModal} title = "product" object = {props.object}/>
+            <QuantityFilterModal state = {quantityFilterModal} handleClose = {closeQuantityFilterModal} title = "product" object = {props.object}/>
+            <PriceFilterModal state = {priceFilterModal} handleClose = {closePriceFilterModal} title = "product" object = {props.object}/>
+
         </View>
     );
 };
@@ -261,4 +308,4 @@ const styles = StyleSheet.create({
 
 });
 
-export default FilterModal;
+export default ProductFilterModal;

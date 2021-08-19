@@ -8,7 +8,6 @@ import { DataTable } from 'react-native-paper';
 import Modal from 'react-native-modal';
 import PickerCheckBox from 'react-native-picker-checkbox';
 import TableDetailModal from '../components/TableDetailModal';
-import FilterModal from '../components/FilterModal';
 import FilterButton from '../components/FilterButton';
 import { Picker } from '@react-native-picker/picker';
 import { uri } from '../api.json'

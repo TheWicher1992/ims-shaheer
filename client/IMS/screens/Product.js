@@ -35,11 +35,13 @@ const Product = props => {
     sortBy: '*'
   })
 
+  const [query, setQuery] = useState('*')
+
   const getProducts = async () => {
 
 
     const res = await axios.get(
-      `${uri}/api/product/${filters.page}/${filters.query}/${filters.colour}/${filters.brand}/${filters.ware}/${filters.sort}/${filters.sortBy}`
+      `${uri}/api/product/${filters.page}/${query}/${filters.colour}/${filters.brand}/${filters.ware}/${filters.sort}/${filters.sortBy}`
     )
 
     setProducts(res.data.products)
@@ -86,8 +88,8 @@ const Product = props => {
   const [search, setSearch] = React.useState(``) //for keeping track of search
   const onChangeSearch = (searchVal) => { //function to keep track of search as the user types
     setSearch(searchVal);
-
-    setFilters({ ...filters, query: searchVal })
+    setQuery(searchVal)
+    // setFilters({ ...filters, query: searchVal })
     console.log(search);
   }
 
@@ -453,7 +455,7 @@ const Product = props => {
         </View>
 
       </View>
-      <FilterButton />
+      <FilterButton page="product" object={products} />
       <View style={{ flexDirection: 'row', }}>
         {/* <ScrollView horizontal = {true}> */}
         <DataTable>
