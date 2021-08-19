@@ -103,11 +103,15 @@ const [products,setProducts] = useState([])
   const [itemsPerPage, setItemsPerPage] = React.useState(optionsPerPage[0]); //for items per page on table
   const [isSelected, setSelection] = React.useState(false);
   const [isModalVisible, setModalVisible] = React.useState(false); //to set modal on and off
-
+  const [touchedOrder, setTouchedOrder] = React.useState([])
   const toggleModal = () => { //to toggle model on and off -- function
     setModalVisible(!isModalVisible);
   };
 
+  const onPressModal = (order) => {
+    setTableDetailModalVisible(true)
+    setTouchedOrder(order)
+  }
 
 
   React.useEffect(() => { //for table
@@ -269,7 +273,7 @@ const [products,setProducts] = useState([])
                 </View>
             </View>
         </Modal>
-        <DeliveryOrderModal state={isTableDetailModalVisible} handleClose={handleClose} title='Delivery Information' name='ABC' email='raahemasghar97@gmail.com' occupation="Employee" />
+        <DeliveryOrderModal state={isTableDetailModalVisible} handleClose={handleClose} title='Delivery Information' object={touchedOrder === [] ? [] : touchedOrder} getOrders={getOrders}/>
         <View style = {styles.screen}>
           <View>
             <Text style={styles.title}>Delivery Orders</Text>
@@ -316,13 +320,13 @@ const [products,setProducts] = useState([])
 
             {   
              orders.map((order,i) => (           
-            <TouchableOpacity onPress={() => setTableDetailModalVisible(true)}>
+            <TouchableOpacity key={i} onPress={() => onPressModal(order)}>
               <DataTable.Row>
                 <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{order.product.title === null ? '--' : order.product.title}</Text></DataTable.Cell>
                 <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{order.client.userName === undefined ? '--' : order.client.userName}</Text></DataTable.Cell>
                 <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{order.quantity === undefined ? '--' : order.quantity}</Text></DataTable.Cell>
                 <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{order.location === undefined ? '--' : order.location}</Text></DataTable.Cell>
-                <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{order.deliveryStatus === null ? '--' : order.deliveryStatus}</Text></DataTable.Cell>
+                {order.status === true ? <DataTable.Cell style={styles.cells}><Ionicons name={'checkmark'} size={25} color={'#006270'}/></DataTable.Cell> : <DataTable.Cell style={styles.cells}><Entypo name={'cross'} size={25} color={'red'}/></DataTable.Cell>}
               </DataTable.Row>
             </TouchableOpacity>
                ))

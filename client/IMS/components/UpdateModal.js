@@ -1,10 +1,31 @@
 import React, { useState, useEffect } from "react";
 import { Modal, StyleSheet, Text, View, TouchableOpacity, Dimensions, TextInput } from "react-native";
 import {Picker} from '@react-native-picker/picker';
+import axios from 'axios'
+import { uri } from '../api.json'
 
 const UpdateModal = props => {
   const [modalVisible, setModalVisible] = useState(false);
-  //console.log('hete')
+  const [warehouses, setWarehouses] = useState([])
+  const [id, setID] = useState(``)
+  const [selectedWarehouse, setSelectedWarehouse] = useState(id)
+  const [filters, setFilters] = useState({
+    page: 1,
+    query: '*',
+    sort: '*',
+    sortBy: '*'
+  })
+
+  const getWarehouses = async () => {
+    const res = await axios.get(
+      `${uri}/api/warehouse/${filters.page}/${filters.query}/${filters.sort}/${filters.sortBy}`
+    )
+    setWarehouses(res.data.warehouse.reverse())
+    setID(res.data.warehouse[0]._id)
+  }
+  useEffect(() => {
+    getWarehouses()
+  }, [])
   useEffect(() => {
     setModalVisible(props.state);
   }, [props.state]);
@@ -12,6 +33,30 @@ const UpdateModal = props => {
   function handleClose() {
     setModalVisible(false);
   }
+
+  const shiftOnSubmit = () => {
+    // props.handleClose()
+    const body = {
+      sourceID: props.id,
+      destID: selectedWarehouse,
+      productID: props.prodID,
+      quantity: props.quantity,
+      type: 'delivery'
+    }
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json"
+      }
+    }
+
+    axios.post(`${uri}/api/product/move`, body, config)
+      .then(() => console.log('done'))
+      .catch(err => console.log(err.response))
+      .finally(() => props.handleClose())
+
+  }
+
   return (
     
     <View style={styles.centeredView}>
@@ -32,10 +77,12 @@ const UpdateModal = props => {
                     <Text style={styles.modalTitle}>{props.title}</Text>
                     <View style={styles.modalBody}>
                       <View style={{borderWidth: 2, borderRadius: 40,borderColor: "#008394",width: Dimensions.get('window').width * 0.65, top: Dimensions.get('window').height * 0.03, height: 40, fontSize: 8,  }}> 
-                        <Picker selectedValue='wa' style={{top:6, color: 'grey', fontFamily: 'Roboto'}}>
-                          <Picker.Item label="Warehouse A" value="wa" />
-                          <Picker.Item label="Warehouse B" value="wb" />
-                          <Picker.Item label="Warehouse C" value="wc" />
+                        <Picker style={{top:6, color: 'grey', fontFamily: 'Roboto'}} selectedValue = {selectedWarehouse} onValueChange={(itemValue, itemIndex) =>
+                              setSelectedWarehouse(itemValue)
+                            } >
+                          {warehouses.map((warehouse, i) => (
+                            <Picker.Item label= {warehouses === [] ? null : warehouse.name} value={warehouse._id} key = {selectedWarehouse}/>
+                          ))}
                         </Picker>
                         </View>
                     </View>
@@ -45,7 +92,7 @@ const UpdateModal = props => {
                                 <Text style={styles.buttonModalText}>Back</Text>
                             </View>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={() => props.handleClose()}>
+                        <TouchableOpacity onPress={() => shiftOnSubmit()}>
                             <View style={styles.backButtonModalContainer}>
                                 <Text style={styles.buttonModalText}>Done</Text>
                             </View>

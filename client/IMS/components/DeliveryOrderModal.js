@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Modal, StyleSheet, Text, View, TouchableOpacity, Dimensions } from "react-native";
 import UpdateModal from "./UpdateModal";
+import axios from 'axios'
+import { uri } from '../api.json'
 const DeliveryOrderModal = props => {
   const [modalVisible, setModalVisible] = useState(false);
   const [isUpdateModalVisible, setUpdateModalVisible] = React.useState(false);
-  console.log('hete', Dimensions.get('window').width)
+  const [warehouses, setWarehouses] = useState([])
+  
   useEffect(() => {
     setModalVisible(props.state);
   }, [props.state]);
@@ -19,7 +22,7 @@ const DeliveryOrderModal = props => {
   return (
     
     <View style={styles.centeredView}>
-        <UpdateModal state={isUpdateModalVisible} handleClose={handleCloseUpdate} title='Select Warehouse' name='Raahem Asghar' email='raahemasghar97@gmail.com' occupation="Employee" />
+        <UpdateModal state={isUpdateModalVisible} handleClose={handleCloseUpdate} title='Select Warehouse' id={props.object !== [] ? props.object._id : ``} prodID = {props.object.product!==undefined ? props.object.product._id : ``} quantity={props.object !== [] ? props.object.quantity : 0}/>
         <Modal
             animationType="slide"
             transparent={true}
@@ -35,18 +38,18 @@ const DeliveryOrderModal = props => {
                     <Text style={styles.modalTitle}>{props.title}</Text>
                     <View style={styles.modalBody}>
                       {
-                        // props.object !== [] ? (props.object.map((obj, i) => (
-                        //   <View key={i}>
-                        //   <Text style={styles.bodyText}>{Object.keys(obj).find(key => obj[key] === obj.userName)}: {obj.userName}</Text>
-                        //   <Text style={styles.bodyText}>{Object.keys(obj).find(key => obj[key] === obj.balance)}: {obj.balance}</Text>
-                        //   <Text style={styles.bodyText}>{Object.keys(obj).find(key => obj[key] === obj.phone)}: {obj.phone}</Text>
-                        //   {/* <Text style={styles.bodyText}>{Object.keys(obj).find(key => obj[key] === obj.date)}: {obj.date}</Text> */}
-                        //   </View>
-                        // ))) : (null)
+                        props.object !== [] ? (
+                          <View>
+                          <Text style={styles.bodyText}>Date: {props.object.date}</Text>
+                          <Text style={styles.bodyText}>Product: {props.object.product === undefined ? '--' : props.object.product.title}</Text>
+                          <Text style={styles.bodyText}>Client: {props.object.client === undefined ? '--' : props.object.client.userName}</Text>
+                          <Text style={styles.bodyText}>Quantity: {props.object.quantity}</Text>
+                          <Text style={styles.bodyText}>Location: {props.object.location}</Text>
+                          <Text style={styles.bodyText}>Note: {props.object.note}</Text>
+                          <Text style={styles.bodyText}>Status: {props.object.status === true ? 'Delivered' : 'Pending'}</Text>
+                          </View>
+                        ) : (null)
                       }
-                          <Text style={styles.bodyText}>Name: Raahem</Text>
-                          <Text style={styles.bodyText}>Occupation: King</Text>
-                          <Text style={styles.bodyText}>Email: raahemasghar97@gmail.com</Text>
                     </View>
                     <View style={{flexDirection: 'row', justifyContent: 'space-evenly', alignItems : 'center'}}>
                         <TouchableOpacity onPress={() => props.handleClose()}>
@@ -87,7 +90,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Roboto',
     fontWeight: 'bold',
     fontSize: Dimensions.get('window').height > 900 ? (Dimensions.get('window').width > 480 ? 28 : 21): 24,
-    top: 15,
+    top: Dimensions.get('window').height > 900 ? 15 : 0,
   },
   //Dimensions.get('window').height < 900 ? Dimensions.get('window').height * 0.11 : Dimensions.get('window').height * 0.1
   buttonModalContainer : {
@@ -98,7 +101,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#00E0C7',
     paddingVertical: 8,
     paddingHorizontal: 24,
-    top: Dimensions.get('window').height > 900 ? 35 : 15,
+    top: Dimensions.get('window').height > 900 ? 35 : 25,
     margin: 20,
     display: 'flex',
 
@@ -111,7 +114,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#008394',
     paddingVertical: 8,
     paddingHorizontal: 24,
-    top: Dimensions.get('window').height > 900 ? 35 : 15,
+    top: Dimensions.get('window').height > 900 ? 35 : 25,
     margin: 20,
     display: 'flex',
     
@@ -142,7 +145,7 @@ const styles = StyleSheet.create({
     marginTop: 22
   },
   modalBody:{
-    paddingVertical:'30%',
+    paddingVertical: Dimensions.get('window').height > 900 ? "15%" : null,
     paddingHorizontal:10
   },
   modalView: {
