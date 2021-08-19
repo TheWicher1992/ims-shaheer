@@ -13,7 +13,7 @@ import axios from "axios"
 
 const optionsPerPage = [2, 3, 4];
 
-const Stocks = props => {
+const EmployeeStocks = props => {
 
 
   const [products, setProducts] = useState([])
@@ -183,7 +183,7 @@ const Stocks = props => {
 }
 
 
-Stocks.navigationOptions = navigationData => {
+EmployeeStocks.navigationOptions = navigationData => {
   return {
     headerTitle: 'Zaki Sons',
     headerTitleAlign: 'center',
@@ -205,7 +205,7 @@ Stocks.navigationOptions = navigationData => {
   };
 };
 
-export default Stocks
+export default EmployeeStocks
 
 
 const styles = StyleSheet.create({

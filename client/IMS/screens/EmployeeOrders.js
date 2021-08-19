@@ -1,48 +1,119 @@
 import * as React from 'react';
-import { StyleSheet, Text, View, Button, Dimensions, TextInput, TouchableOpacity, KeyboardAvoidingView, ScrollView, CheckBox } from 'react-native'; 
+import { useState, useEffect } from 'react';
+import { StyleSheet, Text, View, Button, Dimensions, TextInput, TouchableOpacity, KeyboardAvoidingView, ScrollView, CheckBox } from 'react-native';
 import HeaderButton from '../components/HeaderButton';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { FontAwesome } from '@expo/vector-icons';
 import { DataTable } from 'react-native-paper';
 import Modal from 'react-native-modal';
-import PickerCheckBox from 'react-native-picker-checkbox';
+import { Picker } from '@react-native-picker/picker';
 import DeliveryOrderModal from '../components/DeliveryOrderModal';
 import FilterButton from '../components/FilterButton';
-
+import { Ionicons } from '@expo/vector-icons';
+import { Entypo } from '@expo/vector-icons';
+import { uri } from '../api.json'
+import axios from "axios"
 
 const optionsPerPage = [2, 3, 4];
 
-const DeliveryOrders = props => {
+const EmployeeOrders = props => {
+  const [orders, setOrders] = useState([])
+  const [products, setProducts] = useState([])
+  const [clients, setClients] = useState([])
+
+  const [Pfilters, setPFilters] = useState({
+    page: 1,
+    query: '*',
+    colour: '*',
+    brand: '*',
+    ware: '*',
+    sort: '*',
+    sortBy: '*'
+  })
+
+  const getOrders = async () => {
+    const res = await axios.get(
+      `${uri}/api/order`
+    )
+
+    console.log('logging arriving order', res.data.deliveryOrder)
+    setOrders(res.data.deliveryOrder)
+
+  }
+
+  const getProducts = async () => {
+    const res = await axios.get(
+      `${uri}/api/product/${Pfilters.page}/${Pfilters.query}/${Pfilters.colour}/${Pfilters.brand}/${Pfilters.ware}/${Pfilters.sort}/${Pfilters.sortBy}`
+    )
+
+
+    setProducts(res.data.products)
+
+
+
+  }
+
+
+  const getClients = async () => {
+    const res = await axios.get(
+      `${uri}/api/client/*`
+    )
+
+
+    setClients(res.data.clients)
+
+
+  }
+
+  useEffect(() => {
+    console.log('deli')
+    getClients()
+    getProducts()
+    getOrders()
+
+  }, [])
+
+  // useEffect(() => {
+  // }, [])
+
+
+
+  // useEffect(() => {
+  // },[])
 
 
   const handleConfirm = (pItems) => { // temporary for picker
     console.log('pItems =>', pItems);
   }
- 
+
   const items = [ //temporary for picker for filter
     {
-      itemKey:1,
-      itemDescription:'Item 1'
-      },
+      itemKey: 1,
+      itemDescription: 'Item 1'
+    },
     {
-      itemKey:2,
-      itemDescription:'Item 2'
-      },
+      itemKey: 2,
+      itemDescription: 'Item 2'
+    },
     {
-      itemKey:3,
-      itemDescription:'Item 3'
-      }
+      itemKey: 3,
+      itemDescription: 'Item 3'
+    }
   ];
 
   const [page, setPage] = React.useState(0); //for pages of table
   const [itemsPerPage, setItemsPerPage] = React.useState(optionsPerPage[0]); //for items per page on table
   const [isSelected, setSelection] = React.useState(false);
   const [isModalVisible, setModalVisible] = React.useState(false); //to set modal on and off
-
+  const [touchedOrder, setTouchedOrder] = React.useState([])
   const toggleModal = () => { //to toggle model on and off -- function
     setModalVisible(!isModalVisible);
   };
 
+  const onPressModal = (order) => {
+    setTableDetailModalVisible(true)
+    setTouchedOrder(order)
+  }
 
 
   React.useEffect(() => { //for table
@@ -60,7 +131,7 @@ const DeliveryOrders = props => {
     console.log(search); //printing search value for now
   }
 
-  
+
   // make a sale variables below:
   const [productName, setProductName] = React.useState(``)
   const [quantityVal, setQuantityVal] = React.useState(0)
@@ -91,176 +162,224 @@ const DeliveryOrders = props => {
 
 
   const addDeliveryOrder = () => {
-    console.log(productName);
-    console.log(quantityVal);
-    console.log(location);
-    console.log(clientName);
-    console.log(notes);
     setModalVisible(false); //closing modal on done for now
+    console.log('Printing productName', productName)
+    const body = {
+      productID: productName,
+      quantity: quantityVal,
+      location: location,
+      clientID: clientName,
+      note: notes
+    }
+
+    console.log(body)
+
+    axios.post(`${uri}/api/order`, body, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+      .then(res => getOrders())
+      .catch(err => console.log(err))
   }
-  
+
 
   const [isTableDetailModalVisible, setTableDetailModalVisible] = React.useState(false);
 
-  const handleClose = ()=>{
+  const handleClose = () => {
     setTableDetailModalVisible(false)
   }
 
 
 
 
-    return(
-      // <KeyboardAvoidingView style = {styles.containerView} behavior = "padding">
-      
-      <View>
-        <Modal
-            onSwipeComplete={() => setModalVisible(false)}
-            swipeDirection="left"
-            presentationStyle="overFullScreen"
-            transparent
-            visible={isModalVisible}>
-            <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-                <View style={styles.modalStyle}>
-                  <View style = {{justifyContent: 'center', alignItems : 'center', }}>
-                      <Text style = {styles.modalTitle}>Add Order</Text>
-                      <View>
-                        <TextInput onChangeText={onChangeProductName} style={styles.input} placeholder="Product" autoCorrect={false} />
-                        <TextInput onChangeText={onChangeQuantity} style={styles.input} placeholder="Quantity" autoCorrect={false} />
-                        <TextInput onChangeText={onChangeLocation} style={styles.input} placeholder="Location" autoCorrect={false} />
-                        <TextInput onChangeText={onChangeClientName} style={styles.input} placeholder="Client" autoCorrect={false} />
-                        <TextInput onChangeText={onChangeNotes} style={styles.input} placeholder="Notes" autoCorrect={false} />
-                      </View>
-                      <View style = {{flexDirection: 'row',  alignItems : 'center', top: 45}}>
-                        <TouchableOpacity style={{alignSelf: 'flex-start'}} onPress = {() => {setModalVisible(false)}}>
-                          <View>
-                            <View style={styles.buttonModalContainerCross}>
-                              <View>
-                                <Text style={styles.buttonModalText}>Cancel</Text>
-                              </View>
-                            </View>
-                          </View>
-                        </TouchableOpacity>   
-                        <TouchableOpacity onPress = {() => {addDeliveryOrder()}}>
-                          <View>
-                            <View style={styles.buttonModalContainer}>
-                              <View>
-                                <Text style={styles.buttonModalText}>Done</Text>
-                              </View>
-                            </View>
-                          </View>
-                        </TouchableOpacity>
-                      </View>
-                  </View>
+  return (
+    // <KeyboardAvoidingView style = {styles.containerView} behavior = "padding">
+
+    <View>
+      <Modal
+        onSwipeComplete={() => setModalVisible(false)}
+        swipeDirection="left"
+        presentationStyle="overFullScreen"
+        transparent
+        visible={isModalVisible}>
+        <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+          <View style={styles.modalStyle}>
+            <View style={{ justifyContent: 'center', alignItems: 'center', }}>
+              <Text style={styles.modalTitle}>Add Order</Text>
+              <View>
+                <View style={{ marginTop: 40, borderWidth: 2, borderRadius: 40, borderColor: "#008394", width: Dimensions.get('window').width * 0.65, height: 40, fontSize: 8, justifyContent: 'space-between' }}>
+
+                  <Picker
+                    style={{ top: 6, color: 'grey', fontFamily: 'Roboto' }}
+                    itemStyle={{ fontWeight: '100' }}
+                    placeholder="Select a Product"
+                    selectedValue={productName}
+                    onValueChange={(itemValue, itemIndex) =>
+                      setProductName(itemValue)
+                    }
+                  >
+                    {
+                      products.map((product, i) => (
+
+                        <Picker.Item label={product.title === undefined ? 0 : product.title} value={product._id === undefined ? 0 : product._id} key={product._id === undefined ? 0 : product._id} />
+
+                      ))}
+                  </Picker>
+
                 </View>
+                <TextInput onChangeText={onChangeQuantity} style={styles.input} placeholder="Quantity" autoCorrect={false} />
+                <TextInput onChangeText={onChangeLocation} style={styles.input} placeholder="Location" autoCorrect={false} />
+                <TextInput multiline={true} numberOfLines={5} onChangeText={onChangeNotes} style={styles.input} placeholder="Notes" autoCorrect={false} />
+
+                <View style={{ borderWidth: 2, borderRadius: 40, borderColor: "#008394", width: Dimensions.get('window').width * 0.65, height: 40, fontSize: 8, justifyContent: 'space-between', marginTop: 60 }}>
+                  <Picker
+                    style={{ top: 6, color: 'grey', fontFamily: 'Roboto' }}
+                    itemStyle={{ fontWeight: '100' }}
+                    placeholder="Select a Client"
+                    selectedValue={clientName}
+                    onValueChange={(itemValue, itemIndex) =>
+                      setClientName(itemValue)
+                    }
+                  >
+                    {
+                      clients.map((client, i) => (
+                        <Picker.Item label={client.userName === undefined ? 0 : client.userName} value={client._id === undefined ? 0 : client._id} />
+                      ))}
+                  </Picker>
+                </View>
+
+
+              </View>
+              <View style={{ flexDirection: 'row', alignItems: 'center', }}>
+                <TouchableOpacity style={{ alignSelf: 'flex-start' }} onPress={() => { setModalVisible(false) }}>
+                  <View>
+                    <View style={styles.buttonModalContainerCross}>
+                      <View>
+                        <Text style={styles.buttonModalText}>Cancel</Text>
+                      </View>
+                    </View>
+                  </View>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => { addDeliveryOrder() }}>
+                  <View>
+                    <View style={styles.buttonModalContainer}>
+                      <View>
+                        <Text style={styles.buttonModalText}>Done</Text>
+                      </View>
+                    </View>
+                  </View>
+                </TouchableOpacity>
+              </View>
             </View>
-        </Modal>
-        <DeliveryOrderModal state={isTableDetailModalVisible} handleClose={handleClose} title='Delivery Order' name='ABC1234' email='raahemasghar97@gmail.com' occupation="Employee" />
-        <View style = {styles.screen}>
-          <View>
-            <Text style={styles.title}>Delivery Orders</Text>
           </View>
         </View>
-        <View style = {styles.containerButton}>
-          <TouchableOpacity onPress = {() => {setModalVisible(true)}}>
-            <View style={styles.buttonContainer}>
-              <Text style={styles.buttonText}>Add a Order</Text>
-            </View>
-          </TouchableOpacity>
-          <View style = {{flexDirection: 'row', justifyContent: 'center',}}>
-            <View style = {styles.searchBar}>
-              <TextInput onChangeText={onChangeSearch}  style={styles.buttonInput} placeholder="type here..." autoCorrect={false} />
-            </View>
-            <View style = {{top:14}}>
-            <TouchableOpacity onPress = {() => { searchFunc() }}>
-              <View style = {styles.searchButton}>   
-                  <FontAwesome
-                    name = {"search"}
-                    size = {16}
-                    color = {"#006270"}
-                    style = {{right: 10, top: 3}}
-                  />                  
-                  <Text style = {styles.searchButtonText}>Search</Text>             
+      </Modal>
+      <DeliveryOrderModal state={isTableDetailModalVisible} handleClose={handleClose} title='Delivery Information' object={touchedOrder === [] ? [] : touchedOrder} getOrders={getOrders} />
+      <View style={styles.screen}>
+        <View>
+          <Text style={styles.title}>Delivery Orders</Text>
+        </View>
+      </View>
+      <View style={styles.containerButton}>
+        <TouchableOpacity onPress={() => { setModalVisible(true) }}>
+          <View style={styles.buttonContainer}>
+            <Text style={styles.buttonText}>Add a Order</Text>
+          </View>
+        </TouchableOpacity>
+        <View style={{ flexDirection: 'row', justifyContent: 'center', }}>
+          <View style={styles.searchBar}>
+            <TextInput onChangeText={onChangeSearch} style={styles.buttonInput} placeholder="type here..." autoCorrect={false} />
+          </View>
+          <View style={{ top: 14 }}>
+            <TouchableOpacity onPress={() => { searchFunc() }}>
+              <View style={styles.searchButton}>
+                <FontAwesome
+                  name={"search"}
+                  size={16}
+                  color={"#006270"}
+                  style={{ right: 10, top: 3 }}
+                />
+                <Text style={styles.searchButtonText}>Search</Text>
               </View>
             </TouchableOpacity>
-            </View> 
           </View>
-
         </View>
 
-        <FilterButton/>
-        <ScrollView>
-        
-          <DataTable>
-            <DataTable.Header>
-              <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Product</Text></DataTable.Title>
-              <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Client</Text></DataTable.Title>
-              <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Quantity</Text></DataTable.Title>
-              <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Location</Text></DataTable.Title>
-              <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Status</Text></DataTable.Title>
-            </DataTable.Header>
+      </View>
 
-            {/* <TouchableOpacity onPress={() => setTableDetailModalVisible(true)}> */}
-              <DataTable.Row>
-              <TouchableOpacity style={styles.cells} onPress={() => setTableDetailModalVisible(true)}><DataTable.Cell style={styles.cells}><Text style={styles.tableText} numberOfLines={2}>09/08/2021{'\n'}ABC34013-133</Text></DataTable.Cell></TouchableOpacity>
-              <TouchableOpacity style={styles.cells} onPress={() => setTableDetailModalVisible(true)}><DataTable.Cell style={styles.cells}><Text style={styles.tableText}>Raahem</Text></DataTable.Cell></TouchableOpacity>
-              <TouchableOpacity style={styles.cells} onPress={() => setTableDetailModalVisible(true)}><DataTable.Cell style={styles.cells}><Text style={styles.tableText}>69000</Text></DataTable.Cell></TouchableOpacity>
-              <TouchableOpacity style={styles.cells} onPress={() => setTableDetailModalVisible(true)}><DataTable.Cell style={styles.cells}><Text style={styles.tableText}>Model Town, Lahore</Text></DataTable.Cell></TouchableOpacity>
-                <DataTable.Cell style={styles.cells}>
-                    <View style={styles.checkboxContainer}>
-        <CheckBox
-          value={isSelected}
-          onValueChange={setSelection}
-          style={styles.checkbox}
-        />
-            </View>
-            </DataTable.Cell>
-              </DataTable.Row>
-            {/* </TouchableOpacity> */}
-            <DataTable.Pagination
-              page={page}
-              numberOfPages={3}
-              onPageChange={(page) => setPage(page)}
-              label="1-2 of 6"
-              optionsPerPage={optionsPerPage}
-              itemsPerPage={itemsPerPage}
-              setItemsPerPage={setItemsPerPage}
-              showFastPagination
-              optionsLabel={'Rows per page'}
-            />
-          </DataTable>
+      <FilterButton />
+      <ScrollView>
 
-        </ScrollView>
-      </View>        
-      // </KeyboardAvoidingView>
-        
-        
-    )
+        <DataTable>
+          <DataTable.Header>
+            <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Product</Text></DataTable.Title>
+            <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Client</Text></DataTable.Title>
+            <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Quantity</Text></DataTable.Title>
+            <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Location</Text></DataTable.Title>
+            <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Status</Text></DataTable.Title>
+          </DataTable.Header>
+
+          {
+            orders.map((order, i) => (
+              <TouchableOpacity key={i} onPress={() => onPressModal(order)}>
+                <DataTable.Row>
+                  <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{order.product.title === null ? '--' : order.product.title}</Text></DataTable.Cell>
+                  <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{order.client.userName === undefined ? '--' : order.client.userName}</Text></DataTable.Cell>
+                  <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{order.quantity === undefined ? '--' : order.quantity}</Text></DataTable.Cell>
+                  <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{order.location === undefined ? '--' : order.location}</Text></DataTable.Cell>
+                  {order.status === true ? <DataTable.Cell style={styles.cells}><Ionicons name={'checkmark'} size={25} color={'#006270'} /></DataTable.Cell> : <DataTable.Cell style={styles.cells}><Entypo name={'cross'} size={25} color={'red'} /></DataTable.Cell>}
+                </DataTable.Row>
+              </TouchableOpacity>
+            ))
+
+          }
+
+          <DataTable.Pagination
+            page={page}
+            numberOfPages={3}
+            onPageChange={(page) => setPage(page)}
+            label="1-2 of 6"
+            optionsPerPage={optionsPerPage}
+            itemsPerPage={itemsPerPage}
+            setItemsPerPage={setItemsPerPage}
+            showFastPagination
+            optionsLabel={'Rows per page'}
+          />
+        </DataTable>
+
+      </ScrollView>
+    </View>
+    // </KeyboardAvoidingView>
+
+
+  )
 }
 
-DeliveryOrders.navigationOptions = navigationData => {
-    return {
-        headerTitle: 'Zaki Sons',
-        headerTitleAlign: 'center',
-        headerTitleStyle: { color: 'white' },
-        headerStyle: {
-            backgroundColor: '#008394',
-        },
-        headerLeft: (
-            <HeaderButtons HeaderButtonComponent={HeaderButton}>
-              <Item
-                title="Menu"
-                iconName="ios-menu"
-                onPress={() => {
-                    navigationData.navigation.toggleDrawer();
-                  }}
-              />
-            </HeaderButtons>
-        ),
-    };
+EmployeeOrders.navigationOptions = navigationData => {
+  return {
+    headerTitle: 'Zaki Sons',
+    headerTitleAlign: 'center',
+    headerTitleStyle: { color: 'white' },
+    headerStyle: {
+      backgroundColor: '#008394',
+    },
+    headerLeft: (
+      <HeaderButtons HeaderButtonComponent={HeaderButton}>
+        <Item
+          title="Menu"
+          iconName="ios-menu"
+          onPress={() => {
+            navigationData.navigation.toggleDrawer();
+          }}
+        />
+      </HeaderButtons>
+    ),
   };
+};
 
 
-export default DeliveryOrders
+export default EmployeeOrders
 
 
 const styles = StyleSheet.create({
@@ -271,7 +390,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: Dimensions.get('window').height === 1232 ? 36 : 28,
   },
-  modalTitle : {
+  modalTitle: {
     color: '#006270',
     fontSize: 30,
     fontFamily: 'Roboto',
@@ -282,7 +401,7 @@ const styles = StyleSheet.create({
   modalStyle: {
     backgroundColor: "#fff",
     width: Dimensions.get('window').height > 900 ? 600 : 320,
-    height: Dimensions.get('window').height > 900 ? 540: 480,
+    height: Dimensions.get('window').height > 900 ? 540 : 480,
     borderWidth: 2,
     borderRadius: 20,
     marginBottom: 20,
@@ -310,11 +429,11 @@ const styles = StyleSheet.create({
     // right: Dimensions.get('window').width / 5
     // we can also change the container to center and implement the right styling
   },
-  buttonModalContainer : {
+  buttonModalContainer: {
     justifyContent: 'center',
     alignItems: 'center',
     alignContent: 'space-between',
-    borderRadius : 40,
+    borderRadius: 40,
     backgroundColor: '#00E0C7',
     paddingVertical: 8,
     paddingHorizontal: 24,
@@ -322,11 +441,11 @@ const styles = StyleSheet.create({
     margin: 20,
     display: 'flex'
   },
-  buttonModalContainerCross : {
+  buttonModalContainerCross: {
     justifyContent: 'center',
     alignItems: 'center',
     alignContent: 'space-between',
-    borderRadius : 40,
+    borderRadius: 40,
     backgroundColor: '#ff0000',
     paddingVertical: 8,
     paddingHorizontal: 24,
@@ -334,7 +453,7 @@ const styles = StyleSheet.create({
     margin: 20,
     display: 'flex'
   },
-  buttonModalText :{
+  buttonModalText: {
     color: '#ffffff',
     fontSize: 16,
     fontFamily: 'Roboto',
@@ -342,15 +461,15 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 24,
     textAlign: 'center',
-    color:'white',
+    color: 'white',
     fontWeight: 'bold'
   },
-  container :{
+  container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  containerButton:{
+  containerButton: {
     alignItems: 'flex-start',
     justifyContent: 'flex-start',
   },
@@ -359,7 +478,7 @@ const styles = StyleSheet.create({
     borderColor: 'gray',
     borderWidth: 2,
     borderRadius: 40,
-    marginBottom:20,
+    marginBottom: 20,
     fontSize: 12,
     borderColor: "#008394",
     top: 60,
@@ -372,7 +491,7 @@ const styles = StyleSheet.create({
     borderColor: 'gray',
     borderWidth: 2,
     borderRadius: 4,
-    marginBottom:20,
+    marginBottom: 20,
     fontSize: 12,
     borderColor: "#008394",
   },
@@ -381,8 +500,8 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     flexDirection: 'row',
     bottom: 30,
-    left: Dimensions.get('window').height > 900 ? Dimensions.get('window').width /11:0,
-    
+    left: Dimensions.get('window').height > 900 ? Dimensions.get('window').width / 11 : 0,
+
   },
   searchButton: {
     flexDirection: 'row',
@@ -395,9 +514,9 @@ const styles = StyleSheet.create({
     right: 20,
   },
   searchButtonText: {
-    fontSize:15,
+    fontSize: 15,
     textAlign: 'center',
-    color:'white',
+    color: 'white',
     fontWeight: 'bold',
   },
   buttonInput: {
@@ -405,7 +524,7 @@ const styles = StyleSheet.create({
     borderColor: 'gray',
     borderWidth: 2,
     borderRadius: 40,
-    marginBottom:20,
+    marginBottom: 20,
     fontSize: 14,
     borderColor: "#008394",
     top: 60,
@@ -415,7 +534,7 @@ const styles = StyleSheet.create({
     paddingBottom: 13,
   },
   cells: {
-    justifyContent:'center', 
+    justifyContent: 'center',
     flexDirection: 'row',
     flex: 1
   },
@@ -432,9 +551,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 22
   },
-  modalBody:{
-    paddingVertical:Dimensions.get('window').height < 900 ? Dimensions.get('window').height * 0.11 : Dimensions.get('window').height * 0.1,
-    paddingHorizontal:10
+  modalBody: {
+    paddingVertical: Dimensions.get('window').height < 900 ? Dimensions.get('window').height * 0.11 : Dimensions.get('window').height * 0.1,
+    paddingHorizontal: 10
   },
   modalView: {
     margin: 20,
@@ -451,7 +570,7 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
     width: Dimensions.get('window').height > 900 ? Dimensions.get('window').width * 0.7 : Dimensions.get('window').width * 0.80,
-    height: Dimensions.get('window').height > 900 ? Dimensions.get('window').height* 0.5 : Dimensions.get('window').height * 0.60
+    height: Dimensions.get('window').height > 900 ? Dimensions.get('window').height * 0.5 : Dimensions.get('window').height * 0.60
   },
   checkbox: {
     alignSelf: "center",

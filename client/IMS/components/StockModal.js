@@ -1,32 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { Alert, Modal, StyleSheet, Text, View, TouchableOpacity, Dimensions, KeyboardAvoidingView, ScrollView } from "react-native";
 import ShiftWarehouseModal from "./ShiftWarehouseModal";
-import { uri } from '../api.json'
-import axios from "axios"
 
 const StockModal = props => {
   const [modalVisible, setModalVisible] = useState(false);
   const [isUpdateModalVisible, setUpdateModalVisible] = React.useState(false);
-  const [stock, setStock] = useState([])
-  useEffect(() => {
-    setModalVisible(props.state);
-  }, [props.state]);
-  const getStock = async () => {
-    
-    const res = await axios.get(
-      `${uri}/api/product/stock/${props.object._id}`
-    )
-    setStock(res.data.stocks.reverse())
-    console.log('idddd', res.data)
-    //setSelectedProduct(res.data.warehouse[0]._id)
-  }
-//   useEffect(() => {
-//     getStock()
-//   }, [])
   const handleCloseUpdate = () => {
     setUpdateModalVisible(false)
     props.handleClose()
   }
+  useEffect(() => {
+    setModalVisible(props.state);
+  }, [props.state]);
 
   function handleClose() {
     setModalVisible(false);
@@ -34,7 +19,7 @@ const StockModal = props => {
   return (
     <KeyboardAvoidingView>
       <View style={styles.centeredView}>
-        <ShiftWarehouseModal state={isUpdateModalVisible} handleClose={handleCloseUpdate} title='Update Information' name='Raahem Asghar' email='raahemasghar97@gmail.com' occupation="Employee" getProducts={props.getProducts} obj={props.object} />
+        <ShiftWarehouseModal state={isUpdateModalVisible} handleClose={handleCloseUpdate} title='Shift Warehouse' occupation="Admin" getStock={props.getStock} obj={props.object} />
         <Modal
           animationType="slide"
           transparent={true}
@@ -51,12 +36,10 @@ const StockModal = props => {
               <Text style={styles.modalTitle}>{props.title}</Text>
               <ScrollView>
                 <View style={styles.modalBody}>
-                  {props.object !== [] && (<View><Text style={styles.bodyText}>Product Name: {props.object.title}</Text>
-                    <Text style={styles.bodyText}>Serial: {props.object.serial}</Text>
-                    <Text style={styles.bodyText}>Brand: {props.object.brand === undefined ? '--' : props.object.brand.title}</Text>
-                    {/* <Text style={styles.bodyText}>Price: {props.object.price}</Text> */}
-                    <Text style={styles.bodyText}>Stock: {props.object.totalStock}</Text>
-                    <Text style={styles.bodyText}>Date Added: {props.object.date}</Text>
+                  {props.object !== [] && (<View><Text style={styles.bodyText}>Product Name: {props.object.product === undefined ? '--' : props.object.product.title}</Text>
+                    <Text style={styles.bodyText}>Serial No: {props.object.product === undefined ? '--' : props.object.product.serial}</Text>
+                    <Text style={styles.bodyText}>Stock: {props.object === [] ? null : props.object.stock}</Text>
+                    <Text style={styles.bodyText}>Warehouse: {props.object.warehouse === undefined ? null : props.object.warehouse.name}</Text>
                     </View>)}
                 </View>
               </ScrollView>

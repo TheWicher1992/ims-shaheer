@@ -5,12 +5,49 @@ import axios from 'axios'
 import { uri } from '../api.json'
 const ShiftWarehouseModal = props => {
   const [modalVisible, setModalVisible] = useState(false);
-
+  const [warehouses, setWarehouses] = useState([])
   const [id, setID] = useState(``)
-  const [selectedProduct, setSelectedProduct] = useState()
-  console.log('prod',props.prodID)
-  
-  //console.log('hete')
+  const [selectedWarehouse, setSelectedWarehouse] = useState()
+  const [filters, setFilters] = useState({
+    page: 1,
+    query: '*',
+    sort: '*',
+    sortBy: '*'
+  })
+
+  const getWarehouses = async () => {
+    const res = await axios.get(
+      `${uri}/api/warehouse/${filters.page}/${filters.query}/${filters.sort}/${filters.sortBy}`
+    )
+    setWarehouses(res.data.warehouse.reverse())
+    console.log('hi',res.data)
+    setSelectedWarehouse(res.data.warehouse[0]._id)
+  }
+  useEffect(() => {
+    getWarehouses()
+  }, [])
+  const shiftOnSubmit = () => {
+    // props.handleClose()
+    const body = {
+      sourceID: props.obj.warehouse === undefined ? null : props.obj.warehouse._id,
+      destID: selectedWarehouse,
+      productID: props.obj.product === undefined ? null : props.obj.product._id,
+      quantity: props.obj.stock,
+      type: 'warehouse'
+    }
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json"
+      }
+    }
+
+    axios.post(`${uri}/api/product/move`, body, config)
+      .then(() => props.handleClose())
+      .catch(err => console.log(err.response))
+      .finally(() =>  props.getStock())
+
+  }
   useEffect(() => {
     setModalVisible(props.state);
   }, [props.state]);
@@ -35,32 +72,28 @@ const ShiftWarehouseModal = props => {
        
             <View style={styles.centeredView}>
                {
-                  props.occupation==='Admin' ? (<View style={styles.modalView}>
+                  props.occupation==='Employee' ? (<View style={styles.modalView}>
                     <Text style={styles.modalTitle}>{props.title}</Text>
                     <View style={styles.modalBody}>
-                    <TextInput value={props.name} style={styles.input}/>
-                      <View style={{borderWidth: 2, borderRadius: 40,borderColor: "#008394",width: Dimensions.get('window').width * 0.65, top: Dimensions.get('window').height * 0.02, height: 40, fontSize: 8,  }}> 
-                        <Picker selectedValue='wa' style={{top:6, color: 'grey', fontFamily: 'Roboto'}}>
-                          <Picker.Item label="Warehouse A" value="wa" />
-                          <Picker.Item label="Warehouse B" value="wb" />
-                          <Picker.Item label="Warehouse C" value="wc" />
-                        </Picker>
-                        </View>
-                      <View style={{borderWidth: 2, borderRadius: 40,borderColor: "#008394",width: Dimensions.get('window').width * 0.65, top: Dimensions.get('window').height * 0.04, height: 40, fontSize: 8,  }}> 
-                        <Picker selectedValue='wa' style={{top:6, color: 'grey', fontFamily: 'Roboto'}}>
-                          <Picker.Item label="Select Destination Warehouse" value="wa" />
-                          <Picker.Item label="Warehouse B" value="wb" />
-                          <Picker.Item label="Warehouse C" value="wc" />
-                        </Picker>
-                    </View>
+                        <TextInput value={props.obj.warehouse === undefined ? null : props.obj.warehouse.name} style={styles.input}/>
+                        <TextInput value={props.obj.product === undefined ? null : props.obj.product.title} style={styles.input}/>
+                        <View style={{ borderWidth: 2, borderRadius: 40, borderColor: "#008394", width: Dimensions.get('window').width * 0.65, top: Dimensions.get('window').height * 0.005, height: 40, fontSize: 8, }}>
+                  <Picker style={{ top: 6, color: 'grey', fontFamily: 'Roboto' }} selectedValue={selectedWarehouse} onValueChange={(itemValue, itemIndex) =>
+                    setSelectedWarehouse(itemValue)
+                  } >
+                    {warehouses.map((warehouse, i) => (
+                      <Picker.Item label={warehouses === [] ? null : warehouse.name} value={warehouse._id} key={i} />
+                    ))}
+                  </Picker>
+                </View>
                     </View>
                     <View style={{flexDirection: 'row', justifyContent: 'space-evenly', alignItems : 'center'}}>
-                        <TouchableOpacity onPress={() => props.handleClose()}>
+                        <TouchableOpacity onPress={() => setModalVisible(false)}>
                             <View style={styles.buttonModalContainer}>
                                 <Text style={styles.buttonModalText}>Back</Text>
                             </View>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={() => props.handleClose()}>
+                        <TouchableOpacity onPress={() => shiftOnSubmit()}>
                             <View style={styles.backButtonModalContainer}>
                                 <Text style={styles.buttonModalText}>Done</Text>
                             </View>
@@ -70,21 +103,17 @@ const ShiftWarehouseModal = props => {
                 </View>) : (<View style={styles.modalView}>
                     <Text style={styles.modalTitle}>{props.title}</Text>
                     <View style={styles.modalBody}>
-                        <TextInput placeholder="Current Warehouse" style={styles.input}/>
-                      <View style={{borderWidth: 2, borderRadius: 40,borderColor: "#008394",width: Dimensions.get('window').width * 0.65, top: Dimensions.get('window').height * 0.02, height: 40, fontSize: 8,  }}> 
-                        <Picker selectedValue='wa' style={{top:6, color: 'grey', fontFamily: 'Roboto'}}>
-                          <Picker.Item label="Warehouse A" value="wa" />
-                          <Picker.Item label="Warehouse B" value="wb" />
-                          <Picker.Item label="Warehouse C" value="wc" />
-                        </Picker>
-                        </View>
-                      <View style={{borderWidth: 2, borderRadius: 40,borderColor: "#008394",width: Dimensions.get('window').width * 0.65, top: Dimensions.get('window').height * 0.04, height: 40, fontSize: 8,  }}> 
-                        <Picker selectedValue='wa' style={{top:6, color: 'grey', fontFamily: 'Roboto'}}>
-                          <Picker.Item label="Select Destination Warehouse" value="wa" />
-                          <Picker.Item label="Warehouse B" value="wb" />
-                          <Picker.Item label="Warehouse C" value="wc" />
-                        </Picker>
-                    </View>
+                        <TextInput value={props.obj.warehouse === undefined ? null : props.obj.warehouse.name} style={styles.input}/>
+                        <TextInput value={props.obj.product === undefined ? null : props.obj.product.title} style={styles.input}/>
+                        <View style={{ borderWidth: 2, borderRadius: 40, borderColor: "#008394", width: Dimensions.get('window').width * 0.65, top: Dimensions.get('window').height * 0.005, height: 40, fontSize: 8, }}>
+                  <Picker style={{ top: 6, color: 'grey', fontFamily: 'Roboto' }} selectedValue={selectedWarehouse} onValueChange={(itemValue, itemIndex) =>
+                    setSelectedWarehouse(itemValue)
+                  } >
+                    {warehouses.map((warehouse, i) => (
+                      <Picker.Item label={warehouses === [] ? null : warehouse.name} value={warehouse._id} key={i} />
+                    ))}
+                  </Picker>
+                </View>
                     </View>
                     <View style={{flexDirection: 'row', justifyContent: 'space-evenly', alignItems : 'center'}}>
                         <TouchableOpacity onPress={() => props.handleClose()}>
@@ -92,7 +121,7 @@ const ShiftWarehouseModal = props => {
                                 <Text style={styles.buttonModalText}>Back</Text>
                             </View>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={() => props.handleClose()}>
+                        <TouchableOpacity onPress={() => shiftOnSubmit()}>
                             <View style={styles.backButtonModalContainer}>
                                 <Text style={styles.buttonModalText}>Done</Text>
                             </View>
@@ -101,9 +130,6 @@ const ShiftWarehouseModal = props => {
                     </View>
                 </View>)
                 }
-                
-                
-            
             </View>
         </Modal>
     </View>

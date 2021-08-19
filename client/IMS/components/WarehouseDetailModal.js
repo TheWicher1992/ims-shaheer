@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Alert, Modal, StyleSheet, Text, View, TouchableOpacity, Dimensions, KeyboardAvoidingView, ScrollView } from "react-native";
-import ShiftWarehouseModal from "./ShiftWarehouseModal";
 import { uri } from '../api.json'
 import axios from "axios"
 
@@ -28,7 +27,6 @@ const WarehouseDetailModal= props => {
   return (
     <KeyboardAvoidingView>
     <View style={styles.centeredView}>
-        <ShiftWarehouseModal state={isUpdateModalVisible} handleClose={handleCloseUpdate} title='Shift Warehouse' id={props.object !== [] ? props.object._id : ``} prodID = {props.object.product!==undefined ? props.object.product._id : ``} quantity={props.object !== [] ? props.object.quantity : 0} occupation={props.occupation} name={props.object !== [] ? props.object.name : ``} obj={props.object}/>
         <Modal
             animationType="slide"
             transparent={true}
@@ -57,11 +55,7 @@ const WarehouseDetailModal= props => {
                                 <Text style={styles.buttonModalText}>Back</Text>
                             </View>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress = {() => {setUpdateModalVisible(true)}}>
-                            <View style={styles.backButtonModalContainer}>
-                                <Text style={styles.buttonModalText}>Shift</Text>
-                            </View>
-                        </TouchableOpacity>
+                        
                     </View>
                 </View>) : (<View style={styles.modalView}>
                     <Text style={styles.modalTitle}>{props.title}</Text>
@@ -79,16 +73,9 @@ const WarehouseDetailModal= props => {
                                 <Text style={styles.buttonModalText}>Back</Text>
                             </View>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress = {() => {setUpdateModalVisible(true)}}>
-                            <View style={styles.backButtonModalContainer}>
-                                <Text style={styles.buttonModalText}>Shift</Text>
-                            </View>
-                        </TouchableOpacity>
+                        
                     </View>
                 </View>)}
-                
-                
-            
             </View>
         </Modal>
     </View>

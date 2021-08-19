@@ -13,7 +13,7 @@ import axios from 'axios'
 import { uri } from '../api.json'
 const optionsPerPage = [2, 3, 4];
 
-const Warehouse = props => {
+const EmployeeWarehouses = props => {
 
   const [warehouses, setWarehouses] = useState([])
   const [filters, setFilters] = useState({
@@ -28,10 +28,10 @@ const Warehouse = props => {
       `${uri}/api/warehouse/${filters.page}/${filters.query}/${filters.sort}/${filters.sortBy}`
     )
     setWarehouses(res.data.warehouse.reverse())
-    console.log(warehouses)
   }
 
   useEffect(() => {
+    console.log('ware')
     getWarehouses()
   }, [])
 
@@ -128,7 +128,7 @@ const Warehouse = props => {
   }
 
   const [itemsPerPage, setItemsPerPage] = React.useState(optionsPerPage[0]); //for items per page on table
-  const [toucedWarehouse, setTouchedWarehouse] = React.useState([])
+  const [touchedWarehouse, setTouchedWarehouse] = React.useState([])
   const [isTableDetailModalVisible, setTableDetailModalVisible] = React.useState(false);
 
   const onPressModal = (prod) => {
@@ -187,7 +187,7 @@ const Warehouse = props => {
           </View>
         </View>
       </Modal>
-      <WarehouseDetailModal state={isTableDetailModalVisible} handleClose={handleClose} title='Warehouse Information' object={toucedWarehouse} getWarehouses={getWarehouses} occupation={'Employee'}/>
+      <WarehouseDetailModal state={isTableDetailModalVisible} handleClose={handleClose} title='Warehouse Information' object={touchedWarehouse === [] ? [] : touchedWarehouse} getWarehouses={getWarehouses} occupation={'Admin'} />
       <View style={styles.screen}>
         <View>
           <Text style={styles.title}>Warehouses</Text>
@@ -219,7 +219,7 @@ const Warehouse = props => {
         </View>
 
       </View>
-      <ScrollView style = {{top: 30}}>
+      <ScrollView style={{ top: 30 }}>
         <DataTable>
           <DataTable.Header>
             <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Name</Text></DataTable.Title>
@@ -240,7 +240,7 @@ const Warehouse = props => {
             ))
           }
 
-          {/* <DataTable.Pagination
+          <DataTable.Pagination
             page={page}
             numberOfPages={3}
             onPageChange={(page) => setPage(page)}
@@ -250,7 +250,7 @@ const Warehouse = props => {
             setItemsPerPage={setItemsPerPage}
             showFastPagination
             optionsLabel={'Rows per page'}
-          /> */}
+          />
         </DataTable>
 
       </ScrollView>
@@ -262,7 +262,7 @@ const Warehouse = props => {
 }
 
 
-Warehouse.navigationOptions = navigationData => {
+EmployeeWarehouses.navigationOptions = navigationData => {
   return {
     headerTitle: 'Zaki Sons',
     headerTitleAlign: 'center',
@@ -284,7 +284,7 @@ Warehouse.navigationOptions = navigationData => {
   };
 };
 
-export default Warehouse
+export default EmployeeWarehouses
 
 
 const styles = StyleSheet.create({
