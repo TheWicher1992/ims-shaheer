@@ -11,16 +11,19 @@
     "@expo/vector-icons": "^12.0.5",
     "@react-native-async-storage/async-storage": "^1.15.5",
     "@react-native-community/masked-view": "^0.1.10",
+    "@react-native-community/slider": "^3.0.3",
     "@react-native-picker/picker": "^1.16.4",
     "@react-navigation/native": "^6.0.0",
     "axios": "^0.21.1",
     "expo": "~42.0.1",
     "expo-cli": "^4.9.1",
     "expo-status-bar": "~1.0.4",
+    "moment": "^2.29.1",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-native": "https://github.com/expo/react-native/archive/sdk-42.0.0.tar.gz",
     "react-native-awesome-alerts": "^1.5.2",
+    "react-native-calendar-picker": "^7.1.2",
     "react-native-dropdown-picker": "^5.1.23",
     "react-native-element-dropdown": "^1.2.1",
     "react-native-elements": "^3.4.2",
@@ -30,6 +33,7 @@
     "react-native-picker-checkbox": "^2.0.2",
     "react-native-popup-menu": "^0.15.11",
     "react-native-reanimated": "^1.13.3",
+    "react-native-safe-area-context": "3.2.0",
     "react-native-screens": "^3.4.0",
     "react-native-slider": "^0.11.0",
     "react-native-switch": "^2.0.0",
@@ -45,8 +49,7 @@
     "react-toastify": "^7.0.4",
     "redux": "^4.1.0",
     "redux-logger": "^3.0.6",
-    "redux-thunk": "^2.3.0",
-    "react-native-safe-area-context": "3.2.0"
+    "redux-thunk": "^2.3.0"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0"
