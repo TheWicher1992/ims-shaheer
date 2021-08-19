@@ -244,11 +244,14 @@ router.get('/filters', async (req, res) => {
         const brands = await Brand.find()
         const colours = await ProductColour.find()
         const warehouses = await Warehouse.find()
-
+        const maxPrice = (await Product.find().sort({ price: -1 }).limit(1))[0].price
+        const maxStock = (await Product.find().sort({ totalStock: -1 }).limit(1))[0].totalStock
         const filters = {
             brands,
             colours,
-            warehouses
+            warehouses,
+            maxPrice,
+            maxStock
         }
 
 
