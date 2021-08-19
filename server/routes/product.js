@@ -107,7 +107,7 @@ const moveDeliveryToWarehouse = async (sourceID, destID, productID) => {
     const warehouse = await Warehouse.findOne({
         _id: destID
     })
-
+    console.log(warehouse)
     const stock = await Stock.findOne({
         warehouse: destID,
         product: productID
@@ -122,11 +122,12 @@ const moveDeliveryToWarehouse = async (sourceID, destID, productID) => {
         warehouse.totalProducts += 1
     }
     else {
-        stock.stock += quantity
+        stock.stock += deliverOrder.quantity
+        await stock.save()
     }
-    warehouse.totalStock += quantity
+    warehouse.totalStock += deliverOrder.quantity
     await warehouse.save()
-    await stock.save()
+    console.log(stock)
 }
 
 const moveWarehouseToWarehouse = async (sourceID, destID, productID, quantity) => {

@@ -32,6 +32,7 @@ const Warehouse = props => {
   }
 
   useEffect(() => {
+    console.log('ware')
     getWarehouses()
   }, [])
 
@@ -187,7 +188,7 @@ const Warehouse = props => {
           </View>
         </View>
       </Modal>
-      <WarehouseDetailModal state={isTableDetailModalVisible} handleClose={handleClose} title='Warehouse Information' object={toucedWarehouse} getWarehouses={getWarehouses} occupation={'Admin'}/>
+      <WarehouseDetailModal state={isTableDetailModalVisible} handleClose={handleClose} title='Warehouse Information' object={toucedWarehouse} getWarehouses={getWarehouses} occupation={'Admin'} />
       <View style={styles.screen}>
         <View>
           <Text style={styles.title}>Warehouses</Text>
@@ -219,7 +220,7 @@ const Warehouse = props => {
         </View>
 
       </View>
-      <ScrollView style = {{top: 30}}>
+      <ScrollView style={{ top: 30 }}>
         <DataTable>
           <DataTable.Header>
             <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Name</Text></DataTable.Title>
