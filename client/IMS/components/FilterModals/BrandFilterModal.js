@@ -15,6 +15,45 @@ const BrandFilterModal = props => {
     function handleClose() {
         setModalVisible(false);
     }
+
+    const showBrands = () => {
+        if(props.object !== [] && props.object !== undefined){
+            return (
+                <View>
+                    {props.object.map((record,i) => (
+                        <View>
+
+                            <TouchableOpacity style = {styles.TextBox}>
+                                <View style={{ paddingLeft: '5%' }}>
+                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                                        <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-start' }}>
+                                            <Text style={styles.normalText}>
+                                                {record.title}
+                                            </Text>
+                                        </View>
+                                        <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-end', paddingRight: '8%' }}>
+                                            <View style={styles.sideText}>
+
+                                                <FontAwesome
+                                                    name = {"check"}
+                                                    size = {Dimensions.get('window').height > 900 ? 40:25}
+                                                    color = {"#008394"}
+                                                    />
+                                            
+                                            </View>
+                                        </View>
+                                    </View>
+                                </View>
+                            </TouchableOpacity>
+
+
+                       
+                        </View>
+                    ))}
+                </View>
+            )
+        }
+    }
     return (
 
         <View style={styles.centeredView}>
@@ -57,7 +96,11 @@ const BrandFilterModal = props => {
                             </View>
                             
                         </View>
-
+                        
+                        {
+                            showBrands()
+                        }
+{/* 
                         <View style = {{flex:1}}>
                             <ScrollView>
                                 <View style = {{marginBottom: 100}}>
@@ -119,7 +162,7 @@ const BrandFilterModal = props => {
                                
                                 </View>
                             </ScrollView>
-                        </View>
+                        </View> */}
 
 
                        

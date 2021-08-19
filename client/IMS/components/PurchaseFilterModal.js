@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Modal, StyleSheet, Text, View, TouchableOpacity, Dimensions, TextInput, Button } from "react-native";
-import ColorFilterModal from "./ColorFilterModal";
-import BrandFilterModal from "./BrandFilterModal";
-import WarehouseFilterModal from "./WarehouseFilterModal";
-import DateFilterModal from "./DateFilterModal";
+import ColorFilterModal from "./FilterModals/ColorFilterModal";
+import BrandFilterModal from "./FilterModals/BrandFilterModal";
+import WarehouseFilterModal from "./FilterModals/WarehouseFilterModal";
+import DateFilterModal from "./FilterModals/DateFilterModal";
 const PurchaseFilterModal = props => {
 
     const [modalVisible, setModalVisible] = useState(false);

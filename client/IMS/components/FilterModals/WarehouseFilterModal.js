@@ -1,21 +1,63 @@
 import React, { useState, useEffect } from "react";
 import { Modal, StyleSheet, Text, View, TouchableOpacity, Dimensions, TextInput, Button, ScrollView } from "react-native";
-import { Slider } from 'react-native-elements';
 import { FontAwesome } from "@expo/vector-icons";
 
-const ColorFilterModal = props => {
+const WarehouseFilterModal = props => {
 
     const [modalVisible, setModalVisible] = useState(false);
-    const [colors,setColors] = useState([])
+    const [amountVal, setAmountVal] = useState(0);
 
     useEffect(() => {
         setModalVisible(props.state);
-
     }, [props.state]);
 
     function handleClose() {
         setModalVisible(false);
     }
+    const getWarehouses = () => {
+        if(props.object !== [] && props.object !== undefined){
+            return (
+                <View>
+                    {props.object.map((record,i) => (
+                        <View>
+
+                            <ScrollView>
+                            <View style = {{}}>
+                            <TouchableOpacity style = {styles.TextBox}>
+                                <View style={{ paddingLeft: '5%' }}>
+                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                                        <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-start' }}>
+                                            <Text style={styles.normalText}>
+                                                {record.name}
+                                            </Text>
+                                        </View>
+                                        <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-end', paddingRight: '8%' }}>
+                                            <View style={styles.sideText}>
+
+                                                <FontAwesome
+                                                    name = {"check"}
+                                                    size = {Dimensions.get('window').height > 900 ? 40:25}
+                                                    color = {"#008394"}
+                                                    />
+                                            
+                                            </View>
+                                        </View>
+                                    </View>
+                                </View>
+                            </TouchableOpacity>
+                            </View>
+                            </ScrollView>
+
+
+                       
+                        </View>
+                    ))}
+                </View>
+            )
+
+        }
+    }
+
     return (
 
         <View style={styles.centeredView}>
@@ -42,7 +84,7 @@ const ColorFilterModal = props => {
                                 <View style={{ justifyContent: 'center', alignItems: 'flex-start', marginTop: '6.25%',}}>
                                 
                                     <Text style={styles.topText}>
-                                        Colors
+                                        Warehouses
                                     </Text>
                                 </View>
                                 <View style = {{justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-end', paddingRight: '8%' }}>
@@ -58,10 +100,12 @@ const ColorFilterModal = props => {
                             </View>
                             
                         </View>
-                                
-                   
 
-                        <View style = {{flex:1}}>
+                        {
+                            getWarehouses()
+                        }
+
+                        {/* <View style = {{flex:1}}>
                             <ScrollView>
                                 <View style = {{marginBottom: 100}}>
 
@@ -70,7 +114,7 @@ const ColorFilterModal = props => {
                                         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                             <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-start' }}>
                                                 <Text style={styles.normalText}>
-                                                    Color 1
+                                                    Warehouse 1
                                                 </Text>
                                             </View>
                                             <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-end', paddingRight: '8%' }}>
@@ -97,7 +141,7 @@ const ColorFilterModal = props => {
                                         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                             <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-start' }}>
                                                 <Text style={styles.normalText}>
-                                                    Color 2
+                                                    Warehouse 2
                                                 </Text>
                                             </View>
                                             <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-end', paddingRight: '8%' }}>
@@ -122,7 +166,7 @@ const ColorFilterModal = props => {
                                
                                 </View>
                             </ScrollView>
-                        </View>
+                        </View> */}
 
 
                        
@@ -243,4 +287,4 @@ const styles = StyleSheet.create({
 
 });
 
-export default ColorFilterModal;
+export default WarehouseFilterModal;
