@@ -453,7 +453,7 @@ const Product = props => {
         </View>
 
       </View>
-      <FilterButton />
+      <FilterButton page = "product" object = {products}/>
       <View style={{ flexDirection: 'row', }}>
         {/* <ScrollView horizontal = {true}> */}
         <DataTable>

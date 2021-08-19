@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Text, View, TouchableOpacity, Dimensions, StyleSheet } from "react-native";
 import { FontAwesome } from '@expo/vector-icons';
-import FilterModal from "./FilterModal";
+import ProductFilterModal from "./ProductFilterModal";
+import PurchaseFilterModal from "./PurchaseFilterModal";
 
 const FilterButton = (props) => {
 
@@ -14,6 +15,18 @@ const FilterButton = (props) => {
 
   const openFilterModal = () => { // turn on 
     setFilterModalVisible(true);
+  }
+
+  function displayButton () {
+    if(props.page === "product"){
+      return (
+        <ProductFilterModal state = {isFilterModalVisible} handleClose = {closeFilterModal} object = {props.object} />
+      );
+    }
+    else if (props.page === "purchase"){
+      return (<PurchaseFilterModal state = {isFilterModalVisible} handleClose = {closeFilterModal} filters = {props} />
+      );
+    }
   }
 
     return (
@@ -34,7 +47,7 @@ const FilterButton = (props) => {
             </View>
           </TouchableOpacity> 
           <View>
-            <FilterModal state = {isFilterModalVisible} handleClose = {closeFilterModal} filters = {props}/>
+            {displayButton()}
           </View> 
         </View>
         
