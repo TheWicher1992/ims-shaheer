@@ -1,9 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { Modal, StyleSheet, Text, View, TouchableOpacity, Dimensions, TextInput } from "react-native";
 import {Picker} from '@react-native-picker/picker';
-
+import axios from 'axios'
+import { uri } from '../api.json'
 const ShiftWarehouseModal = props => {
   const [modalVisible, setModalVisible] = useState(false);
+
+  const [id, setID] = useState(``)
+  const [selectedProduct, setSelectedProduct] = useState()
+  console.log('prod',props.prodID)
+  
   //console.log('hete')
   useEffect(() => {
     setModalVisible(props.state);
@@ -15,6 +21,7 @@ const ShiftWarehouseModal = props => {
   return (
     
     <View style={styles.centeredView}>
+      {console.log(props.id)}
         <Modal
             animationType="slide"
             transparent={true}
@@ -31,7 +38,7 @@ const ShiftWarehouseModal = props => {
                   props.occupation==='Admin' ? (<View style={styles.modalView}>
                     <Text style={styles.modalTitle}>{props.title}</Text>
                     <View style={styles.modalBody}>
-                    <TextInput placeholder="Current Warehouse" style={styles.input}/>
+                    <TextInput value={props.name} style={styles.input}/>
                       <View style={{borderWidth: 2, borderRadius: 40,borderColor: "#008394",width: Dimensions.get('window').width * 0.65, top: Dimensions.get('window').height * 0.02, height: 40, fontSize: 8,  }}> 
                         <Picker selectedValue='wa' style={{top:6, color: 'grey', fontFamily: 'Roboto'}}>
                           <Picker.Item label="Warehouse A" value="wa" />

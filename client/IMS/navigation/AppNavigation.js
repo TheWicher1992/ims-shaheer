@@ -18,6 +18,7 @@ import EmployeeDashboard from '../screens/EmployeeDashboard'
 import EmployeeWarehouses from '../screens/EmployeeWarehouses'
 import EmployeeProducts from '../screens/EmployeeProducts'
 import EmployeeOrders from '../screens/EmployeeOrders'
+import Stocks from '../screens/Stocks';
 
 const dash = createStackNavigator({
   Dashboard: {
@@ -31,6 +32,9 @@ const dash = createStackNavigator({
   },
   Products: {
     screen: Product
+  },
+  Stocks: {
+    screen: Stocks
   },
   Warehouse: {
     screen: Warehouse
@@ -94,6 +98,12 @@ const AdminSide = createDrawerNavigator({
     screen: Product,
     navigationOptions: ({ navigation }) => ({
       drawerLabel: 'Products',
+    })
+  },
+  Stocks: {
+    screen: Stocks,
+    navigationOptions: ({ navigation }) => ({
+      drawerLabel: 'Stocks',
     })
   },
   Warehouse: {
