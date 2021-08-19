@@ -298,6 +298,22 @@ router.get('/stock/:id', async (req, res) => {
 
 })
 
+router.get('/stocks', async (req, res) => {
+    try {
+        const stocks = await Stock.find()
+            .populate('product', 'serial title')
+            .populate('warehouse', 'name')
+        return res.json({
+            stocks
+        })
+    } catch (err) {
+        console.log(err)
+        return res.status(500).json({
+            error: errors.SERVER_ERROR
+        })
+    }
+})
+
 router.get('/:id', async (req, res) => {
     try {
 
