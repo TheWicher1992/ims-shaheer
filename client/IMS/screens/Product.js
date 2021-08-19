@@ -9,7 +9,6 @@ import Modal from 'react-native-modal';
 import ProductDetailModal from '../components/ProductDetailModal';
 import FilterButton from '../components/FilterButton';
 import { Picker } from '@react-native-picker/picker';
-import DropDownPicker from 'react-native-dropdown-picker';
 import { uri } from '../api.json'
 import axios from "axios"
 
@@ -58,7 +57,7 @@ const Product = props => {
     setColor(res.data.colours[0]._id)
     setBrand(res.data.brands[0]._id)
 
-    console.log(res.data)
+    //console.log(res.data)
 
 
   }
@@ -90,7 +89,7 @@ const Product = props => {
     setSearch(searchVal);
     setQuery(searchVal)
     // setFilters({ ...filters, query: searchVal })
-    console.log(search);
+    // console.log(search);
   }
 
   const searchFunc = () => {
@@ -108,7 +107,7 @@ const Product = props => {
   const [description, setDescription] = React.useState(``)
   const addProduct = () => {
     setModalVisible(false); //closing modal on done for now
-    console.log(color, brand)
+    // console.log(color, brand)
 
     const body = {
       title: productName,
@@ -455,7 +454,7 @@ const Product = props => {
         </View>
 
       </View>
-      <FilterButton page="product" object={products} />
+      <FilterButton page="product" />
       <View style={{ flexDirection: 'row', }}>
         {/* <ScrollView horizontal = {true}> */}
         <DataTable>

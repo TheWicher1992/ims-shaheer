@@ -1,20 +1,70 @@
 import React, { useState, useEffect } from "react";
 import { Modal, StyleSheet, Text, View, TouchableOpacity, Dimensions, TextInput, Button, ScrollView } from "react-native";
+import { normalize, Slider } from 'react-native-elements';
 import { FontAwesome } from "@expo/vector-icons";
-import Slider from '@react-native-community/slider';
 
-const PriceFilterModal = props => {
+const ColorFilterModal = props => {
 
     const [modalVisible, setModalVisible] = useState(false);
-    const [sliderValue, setSliderValue] = useState(15);
+    const [colors,setColors] = useState([])
 
     useEffect(() => {
         setModalVisible(props.state);
+
     }, [props.state]);
+
+
+    const setFilterColor = (record) => {
+        if(colors.indexOf(record) === -1){
+            setColors(record, colors)
+        }
+
+    }
 
     function handleClose() {
         setModalVisible(false);
     }
+
+    const showColours = () => {
+        if(props.object !== [] && props.object !== undefined){
+            return (
+                <View>
+                    {props.object.map((record,i) => (
+                        <View>
+
+                            <TouchableOpacity style = {styles.TextBox} onPress = {() => setFilterColor(record.title)}>
+                                <View style={{ paddingLeft: '5%' }}>
+                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                                        <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-start' }}>
+                                            <Text style={styles.normalText}>
+                                                {record.title}
+                                            </Text>
+                                        </View>
+                                        <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-end', paddingRight: '8%' }}>
+                                            <View style={styles.sideText}>
+
+                                                <FontAwesome
+                                                    name = {"check"}
+                                                    size = {Dimensions.get('window').height > 900 ? 40:25}
+                                                    color = {"#008394"}
+                                                    />
+                                            
+                                            </View>
+                                        </View>
+                                    </View>
+                                </View>
+                            </TouchableOpacity>
+
+
+                       
+                        </View>
+                    ))}
+                </View>
+            )
+        }
+    }
+
+
     return (
 
         <View style={styles.centeredView}>
@@ -41,11 +91,11 @@ const PriceFilterModal = props => {
                                 <View style={{ justifyContent: 'center', alignItems: 'flex-start', marginTop: '6.25%',}}>
                                 
                                     <Text style={styles.topText}>
-                                        Price
+                                        Colors
                                     </Text>
                                 </View>
                                 <View style = {{justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-end', paddingRight: '8%' }}>
-                                    <TouchableOpacity onPress = {() => setSliderValue(0)}>
+                                    <TouchableOpacity>
                                         <View style = {styles.clearButton}>
                                             <Text style = {styles.clearButtonText}>
                                                 Clear 
@@ -57,28 +107,45 @@ const PriceFilterModal = props => {
                             </View>
                             
                         </View>
-                                
-                   
+                       
+                                    
+                        {
+                            showColours()
+                        }
 
-                        <View style={styles.container}>
-                            {/*Text to show slider value*/}
-                            <Text style = {styles.normalText}>
-                            Value of slider is : {sliderValue}
-                            </Text>
+                        {/* <View style = {{flex:1}}>
+                            <ScrollView>
+                                <View style = {{marginBottom: 100}}>
 
-                            {/*Slider with max, min, step and initial value*/}
-                            <Slider
-                            maximumValue={100}
-                            minimumValue={0}
-                            minimumTrackTintColor="#008394"
-                            maximumTrackTintColor="#000000"
-                            step={1}
-                            value={sliderValue}
-                            onValueChange={
-                                (sliderValue) => setSliderValue(sliderValue)
-                            }
-                            />
-                        </View>
+                                <TouchableOpacity style = {styles.TextBox}>
+                                    <View style={{ paddingLeft: '5%' }}>
+                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                                            <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-start' }}>
+                                                <Text style={styles.normalText}>
+                                                    color1
+                                                </Text>
+                                            </View>
+                                            <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-end', paddingRight: '8%' }}>
+                                                <View style={styles.sideText}>
+
+                                                    <FontAwesome
+                                                        name = {"check"}
+                                                        size = {Dimensions.get('window').height > 900 ? 40:25}
+                                                        color = {"#008394"}
+                                                        />
+                                                 
+                                                </View>
+                                            </View>
+                                        </View>
+                                    </View>
+                                </TouchableOpacity>
+
+    
+                               
+                                </View>
+                            </ScrollView>
+                        </View> */}
+
 
                        
                     </View>
@@ -183,13 +250,19 @@ const styles = StyleSheet.create({
         // left: Dimensions.get('window').width * 0.4,
 
     },
-    container: {
-        flex: 1,
-        padding: 20,
-        justifyContent: 'center',
-        backgroundColor: '#ecf0f1',
+    sliderDummy: {
+        backgroundColor: '#d3d3d3',
+        width: 300,
+        height:30,
+        borderRadius: 50,
+        position: 'absolute',                
     },
+    sliderReal: {
+        backgroundColor: '#119EC2',
+        // width: {(amountVal/50) * 300},
+        height:30,
+    }
 
 });
 
-export default PriceFilterModal;
+export default ColorFilterModal;

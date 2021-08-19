@@ -20,7 +20,7 @@ const FilterButton = (props) => {
   function displayButton () {
     if(props.page === "product"){
       return (
-        <ProductFilterModal state = {isFilterModalVisible} handleClose = {closeFilterModal} object = {props.object} />
+        <ProductFilterModal state = {isFilterModalVisible} handleClose = {closeFilterModal} />
       );
     }
     else if (props.page === "purchase"){

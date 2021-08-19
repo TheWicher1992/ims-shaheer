@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Modal, StyleSheet, Text, View, TouchableOpacity, Dimensions, TextInput, Button } from "react-native";
-import ColorFilterModal from "./ColorFilterModal";
-import BrandFilterModal from "./BrandFilterModal";
-import WarehouseFilterModal from "./WarehouseFilterModal";
-import DateFilterModal from "./DateFilterModal";
-import QuantityFilterModal from "./QuantityFilterModal";
-import PriceFilterModal from "./PriceFilterModal";
+import ColorFilterModal from "./FilterModals/ColorFilterModal";
+import BrandFilterModal from "./FilterModals/BrandFilterModal";
+import WarehouseFilterModal from "./FilterModals/WarehouseFilterModal";
+import DateFilterModal from "./FilterModals/DateFilterModal";
+import QuantityFilterModal from "./FilterModals/QuantityFilterModal";
+import PriceFilterModal from "./FilterModals/PriceFilterModal";
+import { uri } from '../api.json'
+import axios from "axios"
 const ProductFilterModal = props => {
 
     const [modalVisible, setModalVisible] = useState(false);
@@ -42,6 +44,20 @@ const ProductFilterModal = props => {
     const closePriceFilterModal = () => {
         setPriceFilterModal(false);
     }
+
+    const [filters, setFilters] = useState([])
+    const getFilters = async () => {
+        const res = await axios.get(
+            `${uri}/api/product/filters`
+        ).then(res => setFilters(res.data.filters))
+        .catch(err => console.log(err))
+    
+
+    }
+    useEffect(() => {
+        getFilters()
+      }, [])   
+
     return (
 
         <View style={styles.centeredView}>
@@ -199,12 +215,12 @@ const ProductFilterModal = props => {
                     </View>
                 </View>
             </Modal>
-            <ColorFilterModal state = {colorFilterModal} handleClose = {closeColorFilterModal} title = "product" object = {props.object}/>
-            <BrandFilterModal state = {brandFilterModal} handleClose = {closeBrandFilterModal} title = "product" object = {props.object}/>
-            <WarehouseFilterModal state = {warehouseFilterModal} handleClose = {closeWarehouseFilterModal} title = "product" object = {props.object}/>
-            <DateFilterModal state = {dateFilterModal} handleClose = {closeDateFilterModal} title = "product" object = {props.object}/>
-            <QuantityFilterModal state = {quantityFilterModal} handleClose = {closeQuantityFilterModal} title = "product" object = {props.object}/>
-            <PriceFilterModal state = {priceFilterModal} handleClose = {closePriceFilterModal} title = "product" object = {props.object}/>
+            <ColorFilterModal state = {colorFilterModal} handleClose = {closeColorFilterModal} title = "product" object = {filters.colours}/>
+            <BrandFilterModal state = {brandFilterModal} handleClose = {closeBrandFilterModal} title = "product" object = {filters.brands}/>
+            <WarehouseFilterModal state = {warehouseFilterModal} handleClose = {closeWarehouseFilterModal} title = "product" object = {filters.warehouses}/>
+            <DateFilterModal state = {dateFilterModal} handleClose = {closeDateFilterModal} title = "product" />
+            <QuantityFilterModal state = {quantityFilterModal} handleClose = {closeQuantityFilterModal} title = "product" maxStock = {filters.maxStock}/>
+            <PriceFilterModal state = {priceFilterModal} handleClose = {closePriceFilterModal} title = "product" maxPrice = {filters.maxPrice}/>
 
         </View>
     );

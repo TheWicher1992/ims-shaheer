@@ -14,6 +14,29 @@ const QuantityFilterModal = props => {
     function handleClose() {
         setModalVisible(false);
     }
+    showQuantity = () => {
+        if(props.maxStock !== undefined){
+            return (
+                <View style={styles.container}>
+                    <Text style = {styles.normalText}>
+                    Value of slider is : {sliderValue}
+                    </Text>
+
+                    <Slider
+                    maximumValue={props.maxStock}
+                    minimumValue={0}
+                    minimumTrackTintColor="#008394"
+                    maximumTrackTintColor="#000000"
+                    step={1}
+                    value={sliderValue}
+                    onValueChange={
+                        (sliderValue) => setSliderValue(sliderValue)
+                    }
+                    />
+                </View>
+            )
+       }
+    }
     return (
 
         <View style={styles.centeredView}>
@@ -56,16 +79,17 @@ const QuantityFilterModal = props => {
                             </View>
                             
                         </View>
-                                
+                        
+                        {
+                            showQuantity()
+                        }
                    
 
-                        <View style={styles.container}>
-                            {/*Text to show slider value*/}
+                        {/* <View style={styles.container}>
                             <Text style = {styles.normalText}>
                             Value of slider is : {sliderValue}
                             </Text>
 
-                            {/*Slider with max, min, step and initial value*/}
                             <Slider
                             maximumValue={100}
                             minimumValue={0}
@@ -77,7 +101,7 @@ const QuantityFilterModal = props => {
                                 (sliderValue) => setSliderValue(sliderValue)
                             }
                             />
-                        </View>
+                        </View> */}
 
                        
                     </View>
