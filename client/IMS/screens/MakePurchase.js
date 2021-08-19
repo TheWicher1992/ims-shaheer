@@ -346,7 +346,7 @@ const MakePurchase = props => {
         </View>
 
       </View>
-      <FilterButton />
+      <FilterButton page = "purchase" />
       <ScrollView>
 
         <DataTable>
