@@ -7,6 +7,7 @@ const Warehouse = require('../models/Warehouse')
 const Stock = require('../models/Stock')
 const Client = require('../models/Client')
 const errors = require('../misc/errors')
+const { SERVER_ERROR } = require('../misc/errors')
 router.post('/', async (req, res) => {
     try {
         let {
@@ -133,6 +134,30 @@ router.get(`/`, async (req, res) => {
 
 })
 
+router.get('/filters', async (req, res) => {
+    try {
+        const clients = await Client.find().select('userName')
+        const products = await Product.find().select('title')
+        const maxTotal = (await Purchase.find().sort({ total: -1 }).limit(1))[0].total
+        const maxQuantity = (await Purchase.find().sort({ quantity: -1 }).limit(1))[0].quantity
+
+        const filters = {
+            clients,
+            products,
+            maxTotal,
+            maxQuantity
+        }
+
+        return res.json({
+            filters
+        })
+
+    } catch (err) {
+        return res.status(500).json({
+            error: SERVER_ERROR
+        })
+    }
+})
 
 router.get('/form-inputs', async (req, res) => {
 

@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { Modal, StyleSheet, Text, View, TouchableOpacity, Dimensions } from "react-native";
+import {connect} from 'react-redux'
 
 const UserInfoModal = props => {
   const [modalVisible, setModalVisible] = useState(false);
+  const [user,setUser] = useState({})
   //console.log('hete')
   useEffect(() => {
     setModalVisible(props.state);
+    setUser(props.auth)
   }, [props.state]);
+
 
   function handleClose() {
     setModalVisible(false);
@@ -28,9 +32,8 @@ const UserInfoModal = props => {
                 <View style={styles.modalView}>
                     <Text style={styles.modalTitle}>User Information</Text>
                     <View style={styles.modalBody}>
-                        <Text style={styles.bodyText}>Name: Raahem</Text>
-                        <Text style={styles.bodyText}>Email: raahemasghar97@gmail.com</Text>
-                        <Text style={styles.bodyText}>Status: Admin</Text>
+                        <Text style={styles.bodyText}>Name: {user.userName}</Text>
+                        <Text style={styles.bodyText}>Status: {user.type}</Text>
                     </View>
                     <View style={{flexDirection: 'row', justifyContent: 'space-evenly', alignItems : 'center'}}>
                         <TouchableOpacity onPress={() => props.handleClose()}>
@@ -130,4 +133,10 @@ const styles = StyleSheet.create({
   
 });
 
-export default UserInfoModal;
+const mapStateToProps = (state) => {
+  return {
+      auth: state.auth._W.user
+  }
+}
+
+export default connect(mapStateToProps)(UserInfoModal)

@@ -3,8 +3,8 @@ const router = express.Router()
 const Sale = require('../models/Sale')
 const config = require('config')
 const errors = require('../misc/errors')
-
-
+const Client = require('../models/Client')
+const Product = require('../models/Product')
 // make a sale
 router.post('/', async (req, res) => {
     try {
@@ -50,6 +50,34 @@ router.post('/', async (req, res) => {
         })
     }
 })
+
+
+router.get('/filters', async (req, res) => {
+    try {
+        const clients = await Client.find().select('userName')
+        const products = await Product.find().select('title')
+        const maxTotal = (await Sale.find().sort({ total: -1 }).limit(1))[0].total
+        const maxQuantity = (await Sale.find().sort({ quantity: -1 }).limit(1))[0].quantity
+
+        const filters = {
+            clients,
+            products,
+            maxTotal,
+            maxQuantity
+        }
+
+        return res.json({
+            filters
+        })
+
+    } catch (err) {
+        console.log(err)
+        return res.status(500).json({
+            error: errors.SERVER_ERROR
+        })
+    }
+})
+
 
 
 // filter sales
