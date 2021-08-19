@@ -2,12 +2,11 @@ const express = require('express')
 const router = express.Router()
 const Client = require('../models/Client')
 const config = require('config')
-
+const { SERVER_ERROR, CLIENT_DOES_NOT_EXIST, DOES_NOT_EXIST, SAME_PHONENUMBER_ALREADY_EXISTS, SAME_USERNAME_ALREADY_EXISTS } = require('../misc/errors')
 router.post('/', async (req, res) => {
     try {
         var {
             userName,
-            // balance,
             phone,
         } = req.body
 
@@ -16,7 +15,7 @@ router.post('/', async (req, res) => {
         })
         if (checkClientName) {
             return res.status(400).json({
-                error: 'SAME_USERNAME_ALREADY_EXISTS'
+                error: SAME_USERNAME_ALREADY_EXISTS
             })
         }
 
@@ -25,13 +24,12 @@ router.post('/', async (req, res) => {
         })
         if (checkClientPhone) {
             return res.status(400).json({
-                error: 'SAME_PHONENUMBER_ALREADY_EXISTS'
+                error: SAME_PHONENUMBER_ALREADY_EXISTS
             })
         }
 
         const client = new Client({
             userName,
-            // balance,
             phone,
         })
 
@@ -43,38 +41,34 @@ router.post('/', async (req, res) => {
     }
     catch (err) {
         console.log(err)
-        return res.status(400).json({
-            error: 'SERVER_ERROR'
+        return res.status(500).json({
+            error: SERVER_ERROR
         })
     }
 })
 router.get('/:query', async (req, res) => {
-    const query = req.params.query === '*' ? ['.*'] : req.params.query.split(" ")
-
-    const clients = await Client.find({
-        userName: {
-            $in: query.map(q => new RegExp(q, "i"))
-        }
-    })
-
-
-
-
-    return res.json({
-        clients
-    })
-
-
-
+    try {
+        const query = req.params.query === '*' ? ['.*'] : req.params.query.split(" ")
+        const clients = await Client.find({
+            userName: {
+                $in: query.map(q => new RegExp(q, "i"))
+            }
+        })
+        return res.json({
+            clients
+        })
+    } catch (err) {
+        console.log(err)
+        return res.status(500).json({
+            error: SERVER_ERROR
+        })
+    }
 })
 
 
 router.get('/:id', async (req, res) => {
     try {
-
-
         const id = req.params.id
-
         const client = await Client.findById(id)
         if (client) {
             return res.status(200).json({
@@ -83,13 +77,13 @@ router.get('/:id', async (req, res) => {
         }
         else {
             return res.status(400).json({
-                error: 'SERVER_ERROR'
+                error: DOES_NOT_EXIST
             })
         }
     }
     catch (err) {
-        return res.status(400).json({
-            error: 'SERVER_ERROR'
+        return res.status(500).json({
+            error: SERVER_ERROR
         })
     }
 })
@@ -111,7 +105,7 @@ router.put('/:id', async (req, res) => {
         console.log(client)
         if (!client) {
             return res.status(400).json({
-                error: 'CLIENT_DOES_NOT_EXIST'
+                error: CLIENT_DOES_NOT_EXIST
             })
         }
 
@@ -127,8 +121,8 @@ router.put('/:id', async (req, res) => {
     }
     catch (err) {
         console.log(err)
-        return res.status(400).json({
-            error: 'SERVER_ERROR'
+        return res.status(500).json({
+            error: SERVER_ERROR
         })
     }
 })
@@ -146,37 +140,31 @@ router.get('/:page/:query/:sort/:sortBy', async (req, res) => {
         const sortOptions = {
             [sort]: sortBy
         }
-        console.log(query)
         const filters = {}
-        filters['$or'] = [ 
-        {
-            userName: {
-                $in: query.map(q => new RegExp(q, "i"))
-            }
-        }]
-
-
+        filters['$or'] = [
+            {
+                userName: {
+                    $in: query.map(q => new RegExp(q, "i"))
+                }
+            }]
         const itemsPerPage = config.get('rows-per-page')
-
         const warehouse = await Client
-        .find(filters)
-        .sort(sortOptions)
-        .skip(itemsPerPage * page)
-        .limit(itemsPerPage)
+            .find(filters)
+            .sort(sortOptions)
+            .skip(itemsPerPage * page)
+            .limit(itemsPerPage)
 
         return res.status(200).json({
-            warehouse})
-
-
+            warehouse
+        })
     }
     catch (err) {
         console.log(err)
-        return res.status(400).json({
-            error: 'SERVER_ERROR_SEARCH'
+        return res.status(500).json({
+            error: SERVER_ERROR_SEARCH
         })
     }
-
 })
 
-  module.exports = router
+module.exports = router
 

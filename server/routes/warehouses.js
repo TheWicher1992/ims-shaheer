@@ -2,7 +2,7 @@ const express = require('express')
 const router = express.Router()
 const Warehouse = require('../models/Warehouse')
 const config = require('config')
-
+const errors = require('../misc/errors')
 router.get('/:id', async (req, res) => {
     try {
 
@@ -17,13 +17,14 @@ router.get('/:id', async (req, res) => {
         }
         else {
             return res.status(400).json({
-                error: 'SERVER_ERROR'
+                error: errors.WAREHOUSE_NON_EXISTENT
             })
         }
     }
     catch (err) {
-        return res.status(400).json({
-            error: 'SERVER_ERROR'
+        console.log(err)
+        return res.status(500).json({
+            error: errors.SERVER_ERRORs
         })
     }
 })
@@ -43,7 +44,7 @@ router.post('/', async (req, res) => {
         console.log(checkWarehouse)
         if (checkWarehouse) {
             return res.status(400).json({
-                error: 'WAREHOUSE_ALREADY_EXIST'
+                error: errors.WAREHOUSE_ALREADY_EXIST
             })
         }
         const warehouse = new Warehouse({
@@ -61,8 +62,8 @@ router.post('/', async (req, res) => {
     }
     catch (err) {
         console.log(err)
-        return res.status(400).json({
-            error: 'SERVER_ERROR'
+        return res.status(500).json({
+            error: errors.SERVER_ERROR
         })
     }
 })
@@ -78,7 +79,7 @@ router.delete('/:id', async (req, res) => {
 
         if (!exists) {
             return res.status(400).json({
-                error: 'WAREHOUSE_DOES_NOT_EXIST'
+                error: errors.WAREHOUSE_NON_EXISTENT
             })
         }
 
@@ -87,11 +88,12 @@ router.delete('/:id', async (req, res) => {
         })
 
         return res.status(200).json({
-            status: 'SUCCESSFULY_DELETED'
+            status: errors.SUCCESSFULY_DELETED
         })
     } catch (err) {
-        return res.status(400).json({
-            error: 'SERVER_ERROR'
+        console.log(err)
+        return res.status(500).json({
+            error: errors.SERVER_ERROR
         })
     }
 
@@ -114,16 +116,10 @@ router.put('/:id', async (req, res) => {
         console.log(warehouse)
         if (!warehouse) {
             return res.status(400).json({
-                error: 'WAREHOUSE_DOES_NOT_EXIST'
+                error: errors.WAREHOUSE_DOES_NOT_EXIST
             })
         }
-        // const warehouse = new Warehouse({
-        //     name,
-        //     totalProducts,
-        //     totalStock,
-        // })
 
-        // await warehouse.save()
         warehouse.name = name
         warehouse.totalProducts = totalProducts
         warehouse.totalStock = totalStock
@@ -136,8 +132,8 @@ router.put('/:id', async (req, res) => {
     }
     catch (err) {
         console.log(err)
-        return res.status(400).json({
-            error: 'SERVER_ERROR'
+        return res.status(500).json({
+            error: errors.SERVER_ERROR
         })
     }
 })
@@ -155,31 +151,32 @@ router.get('/:page/:query/:sort/:sortBy', async (req, res) => {
         }
         console.log(query)
         const filters = {}
-        filters['$or'] = [ 
-        {
-            name: {
-                $in: query.map(q => new RegExp(q, "i"))
-            }
-        }]
+        filters['$or'] = [
+            {
+                name: {
+                    $in: query.map(q => new RegExp(q, "i"))
+                }
+            }]
 
 
         const itemsPerPage = config.get('rows-per-page')
 
         const warehouse = await Warehouse
-        .find(filters)
-        .sort(sortOptions)
-        .skip(itemsPerPage * page)
-        .limit(itemsPerPage)
+            .find(filters)
+            .sort(sortOptions)
+            .skip(itemsPerPage * page)
+            .limit(itemsPerPage)
 
         return res.status(200).json({
-            warehouse})
+            warehouse
+        })
 
 
     }
     catch (err) {
         console.log(err)
-        return res.status(400).json({
-            error: 'SERVER_ERROR_SEARCH'
+        return res.status(500).json({
+            error: errors.SERVER_ERROR_SEARCH
         })
     }
 
