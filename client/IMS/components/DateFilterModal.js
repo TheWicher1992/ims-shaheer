@@ -74,9 +74,12 @@ const DateFilterModal = props => {
                                 onDateChange = { (date) => onDateChange(date)}
                             />
                         </View>
-                        <View>
-                            <Text>
-                                Date: {selectedDate}
+                        <View style = {{marginTop: 20, padding: 10,}}>
+                            <Text style = {styles.normalText}>
+                                Selected Date: 
+                            </Text>
+                            <Text style = {styles.normalText}>
+                                {selectedDate}
                             </Text>
                         </View>
                         

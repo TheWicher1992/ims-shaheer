@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Modal, StyleSheet, Text, View, TouchableOpacity, Dimensions, TextInput, Button, ScrollView } from "react-native";
-import { Slider } from 'react-native-elements';
 import { FontAwesome } from "@expo/vector-icons";
+import Slider from '@react-native-community/slider';
 
-const TitleFilterModal = props => {
+const PriceFilterModal = props => {
 
     const [modalVisible, setModalVisible] = useState(false);
-    const [amountVal, setAmountVal] = useState(0);
+    const [sliderValue, setSliderValue] = useState(15);
 
     useEffect(() => {
         setModalVisible(props.state);
@@ -41,11 +41,11 @@ const TitleFilterModal = props => {
                                 <View style={{ justifyContent: 'center', alignItems: 'flex-start', marginTop: '6.25%',}}>
                                 
                                     <Text style={styles.topText}>
-                                        {props.Title}
+                                        Price
                                     </Text>
                                 </View>
                                 <View style = {{justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-end', paddingRight: '8%' }}>
-                                    <TouchableOpacity>
+                                    <TouchableOpacity onPress = {() => setSliderValue(0)}>
                                         <View style = {styles.clearButton}>
                                             <Text style = {styles.clearButtonText}>
                                                 Clear 
@@ -57,70 +57,28 @@ const TitleFilterModal = props => {
                             </View>
                             
                         </View>
+                                
+                   
 
-                        <View style = {{flex:1}}>
-                            <ScrollView>
-                                <View style = {{marginBottom: 100}}>
+                        <View style={styles.container}>
+                            {/*Text to show slider value*/}
+                            <Text style = {styles.normalText}>
+                            Value of slider is : {sliderValue}
+                            </Text>
 
-                                <TouchableOpacity style = {styles.TextBox}>
-                                    <View style={{ paddingLeft: '5%' }}>
-                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                                            <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-start' }}>
-                                                <Text style={styles.normalText}>
-                                                    product 1
-                                                </Text>
-                                            </View>
-                                            <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-end', paddingRight: '8%' }}>
-                                                <View style={styles.sideText}>
-
-                                                    <FontAwesome
-                                                        name = {"check"}
-                                                        size = {Dimensions.get('window').height > 900 ? 40:25}
-                                                        color = {"#008394"}
-                                                        />
-                                                    <FontAwesome
-                                                        name = {"close"}
-                                                        size = {Dimensions.get('window').height > 900 ? 40:25}
-                                                        color = {"#008394"}
-                                                        />
-                                                </View>
-                                            </View>
-                                        </View>
-                                    </View>
-                                </TouchableOpacity>
-
-                                <TouchableOpacity style = {styles.TextBox}>
-                                    <View style={{ paddingLeft: '5%' }}>
-                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                                            <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-start' }}>
-                                                <Text style={styles.normalText}>
-                                                    Prouduct 2
-                                                </Text>
-                                            </View>
-                                            <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-end', paddingRight: '8%' }}>
-                                                <View style={styles.sideText}>
-
-                                                    <FontAwesome
-                                                        name = {"check"}
-                                                        size = {Dimensions.get('window').height > 900 ? 40:25}
-                                                        color = {"#008394"}
-                                                        />
-                                                    <FontAwesome
-                                                        name = {"close"}
-                                                        size = {Dimensions.get('window').height > 900 ? 40:25}
-                                                        color = {"#008394"}
-                                                        />
-                                                </View>
-                                            </View>
-                                        </View>
-                                    </View>
-                                </TouchableOpacity>
-
-                               
-                                </View>
-                            </ScrollView>
+                            {/*Slider with max, min, step and initial value*/}
+                            <Slider
+                            maximumValue={100}
+                            minimumValue={0}
+                            minimumTrackTintColor="#008394"
+                            maximumTrackTintColor="#000000"
+                            step={1}
+                            value={sliderValue}
+                            onValueChange={
+                                (sliderValue) => setSliderValue(sliderValue)
+                            }
+                            />
                         </View>
-
 
                        
                     </View>
@@ -225,19 +183,13 @@ const styles = StyleSheet.create({
         // left: Dimensions.get('window').width * 0.4,
 
     },
-    sliderDummy: {
-        backgroundColor: '#d3d3d3',
-        width: 300,
-        height:30,
-        borderRadius: 50,
-        position: 'absolute',                
+    container: {
+        flex: 1,
+        padding: 20,
+        justifyContent: 'center',
+        backgroundColor: '#ecf0f1',
     },
-    sliderReal: {
-        backgroundColor: '#119EC2',
-        // width: {(amountVal/50) * 300},
-        height:30,
-    }
 
 });
 
-export default TitleFilterModal;
+export default PriceFilterModal;
