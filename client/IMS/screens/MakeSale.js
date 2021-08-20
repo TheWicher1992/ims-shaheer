@@ -37,7 +37,6 @@ const MakeSale = props => {
     query: '*',
     client: '*',
     deliveryStatus: '*',
-    date: '*',
     quantity:'*',
     total:'*',
     sort: '*',
@@ -71,13 +70,13 @@ const MakeSale = props => {
 
   const getSales = async () => {
     const res = await axios.get(
-      `${uri}/api/sale`
+      `${uri}/api/sale/${filters.page}/${filters.query}/${filters.client}/${filters.deliveryStatus}/${filters.quantity}/${filters.total}/${Pfilters.sort}/${Pfilters.sortBy}`
     )
 
 
-    setSales(res.data.sale)
+    setSales(res.data.sales)
 
-    console.log(res.data.sale)
+    console.log(res.data.sales)
   }
 
 
@@ -191,7 +190,9 @@ const MakeSale = props => {
       productID: productName,
       quantity: quantityVal,
       total: totalAmount,
+      amountReceived : amountRcieved,
       payment: paymentType,
+      warehouseID : selectedWarehouse,
       clientID: clientName,
       note : notes
     }
