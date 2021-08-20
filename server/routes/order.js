@@ -12,7 +12,8 @@ router.post('/', async (req, res) => {
             clientID,
             location,
             note,
-            date,        
+            date,  
+            status      
         } = req.body
 
     
@@ -25,6 +26,7 @@ router.post('/', async (req, res) => {
             client: clientID,
             note,
             date,
+            status
         })
 
         await order.save()
