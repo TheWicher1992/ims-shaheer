@@ -7,13 +7,22 @@ const BrandFilterModal = props => {
 
     const [modalVisible, setModalVisible] = useState(false);
     const [amountVal, setAmountVal] = useState(0);
-
+    const [brands,setBrands] = useState([])
     useEffect(() => {
         setModalVisible(props.state);
     }, [props.state]);
 
     function handleClose() {
         setModalVisible(false);
+    }
+
+    const setFilterBrand = (record, i) => {
+        props.checkState[i] = !props.checkState[i]
+        //setBrands(record)
+        if(brands.indexOf(record) === -1){
+            setBrands(record, brands) 
+        }
+
     }
 
     const showBrands = () => {
@@ -23,7 +32,7 @@ const BrandFilterModal = props => {
                     {props.object.map((record,i) => (
                         <View>
 
-                            <TouchableOpacity style = {styles.TextBox}>
+                            <TouchableOpacity style = {styles.TextBox} onPress={() => setFilterBrand(record.title, i)}>
                                 <View style={{ paddingLeft: '5%' }}>
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                         <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-start' }}>
@@ -33,12 +42,12 @@ const BrandFilterModal = props => {
                                         </View>
                                         <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-end', paddingRight: '8%' }}>
                                             <View style={styles.sideText}>
-
-                                                <FontAwesome
+                                            {props.checkState[i] === true ? (<FontAwesome
                                                     name = {"check"}
                                                     size = {Dimensions.get('window').height > 900 ? 40:25}
                                                     color = {"#008394"}
                                                     />
+                                            ) : (null)}
                                             
                                             </View>
                                         </View>

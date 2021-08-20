@@ -46,11 +46,21 @@ const ProductFilterModal = props => {
     }
 
     const [filters, setFilters] = useState([])
+    const [colorState, setColorState] = useState([])
+    const [colorID, setColorID] = useState([])
+    const [brandID, setBrandID] = useState([])
+    const [brandState, setBrandState] = useState([])
     const getFilters = async () => {
         const res = await axios.get(
             `${uri}/api/product/filters`
-        ).then(res => setFilters(res.data.filters))
-        .catch(err => console.log(err))
+        )
+        setFilters(res.data.filters)
+        res.data.filters.colours.map((object, i) => colorState.push(false)) 
+        res.data.filters.colours.map((object, i) => colorID.push(object._id))
+        res.data.filters.brands.map((object, i) => brandState.push(false)) 
+        res.data.filters.brands.map((object, i) => brandID.push(object._id)) 
+        console.log('ids ',colorID)
+        console.log('idsb ',brandState)
     
 
     }
@@ -215,8 +225,8 @@ const ProductFilterModal = props => {
                     </View>
                 </View>
             </Modal>
-            <ColorFilterModal state = {colorFilterModal} handleClose = {closeColorFilterModal} title = "product" object = {filters.colours}/>
-            <BrandFilterModal state = {brandFilterModal} handleClose = {closeBrandFilterModal} title = "product" object = {filters.brands}/>
+            <ColorFilterModal state = {colorFilterModal} handleClose = {closeColorFilterModal} title = "product" object = {filters.colours} checkStates={colorState} id={colorID}/>
+            <BrandFilterModal state = {brandFilterModal} handleClose = {closeBrandFilterModal} title = "product" object = {filters.brands} checkState={brandState} id={brandID}/>
             <WarehouseFilterModal state = {warehouseFilterModal} handleClose = {closeWarehouseFilterModal} title = "product" object = {filters.warehouses}/>
             <DateFilterModal state = {dateFilterModal} handleClose = {closeDateFilterModal} title = "product" />
             <QuantityFilterModal state = {quantityFilterModal} handleClose = {closeQuantityFilterModal} title = "product" maxStock = {filters.maxStock}/>

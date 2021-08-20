@@ -7,6 +7,7 @@ const ColorFilterModal = props => {
 
     const [modalVisible, setModalVisible] = useState(false);
     const [colors,setColors] = useState([])
+    const [clearState, setClearState] = useState([props.checkStates])
 
     useEffect(() => {
         setModalVisible(props.state);
@@ -14,10 +15,15 @@ const ColorFilterModal = props => {
     }, [props.state]);
 
 
-    const setFilterColor = (record) => {
+    const setFilterColor = (record, i) => {
+        props.checkStates[i] = !props.checkStates[i]
         if(colors.indexOf(record) === -1){
             setColors(record, colors)
         }
+
+    }
+
+    const clearFilterColors = () => {
 
     }
 
@@ -32,7 +38,7 @@ const ColorFilterModal = props => {
                     {props.object.map((record,i) => (
                         <View>
 
-                            <TouchableOpacity style = {styles.TextBox} onPress = {() => setFilterColor(record.title)}>
+                            <TouchableOpacity style = {styles.TextBox} onPress = {() => setFilterColor(record.title, i)}>
                                 <View style={{ paddingLeft: '5%' }}>
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                         <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-start' }}>
@@ -42,13 +48,13 @@ const ColorFilterModal = props => {
                                         </View>
                                         <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-end', paddingRight: '8%' }}>
                                             <View style={styles.sideText}>
-
-                                                <FontAwesome
+                                                {props.checkStates[i] === true ? (<FontAwesome
                                                     name = {"check"}
                                                     size = {Dimensions.get('window').height > 900 ? 40:25}
                                                     color = {"#008394"}
                                                     />
-                                            
+                                            ) : (null)}
+                                                
                                             </View>
                                         </View>
                                     </View>
@@ -95,7 +101,7 @@ const ColorFilterModal = props => {
                                     </Text>
                                 </View>
                                 <View style = {{justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-end', paddingRight: '8%' }}>
-                                    <TouchableOpacity>
+                                    <TouchableOpacity onPress={() => clearFilterColors()}>
                                         <View style = {styles.clearButton}>
                                             <Text style = {styles.clearButtonText}>
                                                 Clear 
