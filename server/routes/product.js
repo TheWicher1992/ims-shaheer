@@ -268,6 +268,35 @@ router.get('/filters', async (req, res) => {
 
 })
 
+router.get('/stock/:pid/:wid', async (req, res) => {
+
+    try {
+
+        const productID = req.params.pid
+        const warehouseID = req.params.wid
+
+        const warehouseStock = await Stock.findOne({
+            product: productID,
+            warehouse: warehouseID
+        })
+
+
+        return res.status(200).json({
+            stock: warehouseStock
+        })
+
+    }
+    catch (err) {
+        console.log(err)
+        return res.status(500).json({
+            error: errors.SERVER_ERROR
+        })
+    }
+
+})
+
+
+
 router.get('/stock/:id', async (req, res) => {
 
     try {
