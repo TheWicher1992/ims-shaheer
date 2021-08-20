@@ -1,6 +1,8 @@
 const express = require('express')
 const router = express.Router()
 const DeliveryOrder = require('../models/DeliveryOrder')
+const Client = require('../models/Client')
+const Products = require('../models/Product')
 const config = require('config')
 const {
     SERVER_ERROR
@@ -90,15 +92,13 @@ router.get('/:id', async (req, res) => {
 
 
 // filter suppliers
-router.get('/:page/:query/:client/:product/:date/:sort/:sortBy', async (req, res) => {
+router.get('/:page/:query/:client/:product/:sort/:sortBy', async (req, res) => {
+
     try {
         const page = req.params.page - 1
         const query = req.params.query === '*' ? ['.*'] : req.params.query.split(" ")
-
-        const date = req.params.date
         const client = req.params.client
         const product = req.params.product
-
         const sort = req.params.sort === '*' ? 'date' : req.params.sort
         const sortBy = req.params.sortBy === '*' ? 'desc' : req.params.sortBy
 
@@ -108,27 +108,56 @@ router.get('/:page/:query/:client/:product/:date/:sort/:sortBy', async (req, res
 
 
         const filters = {}
+        console.log(query)
+        // if (client !== '*') filters['client'] = client
+        // if (product !== '*') filters['product'] = product
 
-        if (client !== '*') filters['client'] = client
-        if (product !== '*') filters['product'] = product
-        if (date !== '*') filters['date'] = date
+
+        const clientIDs = await Client.find({
+            userName : {
+                $in: query.map(q => new RegExp(q, "i"))
+            }
+        }).select('_id')
+
+        const productIDs = await Products.find({
+            title: {
+                $in: query.map(q => new RegExp(q, "i"))
+            }
+        }).select('_id')
+
+        filters['$or'] = [
+            {
+                client: {
+                    $in: clientIDs.map(c => c._id)
+                }
+            },
+            {
+                product: {
+                    $in: productIDs.map(b => b._id)
+                }
+            }
+            
+        ]
+
         const itemsPerPage = config.get('rows-per-page')
 
-        const suppliers = await Client
+        const deliveryOrder = await DeliveryOrder
+            .find(filters)
+            .populate(['product', 'client'])
             .sort(sortOptions)
             .skip(itemsPerPage * page)
             .limit(itemsPerPage)
 
         return res.status(200).json({
-            suppliers
+            deliveryOrder
         })
-    }
-    catch (err) {
+    } catch (err) {
         console.log(err)
         return res.status(500).json({
-            error: SERVER_ERROR
+            error: 'SERVER_ERROR'
         })
     }
+
 })
 
 

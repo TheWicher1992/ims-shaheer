@@ -20,6 +20,7 @@ const DeliveryOrders = props => {
   const [orders, setOrders] = useState([])
   const [products, setProducts] = useState([])
   const [clients, setClients] = useState([])
+  const [query, setQuery] = useState('*')
 
   const [Pfilters, setPFilters] = useState({
     page: 1,
@@ -27,16 +28,19 @@ const DeliveryOrders = props => {
     colour: '*',
     brand: '*',
     ware: '*',
+    client: '*',
+    product: '*',
     sort: '*',
     sortBy: '*'
   })
 
+
   const getOrders = async () => {
     const res = await axios.get(
-      `${uri}/api/order`
+      `${uri}/api/order/${Pfilters.page}/${query}/${Pfilters.client}/${Pfilters.product}/${Pfilters.sort}/${Pfilters.sortBy}`
     )
 
-    console.log('logging arriving order', res.data.deliveryOrder)
+    // console.log('logging arriving order', res.data.deliveryOrder)
     setOrders(res.data.deliveryOrder)
 
   }
@@ -73,13 +77,12 @@ const DeliveryOrders = props => {
 
   }, [])
 
+
+
+
+
   // useEffect(() => {
-  // }, [])
-
-
-
-  // useEffect(() => {
-  // },[])
+  // 
 
 
   const handleConfirm = (pItems) => { // temporary for picker
@@ -123,12 +126,19 @@ const DeliveryOrders = props => {
 
   const [search, setSearch] = React.useState(``) //for keeping track of search
   const onChangeSearch = (searchVal) => { //function to keep track of search as the user types
-    setSearch(searchVal);
-    console.log(search);
+  if (searchVal === '')
+  {
+    setQuery('*')
+  }
+  else
+  {setQuery(searchVal)}
   }
 
   const searchFunc = () => {
-    console.log(search); //printing search value for now
+    //printing search value for now
+    getClients()
+    getProducts()
+    getOrders()
   }
 
 
