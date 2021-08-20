@@ -107,10 +107,8 @@ const Stocks = props => {
         </View>
       </View>
       <View style={styles.containerButton}>
-        <TouchableOpacity onPress={() => { showAddProductForm() }}>
           <View style={styles.buttonContainer}>
           </View>
-        </TouchableOpacity>
         <View style={{ flexDirection: 'row', justifyContent: 'center', }}>
           <View style={styles.searchBar}>
             <TextInput onChangeText={onChangeSearch} style={styles.buttonInput} placeholder="type here..." autoCorrect={false} />
@@ -132,8 +130,8 @@ const Stocks = props => {
 
       </View>
       <FilterButton />
-      <View style={{ flexDirection: 'row', }}>
-        <ScrollView>
+      
+        <ScrollView style={{ top: 20 }}>
         <DataTable>
           <DataTable.Header>
             <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Serial No.</Text></DataTable.Title>
@@ -175,7 +173,7 @@ const Stocks = props => {
 
         </ScrollView>
       </View>
-    </View>
+    
     
 
 
@@ -247,7 +245,7 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     flexDirection: 'row',
-    marginTop: Dimensions.get('window').height > 900 ? 80 : 60,
+    marginTop: Dimensions.get('window').height > 900 ? 50 : 25,
     paddingVertical: 12,
     paddingHorizontal: 32,
     left: 15

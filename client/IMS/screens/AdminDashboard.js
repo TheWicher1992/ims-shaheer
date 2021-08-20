@@ -57,17 +57,17 @@ const AdminDashboard = props => {
       <View style={{ justifyContent: 'center', alignSelf: 'center', }}>
         <Text style={styles.titleText}>Admin Dashboard</Text>
       </View>
-      <TouchableOpacity>
+      <TouchableOpacity onPress={() => props.navigation.navigate({ routeName: 'Stocks' })}>
         <View style={styles.containers}>
           <Text style={styles.containerText}>Goods out of stock {outOfStock}</Text>
         </View>
       </TouchableOpacity>
-      <TouchableOpacity>
+      <TouchableOpacity onPress={() => props.navigation.navigate({ routeName: 'Sales' })}>
         <View style={styles.containers}>
           <Text style={styles.containerText}>Today's Revenue {todayRevenue}</Text>
         </View>
       </TouchableOpacity>
-      <TouchableOpacity>
+      <TouchableOpacity onPress={() => props.navigation.navigate({ routeName: 'Delivery' })}>
         <View style={styles.containers}>
           <Text style={styles.containerText}>Pending Deliveries {pendingDeliveries}</Text>
         </View>

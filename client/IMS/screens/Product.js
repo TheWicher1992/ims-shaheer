@@ -455,8 +455,7 @@ const Product = props => {
 
       </View>
       <FilterButton page="product" />
-      <View style={{ flexDirection: 'row', }}>
-        {/* <ScrollView horizontal = {true}> */}
+      <ScrollView style={{ top: 25 }}>
         <DataTable>
           <DataTable.Header>
             <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Serial No.</Text></DataTable.Title>
@@ -499,11 +498,8 @@ const Product = props => {
           />
         </DataTable>
 
-        {/* </ScrollView> */}
-      </View>
+      </ScrollView>
     </View>
-    // </KeyboardAvoidingView>
-
 
   )
 }
