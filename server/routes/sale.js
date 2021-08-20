@@ -31,7 +31,7 @@ router.post('/', async (req, res) => {
 
         var neg = total - amountReceived 
     
-        if(payment === 'Credit' || payment === 'Partial')
+        if(payment === 'Partial')
         {
 
             const clientPrev = await Client.findById(clientID)
@@ -40,6 +40,17 @@ router.post('/', async (req, res) => {
             let newBal = prev - neg
 
         let client = await Client.findOneAndUpdate({_id : clientID},{balance : newBal})
+
+        }
+        else if(payment === 'Partial')
+        {
+            const clientPrev = await Client.findById(clientID)
+            let prev = clientPrev.balance
+            
+            let newBal = prev - total
+
+        let client = await Client.findOneAndUpdate({_id : clientID},{balance : newBal})
+            
 
         }
 
