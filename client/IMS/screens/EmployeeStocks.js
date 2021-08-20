@@ -247,7 +247,7 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     flexDirection: 'row',
-    marginTop: Dimensions.get('window').height > 900 ? 80 : 60,
+    marginTop: Dimensions.get('window').height > 900 ? 50 : 25,
     paddingVertical: 12,
     paddingHorizontal: 32,
     left: 15
