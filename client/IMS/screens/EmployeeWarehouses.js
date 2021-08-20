@@ -102,31 +102,6 @@ const EmployeeWarehouses = props => {
     setStock(stocks);
   }
 
-  const addWarehouse = async () => {
-
-    const body = {
-      name: warehouseName,
-      totalProducts: totalProducts,
-      totalStock: stock
-    }
-    console.log(body)
-    console.log(`///////////////////////////////////////add warehouse`)
-
-    await axios.post(`${uri}/api/warehouse`, body,
-      {
-        headers: {
-          "Content-Type": "application/json"
-        }
-      }
-
-    )
-      .then(res => console.log(res))
-      .catch(err => console.log(err))
-
-    getWarehouses()
-    setModalVisible(false); //closing modal on done for now
-  }
-
   const [itemsPerPage, setItemsPerPage] = React.useState(optionsPerPage[0]); //for items per page on table
   const [touchedWarehouse, setTouchedWarehouse] = React.useState([])
   const [isTableDetailModalVisible, setTableDetailModalVisible] = React.useState(false);
@@ -141,52 +116,10 @@ const EmployeeWarehouses = props => {
     setTableDetailModalVisible(false)
   }
 
-
-
-
   return (
     // <KeyboardAvoidingView style = {styles.containerView} behavior = "padding">
 
     <View>
-      <Modal
-        onSwipeComplete={() => setModalVisible(false)}
-        swipeDirection="left"
-        presentationStyle="overFullScreen"
-        transparent
-        visible={isModalVisible}>
-        <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-          <View style={styles.modalStyle}>
-            <View style={{ justifyContent: 'center', alignItems: 'center', }}>
-              <Text style={styles.modalTitle}>Add Warehouse</Text>
-              <View>
-                <TextInput onChangeText={onChangeWarehouseName} style={styles.input} placeholder="Name" autoCorrect={false} />
-                <TextInput onChangeText={onChangeTotalProducts} style={styles.input} placeholder="Total Products" autoCorrect={false} />
-                <TextInput onChangeText={onChangeStock} style={styles.input} placeholder="Total Stocks" autoCorrect={false} />
-              </View>
-              <View style={{ flexDirection: 'row', alignItems: 'center', top: 45 }}>
-                <TouchableOpacity style={{ alignSelf: 'flex-start' }} onPress={() => { setModalVisible(false) }}>
-                  <View>
-                    <View style={styles.buttonModalContainerCross}>
-                      <View>
-                        <Text style={styles.buttonModalText}>Cancel</Text>
-                      </View>
-                    </View>
-                  </View>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => { addWarehouse() }}>
-                  <View>
-                    <View style={styles.buttonModalContainer}>
-                      <View>
-                        <Text style={styles.buttonModalText}>Done</Text>
-                      </View>
-                    </View>
-                  </View>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </View>
-        </View>
-      </Modal>
       <WarehouseDetailModal state={isTableDetailModalVisible} handleClose={handleClose} title='Warehouse Information' object={touchedWarehouse === [] ? [] : touchedWarehouse} getWarehouses={getWarehouses} occupation={'Admin'} />
       <View style={styles.screen}>
         <View>
@@ -194,11 +127,8 @@ const EmployeeWarehouses = props => {
         </View>
       </View>
       <View style={styles.containerButton}>
-        <TouchableOpacity onPress={() => { setModalVisible(true) }}>
           <View style={styles.buttonContainer}>
-            <Text style={styles.buttonText}>Add Warehouse</Text>
           </View>
-        </TouchableOpacity>
         <View style={{ flexDirection: 'row', justifyContent: 'center', }}>
           <View style={styles.searchBar}>
             <TextInput onChangeText={onChangeSearch} style={styles.buttonInput} placeholder="type here..." autoCorrect={false} />
@@ -325,9 +255,8 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     flexDirection: 'row',
-    marginTop: Dimensions.get('window').height > 900 ? 80 : 60,
+    marginTop: Dimensions.get('window').height > 900 ? 50 : 25,
     borderRadius: 40,
-    backgroundColor: '#00E0C7',
     paddingVertical: 12,
     paddingHorizontal: 32,
     left: 15

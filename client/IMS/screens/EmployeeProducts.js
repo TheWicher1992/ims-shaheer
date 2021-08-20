@@ -390,7 +390,7 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     flexDirection: 'row',
-    marginTop: Dimensions.get('window').height > 900 ? 80 : 60,
+    marginTop: Dimensions.get('window').height > 900 ? 50 : 25,
     borderRadius: 40,
     paddingVertical: 12,
     paddingHorizontal: 32,
