@@ -46,10 +46,10 @@ const MakeSale = props => {
   const getStocks = async() =>{
 
     const res = await axios.get(
-      `${uri}/api/product/stock/${productName}`
+      `${uri}/api/product/stock/611e7b157129c52b2446c83b`
     )
 
-    console.log(res.data.stocks)
+    
     setStocks(res.data.stocks)
 
 
@@ -80,14 +80,16 @@ const MakeSale = props => {
   }
 
   const getSales = async () => {
-    const res = await axios.get(
-      `${uri}/api/sale/${filters.page}/${filters.query}/${filters.client}/${filters.deliveryStatus}/${filters.quantity}/${filters.total}/${Pfilters.sort}/${Pfilters.sortBy}`
-    )
 
+    console.log('logging sales')
+    const res = await axios.get(
+      `${uri}/api/sale/${filters.page}/${filters.query}/${filters.client}/${filters.deliveryStatus}/${filters.quantity}/${filters.total}/${filters.sort}/${filters.sortBy}`
+    )
+    console.log(res.data.sales)
 
     setSales(res.data.sales)
 
-    console.log(res.data.sales)
+    
   }
 
 
@@ -101,6 +103,9 @@ const MakeSale = props => {
 
   useEffect(() => {
     getSales()
+  }, [])
+  useEffect(() => {
+    getStocks()
   }, [])
 
 
@@ -310,7 +315,7 @@ const MakeSale = props => {
                               headerComponent={<Text style={{fontSize:32,color: "black", fontWeight: 'bold'}} >Items</Text>}
                               OnConfirm={(pItems) => handleConfirm(pItems)}
                               ConfirmButtonTitle='OK'
-                              DescriptionField='itemDescription'
+                              DescriptionField='itemDescription , itemKey'
                               KeyField='itemKey'
                               placeholder='Select Warehouse'
                               arrowColor='#008394'
