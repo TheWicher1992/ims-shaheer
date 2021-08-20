@@ -24,12 +24,13 @@ const AdminDashboard = props => {
 
   const getToday = async () => {
     const res = await axios.get(
-      `${uri}/api/dashboard/todayRevenue`
+      `${uri}/api/dashboard/todayRevenue` 
     )
 
 
-    console.log('//////revenue', res.data.todaysRevenue.revenue)
-    settodayRevenue(res.data.todaysRevenue.revenue)
+    try{
+    settodayRevenue(res.data.todaysRevenue.revenue)}
+    catch(err){}
   }
 
   const getPending = async () => {
