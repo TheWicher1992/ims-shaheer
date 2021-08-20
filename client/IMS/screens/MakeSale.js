@@ -21,7 +21,7 @@ const MakeSale = props => {
   const [sales, setSales] = useState([])
   const [products,setProducts] = useState([])
   const [clients,setClients]  = useState([])
-
+  const [stocks,setStocks] = useState([])
   const [Pfilters, setPFilters] = useState({
     page: 1,
     query: '*',
@@ -43,6 +43,17 @@ const MakeSale = props => {
     sortBy: '*'
   })
   
+  const getStocks = async() =>{
+
+    const res = await axios.get(
+      `${uri}/api/product/stock/${productName}`
+    )
+
+    console.log(res.data.stocks)
+    setStocks(res.data.stocks)
+
+
+  }
 
   const getProducts = async () => {
     const res = await axios.get(
@@ -190,7 +201,7 @@ const MakeSale = props => {
       productID: productName,
       quantity: quantityVal,
       total: totalAmount,
-      amountReceived : amountRcieved,
+      amountReceived : amountReceived,
       payment: paymentType,
       warehouseID : selectedWarehouse,
       clientID: clientName,
@@ -389,7 +400,7 @@ const MakeSale = props => {
               <DataTable.Row>
                 <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{sale.product === null ? '--' : sale.product.title}</Text></DataTable.Cell>
                 <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{sale.quantity === undefined ? '--' : sale.quantity}</Text></DataTable.Cell>
-                <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>69000</Text></DataTable.Cell>
+                <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{sale.total === undefined ? '--' : sale.total}</Text></DataTable.Cell>
                 <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{sale.client === null ? '--' : sale.client.userName}</Text></DataTable.Cell>
               </DataTable.Row>
             </TouchableOpacity>
