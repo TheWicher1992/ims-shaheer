@@ -11,16 +11,19 @@ import {
     SALE_SET_PAYMENT,
     SALE_RESET_PAYMENT,
     SALE_SET_DATE,
-    SALE_RESET_DATE
+    SALE_RESET_DATE,
+    SALE_CLEAR_ALL,
+    SALE_REMOVE_CLIENT,
+    SALE_REMOVE_PRODUCT
 } from '../actions/types'
 
 const initalSate = {
     maxQuantity: '*',
     maxTotal: '*',
     page: 1,
-    product: '*',
-    client: '*',
-    payment: "*",
+    product: ['*'],
+    client: ['*'],
+    payment: '*',
     date: '*'
 }
 
@@ -29,6 +32,16 @@ export default saleFilterReducer = (state = initalSate, action) => {
         case INCREMENT_SALE_PAGE:
             return {
                 ...state, page: state.page + 1
+            }
+        case SALE_CLEAR_ALL:
+            return {
+                maxQuantity: '*',
+                maxTotal: '*',
+                page: 1,
+                product: ['*'],
+                client: ['*'],
+                payment: '*',
+                date: '*'
             }
         case SALE_SET_MAX_QUANT:
             return {
@@ -48,19 +61,27 @@ export default saleFilterReducer = (state = initalSate, action) => {
             }
         case SALE_SET_PRODUCT:
             return {
-                ...state, product: action.payload
+                ...state, product: [...state.product, action.payload]
+            }
+        case SALE_REMOVE_PRODUCT:
+            return {
+                ...state, product: [...state.product.filter(id => id !== action.payload)]
             }
         case SALE_RESET_PRODUCT:
             return {
-                ...state, product: '*'
+                ...state, product: ['*']
             }
         case SALE_SET_CLIENT:
             return {
-                ...state, client: action.payload
+                ...state, client: [...state.client, action.payload]
+            }
+        case SALE_REMOVE_CLIENT:
+            return {
+                ...state, client: [...state.client.filter(id => id !== action.payload)]
             }
         case SALE_RESET_CLIENT:
             return {
-                ...state, client: '*'
+                ...state, client: ['*']
             }
         case SALE_SET_PAYMENT:
             return {

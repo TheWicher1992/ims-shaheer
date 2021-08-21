@@ -11,7 +11,10 @@ import {
     SALE_SET_PAYMENT,
     SALE_RESET_PAYMENT,
     SALE_SET_DATE,
-    SALE_RESET_DATE
+    SALE_RESET_DATE,
+    SALE_CLEAR_ALL,
+    SALE_REMOVE_CLIENT,
+    SALE_REMOVE_PRODUCT
 } from './types'
 
 
@@ -19,6 +22,12 @@ import {
 export const incrementSalePage = () => dispatch => {
     dispatch({
         type: INCREMENT_SALE_PAGE
+    })
+}
+
+export const clearSaleFilters = () => dispatch => {
+    dispatch({
+        type: SALE_CLEAR_ALL
     })
 }
 
@@ -57,7 +66,12 @@ export const setSaleProduct = (Product) => dispatch => {
         payload: Product
     })
 }
-
+export const removeSaleProduct = (Product) => dispatch => {
+    dispatch({
+        type: SALE_REMOVE_PRODUCT,
+        payload: Product
+    })
+}
 export const resetSaleProduct = () => dispatch => {
     dispatch({
         type: SALE_RESET_PRODUCT,
@@ -71,7 +85,12 @@ export const setSaleClient = (client) => dispatch => {
         payload: client
     })
 }
-
+export const removeSaleClient = (client) => dispatch => {
+    dispatch({
+        type: SALE_REMOVE_CLIENT,
+        payload: client
+    })
+}
 export const resetSaleClient = () => dispatch => {
     dispatch({
         type: SALE_RESET_CLIENT,

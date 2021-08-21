@@ -11,7 +11,10 @@ import {
     PURCHASE_SET_PAYMENT,
     PURCHASE_RESET_PAYMENT,
     PURCHASE_SET_DATE,
-    PURCHASE_RESET_DATE
+    PURCHASE_RESET_DATE,
+    PURCHASE_CLEAR_ALL,
+    PURCHASE_REMOVE_CLIENT,
+    PURCHASE_REMOVE_PRODUCT,
 } from './types'
 
 
@@ -19,6 +22,11 @@ import {
 export const incrementPurchasePage = () => dispatch => {
     dispatch({
         type: INCREMENT_PURCHASE_PAGE
+    })
+}
+export const clearPurchaseFilters = () => dispatch => {
+    dispatch({
+        type: PURCHASE_CLEAR_ALL
     })
 }
 
@@ -57,7 +65,12 @@ export const setPurchaseProduct = (Product) => dispatch => {
         payload: Product
     })
 }
-
+export const removePurchaseProduct = (Product) => dispatch => {
+    dispatch({
+        type: PURCHASE_REMOVE_PRODUCT,
+        payload: Product
+    })
+}
 export const resetPurchaseProduct = () => dispatch => {
     dispatch({
         type: PURCHASE_RESET_PRODUCT,
@@ -71,7 +84,12 @@ export const setPurchaseClient = (client) => dispatch => {
         payload: client
     })
 }
-
+export const removePurchaseClient = (client) => dispatch => {
+    dispatch({
+        type: PURCHASE_REMOVE_CLIENT,
+        payload: client
+    })
+}
 export const resetPurchaseClient = () => dispatch => {
     dispatch({
         type: PURCHASE_RESET_CLIENT,
