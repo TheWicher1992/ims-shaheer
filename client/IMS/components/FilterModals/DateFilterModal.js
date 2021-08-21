@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { Modal, StyleSheet, Text, View, TouchableOpacity, Dimensions, TextInput, Button, ScrollView } from "react-native";
 import CalendarPicker from 'react-native-calendar-picker';
-
+import { connect } from 'react-redux'
+import { setProdDate,resetProdDate } from '../../actions/productFilters'
 import { FontAwesome } from "@expo/vector-icons";
+import moment from "moment";
 
 const DateFilterModal = props => {
 
     const [modalVisible, setModalVisible] = useState(false);
-    const [selectedDate, setSelectedDate] = useState("");
 
     useEffect(() => {
         setModalVisible(props.state);
@@ -18,12 +19,11 @@ const DateFilterModal = props => {
     }
 
     const onDateChange = (date) => {
-        setSelectedDate(date.toString());
-        console.log(date);
+        props.setProdDate(moment(date).format("MM-DD-YY"))
     }
 
-    const clearDate = () => {
-        setSelectedDate("");
+    const clearFilterColors = () => {
+        props.resetProdDate()
     }
     return (
 
@@ -55,7 +55,7 @@ const DateFilterModal = props => {
                                     </Text>
                                 </View>
                                 <View style = {{justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-end', paddingRight: '8%' }}>
-                                    <TouchableOpacity onPress = {() => clearDate()}>
+                                    <TouchableOpacity onPress={() => clearFilterColors()}>
                                         <View style = {styles.clearButton}>
                                             <Text style = {styles.clearButtonText}>
                                                 Clear 
@@ -79,7 +79,9 @@ const DateFilterModal = props => {
                                 Selected Date: 
                             </Text>
                             <Text style = {styles.normalText}>
-                                {selectedDate}
+                                {
+                                    props.dateFilter 
+                                }
                             </Text>
                         </View>
                         
@@ -203,4 +205,11 @@ const styles = StyleSheet.create({
 
 });
 
-export default DateFilterModal;
+const mapStateToProps = (state) => {
+    console.log(state.productFilters)
+    return {
+        dateFilter: state.productFilters.date
+    }
+}
+
+export default connect(mapStateToProps, { setProdDate,resetProdDate  })(DateFilterModal);

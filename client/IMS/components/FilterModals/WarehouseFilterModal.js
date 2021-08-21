@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Modal, StyleSheet, Text, View, TouchableOpacity, Dimensions, TextInput, Button, ScrollView } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
+import { connect } from 'react-redux'
+import { setProdWare, resetProdWare, removeProdWare } from '../../actions/productFilters'
 
 const WarehouseFilterModal = props => {
 
     const [modalVisible, setModalVisible] = useState(false);
-    const [amountVal, setAmountVal] = useState(0);
 
     useEffect(() => {
         setModalVisible(props.state);
@@ -13,6 +14,20 @@ const WarehouseFilterModal = props => {
 
     function handleClose() {
         setModalVisible(false);
+    }
+
+    const setFilterWare = (record, i) => {
+        if (props.wareFilter.indexOf(record._id) === -1) {
+            props.setProdWare(record._id)
+        }
+        else {
+            props.removeProdWare(record._id)
+        }
+
+    }
+
+    const clearFilterWare = () => {
+        props.resetProdWare()
     }
     const getWarehouses = () => {
         if(props.object !== [] && props.object !== undefined){
@@ -23,7 +38,7 @@ const WarehouseFilterModal = props => {
 
                             <ScrollView>
                             <View style = {{}}>
-                            <TouchableOpacity style = {styles.TextBox}>
+                            <TouchableOpacity style = {styles.TextBox}  onPress={() => setFilterWare(record, i)}>
                                 <View style={{ paddingLeft: '5%' }}>
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                         <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-start' }}>
@@ -33,12 +48,12 @@ const WarehouseFilterModal = props => {
                                         </View>
                                         <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-end', paddingRight: '8%' }}>
                                             <View style={styles.sideText}>
-
-                                                <FontAwesome
+                                            {props.wareFilter.indexOf(record._id) !== -1 ? (<FontAwesome
                                                     name = {"check"}
                                                     size = {Dimensions.get('window').height > 900 ? 40:25}
                                                     color = {"#008394"}
                                                     />
+                                            ) : (null)}
                                             
                                             </View>
                                         </View>
@@ -88,7 +103,7 @@ const WarehouseFilterModal = props => {
                                     </Text>
                                 </View>
                                 <View style = {{justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-end', paddingRight: '8%' }}>
-                                    <TouchableOpacity>
+                                    <TouchableOpacity onPress={() => clearFilterWare()}>
                                         <View style = {styles.clearButton}>
                                             <Text style = {styles.clearButtonText}>
                                                 Clear 
@@ -104,69 +119,6 @@ const WarehouseFilterModal = props => {
                         {
                             getWarehouses()
                         }
-
-                        {/* <View style = {{flex:1}}>
-                            <ScrollView>
-                                <View style = {{marginBottom: 100}}>
-
-                                <TouchableOpacity style = {styles.TextBox}>
-                                    <View style={{ paddingLeft: '5%' }}>
-                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                                            <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-start' }}>
-                                                <Text style={styles.normalText}>
-                                                    Warehouse 1
-                                                </Text>
-                                            </View>
-                                            <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-end', paddingRight: '8%' }}>
-                                                <View style={styles.sideText}>
-
-                                                    <FontAwesome
-                                                        name = {"check"}
-                                                        size = {Dimensions.get('window').height > 900 ? 40:25}
-                                                        color = {"#008394"}
-                                                        />
-                                                    <FontAwesome
-                                                        name = {"close"}
-                                                        size = {Dimensions.get('window').height > 900 ? 40:25}
-                                                        color = {"#008394"}
-                                                        />
-                                                </View>
-                                            </View>
-                                        </View>
-                                    </View>
-                                </TouchableOpacity>
-
-                                <TouchableOpacity style = {styles.TextBox}>
-                                    <View style={{ paddingLeft: '5%' }}>
-                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                                            <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-start' }}>
-                                                <Text style={styles.normalText}>
-                                                    Warehouse 2
-                                                </Text>
-                                            </View>
-                                            <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-end', paddingRight: '8%' }}>
-                                                <View style={styles.sideText}>
-
-                                                    <FontAwesome
-                                                        name = {"check"}
-                                                        size = {Dimensions.get('window').height > 900 ? 40:25}
-                                                        color = {"#008394"}
-                                                        />
-                                                    <FontAwesome
-                                                        name = {"close"}
-                                                        size = {Dimensions.get('window').height > 900 ? 40:25}
-                                                        color = {"#008394"}
-                                                        />
-                                                </View>
-                                            </View>
-                                        </View>
-                                    </View>
-                                </TouchableOpacity>
-
-                               
-                                </View>
-                            </ScrollView>
-                        </View> */}
 
 
                        
@@ -202,9 +154,7 @@ const styles = StyleSheet.create({
         textAlign: 'right',
         alignItems: 'flex-end',
         flexDirection: 'row',
-        ///alignSelf: 'flex-end',
-        //alignItems: 'flex-end',
-        // marginLeft: '65%',
+     
     },
     topTextBox: {
         width: '100%',
@@ -219,7 +169,6 @@ const styles = StyleSheet.create({
     TextBox: {
         width: '100%',
         padding: 20,
-        // height: '22%',
         shadowColor: '#000000',
         backgroundColor: '#fff',
         shadowOffset: { width: 1, height: 1 },
@@ -287,4 +236,11 @@ const styles = StyleSheet.create({
 
 });
 
-export default WarehouseFilterModal;
+const mapStateToProps = (state) => {
+    console.log(state.productFilters)
+    return {
+        wareFilter: state.productFilters.ware
+    }
+}
+
+export default connect(mapStateToProps, { setProdWare, resetProdWare, removeProdWare   })(WarehouseFilterModal);

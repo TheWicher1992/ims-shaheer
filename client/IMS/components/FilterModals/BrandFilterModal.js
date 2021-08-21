@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Modal, StyleSheet, Text, View, TouchableOpacity, Dimensions, TextInput, Button, ScrollView } from "react-native";
-import { Slider } from 'react-native-elements';
 import { FontAwesome } from "@expo/vector-icons";
+import { connect } from 'react-redux'
+import { setProdBrand, resetProdBrand, removeProdBrand, } from '../../actions/productFilters'
 
 const BrandFilterModal = props => {
 
@@ -17,12 +18,17 @@ const BrandFilterModal = props => {
     }
 
     const setFilterBrand = (record, i) => {
-        props.checkState[i] = !props.checkState[i]
-        //setBrands(record)
-        if(brands.indexOf(record) === -1){
-            setBrands(record, brands) 
+        if (props.brandFilter.indexOf(record._id) === -1) {
+            props.setProdBrand(record._id)
+        }
+        else {
+            props.removeProdBrand(record._id)
         }
 
+    }
+
+    const clearFilterColors = () => {
+        props.resetProdBrand()
     }
 
     const showBrands = () => {
@@ -32,7 +38,7 @@ const BrandFilterModal = props => {
                     {props.object.map((record,i) => (
                         <View>
 
-                            <TouchableOpacity style = {styles.TextBox} onPress={() => setFilterBrand(record.title, i)}>
+                            <TouchableOpacity style = {styles.TextBox} onPress={() => setFilterBrand(record, i)}>
                                 <View style={{ paddingLeft: '5%' }}>
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                         <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-start' }}>
@@ -42,7 +48,7 @@ const BrandFilterModal = props => {
                                         </View>
                                         <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-end', paddingRight: '8%' }}>
                                             <View style={styles.sideText}>
-                                            {props.checkState[i] === true ? (<FontAwesome
+                                            {props.brandFilter.indexOf(record._id) !== -1 ? (<FontAwesome
                                                     name = {"check"}
                                                     size = {Dimensions.get('window').height > 900 ? 40:25}
                                                     color = {"#008394"}
@@ -93,7 +99,7 @@ const BrandFilterModal = props => {
                                     </Text>
                                 </View>
                                 <View style = {{justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-end', paddingRight: '8%' }}>
-                                    <TouchableOpacity>
+                                    <TouchableOpacity onPress={() => clearFilterColors()}>
                                         <View style = {styles.clearButton}>
                                             <Text style = {styles.clearButtonText}>
                                                 Clear 
@@ -109,69 +115,6 @@ const BrandFilterModal = props => {
                         {
                             showBrands()
                         }
-{/* 
-                        <View style = {{flex:1}}>
-                            <ScrollView>
-                                <View style = {{marginBottom: 100}}>
-
-                                <TouchableOpacity style = {styles.TextBox}>
-                                    <View style={{ paddingLeft: '5%' }}>
-                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                                            <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-start' }}>
-                                                <Text style={styles.normalText}>
-                                                    Brand 1
-                                                </Text>
-                                            </View>
-                                            <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-end', paddingRight: '8%' }}>
-                                                <View style={styles.sideText}>
-
-                                                    <FontAwesome
-                                                        name = {"check"}
-                                                        size = {Dimensions.get('window').height > 900 ? 40:25}
-                                                        color = {"#008394"}
-                                                        />
-                                                    <FontAwesome
-                                                        name = {"close"}
-                                                        size = {Dimensions.get('window').height > 900 ? 40:25}
-                                                        color = {"#008394"}
-                                                        />
-                                                </View>
-                                            </View>
-                                        </View>
-                                    </View>
-                                </TouchableOpacity>
-
-                                <TouchableOpacity style = {styles.TextBox}>
-                                    <View style={{ paddingLeft: '5%' }}>
-                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                                            <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-start' }}>
-                                                <Text style={styles.normalText}>
-                                                    Brand 2
-                                                </Text>
-                                            </View>
-                                            <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-end', paddingRight: '8%' }}>
-                                                <View style={styles.sideText}>
-
-                                                    <FontAwesome
-                                                        name = {"check"}
-                                                        size = {Dimensions.get('window').height > 900 ? 40:25}
-                                                        color = {"#008394"}
-                                                        />
-                                                    <FontAwesome
-                                                        name = {"close"}
-                                                        size = {Dimensions.get('window').height > 900 ? 40:25}
-                                                        color = {"#008394"}
-                                                        />
-                                                </View>
-                                            </View>
-                                        </View>
-                                    </View>
-                                </TouchableOpacity>
-
-                               
-                                </View>
-                            </ScrollView>
-                        </View> */}
 
 
                        
@@ -292,4 +235,11 @@ const styles = StyleSheet.create({
 
 });
 
-export default BrandFilterModal;
+const mapStateToProps = (state) => {
+    console.log(state.productFilters)
+    return {
+        brandFilter: state.productFilters.brand
+    }
+}
+
+export default connect(mapStateToProps, { setProdBrand, resetProdBrand, removeProdBrand  })(BrandFilterModal);
