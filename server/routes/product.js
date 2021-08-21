@@ -94,8 +94,6 @@ router.post('/', async (req, res) => {
     }
 })
 
-
-
 const moveDeliveryToWarehouse = async (sourceID, destID, productID) => {
 
     //update delivery status
@@ -296,8 +294,6 @@ router.get('/stock/:pid/:wid', async (req, res) => {
     }
 
 })
-
-
 
 router.get('/stock/:id', async (req, res) => {
 

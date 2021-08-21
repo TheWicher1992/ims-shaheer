@@ -11,16 +11,19 @@ import {
     PURCHASE_SET_PAYMENT,
     PURCHASE_RESET_PAYMENT,
     PURCHASE_SET_DATE,
-    PURCHASE_RESET_DATE
+    PURCHASE_RESET_DATE,
+    PURCHASE_REMOVE_PRODUCT,
+    PURCHASE_REMOVE_CLIENT,
+    PURCHASE_CLEAR_ALL
 } from '../actions/types'
 
 const initalSate = {
     maxQuantity: '*',
     maxTotal: '*',
     page: 1,
-    product: '*',
-    client: '*',
-    payment: "*",
+    product: ['*'],
+    client: ['*'],
+    payment: '*',
     date: '*'
 }
 
@@ -29,6 +32,16 @@ export default purchaseFilterReducer = (state = initalSate, action) => {
         case INCREMENT_PURCHASE_PAGE:
             return {
                 ...state, page: state.page + 1
+            }
+        case PURCHASE_CLEAR_ALL:
+            return {
+                maxQuantity: '*',
+                maxTotal: '*',
+                page: 1,
+                product: ['*'],
+                client: ['*'],
+                payment: '*',
+                date: '*'
             }
         case PURCHASE_SET_MAX_QUANT:
             return {
@@ -48,19 +61,27 @@ export default purchaseFilterReducer = (state = initalSate, action) => {
             }
         case PURCHASE_SET_PRODUCT:
             return {
-                ...state, product: action.payload
+                ...state, product: [...state.product, action.payload]
+            }
+        case PURCHASE_REMOVE_PRODUCT:
+            return {
+                ...state, product: [...state.product.filter(id => id !== action.payload)]
             }
         case PURCHASE_RESET_PRODUCT:
             return {
-                ...state, product: '*'
+                ...state, product: ['*']
             }
         case PURCHASE_SET_CLIENT:
             return {
-                ...state, client: action.payload
+                ...state, client: [...state.client, action.payload]
             }
         case PURCHASE_RESET_CLIENT:
             return {
-                ...state, client: '*'
+                ...state, client: [...state.client.filter(id => id !== action.payload)]
+            }
+        case PURCHASE_RESET_CLIENT:
+            return {
+                ...state, client: ['*']
             }
         case PURCHASE_SET_PAYMENT:
             return {
