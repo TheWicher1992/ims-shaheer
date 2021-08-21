@@ -8,6 +8,8 @@ const Warehouse = require('../models/Warehouse')
 const Stock = require('../models/Stock')
 const DeliveryOrder = require('../models/DeliveryOrder')
 const errors = require('../misc/errors')
+const moment = require('moment')
+
 router.post('/', async (req, res) => {
     try {
         var {
@@ -367,17 +369,21 @@ router.get('/:id', async (req, res) => {
     }
 })
 
-router.get('/:page/:query/:colour/:brand/:warehouse/:sort/:sortBy', async (req, res) => {
+router.get('/:page/:query/:colour/:brand/:warehouse/:date/:quantity/:price/:sort/:sortBy', async (req, res) => {
 
+    console.log(req.url)
     try {
-        const page = req.params.page - 1
+
+        const page = parseInt(req.params.page) - 1
         const query = req.params.query === '*' ? ['.*'] : req.params.query.split(" ")
         const colour = req.params.colour
         const brand = req.params.brand
         const warehouse = req.params.warehouse
         const sort = req.params.sort === '*' ? 'date' : req.params.sort
         const sortBy = req.params.sortBy === '*' ? 'desc' : req.params.sortBy
-
+        let date = req.params.date
+        const price = parseInt(req.params.price)
+        const quantity = req.params.quantity === '*' ? '*' : parseInt(req.params.quantity)
         const sortOptions = {
             [sort]: sortBy
         }
@@ -385,10 +391,39 @@ router.get('/:page/:query/:colour/:brand/:warehouse/:sort/:sortBy', async (req, 
 
         const filters = {}
 
-        if (brand !== '*') filters['brand'] = brand
-        if (colour !== '*') filters['colour'] = colour
-        if (warehouse !== '*') filters['warehouse'] = warehouse
+        if (brand !== '*') filters['brand'] = {
+            $in: brand.split(',').slice(1, brand.length)
+        }
+        if (colour !== '*') filters['colour'] = {
+            $in: colour.split(',').slice(1, colour.length)
+        }
+        if (warehouse !== '*') filters['warehouse'] = {
+            $in: warehouse.split(',').slice(1, warehouse.length)
+        }
+        if (date !== '*') {
+            date = date.split('-')
+            let month = parseInt(date[0])
+            let day = parseInt(date[1])
+            let year = parseInt(date[2]) + 2000
 
+            let d1 = new Date(year, month - 1, day)
+            let d2 = new Date(year, month - 1, day + 1)
+            console.log(d1, d2)
+            filters['date'] = {
+                $gte: d1,
+                $lte: d2
+            }
+        }
+
+        if (price !== 0) filters['price'] = {
+            $lte: price
+        }
+        if (quantity !== '*') filters['totalStock'] = {
+            $lte: quantity
+        }
+
+
+        console.log(filters)
         const colourIDs = await ProductColour.find({
             title: {
                 $in: query.map(q => new RegExp(q, "i"))

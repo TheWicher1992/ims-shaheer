@@ -24,31 +24,31 @@ const PriceFilterModal = props => {
 
     const clearPrice = () => {
         props.resetProdPrice()
-        
+
     }
-    
+
     const getPrice = () => {
-        if(props.maxPrice !== undefined){
+        if (props.maxPrice !== undefined) {
             return (
                 <View style={styles.container}>
-                            {/*Text to show slider value*/}
-                            <Text style = {styles.normalText}>
-                            Value of slider is : {props.priceFilter}
-                            </Text>
+                    {/*Text to show slider value*/}
+                    <Text style={styles.normalText}>
+                        Value of slider is : {props.priceFilter}
+                    </Text>
 
-                            {/*Slider with max, min, step and initial value*/}
-                            <Slider
-                            maximumValue={props.maxPrice}
-                            minimumValue={0}
-                            minimumTrackTintColor="#008394"
-                            maximumTrackTintColor="#008394"
-                            step={props.maxPrice/50}
-                            value={props.priceFilter}
-                            onValueChange={
-                                (sliderValue) => setPrice(sliderValue)
-                            }
-                            />
-                        </View>
+                    {/*Slider with max, min, step and initial value*/}
+                    <Slider
+                        maximumValue={props.maxPrice}
+                        minimumValue={0}
+                        minimumTrackTintColor="#008394"
+                        maximumTrackTintColor="#008394"
+                        step={props.maxPrice / 100}
+                        value={props.priceFilter}
+                        onValueChange={
+                            (sliderValue) => setPrice(sliderValue)
+                        }
+                    />
+                </View>
             )
         }
     }
@@ -64,44 +64,44 @@ const PriceFilterModal = props => {
                 visible={modalVisible}>
                 <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
                     <View style={styles.modalStyle}>
-                            
+
                         <View style={styles.topTextBox}>
-                            <View style= {{flexDirection: 'row', justifyContent: 'space-between', alignContent: 'center'}}>
-                                <TouchableOpacity onPress = {() => props.handleClose()} style = {{marginTop: Dimensions.get('window').height > 900 ? '7%':'7%', paddingLeft: '5%'}}>
+                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignContent: 'center' }}>
+                                <TouchableOpacity onPress={() => props.handleClose()} style={{ marginTop: Dimensions.get('window').height > 900 ? '7%' : '7%', paddingLeft: '5%' }}>
                                     <FontAwesome
-                                    name = {"arrow-left"}
-                                    size = {Dimensions.get('window').height > 900 ? 40:25}
-                                    color = {"#008394"}
+                                        name={"arrow-left"}
+                                        size={Dimensions.get('window').height > 900 ? 40 : 25}
+                                        color={"#008394"}
                                     />
                                 </TouchableOpacity>
-                                
-                                <View style={{ justifyContent: 'center', alignItems: 'flex-start', marginTop: '6.25%',}}>
-                                
+
+                                <View style={{ justifyContent: 'center', alignItems: 'flex-start', marginTop: '6.25%', }}>
+
                                     <Text style={styles.topText}>
                                         Price
                                     </Text>
                                 </View>
-                                <View style = {{justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-end', paddingRight: '8%' }}>
-                                    <TouchableOpacity onPress = {() => clearPrice()}>
-                                        <View style = {styles.clearButton}>
-                                            <Text style = {styles.clearButtonText}>
-                                                Clear 
+                                <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-end', paddingRight: '8%' }}>
+                                    <TouchableOpacity onPress={() => clearPrice()}>
+                                        <View style={styles.clearButton}>
+                                            <Text style={styles.clearButtonText}>
+                                                Clear
                                             </Text>
                                         </View>
                                     </TouchableOpacity>
-                                        
+
                                 </View>
                             </View>
-                            
-                        </View>
-                                
-                   
-                    {
-                        getPrice()
-                    }
-                        
 
-                       
+                        </View>
+
+
+                        {
+                            getPrice()
+                        }
+
+
+
                     </View>
                 </View>
             </Modal>
@@ -121,11 +121,11 @@ const styles = StyleSheet.create({
     },
     topText: {
         fontWeight: 'bold',
-        fontSize: Dimensions.get('window').height > 900 ? 36:24,
+        fontSize: Dimensions.get('window').height > 900 ? 36 : 24,
         color: "#008394",
     },
     normalText: {
-        fontSize: Dimensions.get('window').height > 900 ? 26:18,
+        fontSize: Dimensions.get('window').height > 900 ? 26 : 18,
         fontWeight: '600',
         color: "#008394",
 
@@ -181,26 +181,26 @@ const styles = StyleSheet.create({
 
     },
     footerText: {
-        fontSize: Dimensions.get('window').height > 900 ? 36:22,
+        fontSize: Dimensions.get('window').height > 900 ? 36 : 22,
         fontWeight: 'bold',
         color: "#008394",
 
     },
-    clearButtonText :{
-        fontSize: Dimensions.get('window').height > 900 ? 26:16,
+    clearButtonText: {
+        fontSize: Dimensions.get('window').height > 900 ? 26 : 16,
         fontWeight: 'bold',
         color: "#008394",
     },
-    clearButton : {
+    clearButton: {
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#00E0C7',
-        width: Dimensions.get('window').height > 900 ? 100:70,
-        height: Dimensions.get('window').height > 900 ? 50:30,
+        width: Dimensions.get('window').height > 900 ? 100 : 70,
+        height: Dimensions.get('window').height > 900 ? 50 : 30,
         borderWidth: 2,
         borderRadius: 20,
         borderColor: "#008394",
-        marginTop: Dimensions.get('window').height > 900 ? 30: 0,
+        marginTop: Dimensions.get('window').height > 900 ? 30 : 0,
         // left: Dimensions.get('window').width * 0.4,
 
     },
@@ -220,4 +220,4 @@ const mapStateToProps = (state) => {
     }
 }
 
-export default connect(mapStateToProps, { setProdPrice, resetProdPrice  })(PriceFilterModal);
+export default connect(mapStateToProps, { setProdPrice, resetProdPrice })(PriceFilterModal);
