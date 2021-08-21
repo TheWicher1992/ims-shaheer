@@ -3,6 +3,7 @@ import { Modal, StyleSheet, Text, View, TouchableOpacity, Dimensions, TextInput,
 import CalendarPicker from 'react-native-calendar-picker';
 import { connect } from 'react-redux'
 import { setProdDate,resetProdDate } from '../../actions/productFilters'
+import { setPurchaseDate, resetPurchaseDate } from '../../actions/purchaseFilters'
 import { FontAwesome } from "@expo/vector-icons";
 import moment from "moment";
 
@@ -206,10 +207,12 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state) => {
-    console.log(state.productFilters)
+    // console.log(state.productFilters)
+    console.log(" purchase filters" ,state.purchaseFilters)
     return {
-        dateFilter: state.productFilters.date
+        dateFilter: state.productFilters.date,
+        datePurchaseFilter: state.purchaseFilters.date
     }
 }
 
-export default connect(mapStateToProps, { setProdDate,resetProdDate  })(DateFilterModal);
+export default connect(mapStateToProps, { setProdDate,resetProdDate, setPurchaseDate, resetPurchaseDate  })(DateFilterModal);

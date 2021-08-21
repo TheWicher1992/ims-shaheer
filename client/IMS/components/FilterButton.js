@@ -23,8 +23,10 @@ const FilterButton = (props) => {
         <ProductFilterModal getProducts={props.getProducts} state={isFilterModalVisible} handleClose={closeFilterModal} />
       );
     }
-    else if (props.page === "purchase") {
-      return (<PurchaseFilterModal state={isFilterModalVisible} handleClose={closeFilterModal} filters={props} />
+
+    else if (props.page === "purchase"){
+      return (<PurchaseFilterModal state = {isFilterModalVisible} handleClose = {closeFilterModal} />
+
       );
     }
   }
