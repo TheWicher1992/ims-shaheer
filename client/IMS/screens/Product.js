@@ -19,11 +19,14 @@ const Product = props => {
 
 
   const [products, setProducts] = useState([])
-  const [touchedProduct, setTouchedProduct] = useState([])
   const [brandsAndColours, setBrandAndColours] = useState({
     brands: [],
     colours: []
   })
+
+
+
+  const [touchedProduct, setTouchedProduct] = useState([])
   const [filters, setFilters] = useState({
     page: 1,
     query: '*',

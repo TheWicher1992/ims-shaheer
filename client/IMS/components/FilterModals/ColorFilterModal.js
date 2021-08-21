@@ -2,11 +2,13 @@ import React, { useState, useEffect } from "react";
 import { Modal, StyleSheet, Text, View, TouchableOpacity, Dimensions, TextInput, Button, ScrollView } from "react-native";
 import { normalize, Slider } from 'react-native-elements';
 import { FontAwesome } from "@expo/vector-icons";
+import { connect } from 'react-redux'
+import { setProdColour, resetProdColour, removeProdColour } from '../../actions/productFilters'
 
 const ColorFilterModal = props => {
 
     const [modalVisible, setModalVisible] = useState(false);
-    const [colors,setColors] = useState([])
+    const [colors, setColors] = useState([])
     const [clearState, setClearState] = useState([props.checkStates])
 
     useEffect(() => {
@@ -16,15 +18,16 @@ const ColorFilterModal = props => {
 
 
     const setFilterColor = (record, i) => {
-        props.checkStates[i] = !props.checkStates[i]
-        if(colors.indexOf(record) === -1){
-            setColors(record, colors)
+        if (props.colourFilter.indexOf(record._id) === -1) {
+            props.setProdColour(record._id)
         }
-
+        else {
+            props.removeProdColour(record._id)
+        }
     }
 
     const clearFilterColors = () => {
-
+        props.resetProdColour()
     }
 
     function handleClose() {
@@ -32,13 +35,13 @@ const ColorFilterModal = props => {
     }
 
     const showColours = () => {
-        if(props.object !== [] && props.object !== undefined){
+        if (props.object !== [] && props.object !== undefined) {
             return (
                 <View>
-                    {props.object.map((record,i) => (
+                    {props.object.map((record, i) => (
                         <View>
 
-                            <TouchableOpacity style = {styles.TextBox} onPress = {() => setFilterColor(record.title, i)}>
+                            <TouchableOpacity style={styles.TextBox} onPress={() => setFilterColor(record, i)}>
                                 <View style={{ paddingLeft: '5%' }}>
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                         <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-start' }}>
@@ -48,13 +51,13 @@ const ColorFilterModal = props => {
                                         </View>
                                         <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-end', paddingRight: '8%' }}>
                                             <View style={styles.sideText}>
-                                                {props.checkStates[i] === true ? (<FontAwesome
-                                                    name = {"check"}
-                                                    size = {Dimensions.get('window').height > 900 ? 40:25}
-                                                    color = {"#008394"}
-                                                    />
-                                            ) : (null)}
-                                                
+                                                {props.colourFilter.indexOf(record._id) !== -1 ? (<FontAwesome
+                                                    name={"check"}
+                                                    size={Dimensions.get('window').height > 900 ? 40 : 25}
+                                                    color={"#008394"}
+                                                />
+                                                ) : (null)}
+
                                             </View>
                                         </View>
                                     </View>
@@ -62,7 +65,7 @@ const ColorFilterModal = props => {
                             </TouchableOpacity>
 
 
-                       
+
                         </View>
                     ))}
                 </View>
@@ -83,38 +86,38 @@ const ColorFilterModal = props => {
                 visible={modalVisible}>
                 <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
                     <View style={styles.modalStyle}>
-                            
+
                         <View style={styles.topTextBox}>
-                            <View style= {{flexDirection: 'row', justifyContent: 'space-between', alignContent: 'center'}}>
-                                <TouchableOpacity onPress = {() => props.handleClose()} style = {{marginTop: Dimensions.get('window').height > 900 ? '7%':'7%', paddingLeft: '5%'}}>
+                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignContent: 'center' }}>
+                                <TouchableOpacity onPress={() => props.handleClose()} style={{ marginTop: Dimensions.get('window').height > 900 ? '7%' : '7%', paddingLeft: '5%' }}>
                                     <FontAwesome
-                                    name = {"arrow-left"}
-                                    size = {Dimensions.get('window').height > 900 ? 40:25}
-                                    color = {"#008394"}
+                                        name={"arrow-left"}
+                                        size={Dimensions.get('window').height > 900 ? 40 : 25}
+                                        color={"#008394"}
                                     />
                                 </TouchableOpacity>
-                                
-                                <View style={{ justifyContent: 'center', alignItems: 'flex-start', marginTop: '6.25%',}}>
-                                
+
+                                <View style={{ justifyContent: 'center', alignItems: 'flex-start', marginTop: '6.25%', }}>
+
                                     <Text style={styles.topText}>
                                         Colors
                                     </Text>
                                 </View>
-                                <View style = {{justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-end', paddingRight: '8%' }}>
+                                <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-end', paddingRight: '8%' }}>
                                     <TouchableOpacity onPress={() => clearFilterColors()}>
-                                        <View style = {styles.clearButton}>
-                                            <Text style = {styles.clearButtonText}>
-                                                Clear 
+                                        <View style={styles.clearButton}>
+                                            <Text style={styles.clearButtonText}>
+                                                Clear
                                             </Text>
                                         </View>
                                     </TouchableOpacity>
-                                        
+
                                 </View>
                             </View>
-                            
+
                         </View>
-                       
-                                    
+
+
                         {
                             showColours()
                         }
@@ -153,7 +156,7 @@ const ColorFilterModal = props => {
                         </View> */}
 
 
-                       
+
                     </View>
                 </View>
             </Modal>
@@ -173,11 +176,11 @@ const styles = StyleSheet.create({
     },
     topText: {
         fontWeight: 'bold',
-        fontSize: Dimensions.get('window').height > 900 ? 36:24,
+        fontSize: Dimensions.get('window').height > 900 ? 36 : 24,
         color: "#008394",
     },
     normalText: {
-        fontSize: Dimensions.get('window').height > 900 ? 26:18,
+        fontSize: Dimensions.get('window').height > 900 ? 26 : 18,
         fontWeight: '600',
         color: "#008394",
 
@@ -233,42 +236,50 @@ const styles = StyleSheet.create({
 
     },
     footerText: {
-        fontSize: Dimensions.get('window').height > 900 ? 36:22,
+        fontSize: Dimensions.get('window').height > 900 ? 36 : 22,
         fontWeight: 'bold',
         color: "#008394",
 
     },
-    clearButtonText :{
-        fontSize: Dimensions.get('window').height > 900 ? 26:16,
+    clearButtonText: {
+        fontSize: Dimensions.get('window').height > 900 ? 26 : 16,
         fontWeight: 'bold',
         color: "#008394",
     },
-    clearButton : {
+    clearButton: {
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#00E0C7',
-        width: Dimensions.get('window').height > 900 ? 100:70,
-        height: Dimensions.get('window').height > 900 ? 50:30,
+        width: Dimensions.get('window').height > 900 ? 100 : 70,
+        height: Dimensions.get('window').height > 900 ? 50 : 30,
         borderWidth: 2,
         borderRadius: 20,
         borderColor: "#008394",
-        marginTop: Dimensions.get('window').height > 900 ? 30: 0,
+        marginTop: Dimensions.get('window').height > 900 ? 30 : 0,
         // left: Dimensions.get('window').width * 0.4,
 
     },
     sliderDummy: {
         backgroundColor: '#d3d3d3',
         width: 300,
-        height:30,
+        height: 30,
         borderRadius: 50,
-        position: 'absolute',                
+        position: 'absolute',
     },
     sliderReal: {
         backgroundColor: '#119EC2',
         // width: {(amountVal/50) * 300},
-        height:30,
+        height: 30,
     }
 
 });
 
-export default ColorFilterModal;
+
+const mapStateToProps = (state) => {
+    console.log(state.productFilters)
+    return {
+        colourFilter: state.productFilters.colour
+    }
+}
+
+export default connect(mapStateToProps, { setProdColour, resetProdColour, removeProdColour })(ColorFilterModal);
