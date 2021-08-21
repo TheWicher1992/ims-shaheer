@@ -11,7 +11,7 @@ import FilterButton from '../components/FilterButton';
 import { Picker } from '@react-native-picker/picker';
 import { uri } from '../api.json'
 import axios from "axios"
-
+import { connect } from 'react-redux'
 
 const optionsPerPage = [2, 3, 4];
 
@@ -27,15 +27,15 @@ const Product = props => {
 
 
   const [touchedProduct, setTouchedProduct] = useState([])
-  const [filters, setFilters] = useState({
-    page: 1,
-    query: '*',
-    colour: '*',
-    brand: '*',
-    ware: '*',
-    sort: '*',
-    sortBy: '*'
-  })
+  // const [filters, setFilters] = useState({
+  //   page: 1,
+  //   query: '*',
+  //   colour: '*',
+  //   brand: '*',
+  //   ware: '*',
+  //   sort: '*',
+  //   sortBy: '*'
+  // })
 
   const [query, setQuery] = useState('*')
 
@@ -43,7 +43,15 @@ const Product = props => {
 
 
     const res = await axios.get(
-      `${uri}/api/product/${filters.page}/${query}/${filters.colour}/${filters.brand}/${filters.ware}/${filters.sort}/${filters.sortBy}`
+      `${uri}/api/product` +
+      `/${props.filters.page}` +
+      `/${query}` +
+      `/${props.filters.colour.join(',')}` +
+      `/${props.filters.brand.join(',')}` +
+      `/${props.filters.ware.join(',')}` +
+      `/${props.filters.date}/${props.filters.quantity}` +
+      `/${props.filters.price}/${props.filters.sort}` +
+      `/${props.filters.sortBy}`
     )
 
     setProducts(res.data.products)
@@ -457,7 +465,7 @@ const Product = props => {
         </View>
 
       </View>
-      <FilterButton page="product" />
+      <FilterButton getProducts={getProducts} page="product" />
       <ScrollView style={{ top: 25 }}>
         <DataTable>
           <DataTable.Header>
@@ -530,7 +538,13 @@ Product.navigationOptions = navigationData => {
   };
 };
 
-export default Product
+const mapStateToProps = (state) => (
+  {
+    filters: state.productFilters
+  }
+)
+
+export default connect(mapStateToProps)(Product)
 
 
 const styles = StyleSheet.create({
