@@ -75,7 +75,7 @@ export default purchaseFilterReducer = (state = initalSate, action) => {
             return {
                 ...state, client: [...state.client, action.payload]
             }
-        case PURCHASE_RESET_CLIENT:
+        case PURCHASE_REMOVE_CLIENT:
             return {
                 ...state, client: [...state.client.filter(id => id !== action.payload)]
             }

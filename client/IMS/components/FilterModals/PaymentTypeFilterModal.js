@@ -1,13 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Modal, StyleSheet, Text, View, TouchableOpacity, Dimensions, TextInput, Button, ScrollView } from "react-native";
-import CalendarPicker from 'react-native-calendar-picker';
-import { connect } from 'react-redux'
-import { setProdDate,resetProdDate } from '../../actions/productFilters'
-import { setPurchaseDate, resetPurchaseDate } from '../../actions/purchaseFilters'
 import { FontAwesome } from "@expo/vector-icons";
-import moment from "moment";
-
-const DateFilterModal = props => {
+import { connect } from 'react-redux'
+import { setPurchasePayment, resetPurchasePayment } from '../../actions/purchaseFilters';
+const PaymentTypeFilterModal = props => {
 
     const [modalVisible, setModalVisible] = useState(false);
 
@@ -19,22 +15,13 @@ const DateFilterModal = props => {
         setModalVisible(false);
     }
 
-    const onDateChange = (date) => {
-        if (props.title === "product"){
-            props.setProdDate(moment(date).format("MM-DD-YY"))
-        }
-        else if (props.title === "purchase"){
-            props.setPurchaseDate(moment(date).format("MM-DD-YY"))
-        }
+    const setPaymentType = (record) => {
+        props.setPurchasePayment(record)
+
     }
 
-    const clearFilterColors = () => {
-        if (props.title === "product"){
-            props.resetProdDate()
-        }
-        else if (props.title === "purchase"){
-            props.resetPurchaseDate()
-        }
+    const clearPaymentType = () => {
+        props.resetPurchasePayment()
     }
     return (
 
@@ -62,11 +49,11 @@ const DateFilterModal = props => {
                                 <View style={{ justifyContent: 'center', alignItems: 'flex-start', marginTop: '6.25%',}}>
                                 
                                     <Text style={styles.topText}>
-                                        Date
+                                        Brands
                                     </Text>
                                 </View>
                                 <View style = {{justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-end', paddingRight: '8%' }}>
-                                    <TouchableOpacity onPress={() => clearFilterColors()}>
+                                    <TouchableOpacity onPress={() => clearPaymentType()}>
                                         <View style = {styles.clearButton}>
                                             <Text style = {styles.clearButtonText}>
                                                 Clear 
@@ -79,26 +66,92 @@ const DateFilterModal = props => {
                             
                         </View>
                         
-                        <View style = {{marginTop: 20}}>
-                            <CalendarPicker
-                                width = {Dimensions.get('window').width *0.75}
-                                onDateChange = { (date) => onDateChange(date)}
-                            />
+                        <View>
+
+                            <TouchableOpacity style = {styles.TextBox} onPress = {() => setPaymentType("Partial")}>
+                                <View style={{ paddingLeft: '5%' }}>
+                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                                        <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-start' }}>
+                                            <Text style={styles.normalText}>
+                                                Partial
+                                            </Text>
+                                        </View>
+                                        <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-end', paddingRight: '8%' }}>
+                                            <View style={styles.sideText}>
+                                            {props.paymentType.indexOf("Partial") !== -1 ? (<FontAwesome
+                                                    name = {"check"}
+                                                    size = {Dimensions.get('window').height > 900 ? 40:25}
+                                                    color = {"#008394"}
+                                                    />
+                                            ) : (null)}
+                                            
+                                            </View>
+                                        </View>
+                                    </View>
+                                </View>
+                            </TouchableOpacity>
+
+
+                       
                         </View>
-                        <View style = {{marginTop: 20, padding: 10,}}>
-                            <Text style = {styles.normalText}>
-                                Selected Date: 
-                            </Text>
-                            <Text style = {styles.normalText}>
-                                {
-                                    props.title === "product" && props.dateFilter
-                                }
-                                {   
-                                    props.title === "purchase" && props.datePurchaseFilter
-                                }
-                            </Text>
+
+                        <View>
+
+                            <TouchableOpacity style = {styles.TextBox} onPress = {() => setPaymentType("Credit")}>
+                                <View style={{ paddingLeft: '5%' }}>
+                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                                        <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-start' }}>
+                                            <Text style={styles.normalText}>
+                                                Credit
+                                            </Text>
+                                        </View>
+                                        <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-end', paddingRight: '8%' }}>
+                                            <View style={styles.sideText}>
+                                            {props.paymentType.indexOf("Credit") !== -1 ? (<FontAwesome
+                                                    name = {"check"}
+                                                    size = {Dimensions.get('window').height > 900 ? 40:25}
+                                                    color = {"#008394"}
+                                                    />
+                                            ) : (null)}
+                                            
+                                            </View>
+                                        </View>
+                                    </View>
+                                </View>
+                            </TouchableOpacity>
+
+
+                       
                         </View>
-                        
+
+                        <View>
+
+                            <TouchableOpacity style = {styles.TextBox} onPress = {() => setPaymentType("Full")}>
+                                <View style={{ paddingLeft: '5%' }}>
+                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                                        <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-start' }}>
+                                            <Text style={styles.normalText}>
+                                                Full
+                                            </Text>
+                                        </View>
+                                        <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-end', paddingRight: '8%' }}>
+                                            <View style={styles.sideText}>
+                                            {props.paymentType.indexOf("Full") !== -1 ? (<FontAwesome
+                                                    name = {"check"}
+                                                    size = {Dimensions.get('window').height > 900 ? 40:25}
+                                                    color = {"#008394"}
+                                                    />
+                                            ) : (null)}
+                                            
+                                            </View>
+                                        </View>
+                                    </View>
+                                </View>
+                            </TouchableOpacity>
+
+
+                       
+                        </View>
 
 
                        
@@ -220,12 +273,10 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state) => {
-    // console.log(state.productFilters)
-    // console.log(" purchase filters" ,state.purchaseFilters)
+    console.log(state.productFilters)
     return {
-        dateFilter: state.productFilters.date,
-        datePurchaseFilter: state.purchaseFilters.date
+        paymentType: state.purchaseFilters.payment
     }
 }
 
-export default connect(mapStateToProps, { setProdDate,resetProdDate, setPurchaseDate, resetPurchaseDate  })(DateFilterModal);
+export default connect(mapStateToProps, { setPurchasePayment, resetPurchasePayment })(PaymentTypeFilterModal);

@@ -3,11 +3,11 @@ import { Modal, StyleSheet, Text, View, TouchableOpacity, Dimensions, TextInput,
 import { FontAwesome } from "@expo/vector-icons";
 import { connect } from 'react-redux'
 import { setProdQuant,resetProdQuant } from '../../actions/productFilters'
+import { setPurchaseEMaxQuant, resetPurchaseMaxQuant } from '../../actions/purchaseFilters'
 import Slider from '@react-native-community/slider';
 const QuantityFilterModal = props => {
 
     const [modalVisible, setModalVisible] = useState(false);
-    const [sliderValue, setSliderValue] = useState(15);
 
     useEffect(() => {
         setModalVisible(props.state);
@@ -17,15 +17,25 @@ const QuantityFilterModal = props => {
         setModalVisible(false);
     }
     const setQuantity = (sliderValue) => {
-        props.setProdQuant(sliderValue);
+        if (props.title === "product"){
+            props.setProdQuant(sliderValue);
+        }
+        else if(props.title === "purchase"){
+            props.setPurchaseEMaxQuant(sliderValue);
+        }
     }
 
     const clearQuantity = () => {
-        props.resetProdQuant()
+        if (props.title === "product"){
+            props.resetProdQuant()
+        }
+        else if(props.title === "purchase"){
+            props.resetPurchaseMaxQuant()
+        }
         
     }
-    showQuantity = () => {
-        if(props.maxStock !== undefined){
+    const showQuantity = () => {
+        if(props.maxStock !== undefined && props.title === "product"){
             return (
                 <View style={styles.container}>
                     <Text style = {styles.normalText}>
@@ -38,13 +48,36 @@ const QuantityFilterModal = props => {
                     minimumTrackTintColor="#008394"
                     maximumTrackTintColor="#000000"
                     step={1}
-                    value={props.quantFilter === '*' ? 0: props.quantFilter}
+                    value={ props.quantFilter === '*' ? 0: props.quantFilter}
+                        
                     onValueChange={
                         (sliderValue) => setQuantity(sliderValue)
                     }
                     />
                 </View>
             )
+       }
+       else if(props.maxStock !== undefined && props.title === "purchase"){
+        return (
+            <View style={styles.container}>
+                <Text style = {styles.normalText}>
+                Value of slider is : {props.quantPurchaseFilter}
+                </Text>
+
+                <Slider
+                maximumValue={props.maxStock}
+                minimumValue={0}
+                minimumTrackTintColor="#008394"
+                maximumTrackTintColor="#000000"
+                step={1}
+                value={ props.quantPurchaseFilter === '*' ? 0: props.quantPurchaseFilter}
+                    
+                onValueChange={
+                    (sliderValue) => setQuantity(sliderValue)
+                }
+                />
+            </View>
+        )
        }
     }
     return (
@@ -210,8 +243,9 @@ const styles = StyleSheet.create({
 const mapStateToProps = (state) => {
     console.log(state.productFilters)
     return {
-        quantFilter: state.productFilters.quantity
+        quantFilter: state.productFilters.quantity,
+        quantPurchaseFilter: state.purchaseFilters.maxQuantity
     }
 }
 
-export default connect(mapStateToProps, { setProdQuant,resetProdQuant  })(QuantityFilterModal);
+export default connect(mapStateToProps, { setProdQuant,resetProdQuant, setPurchaseEMaxQuant, resetPurchaseMaxQuant  })(QuantityFilterModal);
