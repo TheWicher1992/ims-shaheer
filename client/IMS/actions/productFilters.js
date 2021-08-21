@@ -12,12 +12,22 @@ import {
     PROD_SET_DATE,
     PROD_SET_PRICE,
     PROD_SET_QUANT,
-    PROD_SET_WARE
+    PROD_SET_WARE,
+    PROD_REMOVE_COLOUR,
+    PROD_REMOVE_BRAND,
+    PROD_REMOVE_WARE,
+    PROD_CLEAR_ALL
 } from './types'
 
 export const incrementProductPage = () => dispatch => {
     dispatch({
         type: INCREMENT_PROD_PAGE
+    })
+}
+
+export const clearProductFilters = () => dispatch => {
+    dispatch({
+        type: PROD_CLEAR_ALL
     })
 }
 
@@ -28,6 +38,13 @@ export const setProdBrand = (brandID) => dispatch => {
         payload: brandID
     })
 }
+export const removeProdBrand = (BrandID) => dispatch => {
+    dispatch({
+        type: PROD_REMOVE_BRAND,
+        payload: BrandID
+    })
+}
+
 export const resetProdBrand = () => dispatch => {
     dispatch({
         type: PROD_RESET_BRAND,
@@ -44,6 +61,13 @@ export const setProdColour = (ColourID) => dispatch => {
 export const resetProdColour = () => dispatch => {
     dispatch({
         type: PROD_RESET_COLOUR
+    })
+}
+
+export const removeProdColour = (ColourID) => dispatch => {
+    dispatch({
+        type: PROD_REMOVE_COLOUR,
+        payload: ColourID
     })
 }
 
@@ -98,5 +122,11 @@ export const setProdWare = (WareID) => dispatch => {
 export const resetProdWare = () => dispatch => {
     dispatch({
         type: PROD_RESET_WARE,
+    })
+}
+export const removeProdWare = (WareID) => dispatch => {
+    dispatch({
+        type: PROD_REMOVE_WARE,
+        payload: WareID
     })
 }
