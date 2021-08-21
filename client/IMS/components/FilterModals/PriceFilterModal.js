@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Modal, StyleSheet, Text, View, TouchableOpacity, Dimensions, TextInput, Button, ScrollView } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import Slider from '@react-native-community/slider';
+import { connect } from 'react-redux'
+import { setProdPrice, resetProdPrice } from '../../actions/productFilters'
 
 const PriceFilterModal = props => {
 
@@ -15,13 +17,23 @@ const PriceFilterModal = props => {
     function handleClose() {
         setModalVisible(false);
     }
+
+    const setPrice = (sliderValue) => {
+        props.setProdPrice(sliderValue);
+    }
+
+    const clearPrice = () => {
+        props.resetProdPrice()
+        
+    }
+    
     const getPrice = () => {
         if(props.maxPrice !== undefined){
             return (
                 <View style={styles.container}>
                             {/*Text to show slider value*/}
                             <Text style = {styles.normalText}>
-                            Value of slider is : {sliderValue}
+                            Value of slider is : {props.priceFilter}
                             </Text>
 
                             {/*Slider with max, min, step and initial value*/}
@@ -31,9 +43,9 @@ const PriceFilterModal = props => {
                             minimumTrackTintColor="#008394"
                             maximumTrackTintColor="#008394"
                             step={props.maxPrice/50}
-                            value={sliderValue}
+                            value={props.priceFilter}
                             onValueChange={
-                                (sliderValue) => setSliderValue(sliderValue)
+                                (sliderValue) => setPrice(sliderValue)
                             }
                             />
                         </View>
@@ -70,7 +82,7 @@ const PriceFilterModal = props => {
                                     </Text>
                                 </View>
                                 <View style = {{justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-end', paddingRight: '8%' }}>
-                                    <TouchableOpacity onPress = {() => setSliderValue(0)}>
+                                    <TouchableOpacity onPress = {() => clearPrice()}>
                                         <View style = {styles.clearButton}>
                                             <Text style = {styles.clearButtonText}>
                                                 Clear 
@@ -201,4 +213,11 @@ const styles = StyleSheet.create({
 
 });
 
-export default PriceFilterModal;
+const mapStateToProps = (state) => {
+    console.log(state.productFilters)
+    return {
+        priceFilter: state.productFilters.price
+    }
+}
+
+export default connect(mapStateToProps, { setProdPrice, resetProdPrice  })(PriceFilterModal);

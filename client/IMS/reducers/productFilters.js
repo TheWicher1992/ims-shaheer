@@ -27,7 +27,7 @@ const initialState = {
     ware: ['*'],
     date: '*',
     quantity: '*',
-    price: '*',
+    price: 0,
     sort: '*',
     sortBy: '*'
 }
@@ -44,7 +44,7 @@ export default productFilterReducer = (state = initialState, action) => {
                 ware: ['*'],
                 date: '*',
                 quantity: '*',
-                price: '*',
+                price: 0,
                 sort: '*',
                 sortBy: '*'
             }
@@ -90,7 +90,7 @@ export default productFilterReducer = (state = initialState, action) => {
             }
         case PROD_RESET_PRICE:
             return {
-                ...state, price: '*'
+                ...state, price: 0
             }
         case PROD_SET_WARE:
             return {

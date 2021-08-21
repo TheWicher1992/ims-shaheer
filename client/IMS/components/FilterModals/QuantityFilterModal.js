@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Modal, StyleSheet, Text, View, TouchableOpacity, Dimensions, TextInput, Button, ScrollView } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
+import { connect } from 'react-redux'
+import { setProdQuant,resetProdQuant } from '../../actions/productFilters'
 import Slider from '@react-native-community/slider';
 const QuantityFilterModal = props => {
 
@@ -14,12 +16,20 @@ const QuantityFilterModal = props => {
     function handleClose() {
         setModalVisible(false);
     }
+    const setQuantity = (sliderValue) => {
+        props.setProdQuant(sliderValue);
+    }
+
+    const clearQuantity = () => {
+        props.resetProdQuant()
+        
+    }
     showQuantity = () => {
         if(props.maxStock !== undefined){
             return (
                 <View style={styles.container}>
                     <Text style = {styles.normalText}>
-                    Value of slider is : {sliderValue}
+                    Value of slider is : {props.quantFilter}
                     </Text>
 
                     <Slider
@@ -28,9 +38,9 @@ const QuantityFilterModal = props => {
                     minimumTrackTintColor="#008394"
                     maximumTrackTintColor="#000000"
                     step={1}
-                    value={sliderValue}
+                    value={props.quantFilter === '*' ? 0: props.quantFilter}
                     onValueChange={
-                        (sliderValue) => setSliderValue(sliderValue)
+                        (sliderValue) => setQuantity(sliderValue)
                     }
                     />
                 </View>
@@ -67,7 +77,7 @@ const QuantityFilterModal = props => {
                                     </Text>
                                 </View>
                                 <View style = {{justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-end', paddingRight: '8%' }}>
-                                    <TouchableOpacity onPress = {() => setSliderValue(0)}>
+                                    <TouchableOpacity onPress = {() => clearQuantity()}>
                                         <View style = {styles.clearButton}>
                                             <Text style = {styles.clearButtonText}>
                                                 Clear 
@@ -84,24 +94,6 @@ const QuantityFilterModal = props => {
                             showQuantity()
                         }
                    
-
-                        {/* <View style={styles.container}>
-                            <Text style = {styles.normalText}>
-                            Value of slider is : {sliderValue}
-                            </Text>
-
-                            <Slider
-                            maximumValue={100}
-                            minimumValue={0}
-                            minimumTrackTintColor="#008394"
-                            maximumTrackTintColor="#000000"
-                            step={1}
-                            value={sliderValue}
-                            onValueChange={
-                                (sliderValue) => setSliderValue(sliderValue)
-                            }
-                            />
-                        </View> */}
 
                        
                     </View>
@@ -215,4 +207,11 @@ const styles = StyleSheet.create({
 
 });
 
-export default QuantityFilterModal;
+const mapStateToProps = (state) => {
+    console.log(state.productFilters)
+    return {
+        quantFilter: state.productFilters.quantity
+    }
+}
+
+export default connect(mapStateToProps, { setProdQuant,resetProdQuant  })(QuantityFilterModal);

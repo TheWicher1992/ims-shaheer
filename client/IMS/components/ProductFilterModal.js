@@ -8,10 +8,19 @@ import QuantityFilterModal from "./FilterModals/QuantityFilterModal";
 import PriceFilterModal from "./FilterModals/PriceFilterModal";
 import { uri } from '../api.json'
 import axios from "axios"
+import { connect } from "react-redux";
+import { clearProductFilters } from "../actions/productFilters";
+
+
 const ProductFilterModal = props => {
 
     const [modalVisible, setModalVisible] = useState(false);
     const [colorFilterModal, setColorFilterModal] = useState(false);
+    const [filterMap, setFilterMap] = useState({
+        colour: {},
+        warehouse: {},
+        brand : {},
+    }) 
     const [brandFilterModal, setBrandFilterModal] = useState(false);
     const [warehouseFilterModal, setWarehouseFilterModal] = useState(false);
     const [dateFilterModal, setDateFilterModal] = useState(false);
@@ -44,25 +53,41 @@ const ProductFilterModal = props => {
     const closePriceFilterModal = () => {
         setPriceFilterModal(false);
     }
+    const clearAll = () => {
+        props.clearProductFilters()
+    }
 
     const [filters, setFilters] = useState([])
-    const [colorState, setColorState] = useState([])
-    const [colorID, setColorID] = useState([])
-    const [brandID, setBrandID] = useState([])
-    const [brandState, setBrandState] = useState([])
+
     const getFilters = async () => {
         const res = await axios.get(
             `${uri}/api/product/filters`
         )
-        setFilters(res.data.filters)
-        res.data.filters.colours.map((object, i) => colorState.push(false)) 
-        res.data.filters.colours.map((object, i) => colorID.push(object._id))
-        res.data.filters.brands.map((object, i) => brandState.push(false)) 
-        res.data.filters.brands.map((object, i) => brandID.push(object._id)) 
-        console.log('ids ',colorID)
-        console.log('idsb ',brandState)
-    
+        setFilters(res.data.filters);
+        let colourMap = {};
+        (res.data.filters.colours).forEach(element => {
+            colourMap[element._id] = element.title
+        });
+        // setFilterMap({...filterMap,colour : {
+        //     ...colourMap
+        // }})
 
+        let wareMap = {};
+        (res.data.filters.warehouses).forEach(element => {
+            wareMap[element._id] = element.name
+        });
+        // setFilterMap({...filterMap,warehouse : {
+        //     ...wareMap
+        // }})
+
+        let brandMap = {};
+        (res.data.filters.brands).forEach(element => {
+            brandMap[element._id] = element.title
+        });
+        // setFilterMap({...filterMap,brand : {
+        //     ...brandMap
+        // }})      
+        
     }
     useEffect(() => {
         getFilters()
@@ -89,7 +114,7 @@ const ProductFilterModal = props => {
                                     </Text>
                                 </View>
                                 <View style = {{justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-end', paddingRight: '8%' }}>
-                                    <TouchableOpacity>
+                                    <TouchableOpacity onPress={() => clearAll()}>
                                         <View style = {styles.clearButton}>
                                             <Text style = {styles.clearButtonText}>
                                                 Clear 
@@ -112,9 +137,14 @@ const ProductFilterModal = props => {
                                             </Text>
                                         </View>
                                         <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-end', paddingRight: '8%' }}>
-                                            <Text style={styles.sideText}>
-                                                All
-                                            </Text>
+                                            
+                                                {
+                                                    props.filters.colour.map((record,i) => (
+                                                        <Text style={styles.sideText}>
+                                                            {filterMap["colour"][record]}
+                                                        </Text>
+                                                    ))
+                                                }
                                         </View>
                                     </View>
                                 </View>
@@ -132,9 +162,13 @@ const ProductFilterModal = props => {
                                             </Text>
                                         </View>
                                         <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-end', paddingRight: '8%' }}>
-                                            <Text style={styles.sideText}>
-                                                All
-                                            </Text>
+                                        {
+                                                props.filters.brand.map((record,i) => (
+                                                    <Text style={styles.sideText}>
+                                                        {filterMap["brand"][record]}
+                                                    </Text>
+                                                ))
+                                                }
                                         </View>
                                     </View>
                                 </View>
@@ -151,7 +185,7 @@ const ProductFilterModal = props => {
                                         </View>
                                         <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-end', paddingRight: '8%' }}>
                                             <Text style={styles.sideText}>
-                                                All
+                                                {filters.price}
                                             </Text>
                                         </View>
                                     </View>
@@ -201,9 +235,16 @@ const ProductFilterModal = props => {
                                             </Text>
                                         </View>
                                         <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-end', paddingRight: '8%' }}>
-                                            <Text style={styles.sideText}>
-                                                All
-                                            </Text>
+                                        {/* {
+                                                props.filters.ware.map((record,i) => (
+                                                        <Text style={styles.sideText}>
+                                                            {filterMap["warehouse"][record]}
+                                                        </Text>
+                                                    ))
+                                        } */}
+                                        {
+                                            console.log(filterMap)
+                                        }
                                         </View>
                                     </View>
                                 </View>
@@ -225,8 +266,8 @@ const ProductFilterModal = props => {
                     </View>
                 </View>
             </Modal>
-            <ColorFilterModal state = {colorFilterModal} handleClose = {closeColorFilterModal} title = "product" object = {filters.colours} checkStates={colorState} id={colorID}/>
-            <BrandFilterModal state = {brandFilterModal} handleClose = {closeBrandFilterModal} title = "product" object = {filters.brands} checkState={brandState} id={brandID}/>
+            <ColorFilterModal state = {colorFilterModal} handleClose = {closeColorFilterModal} title = "product" object = {filters.colours} />
+            <BrandFilterModal state = {brandFilterModal} handleClose = {closeBrandFilterModal} title = "product" object = {filters.brands} />
             <WarehouseFilterModal state = {warehouseFilterModal} handleClose = {closeWarehouseFilterModal} title = "product" object = {filters.warehouses}/>
             <DateFilterModal state = {dateFilterModal} handleClose = {closeDateFilterModal} title = "product" />
             <QuantityFilterModal state = {quantityFilterModal} handleClose = {closeQuantityFilterModal} title = "product" maxStock = {filters.maxStock}/>
@@ -258,7 +299,7 @@ const styles = StyleSheet.create({
 
     },
     sideText: {
-        fontSize: Dimensions.get('window').height > 900 ? 26:18,
+        fontSize: Dimensions.get('window').height > 900 ? 24:16,
         fontWeight: '600',
         color: "#008394",
         textAlign: 'right',
@@ -334,4 +375,11 @@ const styles = StyleSheet.create({
 
 });
 
-export default ProductFilterModal;
+const mapStateToProps = (state) => {
+    console.log(state.productFilters)
+    return {
+        filters: state.productFilters
+    }
+}
+
+export default connect(mapStateToProps, { clearProductFilters })(ProductFilterModal);

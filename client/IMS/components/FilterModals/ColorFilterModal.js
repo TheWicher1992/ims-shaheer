@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Modal, StyleSheet, Text, View, TouchableOpacity, Dimensions, TextInput, Button, ScrollView } from "react-native";
-import { normalize, Slider } from 'react-native-elements';
 import { FontAwesome } from "@expo/vector-icons";
 import { connect } from 'react-redux'
 import { setProdColour, resetProdColour, removeProdColour } from '../../actions/productFilters'
@@ -8,8 +7,6 @@ import { setProdColour, resetProdColour, removeProdColour } from '../../actions/
 const ColorFilterModal = props => {
 
     const [modalVisible, setModalVisible] = useState(false);
-    const [colors, setColors] = useState([])
-    const [clearState, setClearState] = useState([props.checkStates])
 
     useEffect(() => {
         setModalVisible(props.state);
@@ -121,40 +118,6 @@ const ColorFilterModal = props => {
                         {
                             showColours()
                         }
-
-                        {/* <View style = {{flex:1}}>
-                            <ScrollView>
-                                <View style = {{marginBottom: 100}}>
-
-                                <TouchableOpacity style = {styles.TextBox}>
-                                    <View style={{ paddingLeft: '5%' }}>
-                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                                            <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-start' }}>
-                                                <Text style={styles.normalText}>
-                                                    color1
-                                                </Text>
-                                            </View>
-                                            <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-end', paddingRight: '8%' }}>
-                                                <View style={styles.sideText}>
-
-                                                    <FontAwesome
-                                                        name = {"check"}
-                                                        size = {Dimensions.get('window').height > 900 ? 40:25}
-                                                        color = {"#008394"}
-                                                        />
-                                                 
-                                                </View>
-                                            </View>
-                                        </View>
-                                    </View>
-                                </TouchableOpacity>
-
-    
-                               
-                                </View>
-                            </ScrollView>
-                        </View> */}
-
 
 
                     </View>
