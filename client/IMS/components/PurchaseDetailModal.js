@@ -1,24 +1,51 @@
 import React, { useState, useEffect } from "react";
 import { Modal, StyleSheet, Text, View, TouchableOpacity, Dimensions, ScrollView } from "react-native";
+import PurchaseUpdateModal from "./PurchaseUpdateModal";
+import axios from 'axios'
+import { uri } from '../api.json'
 
 const PurchaseDetailModal = props => {
   const [modalVisible, setModalVisible] = useState(false);
   const [isUpdateModalVisible, setUpdateModalVisible] = React.useState(false);
+  const [warehouse, setWarehouse] = useState(``)
+  const [location, setLocation] = useState(``)
+  const [productName, setProductName] = useState(``)
+  const [quantityVal, setQuantityVal] = useState(0)
+  const [amountReceived, setAmountReceived] = useState(0)
+  const [totalAmount, setTotalAmount] = useState(0)
+  const [clientName, setClientName] = useState(``)
+  const [formInputs, setFormInputs] = useState({
+    clients: [],
+    products: [],
+    warehouses: []
+  })
   console.log('hete', Dimensions.get('window').width)
   useEffect(() => {
     setModalVisible(props.state);
   }, [props.state]);
 
+  useEffect(() => {
+    getPreFormValues()
+  })
+
   const handleCloseUpdate = ()=>{
     setUpdateModalVisible(false)
   }
-
+  const getPreFormValues = async () => {
+    const res = await axios.get(`${uri}/api/purchase/form-inputs`)
+    console.log("ook", res.data)
+    setFormInputs(res.data)
+    setProductName(res.data.products[0]._id)
+    setWarehouse(res.data.warehouses[0]._id)
+    setClientName(res.data.clients[0]._id)
+  }
   function handleClose() {
     setModalVisible(false);
   }
   return (
     
     <View style={styles.centeredView}>
+        <PurchaseUpdateModal state={isUpdateModalVisible} handleClose={handleCloseUpdate} title='Update Purchase' obj={props.object} formInputs={formInputs}/>
         <Modal
             animationType="slide"
             transparent={true}
@@ -47,12 +74,17 @@ const PurchaseDetailModal = props => {
                     </View>
                     </ScrollView>
                     
-                    <View style={{flexDirection: 'row', justifyContent: 'space-evenly', alignItems : 'center'}}>
-                        <TouchableOpacity onPress={() => props.handleClose()}>
-                            <View style={styles.buttonModalContainer}>
-                                <Text style={styles.buttonModalText}>Back</Text>
-                            </View>
-                        </TouchableOpacity>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center' }}>
+                <TouchableOpacity onPress={() => props.handleClose()}>
+                  <View style={styles.buttonModalContainer}>
+                    <Text style={styles.buttonModalText}>Back</Text>
+                  </View>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => { setUpdateModalVisible(true) }}>
+                  <View style={styles.backButtonModalContainer}>
+                    <Text style={styles.buttonModalText}>Update</Text>
+                  </View>
+                </TouchableOpacity>
                     </View>
                 </View>
                 
