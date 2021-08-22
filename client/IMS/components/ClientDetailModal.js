@@ -39,7 +39,6 @@ const ClientDetailModal = props => {
             }}
         > 
             <View style={styles.centeredView}>
-            {console.log("printing object ", props.object)}
             <View style={styles.modalView}>
               <Text style={styles.modalTitle}>{props.title}</Text>
               <ScrollView>
@@ -51,7 +50,19 @@ const ClientDetailModal = props => {
                     </View>)}
                 </View>
               </ScrollView>
-                    <View style={{flexDirection: 'row', justifyContent: 'space-evenly', alignItems : 'center', bottom: 20}}>
+              <View style={{flexDirection: 'row', justifyContent: 'space-evenly', alignItems : 'center',}}>
+                    <TouchableOpacity onPress = {() => {props.handleClose(), props.navigator.navigate({routeName: 'ClientSaleDetail', params: { clientID: props.object._id }})}}>
+                            <View style={styles.backButtonModalContainer}>
+                                <Text style={styles.buttonModalText}>Sales</Text>
+                            </View>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress = {() => {props.handleClose(), props.navigator.navigate({routeName: 'ClientPurchaseDetail', params: { clientID: props.object._id }})}}>
+                            <View style={styles.backButtonModalContainer}>
+                                <Text style={styles.buttonModalText}>Purchases</Text>
+                            </View>
+                        </TouchableOpacity>
+                    </View>
+                    <View style={{flexDirection: 'row', justifyContent: 'space-evenly', alignItems : 'center'}}>
                         <TouchableOpacity onPress={() => props.handleClose()}>
                             <View style={styles.buttonModalContainer}>
                                 <Text style={styles.buttonModalText}>Back</Text>
@@ -63,6 +74,7 @@ const ClientDetailModal = props => {
                             </View>
                         </TouchableOpacity>
                     </View>
+                    
                 </View>
                 
             
@@ -96,8 +108,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#00E0C7',
     paddingVertical: 8,
     paddingHorizontal: 24,
-    top: Dimensions.get('window').height > 900 ? 35 : 15,
-    margin: 20,
+    top: Dimensions.get('window').height > 900 ? 35 : 20,
+    margin: 10,
     display: 'flex',
 
   },
@@ -109,9 +121,35 @@ const styles = StyleSheet.create({
     backgroundColor: '#008394',
     paddingVertical: 8,
     paddingHorizontal: 24,
-    top: Dimensions.get('window').height > 900 ? 35 : 15,
-    margin: 20,
+    top: Dimensions.get('window').height > 900 ? 35 : 20,
+    margin: 10,
     display: 'flex',
+    
+  },
+  buttonModalContainer2 : {
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignContent: 'space-between',
+    borderRadius : 40,
+    backgroundColor: '#00E0C7',
+    paddingVertical: 8,
+    paddingHorizontal: 24,
+    margin: 10,
+    display: 'flex',
+    top: Dimensions.get('window').height > 900 ? 35 : 20,
+
+  },
+  backButtonModalContainer2 : {
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignContent: 'space-between',
+    borderRadius : 40,
+    backgroundColor: '#008394',
+    paddingVertical: 8,
+    paddingHorizontal: 24,
+    margin: 10,
+    display: 'flex',
+    top: Dimensions.get('window').height > 900 ? 35 : 20,
     
   },
   deleteButtonModalContainer : {

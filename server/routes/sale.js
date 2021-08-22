@@ -200,26 +200,26 @@ router.get('/', async (req, res) => {
 // view a specific sale
 
 
-router.get('/:id', async (req, res) => {
-    try {
+// router.get('/:id', async (req, res) => {
+//     try {
 
 
-        const id = req.params.id
+//         const id = req.params.id
 
-        const sale = await Sale.findById(id)
+//         const sale = await Sale.findById(id)
 
-        return res.status(200).json({
-            sale
-        })
-    }
-    catch (err) {
-        console.log(err)
+//         return res.status(200).json({
+//             sale
+//         })
+//     }
+//     catch (err) {
+//         console.log(err)
 
-        return res.status(500).json({
-            error: errors.SERVER_ERROR
-        })
-    }
-})
+//         return res.status(500).json({
+//             error: errors.SERVER_ERROR
+//         })
+//     }
+// })
 
 
 // update deliveryStatus
@@ -246,6 +246,25 @@ router.put('/:id', async (req, res) => {
             error: errors.SERVER_ERROR
         })
     }
+})
+
+router.get(`/:id`, async (req, res) => {
+
+    try{
+
+        id = req.params.id
+        const sales = await Sale.find({client : id }).populate(['product','client'])
+        return res.status(200).json({
+            sales
+        })
+    }
+    catch (err) {
+        console.log(err)
+        return res.status(500).json({
+            error: errors.SERVER_ERROR
+        })
+    }
+
 })
 
 module.exports = router

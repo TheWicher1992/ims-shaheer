@@ -1,114 +1,94 @@
-import React from 'react';
-import { useState, useEffect } from 'react'
-import { StyleSheet, Text, View, Button, Dimensions, TextInput, TouchableOpacity, KeyboardAvoidingView, ScrollView } from 'react-native';
+import * as React from 'react';
+import { useState, useEffect } from 'react';
+import { StyleSheet, Text, View, Button, Dimensions, TextInput, TouchableOpacity, KeyboardAvoidingView, ScrollView, Switch } from 'react-native';
 import HeaderButton from '../components/HeaderButton';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { FontAwesome } from '@expo/vector-icons';
 import { DataTable } from 'react-native-paper';
 import Modal from 'react-native-modal';
-import { ToastAndroid } from 'react-native'
-import PickerCheckBox from 'react-native-picker-checkbox';
-import ClientDetailModal from '../components/ClientDetailModal';
+import { Picker } from '@react-native-picker/picker';
+import TableDetailModal from '../components/TableDetailModal';
+import PurchaseDetailModal from '../components/PurchaseDetailModal';
 import FilterButton from '../components/FilterButton';
-import { uri } from '../api.json'
 import axios from 'axios'
-// import { toast } from 'react-toastify'
+import { uri } from '../api.json'
+import { connect } from 'react-redux'
 import Spinner from '../components/Spinner';
 const optionsPerPage = [2, 3, 4];
-
-const Clients = props => {
+const ClientPurchaseDetail = props => {
 
   const [page, setPage] = React.useState(0); //for pages of table
   const [itemsPerPage, setItemsPerPage] = React.useState(optionsPerPage[0]); //for items per page on table
-  const [touchedClient, setTouchedClient] = useState([])
+  const [productName, setProductName] = useState(``)
   const [isModalVisible, setModalVisible] = React.useState(false); //to set modal on and off
-
+  const [formInputs, setFormInputs] = useState({
+    clients: [],
+    products: [],
+    warehouses: []
+  })
   const toggleModal = () => { //to toggle model on and off -- function
     setModalVisible(!isModalVisible);
   };
 
-  const [clients, setClients] = useState([])
+  const [purchases, setPurchases] = useState([])
   const [loading, setLoading] = useState(true)
-  const getClients = async () => {
+  const getPurchases = async () => {
     setLoading(true)
-    const query = search.trim() === '' ? '*' : search.trim()
-    const res = await axios.get(`${uri}/api/client/${query}`)
-    console.log(res.data.clients)
-    setClients(res.data.clients)
+    const res = await axios.get(`${uri}/api/purchase/${props.navigation.getParam('clientID')}`
+    )
+    setPurchases(res.data.purchases)
     setLoading(false)
   }
 
   useEffect(() => {
-    getClients()
+    getPurchases()
   }, [])
+
+
 
   React.useEffect(() => { //for table
     setPage(0);
   }, [itemsPerPage]);
 
+  const [filters, setFilters] = useState({
+    page: 1,
+    query: '*',
+    products: '*',
+    clients: props.navigation.getParam('clientID'), 
+    payment: '*',
+    date: '*',
+    quantity: '*',
+    amount: '*',
+  })
 
-  const [search, setSearch] = React.useState(`*`) //for keeping track of search
-  const onChangeSearch = (searchVal) => { //function to keep track of search as the user types
-    setSearch(searchVal);
+
+  const [isWarehouse, setIsWarehouse] = useState(false)
+  // const [isDeliveryOrder, setIsDeliveryOrder] = useState(!isWarehouse)
+  const [isEnabled, setIsEnabled] = useState(false);
+
+
+
+
+  const onChangeQuantity = (quant) => {
+    setQuantityVal(quant);
   }
 
-  const searchFunc = () => {
-    getClients()
+  const onChangeAmountReceived = (amount) => {
+    setAmountReceived(amount);
   }
 
-
-  // make a sale variables below:
-  const [name, setName] = React.useState(``)
-  // const [balance, setBalance] = React.useState(``)
-  const [phoneNumber, setPhoneNumber] = React.useState(0)
-
-
-  const onChangeName = (supplierName) => {
-    setName(supplierName);
+  const onChangeTotalAmount = (amount) => {
+    setTotalAmount(amount);
   }
 
-  const onChangeBalnace = (bal) => {
-    setBalance(bal);
+  const onChangeNotes = (noteVal) => {
+    setNotes(noteVal);
   }
 
-  const onChangePhoneNumber = (phNumber) => {
-    setPhoneNumber(phNumber);
+  const onChangeLocation = (loc) => {
+    setLocation(loc);
   }
 
-
-  const addClient = () => {
-    const data = {
-      userName: name,
-      phone: phoneNumber
-    }
-
-    axios.post(`${uri}/api/client`, data,
-      {
-        headers: {
-          "Content-Type": "application/json"
-        }
-      }
-    ).then(res => console.log(res.data))
-      .catch(err => {
-        console.log(err.response)
-        if (err.response.data.error === 'SAME_USERNAME_ALREADY_EXISTS') {
-          ToastAndroid.showWithGravity(
-            "Client with this username exists",
-            ToastAndroid.LONG,
-            ToastAndroid.CENTER
-          )
-        }
-        if (err.response.data.error === 'SAME_PHONENUMBER_ALREADY_EXISTS') {
-          ToastAndroid.showWithGravity(
-            "Client with this phone number exists",
-            ToastAndroid.LONG,
-            ToastAndroid.CENTER)
-
-        }
-      })
-
-    setModalVisible(false); //closing modal on done for now
-  }
 
 
   const [isTableDetailModalVisible, setTableDetailModalVisible] = React.useState(false);
@@ -117,111 +97,80 @@ const Clients = props => {
     setTableDetailModalVisible(false)
   }
 
-  const onPressRecord = (client) => {
-    setTableDetailModalVisible(true),
-      setTouchedClient(client)
-  }
 
+  const toggleSwitch = () => {
+    setIsWarehouse(!isWarehouse);
+    console.log(`switched`);
+  };
+
+  const [touchedPurchase, setTouchedPurchase] = useState([])
+
+  const selectedPurchaseRecord = (purchase) => {
+    setTouchedPurchase(purchase)
+    setTableDetailModalVisible(true)
+    console.log("hello", touchedPurchase)
+  }
 
 
 
   return (
     // <KeyboardAvoidingView style = {styles.containerView} behavior = "padding">
-    // <ScrollView >
+
     <View>
-      <Modal
-        onSwipeComplete={() => setModalVisible(false)}
-        swipeDirection="left"
-        presentationStyle="overFullScreen"
-        transparent
-        visible={isModalVisible}>
-        <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-          <View style={styles.modalStyle}>
-            <View style={{ justifyContent: 'center', alignItems: 'center', }}>
-              <Text style={styles.modalTitle}>Add Supplier</Text>
-              <View>
-                <TextInput onChangeText={onChangeName} style={styles.input} placeholder="Name" autoCorrect={false} />
-                <TextInput onChangeText={onChangePhoneNumber} style={styles.input} placeholder="Phone Number" autoCorrect={false} />
-              </View>
-              <View style={{ flexDirection: 'row', alignItems: 'center', top: 45 }}>
-                <TouchableOpacity style={{ alignSelf: 'flex-start' }} onPress={() => { setModalVisible(false) }}>
-                  <View>
-                    <View style={styles.buttonModalContainerCross}>
-                      <View>
-                        <Text style={styles.buttonModalText}>Cancel</Text>
-                      </View>
-                    </View>
-                  </View>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => { addClient() }}>
-                  <View>
-                    <View style={styles.buttonModalContainer}>
-                      <View>
-                        <Text style={styles.buttonModalText}>Done</Text>
-                      </View>
-                    </View>
-                  </View>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </View>
-        </View>
-      </Modal>
-      <ClientDetailModal navigator = {props.navigation} state={isTableDetailModalVisible} handleClose={handleClose} object={touchedClient} title='Client Details' getClients={getClients} />
+      <PurchaseDetailModal state={isTableDetailModalVisible} handleClose={handleClose} title='Purchase Detail' object={touchedPurchase} screen='new' />
       <View style={styles.screen}>
         <View>
-          <Text style={styles.title}>Clients</Text>
+          <Text style={styles.title}>Purchases</Text>
         </View>
       </View>
       <View style={styles.containerButton}>
-        <TouchableOpacity onPress={() => { setModalVisible(true) }}>
-          <View style={styles.buttonContainer}>
-            <Text style={styles.buttonText}>Add Client</Text>
-          </View>
-        </TouchableOpacity>
+         
         <View style={{ flexDirection: 'row', justifyContent: 'center', }}>
           <View style={styles.searchBar}>
-            <TextInput onChangeText={onChangeSearch} style={styles.buttonInput} placeholder="type here..." autoCorrect={false} />
           </View>
           <View style={{ top: 14 }}>
-            <TouchableOpacity onPress={() => { searchFunc() }}>
               <View style={styles.searchButton}>
-                <FontAwesome
-                  name={"search"}
-                  size={16}
-                  color={"#006270"}
-                  style={{ right: 10, top: 3 }}
-                />
-                <Text style={styles.searchButtonText}>Search</Text>
+                
               </View>
-            </TouchableOpacity>
           </View>
         </View>
 
       </View>
+      <View style={{marginTop: 20}}/>
       <Spinner loading={loading} />
-      {!loading && <ScrollView style={styles.p2}>
+      {!loading && <ScrollView>
 
         <DataTable>
           <DataTable.Header>
-            <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Name</Text></DataTable.Title>
-            <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Balance</Text></DataTable.Title>
-            <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Phone Number</Text></DataTable.Title>
+            <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Product</Text></DataTable.Title>
+            <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Quantity</Text></DataTable.Title>
+            <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Amount</Text></DataTable.Title>
+            <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Client</Text></DataTable.Title>
           </DataTable.Header>
 
           {
-            clients.map(c => (
-              <TouchableOpacity key={c._id} onPress={() => onPressRecord(c)}>
-
+            purchases.map(p => (
+              <TouchableOpacity onPress={() => selectedPurchaseRecord(p)}>
                 <DataTable.Row>
-                  <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{c.userName}</Text></DataTable.Cell>
-                  <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{c.balance}</Text></DataTable.Cell>
-                  <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{c.phone}</Text></DataTable.Cell>
+                  <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{p.product.title}</Text></DataTable.Cell>
+                  <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{p.quantity}</Text></DataTable.Cell>
+                  <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{p.total}</Text></DataTable.Cell>
+                  <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{p.client.userName}</Text></DataTable.Cell>
                 </DataTable.Row>
               </TouchableOpacity>
-
             ))
           }
+          <DataTable.Pagination
+            page={page}
+            numberOfPages={3}
+            onPageChange={(page) => setPage(page)}
+            label="1-2 of 6"
+            optionsPerPage={optionsPerPage}
+            itemsPerPage={itemsPerPage}
+            setItemsPerPage={setItemsPerPage}
+            showFastPagination
+            optionsLabel={'Rows per page'}
+          />
         </DataTable>
 
       </ScrollView>}
@@ -233,7 +182,7 @@ const Clients = props => {
 }
 
 
-Clients.navigationOptions = navigationData => {
+ClientPurchaseDetail.navigationOptions = navigationData => {
   return {
     headerTitle: 'Zaki Sons',
     headerTitleAlign: 'center',
@@ -255,13 +204,11 @@ Clients.navigationOptions = navigationData => {
   };
 };
 
-export default Clients
+
+export default ClientPurchaseDetail
 
 
 const styles = StyleSheet.create({
-  p2: {
-    paddingTop: 40
-  },
   title: {
     color: '#006270',
     fontSize: 30,
@@ -275,12 +222,12 @@ const styles = StyleSheet.create({
     fontFamily: 'Roboto',
     fontWeight: 'bold',
     fontSize: Dimensions.get('window').height === 1232 ? 36 : 28,
-    top: 20,
+    top: 30,
   },
   modalStyle: {
     backgroundColor: "#fff",
     width: Dimensions.get('window').height > 900 ? 600 : 320,
-    height: Dimensions.get('window').height > 900 ? 380 : 360,
+    height: Dimensions.get('window').height > 900 ? 720 : 640,
     borderWidth: 2,
     borderRadius: 20,
     marginBottom: 20,
@@ -301,7 +248,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginTop: Dimensions.get('window').height > 900 ? 80 : 60,
     borderRadius: 40,
-    backgroundColor: '#00E0C7',
     paddingVertical: 12,
     paddingHorizontal: 32,
     left: 15
@@ -364,6 +310,18 @@ const styles = StyleSheet.create({
     height: 40,
     padding: 10,
   },
+  inputLast: {
+    width: Dimensions.get('window').width * 0.65,
+    borderColor: 'gray',
+    borderWidth: 2,
+    borderRadius: 40,
+    marginBottom: 20,
+    fontSize: 12,
+    borderColor: "#008394",
+    top: 0,
+    height: 40,
+    padding: 10,
+  },
   filterInput: {
     width: Dimensions.get('window').width * 0.35,
     height: 1000,
@@ -386,7 +344,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginTop: Dimensions.get('window').height > 600 ? 15 : 8,
     borderRadius: 25,
-    backgroundColor: '#008394',
     paddingVertical: 12,
     paddingHorizontal: 30,
     //top: 43, //HERE IS THE ISSUE
@@ -450,5 +407,16 @@ const styles = StyleSheet.create({
     elevation: 5,
     width: Dimensions.get('window').height > 900 ? Dimensions.get('window').width * 0.7 : Dimensions.get('window').width * 0.80,
     height: Dimensions.get('window').height > 900 ? Dimensions.get('window').height * 0.5 : Dimensions.get('window').height * 0.60
+  },
+  switch: {
+    color: '#008394',
+    fontSize: Dimensions.get('window').height === 1232 ? 18 : 16,
+    fontFamily: 'Roboto',
+  },
+  label: {
+    alignSelf: 'center',
+    flexDirection: 'row',
+    fontWeight: 'bold',
+    marginRight: Dimensions.get('window').width * 0.80 / 2
   },
 })

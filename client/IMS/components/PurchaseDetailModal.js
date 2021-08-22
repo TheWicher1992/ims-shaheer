@@ -80,11 +80,11 @@ const PurchaseDetailModal = props => {
                     <Text style={styles.buttonModalText}>Back</Text>
                   </View>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => { setUpdateModalVisible(true) }}>
+                {props.screen === undefined ? <TouchableOpacity onPress={() => { setUpdateModalVisible(true) }}>
                   <View style={styles.backButtonModalContainer}>
                     <Text style={styles.buttonModalText}>Update</Text>
                   </View>
-                </TouchableOpacity>
+                </TouchableOpacity> : null }
                     </View>
                 </View>
                 

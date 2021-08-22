@@ -20,6 +20,8 @@ import EmployeeProducts from '../screens/EmployeeProducts'
 import EmployeeOrders from '../screens/EmployeeOrders'
 import Stocks from '../screens/Stocks';
 import EmployeeStocks from '../screens/EmployeeStocks';
+import ClientPurchaseDetail from '../screens/ClientPurchaseDetail';
+import ClientSaleDetail from '../screens/ClientSaleDetail';
 
 const dash = createStackNavigator({
   Dashboard: {
@@ -48,7 +50,14 @@ const dash = createStackNavigator({
   },
   Clients: {
     screen: Clients
-  }
+  },
+  ClientPurchaseDetail: {
+    screen: ClientPurchaseDetail
+  },
+  ClientSaleDetail: {
+    screen: ClientSaleDetail
+  },
+
 }, {initialRouteName: 'Dashboard'});
 
 const employeeDash = createStackNavigator({
