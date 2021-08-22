@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import { StyleSheet, Text, View, ToastAndroid } from 'react-native';
 import AppNavigation from './navigation/AppNavigation';
 import { Provider } from 'react-redux'
-
+import { navigationRef } from './navigation/RootNavigation';
 import store from "./store";
 import { loadUser } from './actions/auth'
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -28,7 +28,7 @@ export default function App() {
     //   <StatusBar style="auto" />
     // </View> */}
       {/* <ToastContainer /> */}
-      <AppNavigation />
+      <AppNavigation ref={navigationRef} />
     </Provider>
 
   );

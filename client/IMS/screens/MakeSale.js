@@ -12,14 +12,15 @@ import FilterButton from '../components/FilterButton';
 import { Picker } from '@react-native-picker/picker';
 import { uri } from '../api.json'
 import axios from "axios"
-
+import Spinner from '../components/Spinner';
 const optionsPerPage = [2, 3, 4];
 
 const MakeSale = props => {
 
   const [sales, setSales] = useState([])
-  const [products,setProducts] = useState([])
-  const [clients,setClients]  = useState([])
+  const [loading, setLoading] = useState(true)
+  const [products, setProducts] = useState([])
+  const [clients, setClients] = useState([])
 
   const [Pfilters, setPFilters] = useState({
     page: 1,
@@ -37,24 +38,24 @@ const MakeSale = props => {
     client: '*',
     deliveryStatus: '*',
     date: '*',
-    quantity:'*',
-    total:'*',
+    quantity: '*',
+    total: '*',
     sort: '*',
     sortBy: '*'
   })
-  
+
 
   const getProducts = async () => {
     const res = await axios.get(
       `${uri}/api/product/`
     )
 
-
     setProducts(res.data.products)
+
     setProductName(res.data.products[0]._id)
     // console.log("products here", res.data.products)
 
-    
+
   }
 
 
@@ -67,32 +68,33 @@ const MakeSale = props => {
     setClients(res.data.clients)
     setClientName(res.data.clients[0]._id)
 
-    
+
   }
 
   const getSales = async () => {
+    setLoading(true)
+
     const res = await axios.get(
       `${uri}/api/sale`
     )
 
-
     setSales(res.data.sale)
+    setLoading(false)
+
 
     // console.log(res.data.sale)
+
   }
-
-
-  useEffect(() => {
-    getProducts()
-  },[])
-
-  useEffect(() => {
-    getClients()
-  },[])
 
   useEffect(() => {
     getSales()
+
+    getProducts()
+    getClients()
+
   }, [])
+
+
 
 
   const handleConfirm = (pItems) => { // temporary for picker
@@ -126,7 +128,7 @@ const MakeSale = props => {
     console.log(search); //printing search value for now
   }
 
-  
+
   // make a sale variables below:
   const [productName, setProductName] = React.useState(``)
   const [quantityVal, setQuantityVal] = React.useState(0)
@@ -163,18 +165,22 @@ const MakeSale = props => {
 
   const addSale = () => {
     setModalVisible(false); //closing modal on done for now
-    // console.log('Printing productName',productName)
+
+    console.log('Printing productName', productName)
+
     const body = {
       productID: productName,
       quantity: quantityVal,
       total: totalAmount,
       payment: paymentType,
       clientID: clientName,
+
       note : notes,
       received: amountReceived,
       isWarehouse: isWarehouse,
       deliveryOrder: selectedDOrder,
       warehouses: warehouseIdTicksQuant
+      note: notes
     }
 
 
@@ -189,9 +195,10 @@ const MakeSale = props => {
       .then(res => getSales())
       .catch(err => console.log(err))
   }
-  
+
 
   const [isTableDetailModalVisible, setTableDetailModalVisible] = React.useState(false);
+
   const [isWarehouse, setIsWarehouse] = useState(false)
   const [warehouseModal, setWarehouseModal] = useState(false);
   const [dOrderModal, setDOrderModal] = useState(false);
@@ -202,6 +209,7 @@ const MakeSale = props => {
     quant: {}
   })
   const [warehousesID, setWarehousesID] = useState([]) //keep track of warehouses
+
   const handleClose = () => {
     setTableDetailModalVisible(false)
   }
@@ -274,7 +282,7 @@ const MakeSale = props => {
     getStock()
   }
 
-    return(
+   return(
       // <KeyboardAvoidingView style = {styles.containerView} behavior = "padding">
       
       <View>
@@ -508,113 +516,115 @@ const MakeSale = props => {
                           </View>
                         </TouchableOpacity>
                       </View>
-                  </View>
-                </View>
             </View>
-        </Modal>
-        <TableDetailModal state={isTableDetailModalVisible} handleClose={handleClose} title='Employee Information' name='Raahem Asghar' email='raahemasghar97@gmail.com' occupation="Employee" />
-        <View style = {styles.screen}>
-          <View>
-            <Text style={styles.title}>Sales</Text>
           </View>
         </View>
-        <View style = {styles.containerButton}>
-          <View style = {{flexDirection: 'row', justifyContent: 'space-around',alignItems: 'stretch'}}>
-            <View>
-              <TouchableOpacity onPress = {() => {setModalVisible(true)}}>
-                <View style={styles.buttonContainer}>
-                  <Text style={styles.buttonText}>Make a Sale</Text>
-                </View>
-              </TouchableOpacity>
-            </View>            
-          </View>
-          <View style = {{flexDirection: 'row', justifyContent: 'center',}}>
-            <View style = {styles.searchBar}>
-              <TextInput onChangeText={onChangeSearch}  style={styles.buttonInput} placeholder="type here..." autoCorrect={false} />
-            </View>
-            <View style = {{top:14}}>
-            <TouchableOpacity onPress = {() => { searchFunc() }}>
-              <View style = {styles.searchButton}>   
-                  <FontAwesome
-                    name = {"search"}
-                    size = {16}
-                    color = {"#006270"}
-                    style = {{right: 10, top: 3}}
-                  />                  
-                  <Text style = {styles.searchButtonText}>Search</Text>             
+      </Modal>
+      <TableDetailModal state={isTableDetailModalVisible} handleClose={handleClose} title='Employee Information' name='Raahem Asghar' email='raahemasghar97@gmail.com' occupation="Employee" />
+      <View style={styles.screen}>
+        <View>
+          <Text style={styles.title}>Sales</Text>
+        </View>
+      </View>
+      <View style={styles.containerButton}>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-around', alignItems: 'stretch' }}>
+          <View>
+            <TouchableOpacity onPress={() => { setModalVisible(true) }}>
+              <View style={styles.buttonContainer}>
+                <Text style={styles.buttonText}>Make a Sale</Text>
               </View>
             </TouchableOpacity>
-            </View> 
           </View>
-
         </View>
-        <FilterButton filters = "hello"/>
-        <ScrollView>
-        
-          <DataTable>
-            <DataTable.Header>
-              <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Product</Text></DataTable.Title>
-              <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Quantity</Text></DataTable.Title>
-              <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Amount</Text></DataTable.Title>
-              <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Client</Text></DataTable.Title>
-            </DataTable.Header>
-
-            {   
-             sales.map((sale,i) => (           
-            <TouchableOpacity onPress={() => setTableDetailModalVisible(true)}>
-              <DataTable.Row>
-                <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{sale.product === null ? '--' : sale.product.title}</Text></DataTable.Cell>
-                <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{sale.quantity === undefined ? '--' : sale.quantity}</Text></DataTable.Cell>
-                <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>69000</Text></DataTable.Cell>
-                <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{sale.client === null ? '--' : sale.client.userName}</Text></DataTable.Cell>
-              </DataTable.Row>
+        <View style={{ flexDirection: 'row', justifyContent: 'center', }}>
+          <View style={styles.searchBar}>
+            <TextInput onChangeText={onChangeSearch} style={styles.buttonInput} placeholder="type here..." autoCorrect={false} />
+          </View>
+          <View style={{ top: 14 }}>
+            <TouchableOpacity onPress={() => { searchFunc() }}>
+              <View style={styles.searchButton}>
+                <FontAwesome
+                  name={"search"}
+                  size={16}
+                  color={"#006270"}
+                  style={{ right: 10, top: 3 }}
+                />
+                <Text style={styles.searchButtonText}>Search</Text>
+              </View>
             </TouchableOpacity>
-               ))
+          </View>
+        </View>
 
-             }
-            <DataTable.Pagination
-              page={page}
-              numberOfPages={3}
-              onPageChange={(page) => setPage(page)}
-              label="1-2 of 6"
-              optionsPerPage={optionsPerPage}
-              itemsPerPage={itemsPerPage}
-              setItemsPerPage={setItemsPerPage}
-              showFastPagination
-              optionsLabel={'Rows per page'}
-            />
-          </DataTable>
+      </View>
+      <FilterButton filters="hello" />
+      <Spinner loading={loading} />
+      {!loading && <ScrollView>
 
-        </ScrollView>
-      </View>        
-      // </KeyboardAvoidingView>
-        
-        
-    )
+        <DataTable>
+          <DataTable.Header>
+            <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Product</Text></DataTable.Title>
+            <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Quantity</Text></DataTable.Title>
+            <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Amount</Text></DataTable.Title>
+            <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Client</Text></DataTable.Title>
+          </DataTable.Header>
+
+          {
+            sales.map((sale, i) => (
+              <TouchableOpacity onPress={() => setTableDetailModalVisible(true)}>
+                <DataTable.Row>
+                  <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{sale.product === null ? '--' : sale.product.title}</Text></DataTable.Cell>
+                  <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{sale.quantity === undefined ? '--' : sale.quantity}</Text></DataTable.Cell>
+                  <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>69000</Text></DataTable.Cell>
+                  <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{sale.client === null ? '--' : sale.client.userName}</Text></DataTable.Cell>
+                </DataTable.Row>
+              </TouchableOpacity>
+            ))
+
+          }
+          <DataTable.Pagination
+            page={page}
+            numberOfPages={3}
+            onPageChange={(page) => setPage(page)}
+            label="1-2 of 6"
+            optionsPerPage={optionsPerPage}
+            itemsPerPage={itemsPerPage}
+            setItemsPerPage={setItemsPerPage}
+            showFastPagination
+            optionsLabel={'Rows per page'}
+          />
+        </DataTable>
+
+      </ScrollView>
+      }
+    </View>
+    // </KeyboardAvoidingView>
+
+
+  )
 }
 
 
 MakeSale.navigationOptions = navigationData => {
-    return {
-        headerTitle: 'Zaki Sons',
-        headerTitleAlign: 'center',
-        headerTitleStyle: { color: 'white' },
-        headerStyle: {
-            backgroundColor: '#008394',
-        },
-        headerLeft: (
-            <HeaderButtons HeaderButtonComponent={HeaderButton}>
-              <Item
-                title="Menu"
-                iconName="ios-menu"
-                onPress={() => {
-                    navigationData.navigation.toggleDrawer();
-                  }}
-              />
-            </HeaderButtons>
-        ),
-    };
+  return {
+    headerTitle: 'Zaki Sons',
+    headerTitleAlign: 'center',
+    headerTitleStyle: { color: 'white' },
+    headerStyle: {
+      backgroundColor: '#008394',
+    },
+    headerLeft: (
+      <HeaderButtons HeaderButtonComponent={HeaderButton}>
+        <Item
+          title="Menu"
+          iconName="ios-menu"
+          onPress={() => {
+            navigationData.navigation.toggleDrawer();
+          }}
+        />
+      </HeaderButtons>
+    ),
   };
+};
 
 export default MakeSale
 
@@ -627,7 +637,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: Dimensions.get('window').height === 1232 ? 36 : 28,
   },
-  modalTitle : {
+  modalTitle: {
     color: '#006270',
     fontSize: 30,
     fontFamily: 'Roboto',
@@ -638,7 +648,7 @@ const styles = StyleSheet.create({
   modalStyle: {
     backgroundColor: "#fff",
     width: Dimensions.get('window').height > 900 ? 600 : 320,
-    height: Dimensions.get('window').height > 900 ? 700: 620,
+    height: Dimensions.get('window').height > 900 ? 700 : 620,
     borderWidth: 2,
     borderRadius: 20,
     marginBottom: 20,
@@ -666,11 +676,11 @@ const styles = StyleSheet.create({
     // right: Dimensions.get('window').width / 5
     // we can also change the container to center and implement the right styling
   },
-  buttonModalContainer : {
+  buttonModalContainer: {
     justifyContent: 'center',
     alignItems: 'center',
     alignContent: 'space-between',
-    borderRadius : 40,
+    borderRadius: 40,
     backgroundColor: '#00E0C7',
     paddingVertical: 8,
     paddingHorizontal: 24,
@@ -678,11 +688,11 @@ const styles = StyleSheet.create({
     margin: 20,
     display: 'flex'
   },
-  buttonModalContainerCross : {
+  buttonModalContainerCross: {
     justifyContent: 'center',
     alignItems: 'center',
     alignContent: 'space-between',
-    borderRadius : 40,
+    borderRadius: 40,
     backgroundColor: '#ff0000',
     paddingVertical: 8,
     paddingHorizontal: 24,
@@ -690,7 +700,7 @@ const styles = StyleSheet.create({
     margin: 20,
     display: 'flex'
   },
-  buttonModalText :{
+  buttonModalText: {
     color: '#ffffff',
     fontSize: 16,
     fontFamily: 'Roboto',
@@ -698,15 +708,15 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 24,
     textAlign: 'center',
-    color:'white',
+    color: 'white',
     fontWeight: 'bold'
   },
-  container :{
+  container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  containerButton:{
+  containerButton: {
     alignItems: 'flex-start',
     justifyContent: 'flex-start',
   },
@@ -715,7 +725,7 @@ const styles = StyleSheet.create({
     borderColor: 'gray',
     borderWidth: 2,
     borderRadius: 40,
-    marginBottom:20,
+    marginBottom: 20,
     fontSize: 12,
     borderColor: "#008394",
     height: 40,
@@ -727,7 +737,7 @@ const styles = StyleSheet.create({
     borderColor: 'gray',
     borderWidth: 2,
     borderRadius: 4,
-    marginBottom:20,
+    marginBottom: 20,
     fontSize: 12,
     borderColor: "#008394",
   },
@@ -736,8 +746,8 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     flexDirection: 'row',
     bottom: 30,
-    left: Dimensions.get('window').height > 900 ? Dimensions.get('window').width /11:0,
-    
+    left: Dimensions.get('window').height > 900 ? Dimensions.get('window').width / 11 : 0,
+
   },
   searchButton: {
     flexDirection: 'row',
@@ -750,9 +760,9 @@ const styles = StyleSheet.create({
     right: 20,
   },
   searchButtonText: {
-    fontSize:15,
+    fontSize: 15,
     textAlign: 'center',
-    color:'white',
+    color: 'white',
     fontWeight: 'bold',
   },
   buttonInput: {
@@ -760,7 +770,7 @@ const styles = StyleSheet.create({
     borderColor: 'gray',
     borderWidth: 2,
     borderRadius: 40,
-    marginBottom:20,
+    marginBottom: 20,
     fontSize: 14,
     borderColor: "#008394",
     top: 60,
@@ -770,7 +780,7 @@ const styles = StyleSheet.create({
     paddingBottom: 13,
   },
   cells: {
-    justifyContent:'center', 
+    justifyContent: 'center',
     flexDirection: 'row',
     flex: 1
   },
@@ -787,6 +797,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 22
   },
+
   modalBody:{
     paddingVertical:Dimensions.get('window').height < 900 ? Dimensions.get('window').height * 0.05 : Dimensions.get('window').height * 0.1,
     paddingHorizontal:10

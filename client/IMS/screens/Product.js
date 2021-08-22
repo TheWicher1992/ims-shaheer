@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react'
-import { StyleSheet, Text, View, Button, Dimensions, TextInput, TouchableOpacity, KeyboardAvoidingView, ScrollView, Pressable } from 'react-native';
+import { StyleSheet, Text, View, Button, Dimensions, TextInput, TouchableOpacity, KeyboardAvoidingView, ScrollView, Pressable, Image } from 'react-native';
 import HeaderButton from '../components/HeaderButton';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { FontAwesome } from '@expo/vector-icons';
@@ -12,6 +12,7 @@ import { Picker } from '@react-native-picker/picker';
 import { uri } from '../api.json'
 import axios from "axios"
 import { connect } from 'react-redux'
+import Spinner from '../components/Spinner';
 
 const optionsPerPage = [2, 3, 4];
 
@@ -19,6 +20,7 @@ const Product = props => {
 
 
   const [products, setProducts] = useState([])
+  const [loading, setLoading] = useState(true)
   const [brandsAndColours, setBrandAndColours] = useState({
     brands: [],
     colours: []
@@ -40,8 +42,7 @@ const Product = props => {
   const [query, setQuery] = useState('*')
 
   const getProducts = async () => {
-
-
+    setLoading(true)
     const res = await axios.get(
       `${uri}/api/product` +
       `/${props.filters.page}` +
@@ -55,6 +56,7 @@ const Product = props => {
     )
 
     setProducts(res.data.products)
+    setLoading(false)
   }
 
 
@@ -467,7 +469,8 @@ const Product = props => {
 
       </View>
       <FilterButton getProducts={getProducts} page="product" />
-      <ScrollView style={{ top: 25 }}>
+      <Spinner loading={loading} />
+      {!loading && <ScrollView style={{ top: 25 }}>
         <DataTable>
           <DataTable.Header>
             <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Serial No.</Text></DataTable.Title>
@@ -510,7 +513,7 @@ const Product = props => {
           />
         </DataTable>
 
-      </ScrollView>
+      </ScrollView>}
     </View>
 
   )

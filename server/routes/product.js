@@ -468,7 +468,7 @@ router.get('/:page/:query/:colour/:brand/:warehouse/:date/:quantity/:price/:sort
             .populate(['brand', 'colour'])
             .sort(sortOptions)
             .skip(itemsPerPage * page)
-            .limit(itemsPerPage)
+        // .limit(itemsPerPage)
 
         return res.status(200).json({
             products

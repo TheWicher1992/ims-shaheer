@@ -23,7 +23,7 @@ require('./models/Sale')
 require('./models/Warehouse')
 require('./models/Brand')
 require('./models/ProductColour')
-
+require('./models/Payment')
 //Test Route
 app.get('/', (req, res) => res.send("Hello World!"))
 setRoutes(app)
