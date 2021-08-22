@@ -280,70 +280,113 @@ router.get('/:page/:query/:products/:clients/:payment/:date/:quantity/:amount', 
 
 // router.put('/:id', async (req, res) => {
 
-//     const {
-//         product,
-//         quantity,
-//         client,
-//         payment,
-//         total,
-//         note,
-//         isDeliveryOrder,
-//         location,
-//         warehouseID
-//     } = req.body
-
-//     const purchase = await Purchase.findOne({
-//         _id: req.params.id
-//     })
-
-//     purchase.product = product
-//     purchase.quantity = quantity
-//     purchase.client = client
-//     purchase.payment = payment
-//     purchase.total = total
-//     purchase.note = note
-
-
-//     if (isDeliveryOrder) {
-//         const deliveryOrder = new DeliveryOrder({
-//             client,
+//     try {
+//         const id = req.params.id
+//         let {
 //             product,
 //             quantity,
+//             client,
+//             payment,
+//             total,
+//             received,
+//             note,
+//             isDeliveryOrder,
 //             location,
-//             note
-//         })
-//         await deliveryOrder.save()
-//     }
-//     else {
-//         const warehouse = await Warehouse.findOne({
-//             _id: warehouseID
-//         })
-//         const stock = await Stock.findOne({
-//             warehouse: warehouseID,
-//             product
-//         })
+//             warehouseID
+//         } = req.body
 
-//         if (!stock) {
-//             await new Stock({
+
+//         //set received appropriately
+//         if (payment === 'Credit') received = 0
+//         if (payment === 'Full') received = total
+
+//         const purchase = await Purchase.findOneAndUpdate({ _id: id },
+//             {
 //                 product,
-//                 warehouse: warehouseID,
-//                 stock: quantity
-//             }).save()
+//                 quantity,
+//                 client,
+//                 payment,
+//                 total,
+//                 received,
+//                 note
+//             }, { new: true })
+
+
+
+//         //if DeliveryOrder
+//         if (isDeliveryOrder) {
+//             const deliveryOrder = new DeliveryOrder({
+//                 client,
+//                 product,
+//                 quantity,
+//                 location,
+//                 note
+//             })
+//             await deliveryOrder.save()
 //         }
+//         //if physical stock
 //         else {
-//             stock.stock += quantity
+
+//             //update warehouse with correct amount of stock and product
+//             const warehouse = await Warehouse.findOne({
+//                 _id: warehouseID
+//             })
+//             const stock = await Stock.findOne({
+//                 warehouse: warehouseID,
+//                 product
+//             })
+
+//             if (!stock) {
+//                 await new Stock({
+//                     product,
+//                     warehouse: warehouseID,
+//                     stock: quantity
+//                 }).save()
+//                 warehouse.totalProducts += 1
+//             }
+//             else {
+//                 stock.stock += quantity
+//                 await stock.save()
+//             }
+//             warehouse.totalStock += quantity
+//             await warehouse.save()
 //         }
-//         warehouse.totalStock += quantity
-//         await warehouse.save()
+
+//         await purchase.save()
+
+
+//         //Update totalstock
+//         const prod = await Product.findOne({
+//             _id: product
+//         })
+
+//         prod.totalStock += quantity
+
+//         await prod.save()
+//         //End update totalstock
+
+//         //Update client balance
+//         const clientDB = await Client.findOne({
+//             _id: client
+//         })
+
+//         clientDB.balance = total - received
+
+//         await clientDB.save()
+//         //  End update client balance
+
+//         return res.status(200).json({
+//             purchase
+//         })
+
+
 //     }
-
-//     await purchase.save()
-
-//     return res.status(200).json({
-//         purchase
-//     })
-
-
+//     catch (err) {
+//         console.log(err)
+//         return res.status(500).json({
+//             error: errors.SERVER_ERROR
+//         })
+//     }
 // })
 
 module.exports = router
