@@ -5,12 +5,12 @@ import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import HeaderNavigation from '../components/HeaderNavigation';
 
 const EmployeeDashboard = props => {
-    return(
-      <View style={{marginTop: Dimensions.get('window').height < 900 ? 5 : 60}}>
-        <View style={{justifyContent: 'center', alignSelf: 'center',}}>
-          <Text style={styles.titleText}>Employee Dashboard</Text>
-        </View>
-        {/* <TouchableOpacity>
+  return (
+    <View style={{ marginTop: Dimensions.get('window').height < 900 ? 5 : 60 }}>
+      <View style={{ justifyContent: 'center', alignSelf: 'center', }}>
+        <Text style={styles.titleText}>Employee Dashboard</Text>
+      </View>
+      {/* <TouchableOpacity>
           <View style={styles.containers}>
             <Text style={styles.containerText}>Goods out of stock 8</Text>
           </View>
@@ -25,49 +25,49 @@ const EmployeeDashboard = props => {
             <Text style={styles.containerText}>Pending Deliveries 9</Text>
           </View>
         </TouchableOpacity> */}
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity onPress={() => props.navigation.navigate({routeName: 'Sales'})}>
-            <View elevation={5} style={styles.buttons}>
-                <Text style={styles.buttonContainerText}>Make a Sale</Text>
-            </View>
-          </TouchableOpacity>
-          <View style={{paddingLeft: 20}}></View>
-          <TouchableOpacity onPress={() => props.navigation.navigate({routeName: 'MakePurchase'})}>
-            <View elevation={5} style={styles.buttons}>
-                <Text style={styles.buttonContainerText}>Make a Purchase</Text>
-            </View>
-          </TouchableOpacity>
-        </View>  
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity onPress={() => props.navigation.navigate({ routeName: 'Sales' })}>
+          <View elevation={5} style={styles.buttons}>
+            <Text style={styles.buttonContainerText}>Make a Sale</Text>
+          </View>
+        </TouchableOpacity>
+        <View style={{ paddingLeft: 20 }}></View>
+        <TouchableOpacity onPress={() => props.navigation.navigate({ routeName: 'MakePurchase' })}>
+          <View elevation={5} style={styles.buttons}>
+            <Text style={styles.buttonContainerText}>Make a Purchase</Text>
+          </View>
+        </TouchableOpacity>
       </View>
-      
-    )
+    </View>
+
+  )
 }
 
 EmployeeDashboard.navigationOptions = navigationData => {
-    return {
-        headerTitle: 'Zaki Sons',
-        headerTitleAlign: 'center',
-        headerTitleStyle: { color: 'white' },
-        headerStyle: {
-            backgroundColor: '#008394', 
-        },
-        headerLeft: (
-            <HeaderButtons HeaderButtonComponent={HeaderButton}>
-              <Item
-                title="Menu"
-                iconName="ios-menu"
-                onPress={() => {
-                    navigationData.navigation.toggleDrawer();
-                  }}
-              />
-            </HeaderButtons>
-          ),
-          headerRight: (
-            <HeaderNavigation/>
-          )
-    };
+  return {
+    headerTitle: 'Zaki Sons',
+    headerTitleAlign: 'center',
+    headerTitleStyle: { color: 'white' },
+    headerStyle: {
+      backgroundColor: '#008394',
+    },
+    headerLeft: (
+      <HeaderButtons HeaderButtonComponent={HeaderButton}>
+        <Item
+          title="Menu"
+          iconName="ios-menu"
+          onPress={() => {
+            navigationData.navigation.toggleDrawer();
+          }}
+        />
+      </HeaderButtons>
+    ),
+    headerRight: (
+      <HeaderNavigation navigation={navigationData.navigation} />
+    )
   };
-  
+};
+
 const styles = StyleSheet.create({
   titleText: {
     color: '#008394',

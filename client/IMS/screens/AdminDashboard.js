@@ -24,13 +24,14 @@ const AdminDashboard = props => {
 
   const getToday = async () => {
     const res = await axios.get(
-      `${uri}/api/dashboard/todayRevenue` 
+      `${uri}/api/dashboard/todayRevenue`
     )
 
 
-    try{
-    settodayRevenue(res.data.todaysRevenue.revenue)}
-    catch(err){}
+    try {
+      settodayRevenue(res.data.todaysRevenue.revenue)
+    }
+    catch (err) { }
   }
 
   const getPending = async () => {
@@ -110,7 +111,7 @@ AdminDashboard.navigationOptions = navigationData => {
       </HeaderButtons>
     ),
     headerRight: (
-      <HeaderNavigation />
+      <HeaderNavigation navigation={navigationData.navigation} />
     )
   };
 };
