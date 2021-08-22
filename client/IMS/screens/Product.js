@@ -98,7 +98,8 @@ const Product = props => {
   const [search, setSearch] = React.useState(``) //for keeping track of search
   const onChangeSearch = (searchVal) => { //function to keep track of search as the user types
     setSearch(searchVal);
-    setQuery(searchVal)
+    let q = searchVal.trim()
+    setQuery(q === '' ? '*' : q)
     // setFilters({ ...filters, query: searchVal })
     // console.log(search);
   }

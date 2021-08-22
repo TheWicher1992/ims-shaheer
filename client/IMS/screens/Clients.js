@@ -31,7 +31,7 @@ const Clients = props => {
 
   const getClients = async () => {
 
-    const query = search === '' ? '*' : search
+    const query = search.trim() === '' ? '*' : search.trim()
     const res = await axios.get(`${uri}/api/client/${query}`)
     console.log(res.data.clients)
     setClients(res.data.clients)
@@ -119,7 +119,7 @@ const Clients = props => {
 
   const onPressRecord = (client) => {
     setTableDetailModalVisible(true),
-    setTouchedClient(client)
+      setTouchedClient(client)
   }
 
 
@@ -167,7 +167,7 @@ const Clients = props => {
           </View>
         </View>
       </Modal>
-      <ClientDetailModal state={isTableDetailModalVisible} handleClose={handleClose} object = {touchedClient} title='Client Details' getClients={getClients}/>
+      <ClientDetailModal state={isTableDetailModalVisible} handleClose={handleClose} object={touchedClient} title='Client Details' getClients={getClients} />
       <View style={styles.screen}>
         <View>
           <Text style={styles.title}>Clients</Text>
