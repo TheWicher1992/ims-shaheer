@@ -12,7 +12,14 @@ import setAuthToken from '../utils/setAuthToken';
 import { useNavigation } from '@react-navigation/native';
 import * as RootNavigation from '../navigation/RootNavigation';
 import { uri } from '../api.json'
-
+export const logout = (navigation) => dispatch => {
+    console.log(navigation)
+    navigation.navigate({ routeName: 'Login' })
+    // navigation.navigate('AdminLogin')
+    dispatch({
+        type: LOGOUT
+    })
+}
 
 export const login = (userName, password, navigation, type = 'admin') => async dispatch => {
     console.log('login')

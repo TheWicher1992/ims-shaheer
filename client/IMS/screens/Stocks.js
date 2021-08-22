@@ -9,6 +9,7 @@ import StockModal from '../components/StockModal';
 import FilterButton from '../components/FilterButton';
 import { uri } from '../api.json'
 import axios from "axios"
+import Spinner from '../components/Spinner';
 
 
 const optionsPerPage = [2, 3, 4];
@@ -27,17 +28,18 @@ const Stocks = props => {
     sort: '*',
     sortBy: '*'
   })
-
+  const [loading, setLoading] = useState(true)
   const [stock, setStock] = useState([])
   useEffect(() => {
     setModalVisible(props.state);
   }, [props.state]);
   const getStock = async () => {
-    
+    setLoading(true)
     const res = await axios.get(
       `${uri}/api/product/stocks/`
     )
     setProducts(res.data.stocks.reverse())
+    setLoading(false)
     console.log('idddd', res.data)
     //setSelectedProduct(res.data.warehouse[0]._id)
   }
@@ -107,8 +109,8 @@ const Stocks = props => {
         </View>
       </View>
       <View style={styles.containerButton}>
-          <View style={styles.buttonContainer}>
-          </View>
+        <View style={styles.buttonContainer}>
+        </View>
         <View style={{ flexDirection: 'row', justifyContent: 'center', }}>
           <View style={styles.searchBar}>
             <TextInput onChangeText={onChangeSearch} style={styles.buttonInput} placeholder="type here..." autoCorrect={false} />
@@ -130,8 +132,8 @@ const Stocks = props => {
 
       </View>
       <FilterButton />
-      
-        <ScrollView style={{ top: 20 }}>
+      <Spinner loading={loading} />
+      {!loading && <ScrollView style={{ top: 20 }}>
         <DataTable>
           <DataTable.Header>
             <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Serial No.</Text></DataTable.Title>
@@ -171,10 +173,10 @@ const Stocks = props => {
           />
         </DataTable>
 
-        </ScrollView>
-      </View>
-    
-    
+      </ScrollView>}
+    </View>
+
+
 
 
   )

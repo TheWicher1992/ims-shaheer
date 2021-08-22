@@ -13,6 +13,7 @@ import FilterButton from '../components/FilterButton';
 import axios from 'axios'
 import { uri } from '../api.json'
 import { connect } from 'react-redux'
+import Spinner from '../components/Spinner';
 const optionsPerPage = [2, 3, 4];
 const MakePurchase = props => {
 
@@ -30,9 +31,9 @@ const MakePurchase = props => {
   };
 
   const [purchases, setPurchases] = useState([])
-
+  const [loading, setLoading] = useState(true)
   const getPurchases = async () => {
-
+    setLoading(true)
     const getURI =
       `${uri}/api/purchase` +
       `/${props.filters.page}` +
@@ -47,6 +48,7 @@ const MakePurchase = props => {
     const res = await axios.get(getURI)
     console.log("okok", res.data)
     setPurchases(res.data.purchases)
+    setLoading(false)
   }
 
   const getPreFormValues = async () => {
@@ -361,7 +363,8 @@ const MakePurchase = props => {
 
       </View>
       <FilterButton getPurchases={getPurchases} page="purchase" />
-      <ScrollView>
+      <Spinner loading={loading} />
+      {!loading && <ScrollView>
 
         <DataTable>
           <DataTable.Header>
@@ -419,7 +422,7 @@ const MakePurchase = props => {
           />
         </DataTable>
 
-      </ScrollView>
+      </ScrollView>}
     </View>
     // </KeyboardAvoidingView>
 

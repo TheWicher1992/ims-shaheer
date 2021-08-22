@@ -13,6 +13,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
 import { uri } from '../api.json'
 import axios from "axios"
+import Spinner from '../components/Spinner';
 
 const optionsPerPage = [2, 3, 4];
 
@@ -21,7 +22,7 @@ const DeliveryOrders = props => {
   const [products, setProducts] = useState([])
   const [clients, setClients] = useState([])
   const [query, setQuery] = useState('*')
-
+  const [loading, setLoading] = useState(true)
   const [Pfilters, setPFilters] = useState({
     page: 1,
     query: '*',
@@ -36,13 +37,14 @@ const DeliveryOrders = props => {
 
 
   const getOrders = async () => {
+    setLoading(true)
     const res = await axios.get(
       `${uri}/api/order/${Pfilters.page}/${query}/${Pfilters.client}/${Pfilters.product}/${Pfilters.sort}/${Pfilters.sortBy}`
     )
 
     // console.log('logging arriving order', res.data.deliveryOrder)
     setOrders(res.data.deliveryOrder)
-
+    setLoading(false)
   }
 
   const getProducts = async () => {
@@ -317,7 +319,8 @@ const DeliveryOrders = props => {
       </View>
 
       <FilterButton />
-      <ScrollView>
+      <Spinner loading={loading} />
+      {!loading && <ScrollView>
 
         <DataTable>
           <DataTable.Header>
@@ -357,6 +360,7 @@ const DeliveryOrders = props => {
         </DataTable>
 
       </ScrollView>
+      }
     </View>
     // </KeyboardAvoidingView>
 
