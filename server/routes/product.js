@@ -303,7 +303,7 @@ router.get('/stock/:id', async (req, res) => {
 
         const warehouseStock = await Stock.find({
             product: productID
-        })
+        }).populate(`warehouse`)
 
         const deliverOrderStocks = await DeliveryOrder.find({
             product: productID
@@ -641,6 +641,23 @@ router.post('/brand', async (req, res) => {
     }
 })
 
+router.get('/',async(req,res) => {
+
+    try{
+        
+
+        const products = await Product.find({},{title : 1}) 
+        return res.status(200).json({
+            products
+        })
+    }
+    catch(err) {
+        console.log(err)
+        return res.status(500).json({
+            error: errors.SERVER_ERROR
+        })
+    }
+})
 
 
 module.exports = router
