@@ -183,6 +183,25 @@ router.get('/form-inputs', async (req, res) => {
 
 })
 
+router.get(`/:id`, async (req, res) => {
+
+    try{
+
+        id = req.params.id
+        const purchases = await Purchase.find({client : id }).populate(['product','client'])
+        return res.status(200).json({
+            purchases
+        })
+    }
+    catch (err) {
+        console.log(err)
+        return res.status(500).json({
+            error: errors.SERVER_ERROR
+        })
+    }
+
+})
+
 router.get('/:page/:query/:products/:clients/:payment/:date/:quantity/:amount', async (req, res) => {
     const page = parseInt(req.params.page) - 1
     const query = req.params.query === '*' ? ['.*'] : req.params.query.split(" ")
