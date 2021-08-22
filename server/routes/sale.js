@@ -81,70 +81,101 @@ router.get('/filters', async (req, res) => {
 
 
 // filter sales
+router.get('/:page/:query/:products/:clients/:payment/:date/:quantity/:amount', async (req, res) => {
+    const page = parseInt(req.params.page) - 1
+    const query = req.params.query === '*' ? ['.*'] : req.params.query.split(" ")
+    const quantity = req.params.quantity === '*' ? '*' : parseInt(req.params.quantity)
+    const amount = req.params.amount === '*' ? '*' : parseInt(req.params.amount)
+    let date = req.params.date
+    const payment = req.params.payment
+    const products = req.params.products
+    const clients = req.params.clients
+    const sortOptions = {
+        'date': 'desc'
+    }
+    const filters = {}
 
+    if (products !== '*') filters['product'] = {
+        $in: products.split(',').slice(1, products.length)
+    }
+    if (clients !== '*') filters['client'] = {
+        $in: clients.split(',').slice(1, clients.length)
+    }
 
-router.get('/:page/:query/:client/:deliveryStatus/:date/:quantity/:total/:sort/:sortBy', async (req, res) => {
-    try {
+    if (date !== '*') {
+        date = date.split('-')
+        let month = parseInt(date[0])
+        let day = parseInt(date[1])
+        let year = parseInt(date[2]) + 2000
 
-        const page = req.params.page - 1
-        const query = req.params.query === '*' ? ['.*'] : req.params.query.split(" ")
-        const client = req.params.client
-        const deliveryStatus = req.params.deliveryStatus
-        const date = req.params.date
-        const quantity = req.params.quantity
-        const total = req.params.total
-        const sort = req.params.sort === '*' ? 'date' : req.params.sort
-        const sortBy = req.params.sortBy === '*' ? 'desc' : req.params.sortBy
-
-        const sortOptions = {
-            [sort]: sortBy
+        let d1 = new Date(year, month - 1, day)
+        let d2 = new Date(year, month - 1, day + 1)
+        console.log(d1, d2)
+        filters['date'] = {
+            $gte: d1,
+            $lte: d2
         }
+    }
 
+    if (amount !== '*') filters['total'] = {
+        $lte: amount
+    }
+    if (quantity !== '*') filters['quantity'] = {
+        $lte: quantity
+    }
+    if (payment !== '*') filters['payment'] = payment
 
-        const filters = {}
-
-        if (client !== '*') filters['client'] = client
-        if (deliveryStatus !== '*') filters['deliveryStatus'] = deliveryStatus
-        if (date !== '*') filters['date'] = date
-        if (quantity !== '*') filters['quantity'] = quantity
-        if (total !== '*') filters['total'] = total
-
-
-
-        filters['$or'] = [
-
-            {
-                product: {
-                    $in: productIDs.map(c => c._id)
-                }
-            },
-            {
-                client: {
-                    $in: clientIDs.map(b => b._id)
-                }
+    const productIDs = await Product.find({
+        title: {
+            $in: query.map(q => new RegExp(q, "i"))
+        }
+    }).select('_id')
+    console.log(productIDs)
+    const clientIDs = await Client.find({
+        userName: {
+            $in: query.map(q => new RegExp(q, "i"))
+        }
+    }).select('_id')
+    console.log(clientIDs)
+    filters['$or'] = [
+        {
+            payment: {
+                $in: query.map(q => new RegExp(q, "i"))
             }
-        ]
+        },
+        {
+            note: {
+                $in: query.map(q => new RegExp(q, "i"))
+            }
+        },
+        {
+            client: {
+                $in: clientIDs.map(c => c._id)
+            }
+        },
+        {
+            product: {
+                $in: productIDs.map(p => p._id)
+            }
+        }
+    ]
+    const itemsPerPage = config.get('rows-per-page')
+    const sales = await Sale
+        .find(filters)
+        .populate(['product', 'client'])
+        .sort(sortOptions)
+        .skip(itemsPerPage * page)
+        .limit(itemsPerPage)
 
-        const itemsPerPage = config.get('rows-per-page')
 
-        const sales = await Sale
-            .find(filters)
-            .sort(sortOptions)
-            .skip(itemsPerPage * page)
-            .limit(itemsPerPage)
+    return res.json({
+        sales
+    })
 
-        return res.status(200).json({
-            sales
-        })
-    }
-    catch (err) {
-        console.log(err)
-
-        return res.status(500).json({
-            error: errors.SERVER_ERROR
-        })
-    }
 })
+
+
+
 
 
 // view all sales
