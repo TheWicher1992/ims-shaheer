@@ -12,8 +12,8 @@ import PurchaseDetailModal from '../components/PurchaseDetailModal';
 import FilterButton from '../components/FilterButton';
 import axios from 'axios'
 import { uri } from '../api.json'
+import { connect } from 'react-redux'
 const optionsPerPage = [2, 3, 4];
-
 const MakePurchase = props => {
 
   const [page, setPage] = React.useState(0); //for pages of table
@@ -32,7 +32,19 @@ const MakePurchase = props => {
   const [purchases, setPurchases] = useState([])
 
   const getPurchases = async () => {
-    const res = await axios.get(`${uri}/api/purchase`)
+
+    const getURI =
+      `${uri}/api/purchase` +
+      `/${props.filters.page}` +
+      `/${search}` +
+      `/${props.filters.product.join(',')}` +
+      `/${props.filters.client.join(',')}` +
+      `/${props.filters.payment}` +
+      `/${props.filters.date}` +
+      `/${props.filters.maxQuantity}` +
+      `/${props.filters.maxTotal}`
+
+    const res = await axios.get(getURI)
     console.log("okok", res.data)
     setPurchases(res.data.purchases)
   }
@@ -59,14 +71,14 @@ const MakePurchase = props => {
   }, [itemsPerPage]);
 
 
-  const [search, setSearch] = React.useState(``) //for keeping track of search
+  const [search, setSearch] = React.useState(`*`) //for keeping track of search
   const onChangeSearch = (searchVal) => { //function to keep track of search as the user types
     setSearch(searchVal);
     console.log(search);
   }
 
   const searchFunc = () => {
-    console.log(search); //printing search value for now
+    getPurchases() //printing search value for now
   }
 
 
@@ -151,12 +163,12 @@ const MakePurchase = props => {
     console.log(`switched`);
   };
 
-  const [touchedPurchase,setTouchedPurchase] = useState([])
+  const [touchedPurchase, setTouchedPurchase] = useState([])
 
-  const selectedPurchaseRecord = (purchase) =>{
+  const selectedPurchaseRecord = (purchase) => {
     setTouchedPurchase(purchase)
     setTableDetailModalVisible(true)
-    console.log("hello" ,touchedPurchase)
+    console.log("hello", touchedPurchase)
   }
 
 
@@ -314,7 +326,7 @@ const MakePurchase = props => {
           </View>
         </View>
       </Modal>
-      <PurchaseDetailModal state={isTableDetailModalVisible} handleClose={handleClose} title='Purchase Detail' object = {touchedPurchase}  />
+      <PurchaseDetailModal state={isTableDetailModalVisible} handleClose={handleClose} title='Purchase Detail' object={touchedPurchase} />
       <View style={styles.screen}>
         <View>
           <Text style={styles.title}>Purchases</Text>
@@ -346,7 +358,7 @@ const MakePurchase = props => {
         </View>
 
       </View>
-      <FilterButton page = "purchase" />
+      <FilterButton getPurchases={getPurchases} page="purchase" />
       <ScrollView>
 
         <DataTable>
@@ -436,7 +448,14 @@ MakePurchase.navigationOptions = navigationData => {
   };
 };
 
-export default MakePurchase
+
+const mapStateToProps = (state) => (
+  {
+    filters: state.purchaseFilters
+  }
+)
+
+export default connect(mapStateToProps)(MakePurchase)
 
 
 const styles = StyleSheet.create({
