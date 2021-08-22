@@ -13,7 +13,7 @@ import FilterButton from '../components/FilterButton';
 import { uri } from '../api.json'
 import axios from 'axios'
 // import { toast } from 'react-toastify'
-
+import Spinner from '../components/Spinner';
 const optionsPerPage = [2, 3, 4];
 
 const Clients = props => {
@@ -28,14 +28,14 @@ const Clients = props => {
   };
 
   const [clients, setClients] = useState([])
-
+  const [loading, setLoading] = useState(true)
   const getClients = async () => {
-
+    setLoading(true)
     const query = search.trim() === '' ? '*' : search.trim()
     const res = await axios.get(`${uri}/api/client/${query}`)
     console.log(res.data.clients)
     setClients(res.data.clients)
-
+    setLoading(false)
   }
 
   useEffect(() => {
@@ -199,7 +199,8 @@ const Clients = props => {
         </View>
 
       </View>
-      <ScrollView style={styles.p2}>
+      <Spinner loading={loading} />
+      {!loading && <ScrollView style={styles.p2}>
 
         <DataTable>
           <DataTable.Header>
@@ -223,7 +224,7 @@ const Clients = props => {
           }
         </DataTable>
 
-      </ScrollView>
+      </ScrollView>}
     </View>
     // </KeyboardAvoidingView>
 

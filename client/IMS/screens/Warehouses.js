@@ -11,11 +11,14 @@ import WarehouseDetailModal from '../components/WarehouseDetailModal';
 import FilterButton from '../components/FilterButton';
 import axios from 'axios'
 import { uri } from '../api.json'
+import Spinner from '../components/Spinner';
+
 const optionsPerPage = [2, 3, 4];
 
 const Warehouse = props => {
 
   const [warehouses, setWarehouses] = useState([])
+  const [loading, setLoading] = useState(true)
   const [filters, setFilters] = useState({
     page: 1,
     query: '*',
@@ -24,10 +27,12 @@ const Warehouse = props => {
   })
 
   const getWarehouses = async () => {
+    setLoading(true)
     const res = await axios.get(
       `${uri}/api/warehouse/${filters.page}/${filters.query}/${filters.sort}/${filters.sortBy}`
     )
     setWarehouses(res.data.warehouse.reverse())
+    setLoading(false)
     console.log('wwwwwwwwwwwwwwwwwww', warehouses)
   }
 
@@ -221,7 +226,8 @@ const Warehouse = props => {
         </View>
 
       </View>
-      <ScrollView style={{ top: 30 }}>
+      <Spinner loading={loading} />
+      {!loading && <ScrollView style={{ top: 30 }}>
         <DataTable>
           <DataTable.Header>
             <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Name</Text></DataTable.Title>
@@ -256,6 +262,7 @@ const Warehouse = props => {
         </DataTable>
 
       </ScrollView>
+      }
     </View>
     // </KeyboardAvoidingView>
 

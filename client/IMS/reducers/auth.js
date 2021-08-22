@@ -7,6 +7,7 @@ import {
     LOGIN_FAIL,
     LOGOUT
 } from '../actions/types'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const initialState = {
     token: null,
@@ -15,15 +16,14 @@ const initialState = {
     isAuthenticated: false,
 }
 
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const authReducer = async (state = initialState, action) => {
+const authReducer = (state = initialState, action) => {
     console.log('payload-->', action.payload)
 
     switch (action.type) {
         case ADMIN_LOGIN_SUCCESS:
         case EMPLOYEE_LOGIN_SUCCESS:
-            await AsyncStorage.setItem('token', action.payload)
+            AsyncStorage.setItem('token', action.payload)
             return {
                 ...state, token: action.payload, isAuthenticated: true, loading: false
             }
@@ -39,7 +39,7 @@ const authReducer = async (state = initialState, action) => {
         case AUTH_ERROR:
         case LOGIN_FAIL:
         case LOGOUT:
-            await AsyncStorage.removeItem('token')
+            AsyncStorage.removeItem('token')
             return {
                 ...state, token: null, user: null, isAuthenticated: false, loading: false
             }
