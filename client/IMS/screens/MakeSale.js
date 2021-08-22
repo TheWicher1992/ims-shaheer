@@ -179,7 +179,7 @@ const MakeSale = props => {
       received: amountReceived,
       isWarehouse: isWarehouse,
       deliveryOrder: selectedDOrder,
-      warehouses: warehouseIdTicksQuant
+      warehouses: warehouseIdTicksQuant,
       note: notes
     }
 
