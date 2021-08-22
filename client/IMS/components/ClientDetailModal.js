@@ -50,6 +50,18 @@ const ClientDetailModal = props => {
                     <Text style={styles.bodyText}>Date Added: {props.object.date}</Text>
                     </View>)}
                 </View>
+                <View style={{flexDirection: 'row', justifyContent: 'space-evenly', alignItems : 'center', bottom: 50}}>
+                        <TouchableOpacity onPress={() => props.handleClose()}>
+                            <View style={styles.buttonModalContainer2}>
+                                <Text style={styles.buttonModalText}>Sales</Text>
+                            </View>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress = {() => {setUpdateModalVisible(true)}}>
+                            <View style={styles.backButtonModalContainer2}>
+                                <Text style={styles.buttonModalText}>Purchases</Text>
+                            </View>
+                        </TouchableOpacity>
+                    </View>
               </ScrollView>
                     <View style={{flexDirection: 'row', justifyContent: 'space-evenly', alignItems : 'center', bottom: 20}}>
                         <TouchableOpacity onPress={() => props.handleClose()}>
@@ -110,6 +122,30 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     paddingHorizontal: 24,
     top: Dimensions.get('window').height > 900 ? 35 : 15,
+    margin: 20,
+    display: 'flex',
+    
+  },
+  buttonModalContainer2 : {
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignContent: 'space-between',
+    borderRadius : 40,
+    backgroundColor: '#00E0C7',
+    paddingVertical: 8,
+    paddingHorizontal: 24,
+    margin: 20,
+    display: 'flex',
+
+  },
+  backButtonModalContainer2 : {
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignContent: 'space-between',
+    borderRadius : 40,
+    backgroundColor: '#008394',
+    paddingVertical: 8,
+    paddingHorizontal: 24,
     margin: 20,
     display: 'flex',
     
