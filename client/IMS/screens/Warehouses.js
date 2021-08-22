@@ -28,7 +28,7 @@ const Warehouse = props => {
       `${uri}/api/warehouse/${filters.page}/${filters.query}/${filters.sort}/${filters.sortBy}`
     )
     setWarehouses(res.data.warehouse.reverse())
-    console.log('wwwwwwwwwwwwwwwwwww',warehouses)
+    console.log('wwwwwwwwwwwwwwwwwww', warehouses)
   }
 
   useEffect(() => {
@@ -72,10 +72,11 @@ const Warehouse = props => {
   }, [itemsPerPage]);
 
 
-  const [search, setSearch] = React.useState(``) //for keeping track of search
+  const [search, setSearch] = React.useState(`*`) //for keeping track of search
   const onChangeSearch = (searchVal) => { //function to keep track of search as the user types
     setSearch(searchVal);
-    setFilters({ ...filters, query: searchVal })
+    let q = searchVal.trim()
+    setFilters({ ...filters, query: q === '' ? '*' : q })
     console.log(search);
   }
 

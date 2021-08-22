@@ -126,12 +126,10 @@ const DeliveryOrders = props => {
 
   const [search, setSearch] = React.useState(``) //for keeping track of search
   const onChangeSearch = (searchVal) => { //function to keep track of search as the user types
-  if (searchVal === '')
-  {
-    setQuery('*')
-  }
-  else
-  {setQuery(searchVal)}
+    if (searchVal.trim() === '') {
+      setQuery('*')
+    }
+    else { setQuery(searchVal.trim()) }
   }
 
   const searchFunc = () => {
