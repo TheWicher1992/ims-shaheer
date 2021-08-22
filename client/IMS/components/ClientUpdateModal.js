@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     paddingHorizontal: 24,
     top: Dimensions.get('window').height > 900 ? (Dimensions.get('window').width > 480 ? 35 : null): null,
-    margin: 20,
+    margin: 10,
     display: 'flex',
 
   },
@@ -134,7 +134,7 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     paddingHorizontal: 24,
     top: Dimensions.get('window').height > 900 ? (Dimensions.get('window').width > 480 ? 35 : null): null,
-    margin: 20,
+    margin: 10,
     display: 'flex',
     
   },
@@ -190,7 +190,7 @@ const styles = StyleSheet.create({
     marginTop: 22
   },
   modalBody:{
-    paddingVertical:'30%',
+    paddingVertical:'25%',
     paddingHorizontal:10
   },
   modalView: {
