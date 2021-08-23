@@ -3,6 +3,7 @@ import { Text, View, TouchableOpacity, Dimensions, StyleSheet } from "react-nati
 import { FontAwesome } from '@expo/vector-icons';
 import ProductFilterModal from "./ProductFilterModal";
 import PurchaseFilterModal from "./PurchaseFilterModal";
+import SaleFilterModal from "./SaleFilterModal";
 
 const FilterButton = (props) => {
 
@@ -28,6 +29,9 @@ const FilterButton = (props) => {
       return (<PurchaseFilterModal getPurchases={props.getPurchases} state={isFilterModalVisible} handleClose={closeFilterModal} />
 
       );
+    }
+    else if(props.page === "sale"){
+      return (<SaleFilterModal state = {isFilterModalVisible} handleClose = {closeFilterModal}/>)
     }
   }
 

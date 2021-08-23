@@ -4,6 +4,7 @@ import CalendarPicker from 'react-native-calendar-picker';
 import { connect } from 'react-redux'
 import { setProdDate,resetProdDate } from '../../actions/productFilters'
 import { setPurchaseDate, resetPurchaseDate } from '../../actions/purchaseFilters'
+import { setSaleDate, resetSaleDate } from "../../actions/saleFilters";
 import { FontAwesome } from "@expo/vector-icons";
 import moment from "moment";
 
@@ -26,6 +27,9 @@ const DateFilterModal = props => {
         else if (props.title === "purchase"){
             props.setPurchaseDate(moment(date).format("MM-DD-YY"))
         }
+        else if (props.title === "sale"){
+            props.setSaleDate(moment(date).format("MM-DD-YY"))
+        }
     }
 
     const clearFilterColors = () => {
@@ -34,6 +38,9 @@ const DateFilterModal = props => {
         }
         else if (props.title === "purchase"){
             props.resetPurchaseDate()
+        }
+        else if(props.title === "sale"){
+            props.resetSaleDate()
         }
     }
     return (
@@ -95,6 +102,9 @@ const DateFilterModal = props => {
                                 }
                                 {   
                                     props.title === "purchase" && props.datePurchaseFilter
+                                }
+                                {
+                                    props.title === "sale" && props.dateSaleFilter
                                 }
                             </Text>
                         </View>
@@ -224,8 +234,9 @@ const mapStateToProps = (state) => {
     // console.log(" purchase filters" ,state.purchaseFilters)
     return {
         dateFilter: state.productFilters.date,
-        datePurchaseFilter: state.purchaseFilters.date
+        datePurchaseFilter: state.purchaseFilters.date,
+        dateSaleFilter: state.saleFilters.date
     }
 }
 
-export default connect(mapStateToProps, { setProdDate,resetProdDate, setPurchaseDate, resetPurchaseDate  })(DateFilterModal);
+export default connect(mapStateToProps, { setProdDate,resetProdDate, setPurchaseDate, resetPurchaseDate, setSaleDate, resetSaleDate })(DateFilterModal);

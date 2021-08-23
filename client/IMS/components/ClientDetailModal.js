@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { Modal, StyleSheet, Text, View, TouchableOpacity, Dimensions, ScrollView } from "react-native";
 import ClientUpdateModal from "./ClientUpdateModal";
+import ClientPaymentModal from "./ClientPaymentModal"
 
 
 const ClientDetailModal = props => {
   const [modalVisible, setModalVisible] = useState(false);
   const [isUpdateModalVisible, setUpdateModalVisible] = React.useState(false);
+  const [isPaymentModalVisible, setPaymentModalVisible] = React.useState(false);
   
   console.log('hete', Dimensions.get('window').width)
   useEffect(() => {
@@ -13,8 +15,13 @@ const ClientDetailModal = props => {
   }, [props.state]);
 
   const handleCloseUpdate = ()=>{
-    props.handleClose()
+    //props.handleClose()
     setUpdateModalVisible(false)
+  }
+
+  const handleClosePayment = ()=>{
+    //props.handleClose()
+    setPaymentModalVisible(!isPaymentModalVisible)
   }
 
   function handleClose() {
@@ -27,6 +34,7 @@ const ClientDetailModal = props => {
   return (
     
     <View style={styles.centeredView}>
+        <ClientPaymentModal state={isPaymentModalVisible} handleClose={handleClosePayment} title='Manage Payments' getClients={props.getClients} object={props.object} />
         <ClientUpdateModal state={isUpdateModalVisible} handleClose={handleCloseUpdate} title='Update Client Information' getClients={props.getClients} object={props.object} />
         <Modal
             animationType="slide"
@@ -59,6 +67,11 @@ const ClientDetailModal = props => {
                         <TouchableOpacity onPress = {() => {props.handleClose(), props.navigator.navigate({routeName: 'ClientPurchaseDetail', params: { clientID: props.object._id }})}}>
                             <View style={styles.backButtonModalContainer}>
                                 <Text style={styles.buttonModalText}>Purchases</Text>
+                            </View>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress = {() => {setPaymentModalVisible(true)}}>
+                            <View style={styles.backButtonModalContainer}>
+                                <Text style={styles.buttonModalText}>Payments</Text>
                             </View>
                         </TouchableOpacity>
                     </View>

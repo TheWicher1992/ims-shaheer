@@ -3,11 +3,13 @@ import { Alert, Modal, StyleSheet, Text, View, TouchableOpacity, Dimensions, Key
 import ProductUpdateModal from "./ProductUpdateModal";
 import { uri } from '../api.json'
 import axios from "axios"
+import ShowAlert from './ShowAlert'
 
 const EmployeeDetailModal = props => {
   const [modalVisible, setModalVisible] = useState(false);
   const [isUpdateModalVisible, setUpdateModalVisible] = React.useState(false);
-  console.log('hete', Dimensions.get('window').width)
+  const [alertState, setAlertState] = useState(false)
+
   useEffect(() => {
     setModalVisible(props.state);
   }, [props.state]);
@@ -22,15 +24,18 @@ const EmployeeDetailModal = props => {
   }
 
   const deleteEmployee = (id) => {
-    console.log('del this ',id)
     axios.delete(`${uri}/api/auth/employee/${id}`).then(() => props.getEmployees())
     props.handleClose()
+    show()
 
   }
+  const show = () => {
+    setAlertState(!alertState)
+}
   return (
     <KeyboardAvoidingView>
+        <ShowAlert state={alertState} handleClose={show} alertTitle={'Success'} alertMsg={'Employee has been deleted successfully! Press OK to go back.'}/>
       <View style={styles.centeredView}>
-        {/* <ProductUpdateModal state={isUpdateModalVisible} handleClose={handleCloseUpdate} title='Update Information' name='Raahem Asghar' email='raahemasghar97@gmail.com' occupation="Employee" getProducts={props.getProducts} obj={props.object} /> */}
         <Modal
           animationType="slide"
           transparent={true}
