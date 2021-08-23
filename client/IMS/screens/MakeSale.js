@@ -556,7 +556,7 @@ const MakeSale = props => {
         </View>
 
       </View>
-      <FilterButton filters="hello" />
+      <FilterButton page = "sale" />
       <Spinner loading={loading} />
       {!loading && <ScrollView>
 

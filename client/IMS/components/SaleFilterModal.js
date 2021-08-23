@@ -9,8 +9,10 @@ import PaymentTypeFilterModal from "./FilterModals/PaymentTypeFilterModal";
 import { uri } from '../api.json'
 import axios from "axios"
 import { connect } from 'react-redux'
-import { clearPurchaseFilters } from '../actions/purchaseFilters'
-const PurchaseFilterModal = props => {
+import { clearSaleFilters } from "../actions/saleFilters";
+
+
+const SaleFilterModal = props => {
 
     const [modalVisible, setModalVisible] = useState(false);
     const [clientFilterModal, setClientFilterModal] = useState(false);
@@ -53,7 +55,7 @@ const PurchaseFilterModal = props => {
 
     const getFilters = async () => {
         const res = await axios.get(
-            `${uri}/api/purchase/filters`
+            `${uri}/api/sale/filters`
         )
         setFilters(res.data.filters);
 
@@ -75,8 +77,7 @@ const PurchaseFilterModal = props => {
                 ...productMap
             }
         })
-        console.log(clientMap, productMap)
-        // console.log("purchase filters", res.data.filters)
+        
     }
 
 
@@ -104,7 +105,7 @@ const PurchaseFilterModal = props => {
                                     </Text>
                                 </View>
                                 <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-end', paddingRight: '8%' }}>
-                                    <TouchableOpacity onPress={props.clearPurchaseFilters}>
+                                    <TouchableOpacity onPress={props.clearSaleFilters}>
                                         <View style={styles.clearButton}>
                                             <Text style={styles.clearButtonText}>
                                                 Clear
@@ -246,11 +247,11 @@ const PurchaseFilterModal = props => {
                         </TouchableOpacity>
 
                         <View style={styles.bottomBox}>
-                            <TouchableOpacity onPress={() => { props.handleClose(); props.getPurchases() }} style={{ width: '90%', position: "absolute", top: '5%' }}>
+                            <TouchableOpacity onPress={() => { props.handleClose() }} style={{ width: '90%', position: "absolute", top: '5%' }}>
                                 <View style={styles.bottomButton}>
                                     <View>
                                         <Text style={styles.footerText}>
-                                            View Purchases
+                                            View Sales
                                         </Text>
                                     </View>
                                 </View>
@@ -261,12 +262,12 @@ const PurchaseFilterModal = props => {
                     </View>
                 </View>
             </Modal>
-            <DateFilterModal state={dateFilterModal} handleClose={closeDateFilterModal} title="purchase" />
-            <ClientFilterModal state={clientFilterModal} handleClose={closeClientFilterModal} object={filters.clients} title="purchase" />
-            <ProductNameFilterModal state={productNameFilterModal} handleClose={closeProductNameFilterModal} object={filters.products} title="purchase" />
-            <QuantityFilterModal state={quantityFilterModal} handleClose={closeQuantityFilterModal} title="purchase" maxStock={filters.maxQuantity} />
-            <PriceFilterModal state={priceFilterModal} handleClose={closePriceFilterModal} title="purchase" maxPrice={filters.maxTotal} />
-            <PaymentTypeFilterModal state={paymentTypeFilterModal} handleClose={closePaymentTypeFilterModal} title = "purchase" />
+            <DateFilterModal state={dateFilterModal} handleClose={closeDateFilterModal} title="sale" />
+            <ClientFilterModal state={clientFilterModal} handleClose={closeClientFilterModal} object={filters.clients} title="sale" />
+            <ProductNameFilterModal state={productNameFilterModal} handleClose={closeProductNameFilterModal} object={filters.products} title="sale" />
+            <QuantityFilterModal state={quantityFilterModal} handleClose={closeQuantityFilterModal} title="sale" maxStock={filters.maxQuantity} />
+            <PriceFilterModal state={priceFilterModal} handleClose={closePriceFilterModal} title="sale" maxPrice={filters.maxTotal} />
+            <PaymentTypeFilterModal state={paymentTypeFilterModal} handleClose={closePaymentTypeFilterModal} title = "sale" />
         </View>
     );
 };
@@ -370,6 +371,6 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state) => ({
-    filters: state.purchaseFilters
+    filters: state.saleFilters
 })
-export default connect(mapStateToProps, { clearPurchaseFilters })(PurchaseFilterModal);
+export default connect(mapStateToProps, { clearSaleFilters })(SaleFilterModal);

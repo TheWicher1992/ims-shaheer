@@ -4,6 +4,7 @@ import { FontAwesome } from "@expo/vector-icons";
 import { connect } from 'react-redux'
 import { setProdQuant,resetProdQuant } from '../../actions/productFilters'
 import { setPurchaseEMaxQuant, resetPurchaseMaxQuant } from '../../actions/purchaseFilters'
+import { setSaleMaxQuant, resetSaleMaxQuant } from "../../actions/saleFilters"; 
 import Slider from '@react-native-community/slider';
 const QuantityFilterModal = props => {
 
@@ -23,6 +24,9 @@ const QuantityFilterModal = props => {
         else if(props.title === "purchase"){
             props.setPurchaseEMaxQuant(sliderValue);
         }
+        else if(props.title === "sale"){
+            props.setSaleMaxQuant(sliderValue);
+        }
     }
 
     const clearQuantity = () => {
@@ -31,6 +35,9 @@ const QuantityFilterModal = props => {
         }
         else if(props.title === "purchase"){
             props.resetPurchaseMaxQuant()
+        }
+        else if(props.title === "sale"){
+            props.resetSaleMaxQuant()
         }
         
     }
@@ -78,6 +85,28 @@ const QuantityFilterModal = props => {
                 />
             </View>
         )
+       }
+       else if(props.maxStock !== undefined && props.title === "sale"){
+            return (
+                <View style={styles.container}>
+                    <Text style = {styles.normalText}>
+                    Value of slider is : {props.quantSaleFilter}
+                    </Text>
+
+                    <Slider
+                    maximumValue={props.maxStock}
+                    minimumValue={0}
+                    minimumTrackTintColor="#008394"
+                    maximumTrackTintColor="#000000"
+                    step={1}
+                    value={ props.quantSaleFilter === '*' ? 0: props.quantSaleFilter}
+                        
+                    onValueChange={
+                        (sliderValue) => setQuantity(sliderValue)
+                    }
+                    />
+                </View>
+            )
        }
     }
     return (
@@ -244,8 +273,9 @@ const mapStateToProps = (state) => {
     console.log(state.productFilters)
     return {
         quantFilter: state.productFilters.quantity,
-        quantPurchaseFilter: state.purchaseFilters.maxQuantity
+        quantPurchaseFilter: state.purchaseFilters.maxQuantity,
+        quantSaleFilter: state.saleFilters.maxQuantity
     }
 }
 
-export default connect(mapStateToProps, { setProdQuant,resetProdQuant, setPurchaseEMaxQuant, resetPurchaseMaxQuant  })(QuantityFilterModal);
+export default connect(mapStateToProps, { setProdQuant,resetProdQuant, setPurchaseEMaxQuant, resetPurchaseMaxQuant, setSaleMaxQuant, resetSaleMaxQuant, setSaleMaxQuant, resetSaleMaxQuant   })(QuantityFilterModal);

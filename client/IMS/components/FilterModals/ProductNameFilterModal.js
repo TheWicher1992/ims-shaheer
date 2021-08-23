@@ -3,6 +3,7 @@ import { Modal, StyleSheet, Text, View, TouchableOpacity, Dimensions, TextInput,
 import { FontAwesome } from "@expo/vector-icons";
 import { connect } from 'react-redux'
 import { setPurchaseProduct, resetPurchaseProduct, removePurchaseProduct } from '../../actions/purchaseFilters'
+import { setSaleProduct, resetSaleProduct, removeSaleProduct } from "../../actions/saleFilters";
 const ProductNameFilterModal = props => {
 
     const [modalVisible, setModalVisible] = useState(false);
@@ -13,16 +14,33 @@ const ProductNameFilterModal = props => {
     }, [props.state]);
 
     const setProductFilter = (record, i) => {
-        if (props.productFilter.indexOf(record._id) === -1) {
-            props.setPurchaseProduct(record._id)
+        if(props.title === "purchase"){
+            if (props.productFilter.indexOf(record._id) === -1) {
+                props.setPurchaseProduct(record._id)
+            }
+            else {
+                props.removePurchaseProduct(record._id)
+                
+            }
         }
-        else {
-            props.removePurchaseProduct(record._id)
-            
+        else if(props.title === "sale"){
+            if (props.saleFilter.indexOf(record._id) === -1) {
+                props.setSaleProduct(record._id)
+            }
+            else {
+                props.removeSaleProduct(record._id)
+                
+            }
         }
+        
     }
     const clearProductFilters = () => {
-        props.resetPurchaseProduct()
+        if(props.title === "purchase"){
+            props.resetPurchaseProduct()
+        }
+        else if(props.title === "sale"){
+            props.resetSaleProduct()
+        }
     }
     const showProducts = () => {
         if (props.object !== [] && props.object !== undefined) {
@@ -44,7 +62,13 @@ const ProductNameFilterModal = props => {
                                         </View>
                                         <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-end', paddingRight: '8%' }}>
                                             <View style={styles.sideText}>
-                                                {props.productFilter.indexOf(record._id) !== -1 ? (<FontAwesome
+                                                {props.title === "purchase" && props.productFilter.indexOf(record._id) !== -1 ? (<FontAwesome
+                                                    name={"check"}
+                                                    size={Dimensions.get('window').height > 900 ? 40 : 25}
+                                                    color={"#008394"}
+                                                />
+                                                ) : (null)}
+                                                {props.title === "sale" && props.saleFilter.indexOf(record._id) !== -1 ? (<FontAwesome
                                                     name={"check"}
                                                     size={Dimensions.get('window').height > 900 ? 40 : 25}
                                                     color={"#008394"}
@@ -238,8 +262,9 @@ const styles = StyleSheet.create({
 const mapStateToProps = (state) => {
     console.log(state.purchaseFilters)
     return {
-        productFilter: state.purchaseFilters.product
+        productFilter: state.purchaseFilters.product,
+        saleFilter: state.saleFilters.product
     }
 }
 
-export default connect(mapStateToProps, { setPurchaseProduct, resetPurchaseProduct, removePurchaseProduct })(ProductNameFilterModal);
+export default connect(mapStateToProps, { setPurchaseProduct, resetPurchaseProduct, removePurchaseProduct, setSaleProduct, resetSaleProduct, removeSaleProduct })(ProductNameFilterModal);
