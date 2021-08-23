@@ -12,7 +12,7 @@ import UpdateModal from '../components/UpdateModal'
 import { uri } from '../api.json'
 import axios from "axios"
 import Spinner from '../components/Spinner';
-import {ToastAndroid} from 'react-native'
+import { ToastAndroid } from 'react-native'
 import ShowAlert from '../components/ShowAlert';
 
 const optionsPerPage = [2, 3, 4];
@@ -33,71 +33,76 @@ const Employee = props => {
   const [alertState, setAlertState] = useState(false)
   const [alertTitle, setAlertTitle] = useState(``)
   const [alertMsg, setAlertMsg] = useState(``)
-  
+
   const addEmployee = () => {
-    if(userName===`` || password ===``){
+    if (userName === `` || password === ``) {
       console.log('inside if')
       setAlertTitle('Warning')
       setAlertMsg('Some of the input fields may be empty. Request could not be processed.')
       show()
     }
-    else{
+    else {
       setModalVisible(false); //closing modal on done for now
-    const body = {
-      userName: userName,
-      password: password,
+      const body = {
+        userName: userName,
+        password: password,
+      }
+
+      axios.post(`${uri}/api/auth/add-employee`, body, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+        .then(res => {
+          getEmployees()
+          setAlertTitle('Success')
+          setAlertMsg('Request has been processed and admin has been added.')
+          show()
+        })
+        .catch(err => setError())
+        .finally(() => setUserName(``), setPassword(``))
     }
 
-    axios.post(`${uri}/api/auth/add-employee`, body, {
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-      .then(res => getEmployees(),
-      setAlertTitle('Success'),
-      setAlertMsg('Request has been processed and admin has been added.'),
-      show())
-      .catch(err => setError())
-      .finally(() => setUserName(``), setPassword(``))
-    }
-    
   }
   const show = () => {
     setAlertState(!alertState)
-}
+  }
   const setError = () => {
     setAlertTitle('Error')
     setAlertMsg('User already exists.')
     show()
   }
   const addAdmin = () => {
-    if(userName===`` || password ===``){
+    if (userName === `` || password === ``) {
       setAlertTitle('Warning')
       setAlertMsg('Some of the input fields may be empty. Request could not be processed.')
       show()
     }
-    else{
-    setModalVisible(false); //closing modal on done for now
+    else {
+      setModalVisible(false); //closing modal on done for now
 
-    const body = {
-      userName: userName,
-      password: password,
-    }
-
-    axios.post(`${uri}/api/auth/add-admin`, body, {
-      headers: {
-        'Content-Type': 'application/json'
+      const body = {
+        userName: userName,
+        password: password,
       }
-    })
-    .then(res => getEmployees(),
-    setAlertTitle('Success'),
-    setAlertMsg('Request has been processed and admin has been added.'),
-    show())
-    .catch(err => setError())
-    .finally(() => setUserName(``), setPassword(``))
-      
+
+      axios.post(`${uri}/api/auth/add-admin`, body, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+        .then(res => {
+          console.log(res.status)
+          getEmployees();
+          setAlertTitle('Success');
+          setAlertMsg('Request has been processed and admin has been added.');
+          show();
+        })
+        .catch(err => setError())
+        .finally(() => setUserName(``), setPassword(``))
+
+    }
   }
-}
 
   const onPressModal = (emp) => {
     setTableDetailModalVisible(true),
@@ -154,7 +159,7 @@ const Employee = props => {
   return (
     // <KeyboardAvoidingView style = {styles.containerView} behavior = "padding">
     <View>
-      <ShowAlert state={alertState} handleClose={show} alertTitle={alertTitle} alertMsg={alertMsg} style={styles.buttonModalContainer}/>
+      <ShowAlert state={alertState} handleClose={show} alertTitle={alertTitle} alertMsg={alertMsg} style={styles.buttonModalContainer} />
       <Modal
         onSwipeComplete={() => setModalVisible(false)}
         swipeDirection="left"
@@ -294,6 +299,9 @@ const Employee = props => {
 
   )
 }
+
+
+
 
 
 Employee.navigationOptions = navigationData => {
