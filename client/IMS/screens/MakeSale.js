@@ -206,7 +206,8 @@ const MakeSale = props => {
   const [selectedDOrder, setSelectedDOrder] = useState(``)
   const [warehouseIdTicksQuant, setWarehouseIdTicksQuant] = useState({
     ticks: {},
-    quant: {}
+    quant: {},
+    ids : []
   })
   const [warehousesID, setWarehousesID] = useState([]) //keep track of warehouses
 
@@ -224,15 +225,17 @@ const MakeSale = props => {
     )
 
     setStock(res.data.stocks)
-    // console.log("here it is",res.data.stocks)
+    console.log("here it is",res.data.stocks)
 
 
     const wareMap = {}
     const quantMap = {}
+    const wareIDs = []
     res.data.stocks.warehouseStock.forEach(e => {
       if(e.stock!== 0){
         wareMap[e.warehouse._id] = false
         quantMap[e.warehouse._id] = 0
+        wareIDs.push(e.warehouse._id)
       }
       
     })
@@ -240,7 +243,8 @@ const MakeSale = props => {
     // console.log("here qq ", quantMap)
     setWarehouseIdTicksQuant({
       ticks: {...wareMap},
-      quant: {...quantMap}
+      quant: {...quantMap},
+      ids: [...wareIDs]
     })
 
     
@@ -306,7 +310,7 @@ const MakeSale = props => {
                             <TouchableOpacity onPress = {() => warehouseClicked(record.warehouse._id)}>
                               <View style = {styles.input}>
                                 <View style = {{flexDirection: 'row'}}>
-                                  <Text>
+                                  <Text style={{fontSize:8}}>
                                       Warehouse: {record.warehouse.name} --- Quantity: {record.stock}
                                   </Text>
                                   {warehouseIdTicksQuant["ticks"][record.warehouse._id] === true ? (<FontAwesome

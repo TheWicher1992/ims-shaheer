@@ -309,10 +309,16 @@ router.get('/stock/:id', async (req, res) => {
             product: productID
         })
 
+
         const stocks = {
             warehouseStock,
             deliverOrderStocks
         }
+
+        stocks.warehouseStock.map(q => {
+            console.log(q._id)
+        })
+
 
         return res.status(200).json({
             stocks
