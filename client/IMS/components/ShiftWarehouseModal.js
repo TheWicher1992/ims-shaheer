@@ -3,6 +3,7 @@ import { Modal, StyleSheet, Text, View, TouchableOpacity, Dimensions, TextInput 
 import {Picker} from '@react-native-picker/picker';
 import axios from 'axios'
 import { uri } from '../api.json'
+import ShowAlert from '../components/ShowAlert';
 const ShiftWarehouseModal = props => {
   const [modalVisible, setModalVisible] = useState(false);
   const [warehouses, setWarehouses] = useState([])
@@ -14,13 +15,23 @@ const ShiftWarehouseModal = props => {
     sort: '*',
     sortBy: '*'
   })
+  const [alertState, setAlertState] = useState(false)
+  const [alertTitle, setAlertTitle] = useState(``)
+  const [alertMsg, setAlertMsg] = useState(``)
 
+  const show = () => {
+    setAlertState(!alertState)
+  }
+  const setError = () => {
+    setAlertTitle('Error')
+    setAlertMsg('Something Went Wrong')
+    show()
+  }
   const getWarehouses = async () => {
     const res = await axios.get(
       `${uri}/api/warehouse/${filters.page}/${filters.query}/${filters.sort}/${filters.sortBy}`
     )
     setWarehouses(res.data.warehouse.reverse())
-    console.log('hi',res.data)
     setSelectedWarehouse(res.data.warehouse[0]._id)
   }
   useEffect(() => {
@@ -43,8 +54,12 @@ const ShiftWarehouseModal = props => {
     }
 
     axios.post(`${uri}/api/product/move`, body, config)
-      .then(() => props.handleClose())
-      .catch(err => console.log(err.response))
+    .then(() => {
+      props.handleClose();
+      setAlertTitle('Success');
+      setAlertMsg('Stock transferred successfully');
+      show()})
+      .catch(err => setError())
       .finally(() =>  props.getStock())
 
   }
@@ -58,6 +73,7 @@ const ShiftWarehouseModal = props => {
   return (
     
     <View style={styles.centeredView}>
+      <ShowAlert state={alertState} handleClose={show} alertTitle={alertTitle} alertMsg={alertMsg} style={styles.buttonModalContainer} />
       {console.log(props.id)}
         <Modal
             animationType="slide"

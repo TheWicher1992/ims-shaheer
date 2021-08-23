@@ -12,6 +12,7 @@ import FilterButton from '../components/FilterButton';
 import axios from 'axios'
 import { uri } from '../api.json'
 import Spinner from '../components/Spinner';
+import ShowAlert from '../components/ShowAlert';
 
 const optionsPerPage = [2, 3, 4];
 
@@ -31,35 +32,27 @@ const Warehouse = props => {
     const res = await axios.get(
       `${uri}/api/warehouse/${filters.page}/${filters.query}/${filters.sort}/${filters.sortBy}`
     )
+    res.data.warehouse.length === 0 ? searchWarning(): null
     setWarehouses(res.data.warehouse.reverse())
     setLoading(false)
-    console.log('wwwwwwwwwwwwwwwwwww', warehouses)
+  }
+  const [alertState, setAlertState] = useState(false)
+  const [alertTitle, setAlertTitle] = useState(``)
+  const [alertMsg, setAlertMsg] = useState(``)
+
+  const show = () => {
+    setAlertState(!alertState)
+  }
+  const setError = () => {
+    setAlertTitle('Error')
+    setAlertMsg('Warehouse already exists')
+    show()
   }
 
   useEffect(() => {
-    console.log('ware')
     getWarehouses()
   }, [])
 
-
-  const handleConfirm = (pItems) => { // temporary for picker
-    console.log('pItems =>', pItems);
-  }
-
-  const items = [ //temporary for picker for filter
-    {
-      itemKey: 1,
-      itemDescription: 'Item 1'
-    },
-    {
-      itemKey: 2,
-      itemDescription: 'Item 2'
-    },
-    {
-      itemKey: 3,
-      itemDescription: 'Item 3'
-    }
-  ];
 
   const [page, setPage] = React.useState(0); //for pages of table
   const [isModalVisible, setModalVisible] = React.useState(false); //to set modal on and off
@@ -95,7 +88,11 @@ const Warehouse = props => {
   const [warehouseName, setWarehouseName] = React.useState(``)
   const [totalProducts, setTotalProducts] = React.useState(0)
   const [stock, setStock] = React.useState(0)
-
+  const searchWarning = () => {
+    setAlertTitle('Attention')
+    setAlertMsg('No warehouses found!')
+    show()
+  }
 
   const onChangeWarehouseName = (warehousename) => {
     setWarehouseName(warehousename);
@@ -116,8 +113,6 @@ const Warehouse = props => {
       totalProducts: totalProducts,
       totalStock: stock
     }
-    console.log(body)
-    console.log(`///////////////////////////////////////add warehouse`)
 
     await axios.post(`${uri}/api/warehouse`, body,
       {
@@ -127,8 +122,11 @@ const Warehouse = props => {
       }
 
     )
-      .then(res => console.log(res))
-      .catch(err => console.log(err))
+      .then(() => {
+      setAlertTitle('Success');
+      setAlertMsg('Warehouses Added Successfully');
+      show()})
+      .catch(err => setError())
 
     getWarehouses()
     setModalVisible(false); //closing modal on done for now
@@ -155,6 +153,7 @@ const Warehouse = props => {
     // <KeyboardAvoidingView style = {styles.containerView} behavior = "padding">
 
     <View>
+      <ShowAlert state={alertState} handleClose={show} alertTitle={alertTitle} alertMsg={alertMsg} style={styles.buttonModalContainer} />
       <Modal
         onSwipeComplete={() => setModalVisible(false)}
         swipeDirection="left"

@@ -120,7 +120,7 @@ const EmployeeWarehouses = props => {
     // <KeyboardAvoidingView style = {styles.containerView} behavior = "padding">
 
     <View>
-      <WarehouseDetailModal state={isTableDetailModalVisible} handleClose={handleClose} title='Warehouse Information' object={touchedWarehouse === [] ? [] : touchedWarehouse} getWarehouses={getWarehouses} occupation={'Admin'} />
+      <WarehouseDetailModal state={isTableDetailModalVisible} handleClose={handleClose} title='Warehouse Information' object={touchedWarehouse === [] ? [] : touchedWarehouse} getWarehouses={getWarehouses} occupation={'Employee'} />
       <View style={styles.screen}>
         <View>
           <Text style={styles.title}>Warehouses</Text>

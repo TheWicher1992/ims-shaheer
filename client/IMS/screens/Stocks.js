@@ -131,7 +131,7 @@ const Stocks = props => {
         </View>
 
       </View>
-      <FilterButton />
+      <View style={{ marginTop: 20 }}/>
       <Spinner loading={loading} />
       {!loading && <ScrollView style={{ top: 20 }}>
         <DataTable>
@@ -140,8 +140,6 @@ const Stocks = props => {
             <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Product</Text></DataTable.Title>
             <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Warehouse</Text></DataTable.Title>
             <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Stock</Text></DataTable.Title>
-            {/* <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Quantity</Text></DataTable.Title> */}
-            {/* <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Warehouse</Text></DataTable.Title> */}
 
           </DataTable.Header>
 
@@ -159,18 +157,6 @@ const Stocks = props => {
 
             ))
           }
-
-          <DataTable.Pagination
-            page={page}
-            numberOfPages={3}
-            onPageChange={(page) => setPage(page)}
-            label="1-2 of 6"
-            optionsPerPage={optionsPerPage}
-            itemsPerPage={itemsPerPage}
-            setItemsPerPage={setItemsPerPage}
-            showFastPagination
-            optionsLabel={'Rows per page'}
-          />
         </DataTable>
 
       </ScrollView>}

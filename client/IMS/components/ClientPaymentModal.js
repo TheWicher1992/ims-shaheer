@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Modal, StyleSheet, Text, View, TouchableOpacity, Dimensions, TextInput, Switch } from "react-native";
 import { uri } from '../api.json'
 import axios from "axios"
+import ShowAlert from '../components/ShowAlert';
 
 const ClientPaymentModal = props => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -9,6 +10,18 @@ const ClientPaymentModal = props => {
   const [isEnabled, setIsEnabled] = useState(false);
   const [amount, setAmount] = useState(0)
   const [amountGiven, setAmountGiven] = useState(0)
+  const [alertState, setAlertState] = useState(false)
+  const [alertTitle, setAlertTitle] = useState(``)
+  const [alertMsg, setAlertMsg] = useState(``)
+
+  const show = () => {
+    setAlertState(!alertState)
+  }
+  const setError = () => {
+    setAlertTitle('Error')
+    //setAlertMsg('Client already exists.')
+    show()
+  }
   const onChangeAmountReceived = (amount) => {
     setAmount(amount)
   }
@@ -31,9 +44,16 @@ const ClientPaymentModal = props => {
     }
     
     axios.post(`${uri}/api/payment`, body, config)
-    .then(() => props.getClients())
+    .then(() => {
+      props.getClients()
+      setAlertTitle('Success');
+      setAlertMsg(isEnabled ? 'Payment has been received!' : 'Payment has been made');
+      props.initialModalClose();
+      show()})
     .catch(err => console.log(err.response))
-    .finally(() => props.handleClose())
+    .finally(() => {
+      props.handleClose()
+    })
 }
   
   useEffect(() => {
@@ -48,6 +68,7 @@ const ClientPaymentModal = props => {
   return (
     
     <View style={styles.centeredView}>
+      <ShowAlert state={alertState} handleClose={show} alertTitle={alertTitle} alertMsg={alertMsg} style={styles.buttonModalContainer} />
         <Modal
             animationType="slide"
             transparent={true}

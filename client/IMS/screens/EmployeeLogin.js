@@ -4,6 +4,7 @@ import styles from '../components/LoginStyles'
 import { connect } from 'react-redux'
 import { login, loadUser } from '../actions/auth'
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import ShowAlert from '../components/ShowAlert';
 
 const EmployeeLogin = props => {
     useEffect(() => {
@@ -20,24 +21,39 @@ const EmployeeLogin = props => {
 
     const [userName, setUserName] = useState(``)
     const [password, setPassword] = useState(``)
+    const [alertState, setAlertState] = useState(false)
+    const [alertTitle, setAlertTitle] = useState(``)
+    const [alertMsg, setAlertMsg] = useState(``)
 
 
     const onChangePassword = (pass) => {
         setPassword(pass)
     }
 
+    const show = () => {
+        setAlertState(!alertState)
+      }
 
     const onChangeUserName = (userName) => {
         setUserName(userName)
     }
 
     const login = () => {
-        props.login(userName, password, props.navigation, 'employee')
+        if (userName === `` || password === ``) {
+            setAlertTitle('Warning')
+            setAlertMsg('Some of the input fields may be empty. Unable to login.')
+            show()
+          }
+        else{
+            props.login(userName, password, props.navigation, 'employee')
+        }
+        
     }
 
 
     return (
         <View>
+            <ShowAlert state={alertState} handleClose={show} alertTitle={alertTitle} alertMsg={alertMsg} style={styles.buttonModalContainer} />
             <KeyboardAvoidingView style={styles.containerView} behavior="padding">
                 <View>
                     <View style={styles.circleNumber1}>

@@ -5,6 +5,7 @@ import axios from 'axios'
 import { connect } from 'react-redux'
 import { login, loadUser } from '../actions/auth'
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import ShowAlert from '../components/ShowAlert';
 
 
 const AdminLogin = props => {
@@ -15,6 +16,9 @@ const AdminLogin = props => {
 
     const [userName, setUserName] = useState(``)
     const [password, setPassword] = useState(``)
+    const [alertState, setAlertState] = useState(false)
+    const [alertTitle, setAlertTitle] = useState(``)
+    const [alertMsg, setAlertMsg] = useState(``)
 
 
     const onChangePassword = (pass) => {
@@ -25,9 +29,19 @@ const AdminLogin = props => {
     const onChangeUserName = (userName) => {
         setUserName(userName)
     }
-
+    const show = () => {
+        setAlertState(!alertState)
+      }
     const login = () => {
-        props.login(userName, password, props.navigation)
+        if (userName === `` || password === ``) {
+            setAlertTitle('Warning')
+            setAlertMsg('Some of the input fields may be empty. Unable to login.')
+            show()
+          }
+        else{
+            props.login(userName, password, props.navigation)
+        }
+        
     }
 
 
@@ -38,6 +52,7 @@ const AdminLogin = props => {
     };
     return (
         <View>
+            <ShowAlert state={alertState} handleClose={show} alertTitle={alertTitle} alertMsg={alertMsg} style={styles.buttonModalContainer} />
             <KeyboardAvoidingView style={styles.containerView} behavior="padding">
                 <View>
                     <View style={styles.circleNumber1}>

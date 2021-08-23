@@ -2,11 +2,23 @@ import React, { useState, useEffect } from "react";
 import { Alert, Modal, StyleSheet, Text, View, TouchableOpacity, Dimensions, KeyboardAvoidingView, ScrollView } from "react-native";
 import { uri } from '../api.json'
 import axios from "axios"
+import ShowAlert from '../components/ShowAlert';
 
 const WarehouseDetailModal= props => {
   const [modalVisible, setModalVisible] = useState(false);
   const [isUpdateModalVisible, setUpdateModalVisible] = React.useState(false);
-  console.log('hete', Dimensions.get('window').width)
+  const [alertState, setAlertState] = useState(false)
+  const [alertTitle, setAlertTitle] = useState(``)
+  const [alertMsg, setAlertMsg] = useState(``)
+
+  const show = () => {
+    setAlertState(!alertState)
+  }
+  const setError = () => {
+    setAlertTitle('Error')
+    setAlertMsg('Something Went Wrong')
+    show()
+  }
   useEffect(() => {
     setModalVisible(props.state);
   }, [props.state]);
@@ -19,14 +31,23 @@ const WarehouseDetailModal= props => {
     setModalVisible(false);
   }
 
-  const deleteProduct = (id) =>{
-    axios.delete(`${uri}/api/product/${id}`).then(() => props.getProducts())
-    props.handleClose()
+  const deleteWarehouse = (id) =>{
+    axios.delete(`${uri}/api/warehouse/${id}`)
+    .then(() => {
+      props.handleClose();
+      setAlertTitle('Success');
+      setAlertMsg('Warehouse deleted successfully');
+      show()})
+      .catch(err => setError())
+      .finally(() =>  props.getWarehouses())
       
   }
+  
   return (
     <KeyboardAvoidingView>
     <View style={styles.centeredView}>
+    <ShowAlert state={alertState} handleClose={show} alertTitle={alertTitle} alertMsg={alertMsg} style={styles.buttonModalContainer} />
+
         <Modal
             animationType="slide"
             transparent={true}
@@ -55,8 +76,17 @@ const WarehouseDetailModal= props => {
                                 <Text style={styles.buttonModalText}>Back</Text>
                             </View>
                         </TouchableOpacity>
+                        {/* <View style={{flexDirection: 'row', justifyContent: 'space-evenly', alignItems : 'center'}}>
+                        <TouchableOpacity onPress={() => deleteWarehouse(props.object._id)}>
+                            <View style={styles.deleteButtonModalContainer}>
+                                <Text style={styles.buttonModalText}>Delete</Text>
+                            </View>
+                        </TouchableOpacity>
+                        
+                    </View> */}
                         
                     </View>
+                    
                 </View>) : (<View style={styles.modalView}>
                     <Text style={styles.modalTitle}>{props.title}</Text>
                     <View>
@@ -73,8 +103,8 @@ const WarehouseDetailModal= props => {
                                 <Text style={styles.buttonModalText}>Back</Text>
                             </View>
                         </TouchableOpacity>
-                        
                     </View>
+                    
                 </View>)}
             </View>
         </Modal>
