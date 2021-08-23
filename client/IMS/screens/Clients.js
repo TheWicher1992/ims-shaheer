@@ -12,7 +12,7 @@ import ClientDetailModal from '../components/ClientDetailModal';
 import FilterButton from '../components/FilterButton';
 import { uri } from '../api.json'
 import axios from 'axios'
-// import { toast } from 'react-toastify'
+import ShowAlert from '../components/ShowAlert'
 import Spinner from '../components/Spinner';
 const optionsPerPage = [2, 3, 4];
 
@@ -22,6 +22,18 @@ const Clients = props => {
   const [itemsPerPage, setItemsPerPage] = React.useState(optionsPerPage[0]); //for items per page on table
   const [touchedClient, setTouchedClient] = useState([])
   const [isModalVisible, setModalVisible] = React.useState(false); //to set modal on and off
+  const [alertState, setAlertState] = useState(false)
+  const [alertTitle, setAlertTitle] = useState(``)
+  const [alertMsg, setAlertMsg] = useState(``)
+
+  const show = () => {
+    setAlertState(!alertState)
+  }
+  const setError = () => {
+    setAlertTitle('Error')
+    setAlertMsg('Client with this name already exists.')
+    show()
+  }
 
   const toggleModal = () => { //to toggle model on and off -- function
     setModalVisible(!isModalVisible);
@@ -34,6 +46,7 @@ const Clients = props => {
     const query = search.trim() === '' ? '*' : search.trim()
     const res = await axios.get(`${uri}/api/client/${query}`)
     console.log(res.data.clients)
+    res.data.clients.length === 0 ? searchWarning(): null
     setClients(res.data.clients)
     setLoading(false)
   }
@@ -54,6 +67,12 @@ const Clients = props => {
 
   const searchFunc = () => {
     getClients()
+  }
+
+  const searchWarning = () => {
+    setAlertState(!alertState) 
+    setAlertTitle('Attention')
+    setAlertMsg('No clients found!')
   }
 
 
@@ -88,23 +107,14 @@ const Clients = props => {
           "Content-Type": "application/json"
         }
       }
-    ).then(res => console.log(res.data))
+    ).then(res => {
+      getClients();
+      setAlertTitle('Success');
+      setAlertMsg('Client added successfully!');
+      show()})
       .catch(err => {
         console.log(err.response)
-        if (err.response.data.error === 'SAME_USERNAME_ALREADY_EXISTS') {
-          ToastAndroid.showWithGravity(
-            "Client with this username exists",
-            ToastAndroid.LONG,
-            ToastAndroid.CENTER
-          )
-        }
-        if (err.response.data.error === 'SAME_PHONENUMBER_ALREADY_EXISTS') {
-          ToastAndroid.showWithGravity(
-            "Client with this phone number exists",
-            ToastAndroid.LONG,
-            ToastAndroid.CENTER)
-
-        }
+        setError()
       })
 
     setModalVisible(false); //closing modal on done for now
@@ -129,6 +139,7 @@ const Clients = props => {
     // <KeyboardAvoidingView style = {styles.containerView} behavior = "padding">
     // <ScrollView >
     <View>
+      <ShowAlert state={alertState} handleClose={show} alertTitle={alertTitle} alertMsg={alertMsg} style={styles.buttonModalContainer} />
       <Modal
         onSwipeComplete={() => setModalVisible(false)}
         swipeDirection="left"

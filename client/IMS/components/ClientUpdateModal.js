@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Modal, StyleSheet, Text, View, TouchableOpacity, Dimensions, TextInput } from "react-native";
 import { uri } from '../api.json'
 import axios from "axios"
+import ShowAlert from '../components/ShowAlert';
+
 
 const ClientUpdateModal = props => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -9,6 +11,18 @@ const ClientUpdateModal = props => {
   const [phoneNumber,setPhoneNumber] = useState(``);
   const [balance, setBalance] = useState(0);
   const [id, setID] = useState(``)
+  const [alertState, setAlertState] = useState(false)
+  const [alertTitle, setAlertTitle] = useState(``)
+  const [alertMsg, setAlertMsg] = useState(``)
+
+  const show = () => {
+    setAlertState(!alertState)
+  }
+  const setError = () => {
+    setAlertTitle('Error')
+    //setAlertMsg('Client already exists.')
+    show()
+  }
 
   const updateClient = () => {
       const body = {
@@ -23,8 +37,14 @@ const ClientUpdateModal = props => {
       }
       
       axios.put(`${uri}/api/client/${id}`, body, config)
-      .then(() => props.getClients())
-      .catch(err => console.log(err.response))
+      .then( res => {
+        props.getClients()
+        setAlertTitle('Success');
+        setAlertMsg('Client data updated successfully!');
+        show();})
+      .catch(err => {
+        console.log(err.response)
+        setError()})
       .finally(() => props.handleClose())
   }
   
@@ -55,6 +75,7 @@ const ClientUpdateModal = props => {
   return (
     
     <View style={styles.centeredView}>
+      <ShowAlert state={alertState} handleClose={show} alertTitle={alertTitle} alertMsg={alertMsg} style={styles.buttonModalContainer} />
         <Modal
             animationType="slide"
             transparent={true}
