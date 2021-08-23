@@ -3,6 +3,7 @@ import { Modal, StyleSheet, Text, View, TouchableOpacity, Dimensions, TextInput,
 import { FontAwesome } from "@expo/vector-icons";
 import { connect } from 'react-redux'
 import { setPurchasePayment, resetPurchasePayment } from '../../actions/purchaseFilters';
+import { setSalePayment, resetSalePayment } from "../../actions/saleFilters";
 const PaymentTypeFilterModal = props => {
 
     const [modalVisible, setModalVisible] = useState(false);
@@ -16,12 +17,23 @@ const PaymentTypeFilterModal = props => {
     }
 
     const setPaymentType = (record) => {
-        props.setPurchasePayment(record)
+        if(props.title === "purchase"){
+            props.setPurchasePayment(record)
+        }
+        else if(props.title === "sale"){
+            props.setSalePayment(record)
+        }
+        
 
     }
 
     const clearPaymentType = () => {
-        props.resetPurchasePayment()
+        if(props.title === "purchase"){
+            props.resetPurchasePayment()
+        }
+        if(props.title === "sale"){
+            props.resetSalePayment()
+        }
     }
     return (
 
@@ -49,7 +61,7 @@ const PaymentTypeFilterModal = props => {
                                 <View style={{ justifyContent: 'center', alignItems: 'flex-start', marginTop: '6.25%',}}>
                                 
                                     <Text style={styles.topText}>
-                                        Brands
+                                        Payment Type
                                     </Text>
                                 </View>
                                 <View style = {{justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-end', paddingRight: '8%' }}>
@@ -78,12 +90,19 @@ const PaymentTypeFilterModal = props => {
                                         </View>
                                         <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-end', paddingRight: '8%' }}>
                                             <View style={styles.sideText}>
-                                            {props.paymentType.indexOf("Partial") !== -1 ? (<FontAwesome
+                                            {props.title === "purchase" && props.paymentType === "Partial" ? (<FontAwesome
                                                     name = {"check"}
                                                     size = {Dimensions.get('window').height > 900 ? 40:25}
                                                     color = {"#008394"}
                                                     />
                                             ) : (null)}
+                                            {props.title === "sale" && props.salePaymentType === "Partial" ? (<FontAwesome
+                                                    name = {"check"}
+                                                    size = {Dimensions.get('window').height > 900 ? 40:25}
+                                                    color = {"#008394"}
+                                                    />
+                                            ) : (null)}
+
                                             
                                             </View>
                                         </View>
@@ -107,7 +126,13 @@ const PaymentTypeFilterModal = props => {
                                         </View>
                                         <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-end', paddingRight: '8%' }}>
                                             <View style={styles.sideText}>
-                                            {props.paymentType.indexOf("Credit") !== -1 ? (<FontAwesome
+                                            {props.title === "purchase" && props.paymentType === "Credit" ? (<FontAwesome
+                                                    name = {"check"}
+                                                    size = {Dimensions.get('window').height > 900 ? 40:25}
+                                                    color = {"#008394"}
+                                                    />
+                                            ) : (null)}
+                                            {props.title === "sale" && props.salePaymentType === "Credit" ? (<FontAwesome
                                                     name = {"check"}
                                                     size = {Dimensions.get('window').height > 900 ? 40:25}
                                                     color = {"#008394"}
@@ -136,7 +161,13 @@ const PaymentTypeFilterModal = props => {
                                         </View>
                                         <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-end', paddingRight: '8%' }}>
                                             <View style={styles.sideText}>
-                                            {props.paymentType.indexOf("Full") !== -1 ? (<FontAwesome
+                                            {props.title === "purchase" && props.paymentType === "Full" ? (<FontAwesome
+                                                    name = {"check"}
+                                                    size = {Dimensions.get('window').height > 900 ? 40:25}
+                                                    color = {"#008394"}
+                                                    />
+                                            ) : (null)}
+                                            {props.title === "sale" && props.salePaymentType === "Full" ? (<FontAwesome
                                                     name = {"check"}
                                                     size = {Dimensions.get('window').height > 900 ? 40:25}
                                                     color = {"#008394"}
@@ -275,8 +306,9 @@ const styles = StyleSheet.create({
 const mapStateToProps = (state) => {
     console.log(state.productFilters)
     return {
-        paymentType: state.purchaseFilters.payment
+        paymentType: state.purchaseFilters.payment,
+        salePaymentType: state.saleFilters.payment
     }
 }
 
-export default connect(mapStateToProps, { setPurchasePayment, resetPurchasePayment })(PaymentTypeFilterModal);
+export default connect(mapStateToProps, { setPurchasePayment, resetPurchasePayment, setSalePayment, resetSalePayment })(PaymentTypeFilterModal);

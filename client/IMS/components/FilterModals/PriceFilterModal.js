@@ -5,6 +5,7 @@ import Slider from '@react-native-community/slider';
 import { connect } from 'react-redux'
 import { setProdPrice, resetProdPrice } from '../../actions/productFilters'
 import { setPurchaseMaxTotal, resetPurchaseMaxTotal } from "../../actions/purchaseFilters";
+import { setSaleMaxTotal, resetSaleMaxTotal } from "../../actions/saleFilters";
 
 const PriceFilterModal = props => {
 
@@ -26,6 +27,9 @@ const PriceFilterModal = props => {
         else if(props.title === "purchase"){
             props.setPurchaseMaxTotal(sliderValue);
         }
+        else if(props.title === "sale"){
+            props.setSaleMaxTotal(sliderValue);
+        }
     }
 
     const clearPrice = () => {
@@ -35,6 +39,10 @@ const PriceFilterModal = props => {
         else if(props.title === "purchase"){
             props.resetPurchaseMaxTotal()
         }
+        else if(props.title === "sale"){
+            props.resetPurchaseMaxTotal()
+        }
+
 
     }
 
@@ -78,6 +86,29 @@ const PriceFilterModal = props => {
                         maximumTrackTintColor="#008394"
                         step={props.maxPrice / 100}
                         value={props.pricePurchaseFilter === "*" ? 0 : props.pricePurchaseFilter}
+                        onValueChange={
+                            (sliderValue) => setPrice(sliderValue)
+                        }
+                    />
+                </View>
+            )
+        }
+        else if (props.maxPrice !== undefined && props.title === "sale") {
+            return (
+                <View style={styles.container}>
+                    {/*Text to show slider value*/}
+                    <Text style={styles.normalText}>
+                        Value of slider is : {props.priceSaleFilter}
+                    </Text>
+
+                    {/*Slider with max, min, step and initial value*/}
+                    <Slider
+                        maximumValue={props.maxPrice}
+                        minimumValue={0}
+                        minimumTrackTintColor="#008394"
+                        maximumTrackTintColor="#008394"
+                        step={props.maxPrice / 100}
+                        value={props.priceSaleFilter === "*" ? 0 : props.priceSaleFilter}
                         onValueChange={
                             (sliderValue) => setPrice(sliderValue)
                         }
@@ -251,8 +282,9 @@ const mapStateToProps = (state) => {
     console.log(state.productFilters)
     return {
         priceFilter: state.productFilters.price,
-        pricePurchaseFilter: state.purchaseFilters.maxTotal
+        pricePurchaseFilter: state.purchaseFilters.maxTotal,
+        priceSaleFilter: state.saleFilters.maxTotal
     }
 }
 
-export default connect(mapStateToProps, { setProdPrice, resetProdPrice,setPurchaseMaxTotal, resetPurchaseMaxTotal })(PriceFilterModal);
+export default connect(mapStateToProps, { setProdPrice, resetProdPrice,setPurchaseMaxTotal, resetPurchaseMaxTotal, setSaleMaxTotal, resetSaleMaxTotal  })(PriceFilterModal);

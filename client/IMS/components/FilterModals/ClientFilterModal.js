@@ -3,6 +3,7 @@ import { Modal, StyleSheet, Text, View, TouchableOpacity, Dimensions, TextInput,
 import { FontAwesome } from "@expo/vector-icons";
 import { connect } from 'react-redux'
 import { setPurchaseClient, resetPurchaseClient, removePurchaseClient } from '../../actions/purchaseFilters'
+import { setSaleClient, resetSaleClient, removeSaleClient} from "../../actions/saleFilters";
 const ClientFilterModal = props => {
 
     const [modalVisible, setModalVisible] = useState(false);
@@ -14,17 +15,34 @@ const ClientFilterModal = props => {
 
 
     const setFilterClient = (record, i) => {
-        if (props.clientFilter.indexOf(record._id) === -1) {
-            props.setPurchaseClient(record._id)
+        if(props.title === "purchase"){
+            if (props.clientFilter.indexOf(record._id) === -1) {
+                props.setPurchaseClient(record._id)
+            }
+            else {
+                props.removePurchaseClient(record._id)
+                
+            }
         }
-        else {
-            props.removePurchaseClient(record._id)
-            
+        else if(props.title === "sale"){
+            if (props.saleClientFilter.indexOf(record._id) === -1) {
+                props.setSaleClient(record._id)
+            }
+            else {
+                props.removeSaleClient(record._id)
+                
+            }
         }
+        
     }
 
     const clearFilterClient = () => {
-        props.resetPurchaseClient()
+        if(props.title === "purchase"){
+            props.resetPurchaseClient()
+        }
+        else if(props.title === "sale"){
+            props.resetSaleClient()
+        }
     }
 
     function handleClose() {
@@ -48,7 +66,13 @@ const ClientFilterModal = props => {
                                         </View>
                                         <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-end', paddingRight: '8%' }}>
                                             <View style={styles.sideText}>
-                                                {props.clientFilter.indexOf(record._id) !== -1 ? (<FontAwesome
+                                                {props.title === "purchase" && props.clientFilter.indexOf(record._id) !== -1 ? (<FontAwesome
+                                                    name={"check"}
+                                                    size={Dimensions.get('window').height > 900 ? 40 : 25}
+                                                    color={"#008394"}
+                                                />
+                                                ) : (null)}
+                                                {props.title === "sale" && props.saleClientFilter.indexOf(record._id) !== -1 ? (<FontAwesome
                                                     name={"check"}
                                                     size={Dimensions.get('window').height > 900 ? 40 : 25}
                                                     color={"#008394"}
@@ -241,8 +265,9 @@ const styles = StyleSheet.create({
 const mapStateToProps = (state) => {
     console.log(state.purchaseFilters)
     return {
-        clientFilter: state.purchaseFilters.client
+        clientFilter: state.purchaseFilters.client,
+        saleClientFilter: state.saleFilters.client,
     }
 }
 
-export default connect(mapStateToProps, { setPurchaseClient, resetPurchaseClient, removePurchaseClient })(ClientFilterModal);
+export default connect(mapStateToProps, { setPurchaseClient, resetPurchaseClient, removePurchaseClient, setSaleClient, resetSaleClient, removeSaleClient })(ClientFilterModal);
