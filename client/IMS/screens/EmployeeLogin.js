@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import { login, loadUser } from '../actions/auth'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ShowAlert from '../components/ShowAlert';
-
+import Spinner from '../components/Spinner';
 const EmployeeLogin = props => {
     useEffect(() => {
         props.loadUser(props.navigation)
@@ -24,7 +24,7 @@ const EmployeeLogin = props => {
     const [alertState, setAlertState] = useState(false)
     const [alertTitle, setAlertTitle] = useState(``)
     const [alertMsg, setAlertMsg] = useState(``)
-
+    const [loading, setLoading] = useState(false)
 
     const onChangePassword = (pass) => {
         setPassword(pass)
@@ -32,7 +32,7 @@ const EmployeeLogin = props => {
 
     const show = () => {
         setAlertState(!alertState)
-      }
+    }
 
     const onChangeUserName = (userName) => {
         setUserName(userName)
@@ -43,18 +43,30 @@ const EmployeeLogin = props => {
             setAlertTitle('Warning')
             setAlertMsg('Some of the input fields may be empty. Unable to login.')
             show()
-          }
-        else{
-            props.login(userName, password, props.navigation, 'employee')
         }
-        
+        else {
+            props.login(
+                userName,
+                password,
+                props.navigation,
+                'employee',
+                setAlertTitle,
+                setAlertMsg,
+                show,
+                setLoading
+            )
+        }
+
     }
 
 
     return (
         <View>
             <ShowAlert state={alertState} handleClose={show} alertTitle={alertTitle} alertMsg={alertMsg} style={styles.buttonModalContainer} />
-            <KeyboardAvoidingView style={styles.containerView} behavior="padding">
+            <View style={SpinnerStyle.middle}>
+                <Spinner loading={loading} />
+            </View>
+            {!loading && <KeyboardAvoidingView style={styles.containerView} behavior="padding">
                 <View>
                     <View style={styles.circleNumber1}>
 
@@ -103,7 +115,7 @@ const EmployeeLogin = props => {
 
                     </View>
                 </View>
-            </KeyboardAvoidingView>
+            </KeyboardAvoidingView>}
             <View style={styles.circleNumber4}>
 
             </View>
@@ -118,6 +130,13 @@ const EmployeeLogin = props => {
 
     )
 }
+
+
+const SpinnerStyle = StyleSheet.create({
+    middle: {
+        top: '100%'
+    }
+})
 
 EmployeeLogin.navigationOptions = () => {
     return {

@@ -21,8 +21,19 @@ export const logout = (navigation) => dispatch => {
     })
 }
 
-export const login = (userName, password, navigation, type = 'admin') => async dispatch => {
+export const login = (
+    userName,
+    password,
+    navigation,
+    type = 'admin',
+    setAlertTitle,
+    setAlertMsg,
+    show,
+    setLoading
+) => async dispatch => {
     console.log('login')
+    setLoading(true)
+
     try {
         let formData = {
             userName,
@@ -39,10 +50,12 @@ export const login = (userName, password, navigation, type = 'admin') => async d
             payload: res.data.token
         })
         dispatch(loadUser(navigation))
-
     } catch (error) {
 
         // const err = error.response.data.errors[0]
+        setAlertTitle('Invalid Credentials!')
+        setAlertMsg('Username or Password was incorrect.')
+        show()
         console.log(error)
         dispatch({
             type: LOGIN_FAIL
@@ -50,6 +63,7 @@ export const login = (userName, password, navigation, type = 'admin') => async d
 
     }
 
+    setLoading(false)
 
 
 }

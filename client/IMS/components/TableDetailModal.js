@@ -4,7 +4,6 @@ import UpdateModal from "./UpdateModal";
 const TableDetailModal = props => {
   const [modalVisible, setModalVisible] = useState(false);
   const [isUpdateModalVisible, setUpdateModalVisible] = React.useState(false);
-  console.log('hete', Dimensions.get('window').width)
   useEffect(() => {
     setModalVisible(props.state);
   }, [props.state]);
