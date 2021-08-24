@@ -49,7 +49,7 @@ const DeliveryOrders = props => {
 
   const getProducts = async () => {
     const res = await axios.get(
-      `${uri}/api/product/${Pfilters.page}/${Pfilters.query}/${Pfilters.colour}/${Pfilters.brand}/${Pfilters.ware}/${Pfilters.sort}/${Pfilters.sortBy}`
+      `${uri}/api/product/`
     )
 
 

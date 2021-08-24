@@ -239,7 +239,7 @@ const styles = StyleSheet.create({
 
 
 const mapStateToProps = (state) => {
-    console.log(state.productFilters)
+    //console.log(state.productFilters)
     return {
         colourFilter: state.productFilters.colour
     }

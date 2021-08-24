@@ -270,7 +270,7 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state) => {
-    console.log(state.productFilters)
+    // console.log(state.productFilters)
     return {
         quantFilter: state.productFilters.quantity,
         quantPurchaseFilter: state.purchaseFilters.maxQuantity,

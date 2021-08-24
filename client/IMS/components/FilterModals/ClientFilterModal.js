@@ -263,7 +263,7 @@ const styles = StyleSheet.create({
 
 
 const mapStateToProps = (state) => {
-    console.log(state.purchaseFilters)
+    // console.log(state.purchaseFilters)
     return {
         clientFilter: state.purchaseFilters.client,
         saleClientFilter: state.saleFilters.client,

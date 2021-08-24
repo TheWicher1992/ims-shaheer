@@ -3,11 +3,12 @@ import { Alert, Modal, StyleSheet, Text, View, TouchableOpacity, Dimensions, Key
 import ProductUpdateModal from "./ProductUpdateModal";
 import { uri } from '../api.json'
 import axios from "axios"
+import ShowAlert from '../components/ShowAlert';
+
 
 const ProductDetailModal = props => {
   const [modalVisible, setModalVisible] = useState(false);
   const [isUpdateModalVisible, setUpdateModalVisible] = React.useState(false);
-  console.log('hete', Dimensions.get('window').width)
   useEffect(() => {
     setModalVisible(props.state);
   }, [props.state]);
@@ -22,13 +23,34 @@ const ProductDetailModal = props => {
   }
 
   const deleteProduct = (id) => {
-    axios.delete(`${uri}/api/product/${id}`).then(() => props.getProducts())
-    props.handleClose()
+    axios.delete(`${uri}/api/product/${id}`)
+    .then(() => {
+      props.getProducts()
+      setAlertTitle('Success')
+      setAlertMsg('Request has been processed, Record has been deleted.')
+      show()
+      props.handleClose()
+    })
+    .catch(err => {
+      setAlertTitle('Warning')
+      setAlertMsg('Request could not be processed.')
+      show()
+    })
+    
 
+
+  }
+
+  const [alertState, setAlertState] = useState(false)
+  const [alertTitle, setAlertTitle] = useState(``)
+  const [alertMsg, setAlertMsg] = useState(``)
+  const show = () => {
+    setAlertState(!alertState)
   }
   return (
     <KeyboardAvoidingView>
       <View style={styles.centeredView}>
+      <ShowAlert state={alertState} handleClose={show} alertTitle={alertTitle} alertMsg={alertMsg} style={styles.buttonModalContainer} />
         <ProductUpdateModal state={isUpdateModalVisible} handleClose={handleCloseUpdate} title='Update Information' name='Raahem Asghar' email='raahemasghar97@gmail.com' occupation="Employee" getProducts={props.getProducts} obj={props.object} />
         <Modal
           animationType="slide"
@@ -41,7 +63,6 @@ const ProductDetailModal = props => {
           }}
         >
           <View style={styles.centeredView}>
-            {console.log("printing object ", props.object)}
             <View style={styles.modalView}>
               <Text style={styles.modalTitle}>{props.title}</Text>
               <ScrollView>

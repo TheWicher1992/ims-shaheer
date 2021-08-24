@@ -64,12 +64,12 @@ const ProductFilterModal = props => {
             `${uri}/api/product/filters`
         )
         setFilters(res.data.filters);
-        console.log("res--->", res.data.filters)
+        // console.log("res--->", res.data.filters)
         let colourMap = {};
         (res.data.filters.colours).forEach(element => {
             colourMap[element._id] = element.title
         });
-        console.log(colourMap)
+        // console.log(colourMap)
         // setFilterMap({...filterMap,colour : {
         //     ...colourMap
         // }})
@@ -81,7 +81,7 @@ const ProductFilterModal = props => {
         // setFilterMap({...filterMap,warehouse : {
         //     ...wareMap
         // }})
-        console.log(wareMap)
+        // console.log(wareMap)
 
         let brandMap = {};
         (res.data.filters.brands).forEach(element => {
@@ -90,7 +90,7 @@ const ProductFilterModal = props => {
         // setFilterMap({...filterMap,brand : {
         //     ...brandMap
         // }})      
-        console.log(brandMap)
+        // console.log(brandMap)
 
         setFilterMap(
             {
@@ -410,7 +410,7 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state) => {
-    console.log(state.productFilters)
+    // console.log(state.productFilters)
     return {
         filters: state.productFilters
     }
