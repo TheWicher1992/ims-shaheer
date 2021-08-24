@@ -9,7 +9,6 @@ const ClientDetailModal = props => {
   const [isUpdateModalVisible, setUpdateModalVisible] = React.useState(false);
   const [isPaymentModalVisible, setPaymentModalVisible] = React.useState(false);
   
-  console.log('hete', Dimensions.get('window').width)
   useEffect(() => {
     setModalVisible(props.state);
   }, [props.state]);

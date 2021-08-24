@@ -19,7 +19,6 @@ const PurchaseDetailModal = props => {
     products: [],
     warehouses: []
   })
-  console.log('hete', Dimensions.get('window').width)
   useEffect(() => {
     setModalVisible(props.state);
   }, [props.state]);
