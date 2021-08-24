@@ -5,7 +5,6 @@ import { logout } from "../actions/auth";
 const UserInfoModal = props => {
   const [modalVisible, setModalVisible] = useState(false);
   const [user, setUser] = useState({})
-  //console.log('hete')
   useEffect(() => {
     setModalVisible(props.state);
     setUser(props.auth)

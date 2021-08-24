@@ -46,7 +46,6 @@ const MakePurchase = props => {
       `/${props.filters.maxTotal}`
 
     const res = await axios.get(getURI)
-    console.log("okok", res.data)
     setPurchases(res.data.purchases)
     setLoading(false)
   }
