@@ -33,7 +33,6 @@ const PurchaseDetailModal = props => {
   }
   const getPreFormValues = async () => {
     const res = await axios.get(`${uri}/api/purchase/form-inputs`)
-    console.log("ook", res.data)
     setFormInputs(res.data)
     setProductName(res.data.products[0]._id)
     setWarehouse(res.data.warehouses[0]._id)

@@ -155,7 +155,6 @@ const Product = props => {
           setAlertTitle('Warning')
           setAlertMsg('Request could not be processed.')
           show()
-          console.log(err)
         })
     }
     

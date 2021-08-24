@@ -236,7 +236,7 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state) => {
-    console.log(state.productFilters)
+    // console.log(state.productFilters)
     return {
         brandFilter: state.productFilters.brand
     }
