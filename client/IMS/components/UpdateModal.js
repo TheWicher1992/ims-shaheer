@@ -3,6 +3,7 @@ import { Modal, StyleSheet, Text, View, TouchableOpacity, Dimensions, TextInput 
 import { Picker } from '@react-native-picker/picker';
 import axios from 'axios'
 import { uri } from '../api.json'
+import ShowAlert from '../components/ShowAlert';
 
 const UpdateModal = props => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -15,6 +16,12 @@ const UpdateModal = props => {
     sort: '*',
     sortBy: '*'
   })
+  const [alertState, setAlertState] = useState(false)
+  const [alertTitle, setAlertTitle] = useState(``)
+  const [alertMsg, setAlertMsg] = useState(``)
+  const show = () => {
+    setAlertState(!alertState)
+  }
 
   const getWarehouses = async () => {
     const res = await axios.get(
@@ -51,15 +58,27 @@ const UpdateModal = props => {
     }
 
     axios.post(`${uri}/api/product/move`, body, config)
-      .then(() => console.log('done'))
-      .catch(err => console.log(err.response))
-      .finally(() => props.handleClose())
+      .then(res => {
+
+        setAlertTitle('Success')
+        setAlertMsg('Request has been processed, Product has been shifted to the warehouse.')
+        show()
+        props.handleClose()
+        console.log("here")
+      })
+      .catch(err => {
+        setAlertTitle('Warning')
+        setAlertMsg('Request could not be processed.')
+        show()
+      })
+      
 
   }
 
   return (
 
     <View style={styles.centeredView}>
+      <ShowAlert state={alertState} handleClose={show} alertTitle={alertTitle} alertMsg={alertMsg} style={styles.buttonModalContainer} />
       <Modal
         animationType="slide"
         transparent={true}

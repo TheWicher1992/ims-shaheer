@@ -62,11 +62,6 @@ const DeliveryOrderModal = props => {
                   <Text style={styles.buttonModalText}>Shift to Warehouse</Text>
                 </View>
               </TouchableOpacity>
-              {/* <TouchableOpacity onPress={() => props.handleClose()}>
-                            <View style={styles.deleteButtonModalContainer}>
-                                <Text style={styles.buttonModalText}>Delete</Text>
-                            </View>
-                        </TouchableOpacity> */}
             </View>
           </View>
 
