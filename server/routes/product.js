@@ -350,6 +350,71 @@ router.get('/stocks', async (req, res) => {
     }
 })
 
+router.get('/stock/:page/:query/:sort/:sortBy', async (req, res) => {
+
+    try {
+
+        const page = parseInt(req.params.page) - 1
+        const query = req.params.query === '*' ? ['.*'] : req.params.query.split(" ")
+        const sort = req.params.sort === '*' ? 'stock' : req.params.sort
+        const sortBy = req.params.sortBy === '*' ? 'desc' : req.params.sortBy
+
+        const sortOptions = {
+            [sort]: sortBy
+        }
+
+        const productIDs = await Product.find({
+            title: {
+                $in: query.map(q => new RegExp(q, "i"))
+            }
+        }).select('_id')
+
+        const warehouseIDs = await Warehouse.find({
+            name: {
+                $in: query.map(q => new RegExp(q, "i"))
+            }
+        }).select('_id')
+
+        filters = {}
+
+        filters['$or'] = [
+            {
+                product: {
+                    $in: productIDs.map(c => c._id)
+                }
+            },
+            {
+                warehouse: {
+                    $in: warehouseIDs.map(b => b._id)
+                }
+            }
+        ]
+
+        const itemsPerPage = config.get('rows-per-page')
+
+        const stocks = await Stock
+            .find(filters)
+            .populate(['product', 'warehouse'])
+            .sort(sortOptions)
+            .skip(itemsPerPage * page)
+        // .limit(itemsPerPage)
+
+        return res.status(200).json({
+            stocks
+        })
+
+
+    }
+    catch (err) {
+        console.log(err)
+        return res.status(500).json({
+            error: errors.SERVER_ERROR
+        })
+
+    }
+
+})
+
 router.get('/:id', async (req, res) => {
     try {
 
