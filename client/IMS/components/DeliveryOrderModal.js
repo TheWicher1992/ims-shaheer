@@ -22,7 +22,7 @@ const DeliveryOrderModal = props => {
   return (
 
     <View style={styles.centeredView}>
-      <UpdateModal state={isUpdateModalVisible} handleClose={handleCloseUpdate} title='Select Warehouse' id={props.object !== [] ? props.object._id : ``} prodID={props.object.product !== undefined ? props.object.product._id : ``} quantity={props.object !== [] ? props.object.quantity : 0} />
+      <UpdateModal state={isUpdateModalVisible} handleClose={handleCloseUpdate} initialModalClose = {props.handleClose} getOrders = {props.getOrders} title='Select Warehouse' id={props.object !== [] ? props.object._id : ``} prodID={props.object.product !== undefined ? props.object.product._id : ``} quantity={props.object !== [] ? props.object.quantity : 0} />
       <Modal
         animationType="slide"
         transparent={true}
@@ -149,14 +149,8 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 35,
     alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
+    borderColor: "#008394",
+    borderWidth: 2,
     width: '80%',
     height: Dimensions.get('window').height > 900 ? '65%' : Dimensions.get('window').height * 0.60
   },
