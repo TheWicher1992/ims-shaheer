@@ -279,7 +279,7 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state) => {
-    console.log(state.productFilters)
+    // console.log(state.productFilters)
     return {
         priceFilter: state.productFilters.price,
         pricePurchaseFilter: state.purchaseFilters.maxTotal,

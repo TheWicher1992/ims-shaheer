@@ -3,12 +3,11 @@ import { Modal, StyleSheet, Text, View, TouchableOpacity, Dimensions, TextInput,
 import { Picker } from '@react-native-picker/picker';
 import { uri } from '../api.json'
 import axios from "axios"
+import ShowAlert from '../components/ShowAlert';
+
 const ProductUpdateModal = props => {
   const [isModalVisible, setModalVisible] = useState(false);
-  // const [color, setColor] = React.useState(``)
-  // const [brand, setBrand] = React.useState(``)
   const [addBrandModal, setAddBrandModal] = useState(false);
-
   const [serialNo, setSerialNo] = React.useState(``)
   const [productName, setProductName] = React.useState(``)
   const [amountVal, setAmountVal] = React.useState(0)
@@ -16,31 +15,52 @@ const ProductUpdateModal = props => {
   const [brand, setBrand] = React.useState(``)
   const [description, setDescription] = React.useState(``)
   const [id, setID] = useState(``)
+
+  const [alertState, setAlertState] = useState(false)
+  const [alertTitle, setAlertTitle] = useState(``)
+  const [alertMsg, setAlertMsg] = useState(``)
+  const show = () => {
+    setAlertState(!alertState)
+  }
+
   const updateProduct = () => {
-    const body = {
-      title: productName,
-      serial: serialNo,
-      brandID: brand,
-      colourID: color,
-      description,
-      price: amountVal
+    if(serialNo === '' || productName === '' || amountVal === '' || description === ''){
+      setAlertTitle('Warning')
+      setAlertMsg('Input fields may be empty. Request could not be processed.')
+      show()
     }
-
-    const config = {
-      headers: {
-        "Content-Type": "application/json"
+    else {
+      const body = {
+        title: productName,
+        serial: serialNo,
+        brandID: brand,
+        colourID: color,
+        description,
+        price: amountVal
       }
+  
+      const config = {
+        headers: {
+          "Content-Type": "application/json"
+        }
+      }
+  
+      axios.put(`${uri}/api/product/${id}`, body, config)
+        .then(() => {
+          props.getProducts()
+          setAlertTitle('Success')
+          setAlertMsg('Request has been processed, Product updated.')
+          show()
+          props.handleClose()
+        })
+        .catch(err =>{
+          setAlertTitle('Warning')
+          setAlertMsg('Request could not be processed.')
+          show()
+        })
+  
     }
 
-    axios.put(`${uri}/api/product/${id}`, body, config)
-      .then(() => props.getProducts())
-      .catch(err => console.log(err.response))
-      .finally(() => props.handleClose())
-
-
-
-    // console.log(body)
-    // props.handleClose()
 
   }
 
@@ -65,7 +85,6 @@ const ProductUpdateModal = props => {
     brands: [],
     colours: []
   })
-  //console.log('hete')
   useEffect(() => {
     setModalVisible(props.state);
     getBrandColours()
@@ -80,31 +99,64 @@ const ProductUpdateModal = props => {
   }
   const [addColor, setAddColor] = useState(``);
   const addNewBrand = () => {
-    axios.post(`${uri}/api/product/brand`, {
-      brand: addBrand
-    }, {
-      headers: {
-        "Content-Type": 'application/json'
-      }
-    }).then(res => console.log(res.data))
-
-    getBrandColours().then(() => setAddBrandModal(false))
+    if(addBrand === ''){
+      setAlertTitle('Warning')
+      setAlertMsg('Input fields may be empty. Request could not be processed.')
+      show()
+    }
+    else{
+      axios.post(`${uri}/api/product/brand`, {
+        brand: addBrand
+      }, {
+        headers: {
+          "Content-Type": 'application/json'
+        }
+      }).then(res => {
+        setAlertTitle('Success')
+        setAlertMsg('Request has been processed, Brand added.')
+        show()
+      })
+      .catch(err => {
+        setAlertTitle('Warning')
+        setAlertMsg('Request could not be processed.')
+        show()
+      })
+  
+      getBrandColours().then(() => setAddBrandModal(false))
+    }
+    
 
   }
   const onChangeNewColor = (newColor => {
     setAddColor(newColor);
   })
   const addNewColor = () => {
-
-    axios.post(`${uri}/api/product/colour`, {
-      colour: addColor
-    }, {
-      headers: {
-        "Content-Type": 'application/json'
-      }
-    }).then(res => console.log(res.data))
-
-    getBrandColours().then(() => setAddColorModal(false))
+    if(addColor === ''){
+      setAlertTitle('Warning')
+      setAlertMsg('Input fields may be empty. Request could not be processed.')
+      show()
+    }
+    else{
+      axios.post(`${uri}/api/product/colour`, {
+        colour: addColor
+      }, {
+        headers: {
+          "Content-Type": 'application/json'
+        }
+      }).then(res => {
+        setAlertTitle('Success')
+        setAlertMsg('Request has been processed, Colour added.')
+        show()
+      })
+      .catch(err => {
+        setAlertTitle('Warning')
+        setAlertMsg('Request could not be processed.')
+        show()
+      })
+  
+      getBrandColours().then(() => setAddColorModal(false))
+    }
+    
   }
   function handleClose() {
     setModalVisible(false);
@@ -130,12 +182,10 @@ const ProductUpdateModal = props => {
       `${uri}/api/product/cb`
     )
     setBrandAndColours(res.data)
-    // setColor(res.data.colours[0]._id)
-    // setBrand(res.data.brands[0]._id)
-    //console.log(res.data)
   }
   return (
     <KeyboardAvoidingView>
+      <ShowAlert state={alertState} handleClose={show} alertTitle={alertTitle} alertMsg={alertMsg} style={styles.buttonModalContainer} />
       <Modal
         onSwipeComplete={() => props.handleClose()}
         swipeDirection="left"
@@ -145,7 +195,6 @@ const ProductUpdateModal = props => {
 
         <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', }}>
           <ScrollView>
-            {console.log("up-->", props.obj.price)}
             <View style={styles.modalStyle}>
               <View style={{ justifyContent: 'center', alignItems: 'center', }}>
                 <Text style={styles.modalTitle}>Update Product</Text>

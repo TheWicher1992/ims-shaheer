@@ -13,6 +13,8 @@ import { uri } from '../api.json'
 import axios from "axios"
 import { connect } from 'react-redux'
 import Spinner from '../components/Spinner';
+import ShowAlert from '../components/ShowAlert';
+
 
 const optionsPerPage = [2, 3, 4];
 
@@ -120,28 +122,42 @@ const Product = props => {
   const [brand, setBrand] = React.useState(``)
   const [description, setDescription] = React.useState(``)
   const addProduct = () => {
-    setModalVisible(false); //closing modal on done for now
-    // console.log(color, brand)
-
-    const body = {
-      title: productName,
-      serial: serialNo,
-      brandID: brand,
-      colourID: color,
-      description,
-      price: amountVal
+    // setModalVisible(false); //closing modal on done for now
+    // // console.log(color, brand)
+    if(serialNo === '' || productName === '' || amountVal === '' || description === ''){
+      setAlertTitle('Warning')
+      setAlertMsg('Input fields may be empty. Request could not be processed.')
+      show()
     }
-
-    axios.post(`${uri}/api/product`, body, {
-      headers: {
-        'Content-Type': 'application/json'
+    else{
+      const body = {
+        title: productName,
+        serial: serialNo,
+        brandID: brand,
+        colourID: color,
+        description,
+        price: amountVal
       }
-    })
-      .then(res => getProducts())
-      .catch(err => console.log(err))
-
-
-
+  
+      axios.post(`${uri}/api/product`, body, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+        .then(res => {
+          getProducts()
+          setAlertTitle('Success')
+          setAlertMsg('Request has been processed, Product added.')
+          show()
+          setModalVisible(false)
+        })
+        .catch(err => {
+          setAlertTitle('Warning')
+          setAlertMsg('Request could not be processed.')
+          show()
+        })
+    }
+    
 
   }
   const onChangeSerialNo = (serial) => {
@@ -206,15 +222,33 @@ const Product = props => {
   }
 
   const addNewBrand = () => {
-    axios.post(`${uri}/api/product/brand`, {
-      brand: addBrand
-    }, {
-      headers: {
-        "Content-Type": 'application/json'
-      }
-    }).then(res => console.log(res.data))
+    if(addBrand === ''){
+      setAlertTitle('Warning')
+      setAlertMsg('Input fields may be empty. Request could not be processed.')
+      show()
+    }
+    else{
+      axios.post(`${uri}/api/product/brand`, {
+        brand: addBrand
+      }, {
+        headers: {
+          "Content-Type": 'application/json'
+        }
+      }).then(res => {
+        setAlertTitle('Success')
+        setAlertMsg('Request has been processed, Brand added.')
+        show()
+      })
+      .catch(res => {
+        setAlertTitle('Warning')
+        setAlertMsg('Request could not be processed.')
+        show()
+      })
+  
+      getBrandColours().then(() => setAddBrandModal(false))
 
-    getBrandColours().then(() => setAddBrandModal(false))
+    }
+    
 
   }
 
@@ -230,16 +264,33 @@ const Product = props => {
     setAddColor(newColor);
   })
   const addNewColor = () => {
+    if(addColor === ''){
+      setAlertTitle('Warning')
+      setAlertMsg('Input fields may be empty. Request could not be processed.')
+      show()
+    }
+    else {
+      axios.post(`${uri}/api/product/colour`, {
+        colour: addColor
+      }, {
+        headers: {
+          "Content-Type": 'application/json'
+        }
+      }).then(res => {
+        setAlertTitle('Success')
+        setAlertMsg('Request has been processed, Color added.')
+        show()
+      })
+      .catch(res => {
+        setAlertTitle('Warning')
+        setAlertMsg('Request could not be processed.')
+        show()
+      })
+  
+      getBrandColours().then(() => setAddColorModal(false))
 
-    axios.post(`${uri}/api/product/colour`, {
-      colour: addColor
-    }, {
-      headers: {
-        "Content-Type": 'application/json'
-      }
-    }).then(res => console.log(res.data))
-
-    getBrandColours().then(() => setAddColorModal(false))
+    }
+    
   }
 
   const showAddProductForm = () => {
@@ -247,11 +298,17 @@ const Product = props => {
     getBrandColours().then(() => setModalVisible(true))
   }
 
+  const [alertState, setAlertState] = useState(false)
+  const [alertTitle, setAlertTitle] = useState(``)
+  const [alertMsg, setAlertMsg] = useState(``)
+  const show = () => {
+    setAlertState(!alertState)
+  }
+
 
   return (
-    // <KeyboardAvoidingView style = {styles.containerView} behavior = "padding">
-
     <View>
+      <ShowAlert state={alertState} handleClose={show} alertTitle={alertTitle} alertMsg={alertMsg} style={styles.buttonModalContainer} />
       <Modal
         onSwipeComplete={() => setModalVisible(false)}
         swipeDirection="left"
@@ -649,7 +706,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderRadius: 40,
     marginBottom: 20,
-    fontSize: 12,
+    fontSize: 15,
     borderColor: "#008394",
     //top: 60,
     height: 40,
@@ -754,7 +811,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#00E0C7',
     height: 24,
     width: 80,
-
   },
   modalbuttonText: {
     fontWeight: 'bold',
