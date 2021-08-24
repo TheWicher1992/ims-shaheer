@@ -57,7 +57,7 @@ const DeliveryOrderModal = props => {
                   <Text style={styles.buttonModalText}>Back</Text>
                 </View>
               </TouchableOpacity>
-              <TouchableOpacity disabled={props.object.status} onPress={() => { setUpdateModalVisible(true) }}>
+              <TouchableOpacity onPress={() => { setUpdateModalVisible(true) }}>
                 <View style={styles.backButtonModalContainer}>
                   <Text style={styles.buttonModalText}>Shift to Warehouse</Text>
                 </View>

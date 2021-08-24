@@ -6,12 +6,14 @@ import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { FontAwesome } from '@expo/vector-icons';
 import { DataTable } from 'react-native-paper';
 import Modal from 'react-native-modal';
+import { ToastAndroid } from 'react-native'
+import PickerCheckBox from 'react-native-picker-checkbox';
 import ClientDetailModal from '../components/ClientDetailModal';
+import ExportButton from '../components/ExportAsExcel';
 import { uri } from '../api.json'
 import axios from 'axios'
 import ShowAlert from '../components/ShowAlert'
 import Spinner from '../components/Spinner';
-import ExportButton from '../components/ExportAsExcel';
 const optionsPerPage = [2, 3, 4];
 
 const Clients = props => {
@@ -206,7 +208,7 @@ const Clients = props => {
         </View>
 
       </View>
-      <ExportButton object = {clients}/>
+      <ExportButton data={clients} title={'clients.xlsx'}/>
       <Spinner loading={loading} />
       {!loading && <ScrollView style={styles.p2}>
 
@@ -268,7 +270,7 @@ export default Clients
 
 const styles = StyleSheet.create({
   p2: {
-    paddingTop: 10
+    paddingTop: 40
   },
   title: {
     color: '#006270',
