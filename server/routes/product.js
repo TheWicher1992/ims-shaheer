@@ -678,13 +678,19 @@ router.put('/:id', async (req, res) => {
 router.post('/colour', async (req, res) => {
     try {
 
-        const { colour } = req.body
+        const colour = req.body.colour.toLowerCase()
 
-        const productColour = new ProductColour({
+        const exists = await ProductColour.findOne({
             title: colour
         })
 
-        await productColour.save()
+        if (!exists) {
+            const productColour = new ProductColour({
+                title: colour
+            })
+
+            await productColour.save()
+        }
     }
     catch (err) {
         console.log(err)
@@ -696,13 +702,16 @@ router.post('/colour', async (req, res) => {
 router.post('/brand', async (req, res) => {
     try {
 
-        const { brand } = req.body
-
-        const brandC = new Brand({
+        const brand = req.body.brand.toLowerCase()
+        const exists = await Brand.findOne({
             title: brand
         })
-
-        await brandC.save()
+        if (!exists) {
+            const brandC = new Brand({
+                title: brand
+            })
+            await brandC.save()
+        }
     }
     catch (err) {
         console.log(err)
@@ -712,17 +721,17 @@ router.post('/brand', async (req, res) => {
     }
 })
 
-router.get('/',async(req,res) => {
+router.get('/', async (req, res) => {
 
-    try{
-        
+    try {
 
-        const products = await Product.find({},{title : 1}) 
+
+        const products = await Product.find({}, { title: 1 })
         return res.status(200).json({
             products
         })
     }
-    catch(err) {
+    catch (err) {
         console.log(err)
         return res.status(500).json({
             error: errors.SERVER_ERROR

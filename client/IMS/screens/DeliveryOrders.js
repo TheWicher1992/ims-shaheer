@@ -44,7 +44,6 @@ const DeliveryOrders = props => {
       `${uri}/api/order/${Pfilters.page}/${query}/${Pfilters.client}/${Pfilters.product}/${Pfilters.sort}/${Pfilters.sortBy}`
     )
 
-    // console.log('logging arriving order', res.data.deliveryOrder)
     setOrders(res.data.deliveryOrder)
     setLoading(false)
   }
@@ -76,7 +75,6 @@ const DeliveryOrders = props => {
   }
 
   useEffect(() => {
-    console.log('deli')
     getClients()
     getProducts()
     getOrders()
@@ -162,7 +160,6 @@ const DeliveryOrders = props => {
         clientID: clientName,
         note: notes
       }
-
   
       axios.post(`${uri}/api/order`, body, {
         headers: {
@@ -180,7 +177,6 @@ const DeliveryOrders = props => {
           setAlertTitle('Warning')
           setAlertMsg('Request could not be processed.')
           show()
-          console.log(err)
         })
     }
     

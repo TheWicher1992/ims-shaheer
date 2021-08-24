@@ -75,11 +75,9 @@ const Warehouse = props => {
     setSearch(searchVal);
     let q = searchVal.trim()
     setFilters({ ...filters, query: q === '' ? '*' : q })
-    console.log(search);
   }
 
   const searchFunc = () => {
-    //console.log(search); //printing search value for now
     getWarehouses();
   }
 

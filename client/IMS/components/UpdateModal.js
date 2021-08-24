@@ -64,7 +64,8 @@ const UpdateModal = props => {
         setAlertMsg('Request has been processed, Product has been shifted to the warehouse.')
         show()
         props.handleClose()
-        console.log("here")
+        props.initialModalClose()
+        props.getOrders()
       })
       .catch(err => {
         setAlertTitle('Warning')

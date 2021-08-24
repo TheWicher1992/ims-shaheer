@@ -45,7 +45,9 @@ const ClientUpdateModal = props => {
       .catch(err => {
         console.log(err.response)
         setError()})
-      .finally(() => props.handleClose())
+      .finally(() => {
+        props.handleClose()
+        props.initialModalClose()})
   }
   
   useEffect(() => {
@@ -221,13 +223,8 @@ const styles = StyleSheet.create({
     padding: 35,
     alignItems: "center",
     shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
+    borderColor: "#008394",
+    borderWidth: 2,
     width: Dimensions.get('window').height > 900 ? Dimensions.get('window').width * 0.7 : Dimensions.get('window').width * 0.80,
     height: Dimensions.get('window').height > 900 ? Dimensions.get('window').height* 0.5 : Dimensions.get('window').height * 0.60
     // width: '80%',
