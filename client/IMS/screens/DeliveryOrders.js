@@ -14,6 +14,8 @@ import { Entypo } from '@expo/vector-icons';
 import { uri } from '../api.json'
 import axios from "axios"
 import Spinner from '../components/Spinner';
+import ShowAlert from '../components/ShowAlert';
+
 
 const optionsPerPage = [2, 3, 4];
 
@@ -54,6 +56,7 @@ const DeliveryOrders = props => {
 
 
     setProducts(res.data.products)
+    setProductName(res.data.products[0]._id)
 
 
 
@@ -67,6 +70,7 @@ const DeliveryOrders = props => {
 
 
     setClients(res.data.clients)
+    setClientName(res.data.clients[0]._id)
 
 
   }
@@ -79,32 +83,6 @@ const DeliveryOrders = props => {
 
   }, [])
 
-
-
-
-
-  // useEffect(() => {
-  // 
-
-
-  const handleConfirm = (pItems) => { // temporary for picker
-    console.log('pItems =>', pItems);
-  }
-
-  const items = [ //temporary for picker for filter
-    {
-      itemKey: 1,
-      itemDescription: 'Item 1'
-    },
-    {
-      itemKey: 2,
-      itemDescription: 'Item 2'
-    },
-    {
-      itemKey: 3,
-      itemDescription: 'Item 3'
-    }
-  ];
 
   const [page, setPage] = React.useState(0); //for pages of table
   const [itemsPerPage, setItemsPerPage] = React.useState(optionsPerPage[0]); //for items per page on table
@@ -149,11 +127,6 @@ const DeliveryOrders = props => {
   const [clientName, setClientName] = React.useState(``)
   const [notes, setNotes] = React.useState(``)
 
-
-  const onChangeProductName = (prodName) => {
-    setProductName(prodName);
-  }
-
   const onChangeQuantity = (quant) => {
     setQuantityVal(quant);
   }
@@ -162,35 +135,56 @@ const DeliveryOrders = props => {
   const onChangeLocation = (locationVal) => {
     setLocation(locationVal);
   }
-  const onChangeClientName = (clName) => {
-    setClientName(clName);
-  }
 
   const onChangeNotes = (noteVal) => {
     setNotes(noteVal);
   }
 
+  const [alertState, setAlertState] = useState(false)
+  const [alertTitle, setAlertTitle] = useState(``)
+  const [alertMsg, setAlertMsg] = useState(``)
+  const show = () => {
+    setAlertState(!alertState)
+  }
+
 
   const addDeliveryOrder = () => {
-    setModalVisible(false); //closing modal on done for now
-    console.log('Printing productName', productName)
-    const body = {
-      productID: productName,
-      quantity: quantityVal,
-      location: location,
-      clientID: clientName,
-      note: notes
+    if(quantityVal === '' || notes === '' || location === ''){
+      setAlertTitle('Warning')
+      setAlertMsg('Input fields may be empty. Request could not be processed.')
+      show()
     }
-
-    console.log(body)
-
-    axios.post(`${uri}/api/order`, body, {
-      headers: {
-        'Content-Type': 'application/json'
+    else{
+      const body = {
+        productID: productName,
+        quantity: quantityVal,
+        location: location,
+        clientID: clientName,
+        note: notes
       }
-    })
-      .then(res => getOrders())
-      .catch(err => console.log(err))
+  
+      console.log(body)
+  
+      axios.post(`${uri}/api/order`, body, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+        .then(res => {
+          getOrders()
+          setAlertTitle('Success')
+          setAlertMsg('Request has been processed, Delivery Order added.')
+          show()
+          setModalVisible(false)
+        })
+        .catch(err => {
+          setAlertTitle('Warning')
+          setAlertMsg('Request could not be processed.')
+          show()
+          console.log(err)
+        })
+    }
+    
   }
 
 
@@ -207,6 +201,7 @@ const DeliveryOrders = props => {
     // <KeyboardAvoidingView style = {styles.containerView} behavior = "padding">
 
     <View>
+      <ShowAlert state={alertState} handleClose={show} alertTitle={alertTitle} alertMsg={alertMsg} style={styles.buttonModalContainer} />
       <Modal
         onSwipeComplete={() => setModalVisible(false)}
         swipeDirection="left"
@@ -238,11 +233,14 @@ const DeliveryOrders = props => {
                   </Picker>
 
                 </View>
-                <TextInput onChangeText={onChangeQuantity} style={styles.input} placeholder="Quantity" autoCorrect={false} />
-                <TextInput onChangeText={onChangeLocation} style={styles.input} placeholder="Location" autoCorrect={false} />
-                <TextInput multiline={true} numberOfLines={5} onChangeText={onChangeNotes} style={styles.input} placeholder="Notes" autoCorrect={false} />
+                <View style = {{bottom: 40}}>
+                  <TextInput onChangeText={onChangeQuantity} style={styles.input} placeholder="Quantity" autoCorrect={false} />
+                  <TextInput onChangeText={onChangeLocation} style={styles.input} placeholder="Location" autoCorrect={false} />
+                  <TextInput multiline={true} numberOfLines={5} onChangeText={onChangeNotes} style={styles.input} placeholder="Notes" autoCorrect={false} />
+                </View>
 
-                <View style={{ borderWidth: 2, borderRadius: 40, borderColor: "#008394", width: Dimensions.get('window').width * 0.65, height: 40, fontSize: 8, justifyContent: 'space-between', marginTop: 60 }}>
+
+                <View style={{ borderWidth: 2, borderRadius: 40, borderColor: "#008394", width: Dimensions.get('window').width * 0.65, height: 40, fontSize: 8, justifyContent: 'space-between', marginTop: 20 }}>
                   <Picker
                     style={{ top: 6, color: 'grey', fontFamily: 'Roboto' }}
                     itemStyle={{ fontWeight: '100' }}
@@ -261,7 +259,7 @@ const DeliveryOrders = props => {
 
 
               </View>
-              <View style={{ flexDirection: 'row', alignItems: 'center', }}>
+              <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 20 }}>
                 <TouchableOpacity style={{ alignSelf: 'flex-start' }} onPress={() => { setModalVisible(false) }}>
                   <View>
                     <View style={styles.buttonModalContainerCross}>
@@ -318,9 +316,10 @@ const DeliveryOrders = props => {
 
       </View>
 
-      <FilterButton />
+      {/* <FilterButton />  */}
+                      
       <Spinner loading={loading} />
-      {!loading && <ScrollView>
+      {!loading && <ScrollView style = {{marginTop: 40}}>
 
         <DataTable>
           <DataTable.Header>
@@ -345,18 +344,6 @@ const DeliveryOrders = props => {
             ))
 
           }
-
-          <DataTable.Pagination
-            page={page}
-            numberOfPages={3}
-            onPageChange={(page) => setPage(page)}
-            label="1-2 of 6"
-            optionsPerPage={optionsPerPage}
-            itemsPerPage={itemsPerPage}
-            setItemsPerPage={setItemsPerPage}
-            showFastPagination
-            optionsLabel={'Rows per page'}
-          />
         </DataTable>
 
       </ScrollView>
@@ -491,7 +478,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderRadius: 40,
     marginBottom: 20,
-    fontSize: 12,
+    fontSize: 15,
     borderColor: "#008394",
     top: 60,
     height: 40,
