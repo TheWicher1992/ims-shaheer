@@ -8,6 +8,7 @@ import { DataTable } from 'react-native-paper';
 import Modal from 'react-native-modal';
 import PickerCheckBox from 'react-native-picker-checkbox';
 import TableDetailModal from '../components/TableDetailModal';
+import SaleDetailModal from '../components/SaleDetailModal';
 import FilterButton from '../components/FilterButton';
 import { Picker } from '@react-native-picker/picker';
 import { uri } from '../api.json'
@@ -200,6 +201,7 @@ const MakeSale = props => {
   const [isTableDetailModalVisible, setTableDetailModalVisible] = React.useState(false);
 
   const [isWarehouse, setIsWarehouse] = useState(false)
+  const [touchedSale, setTouchedSale] = useState({})
   const [warehouseModal, setWarehouseModal] = useState(false);
   const [dOrderModal, setDOrderModal] = useState(false);
   const [isEnabled, setIsEnabled] = useState(false);
@@ -211,6 +213,18 @@ const MakeSale = props => {
     ids : []
   })
   const [warehousesID, setWarehousesID] = useState([]) //keep track of warehouses
+
+  const onPressModal = (prod) => {
+    setTableDetailModalVisible(true),
+    console.log(prod),
+    setTouchedSale(prod)
+  }
+
+
+
+
+
+
 
   const handleClose = () => {
     setTableDetailModalVisible(false)
@@ -532,7 +546,7 @@ const MakeSale = props => {
           </View>
         </View>
       </Modal>
-      <TableDetailModal state={isTableDetailModalVisible} handleClose={handleClose} title='Employee Information' name='Raahem Asghar' email='raahemasghar97@gmail.com' occupation="Employee" />
+      <SaleDetailModal state={isTableDetailModalVisible} handleClose={handleClose} title="Sale Information" object={touchedSale} occupation = "Admin" />
       <View style={styles.screen}>
         <View>
           <Text style={styles.title}>Sales</Text>
@@ -582,7 +596,7 @@ const MakeSale = props => {
 
           {
             sales.map((sale, i) => (
-              <TouchableOpacity onPress={() => setTableDetailModalVisible(true)}>
+              <TouchableOpacity onPress={() => onPressModal(sale)}>
                 <DataTable.Row>
                   <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{sale.product === null ? '--' : sale.product.title}</Text></DataTable.Cell>
                   <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{sale.quantity === undefined ? '--' : sale.quantity}</Text></DataTable.Cell>

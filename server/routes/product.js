@@ -302,11 +302,13 @@ router.get('/stock/:id', async (req, res) => {
         const productID = req.params.id
 
         const warehouseStock = await Stock.find({
-            product: productID
+            product: productID,
+            stock : {$gt : 0}
         }).populate(`warehouse`)
 
         const deliverOrderStocks = await DeliveryOrder.find({
-            product: productID
+            product: productID,
+            quantity: {$gt : 0}
         })
 
 
