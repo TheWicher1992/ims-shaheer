@@ -6,9 +6,10 @@ import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { FontAwesome } from '@expo/vector-icons';
 import { DataTable } from 'react-native-paper';
 import StockModal from '../components/StockModal';
-import FilterButton from '../components/FilterButton';
 import { uri } from '../api.json'
 import axios from "axios"
+import Spinner from '../components/Spinner';
+import ShowAlert from '../components/ShowAlert'
 
 
 const optionsPerPage = [2, 3, 4];
@@ -21,30 +22,43 @@ const EmployeeStocks = props => {
   const [filters, setFilters] = useState({
     page: 1,
     query: '*',
-    colour: '*',
-    brand: '*',
-    ware: '*',
     sort: '*',
     sortBy: '*'
   })
-
+  const [alertState, setAlertState] = useState(false)
+  const [alertTitle, setAlertTitle] = useState(``)
+  const [alertMsg, setAlertMsg] = useState(``)
   const [stock, setStock] = useState([])
+  const [loading, setLoading] = useState(true)
+  const show = () => {
+    setAlertState(!alertState)
+  }
+  const setError = () => {
+    setAlertTitle('Error')
+    setAlertMsg('Client with this name already exists.')
+    show()
+  }
   useEffect(() => {
     setModalVisible(props.state);
   }, [props.state]);
   const getStock = async () => {
-    
+    setLoading(true)
     const res = await axios.get(
-      `${uri}/api/product/stocks/`
+      `${uri}/api/product/stock/${filters.page}/${filters.query}/${filters.sort}/${filters.sortBy}`
     )
+    res.data.stocks.length === 0 ? searchWarning(): null
     setProducts(res.data.stocks.reverse())
-    console.log('idddd', res.data)
+    setLoading(false)
     //setSelectedProduct(res.data.warehouse[0]._id)
   }
   useEffect(() => {
     getStock()
   }, [])
-
+  const searchWarning = () => {
+    setAlertState(!alertState) 
+    setAlertTitle('Attention')
+    setAlertMsg('No stock found!')
+  }
 
   const [page, setPage] = React.useState(0); //for pages of table
   const [itemsPerPage, setItemsPerPage] = React.useState(optionsPerPage[0]); //for items per page on table
@@ -65,9 +79,8 @@ const EmployeeStocks = props => {
   const [search, setSearch] = React.useState(``) //for keeping track of search
   const onChangeSearch = (searchVal) => { //function to keep track of search as the user types
     setSearch(searchVal);
-
-    setFilters({ ...filters, query: searchVal })
-    console.log(search);
+    let q = searchVal.trim()
+    setFilters({ ...filters, query: q === '' ? '*' : q })
   }
 
   const searchFunc = () => {
@@ -100,6 +113,7 @@ const EmployeeStocks = props => {
   return (
     // <KeyboardAvoidingView style = {styles.containerView} behavior = "padding">
     <View>
+      <ShowAlert state={alertState} handleClose={show} alertTitle={alertTitle} alertMsg={alertMsg} style={styles.buttonModalContainer} />
       <StockModal state={isTableDetailModalVisible} handleClose={handleClose} object={touchedProduct !== [] ? touchedProduct : null} title='Stock Detail' getStock={getStock} />
       <View style={styles.screen}>
         <View>
@@ -131,9 +145,9 @@ const EmployeeStocks = props => {
         </View>
 
       </View>
-      <FilterButton />
-      <View style={{ flexDirection: 'row', }}>
-        <ScrollView>
+      <View style={{ marginTop: 30 }}>
+      <Spinner loading={loading} />
+        {!loading && <ScrollView style={{ top: 20 }}>
         <DataTable>
           <DataTable.Header>
             <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Serial No.</Text></DataTable.Title>
@@ -160,20 +174,9 @@ const EmployeeStocks = props => {
             ))
           }
 
-          <DataTable.Pagination
-            page={page}
-            numberOfPages={3}
-            onPageChange={(page) => setPage(page)}
-            label="1-2 of 6"
-            optionsPerPage={optionsPerPage}
-            itemsPerPage={itemsPerPage}
-            setItemsPerPage={setItemsPerPage}
-            showFastPagination
-            optionsLabel={'Rows per page'}
-          />
         </DataTable>
 
-        </ScrollView>
+        </ScrollView>}
       </View>
     </View>
     

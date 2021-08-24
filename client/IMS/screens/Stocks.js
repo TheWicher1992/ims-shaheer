@@ -10,7 +10,7 @@ import FilterButton from '../components/FilterButton';
 import { uri } from '../api.json'
 import axios from "axios"
 import Spinner from '../components/Spinner';
-
+import ShowAlert from '../components/ShowAlert'
 
 const optionsPerPage = [2, 3, 4];
 
@@ -22,25 +22,34 @@ const Stocks = props => {
   const [filters, setFilters] = useState({
     page: 1,
     query: '*',
-    colour: '*',
-    brand: '*',
-    ware: '*',
     sort: '*',
     sortBy: '*'
   })
   const [loading, setLoading] = useState(true)
   const [stock, setStock] = useState([])
+  const [alertState, setAlertState] = useState(false)
+  const [alertTitle, setAlertTitle] = useState(``)
+  const [alertMsg, setAlertMsg] = useState(``)
+
+  const show = () => {
+    setAlertState(!alertState)
+  }
+  const setError = () => {
+    setAlertTitle('Error')
+    setAlertMsg('Client with this name already exists.')
+    show()
+  }
   useEffect(() => {
     setModalVisible(props.state);
   }, [props.state]);
   const getStock = async () => {
     setLoading(true)
     const res = await axios.get(
-      `${uri}/api/product/stocks/`
+      `${uri}/api/product/stock/${filters.page}/${filters.query}/${filters.sort}/${filters.sortBy}`
     )
+    res.data.stocks.length === 0 ? searchWarning(): null
     setProducts(res.data.stocks.reverse())
     setLoading(false)
-    console.log('idddd', res.data)
     //setSelectedProduct(res.data.warehouse[0]._id)
   }
   useEffect(() => {
@@ -57,7 +66,11 @@ const Stocks = props => {
     setModalVisible(!isModalVisible);
   };
 
-
+  const searchWarning = () => {
+    setAlertState(!alertState) 
+    setAlertTitle('Attention')
+    setAlertMsg('No stock found!')
+  }
 
   React.useEffect(() => { //for table
     setPage(0);
@@ -67,9 +80,8 @@ const Stocks = props => {
   const [search, setSearch] = React.useState(``) //for keeping track of search
   const onChangeSearch = (searchVal) => { //function to keep track of search as the user types
     setSearch(searchVal);
-
-    setFilters({ ...filters, query: searchVal })
-    console.log(search);
+    let q = searchVal.trim()
+    setFilters({ ...filters, query: q === '' ? '*' : q })
   }
 
   const searchFunc = () => {
@@ -86,7 +98,7 @@ const Stocks = props => {
   const [brand, setBrand] = React.useState(``)
   const [description, setDescription] = React.useState(``)
   const [isTableDetailModalVisible, setTableDetailModalVisible] = React.useState(false);
-
+  
   const onPressModal = (prod) => {
     setTableDetailModalVisible(true),
       setTouchedProduct(prod)
@@ -102,6 +114,7 @@ const Stocks = props => {
   return (
     // <KeyboardAvoidingView style = {styles.containerView} behavior = "padding">
     <View>
+      <ShowAlert state={alertState} handleClose={show} alertTitle={alertTitle} alertMsg={alertMsg} style={styles.buttonModalContainer} />
       <StockModal state={isTableDetailModalVisible} handleClose={handleClose} object={touchedProduct !== [] ? touchedProduct : null} title='Stock Detail' getStock={getStock} />
       <View style={styles.screen}>
         <View>
