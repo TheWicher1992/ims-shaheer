@@ -132,7 +132,7 @@ const ShiftWarehouseModal = props => {
                 </View>
                     </View>
                     <View style={{flexDirection: 'row', justifyContent: 'space-evenly', alignItems : 'center'}}>
-                        <TouchableOpacity onPress={() => props.handleClose()}>
+                        <TouchableOpacity onPress={() => setModalVisible(false)}>
                             <View style={styles.buttonModalContainer}>
                                 <Text style={styles.buttonModalText}>Back</Text>
                             </View>

@@ -26,15 +26,15 @@ const EmployeeDashboard = props => {
           </View>
         </TouchableOpacity> */}
       <View style={styles.buttonContainer}>
-        <TouchableOpacity onPress={() => props.navigation.navigate({ routeName: 'Sales' })}>
+        <TouchableOpacity onPress={() => props.navigation.navigate({ routeName: 'EmployeeOrders' })}>
           <View elevation={5} style={styles.buttons}>
-            <Text style={styles.buttonContainerText}>Make a Sale</Text>
+            <Text style={styles.buttonContainerText}>View Orders</Text>
           </View>
         </TouchableOpacity>
         <View style={{ paddingLeft: 20 }}></View>
-        <TouchableOpacity onPress={() => props.navigation.navigate({ routeName: 'MakePurchase' })}>
+        <TouchableOpacity onPress={() => props.navigation.navigate({ routeName: 'EmployeeStocks' })}>
           <View elevation={5} style={styles.buttons}>
-            <Text style={styles.buttonContainerText}>Make a Purchase</Text>
+            <Text style={styles.buttonContainerText}>View Stocks</Text>
           </View>
         </TouchableOpacity>
       </View>

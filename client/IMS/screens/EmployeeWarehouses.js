@@ -11,11 +11,15 @@ import WarehouseDetailModal from '../components/WarehouseDetailModal';
 import FilterButton from '../components/FilterButton';
 import axios from 'axios'
 import { uri } from '../api.json'
+import Spinner from '../components/Spinner';
+import ShowAlert from '../components/ShowAlert';
+
 const optionsPerPage = [2, 3, 4];
 
-const EmployeeWarehouses = props => {
+const Warehouse = props => {
 
   const [warehouses, setWarehouses] = useState([])
+  const [loading, setLoading] = useState(true)
   const [filters, setFilters] = useState({
     page: 1,
     query: '*',
@@ -24,36 +28,31 @@ const EmployeeWarehouses = props => {
   })
 
   const getWarehouses = async () => {
+    setLoading(true)
     const res = await axios.get(
       `${uri}/api/warehouse/${filters.page}/${filters.query}/${filters.sort}/${filters.sortBy}`
     )
+    res.data.warehouse.length === 0 ? searchWarning(): null
     setWarehouses(res.data.warehouse.reverse())
+    setLoading(false)
+  }
+  const [alertState, setAlertState] = useState(false)
+  const [alertTitle, setAlertTitle] = useState(``)
+  const [alertMsg, setAlertMsg] = useState(``)
+
+  const show = () => {
+    setAlertState(!alertState)
+  }
+  const setError = () => {
+    setAlertTitle('Error')
+    setAlertMsg('Warehouse already exists')
+    show()
   }
 
   useEffect(() => {
-    console.log('ware')
     getWarehouses()
   }, [])
 
-
-  const handleConfirm = (pItems) => { // temporary for picker
-    console.log('pItems =>', pItems);
-  }
-
-  const items = [ //temporary for picker for filter
-    {
-      itemKey: 1,
-      itemDescription: 'Item 1'
-    },
-    {
-      itemKey: 2,
-      itemDescription: 'Item 2'
-    },
-    {
-      itemKey: 3,
-      itemDescription: 'Item 3'
-    }
-  ];
 
   const [page, setPage] = React.useState(0); //for pages of table
   const [isModalVisible, setModalVisible] = React.useState(false); //to set modal on and off
@@ -71,10 +70,11 @@ const EmployeeWarehouses = props => {
   }, [itemsPerPage]);
 
 
-  const [search, setSearch] = React.useState(``) //for keeping track of search
+  const [search, setSearch] = React.useState(`*`) //for keeping track of search
   const onChangeSearch = (searchVal) => { //function to keep track of search as the user types
     setSearch(searchVal);
-    setFilters({ ...filters, query: searchVal })
+    let q = searchVal.trim()
+    setFilters({ ...filters, query: q === '' ? '*' : q })
     console.log(search);
   }
 
@@ -88,7 +88,11 @@ const EmployeeWarehouses = props => {
   const [warehouseName, setWarehouseName] = React.useState(``)
   const [totalProducts, setTotalProducts] = React.useState(0)
   const [stock, setStock] = React.useState(0)
-
+  const searchWarning = () => {
+    setAlertTitle('Attention')
+    setAlertMsg('No warehouses found!')
+    show()
+  }
 
   const onChangeWarehouseName = (warehousename) => {
     setWarehouseName(warehousename);
@@ -100,6 +104,32 @@ const EmployeeWarehouses = props => {
 
   const onChangeStock = (stocks) => {
     setStock(stocks);
+  }
+
+  const addWarehouse = async () => {
+
+    const body = {
+      name: warehouseName,
+      totalProducts: totalProducts,
+      totalStock: stock
+    }
+
+    await axios.post(`${uri}/api/warehouse`, body,
+      {
+        headers: {
+          "Content-Type": "application/json"
+        }
+      }
+
+    )
+      .then(() => {
+      setAlertTitle('Success');
+      setAlertMsg('Warehouses Added Successfully');
+      show()})
+      .catch(err => setError())
+
+    getWarehouses()
+    setModalVisible(false); //closing modal on done for now
   }
 
   const [itemsPerPage, setItemsPerPage] = React.useState(optionsPerPage[0]); //for items per page on table
@@ -116,11 +146,15 @@ const EmployeeWarehouses = props => {
     setTableDetailModalVisible(false)
   }
 
+
+
+
   return (
     // <KeyboardAvoidingView style = {styles.containerView} behavior = "padding">
 
     <View>
-      <WarehouseDetailModal state={isTableDetailModalVisible} handleClose={handleClose} title='Warehouse Information' object={touchedWarehouse === [] ? [] : touchedWarehouse} getWarehouses={getWarehouses} occupation={'Employee'} />
+      <ShowAlert state={alertState} handleClose={show} alertTitle={alertTitle} alertMsg={alertMsg} style={styles.buttonModalContainer} />
+      <WarehouseDetailModal state={isTableDetailModalVisible} handleClose={handleClose} title='Warehouse Information' object={touchedWarehouse === [] ? [] : touchedWarehouse} getWarehouses={getWarehouses} occupation={'Admin'} />
       <View style={styles.screen}>
         <View>
           <Text style={styles.title}>Warehouses</Text>
@@ -149,7 +183,8 @@ const EmployeeWarehouses = props => {
         </View>
 
       </View>
-      <ScrollView style={{ top: 30 }}>
+      <Spinner loading={loading} />
+      {!loading && <ScrollView style={{ top: 30 }}>
         <DataTable>
           <DataTable.Header>
             <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Name</Text></DataTable.Title>
@@ -170,20 +205,10 @@ const EmployeeWarehouses = props => {
             ))
           }
 
-          <DataTable.Pagination
-            page={page}
-            numberOfPages={3}
-            onPageChange={(page) => setPage(page)}
-            label="1-2 of 6"
-            optionsPerPage={optionsPerPage}
-            itemsPerPage={itemsPerPage}
-            setItemsPerPage={setItemsPerPage}
-            showFastPagination
-            optionsLabel={'Rows per page'}
-          />
         </DataTable>
 
       </ScrollView>
+      }
     </View>
     // </KeyboardAvoidingView>
 
@@ -192,7 +217,7 @@ const EmployeeWarehouses = props => {
 }
 
 
-EmployeeWarehouses.navigationOptions = navigationData => {
+Warehouse.navigationOptions = navigationData => {
   return {
     headerTitle: 'Zaki Sons',
     headerTitleAlign: 'center',
@@ -214,7 +239,7 @@ EmployeeWarehouses.navigationOptions = navigationData => {
   };
 };
 
-export default EmployeeWarehouses
+export default Warehouse
 
 
 const styles = StyleSheet.create({
@@ -255,7 +280,7 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     flexDirection: 'row',
-    marginTop: Dimensions.get('window').height > 900 ? 50 : 25,
+    marginTop: Dimensions.get('window').height > 900 ? 80 : 60,
     borderRadius: 40,
     paddingVertical: 12,
     paddingHorizontal: 32,
