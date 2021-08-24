@@ -14,6 +14,8 @@ import axios from 'axios'
 import { uri } from '../api.json'
 import { connect } from 'react-redux'
 import Spinner from '../components/Spinner';
+import ShowAlert from '../components/ShowAlert';
+
 const optionsPerPage = [2, 3, 4];
 const MakePurchase = props => {
 
@@ -52,7 +54,6 @@ const MakePurchase = props => {
 
   const getPreFormValues = async () => {
     const res = await axios.get(`${uri}/api/purchase/form-inputs`)
-    console.log("ook", res.data)
     setFormInputs(res.data)
     setProductName(res.data.products[0]._id)
     setWarehouse(res.data.warehouses[0]._id)
@@ -99,35 +100,51 @@ const MakePurchase = props => {
 
 
   const [isWarehouse, setIsWarehouse] = useState(false)
-  // const [isDeliveryOrder, setIsDeliveryOrder] = useState(!isWarehouse)
   const [isEnabled, setIsEnabled] = useState(false);
 
 
   const addPurchase = () => {
-    const body = {
-      product: productName,
-      quantity: quantityVal,
-      client: clientName,
-      payment: paymentType,
-      total: totalAmount,
-      received: amountReceived,
-      note: notes,
-      isDeliveryOrder: !isWarehouse,
-      location,
-      warehouseID: warehouse
+    if(quantityVal === '' || totalAmount === '' || notes === '' || amountReceived === '' || (isWarehouse && warehouse === '') || (!isWarehouse && location === '')){
+      setAlertTitle('Warning')
+      setAlertMsg('Input fields may be empty. Request could not be processed.')
+      show()
     }
-    const config = {
-      headers: {
-        "Content-Type": "application/json"
+    else{
+      const body = {
+        product: productName,
+        quantity: quantityVal,
+        client: clientName,
+        payment: paymentType,
+        total: totalAmount,
+        received: amountReceived,
+        note: notes,
+        isDeliveryOrder: !isWarehouse,
+        location,
+        warehouseID: warehouse
       }
+      const config = {
+        headers: {
+          "Content-Type": "application/json"
+        }
+      }
+      axios.post(`${uri}/api/purchase`, body, config)
+        .then(res => {
+          setAlertTitle('Success')
+          setAlertMsg('Request has been processed, Purchase added.')
+          show()
+          setModalVisible(false)
+
+        })
+        .catch(err => {
+          setAlertTitle('Warning')
+          setAlertMsg('Request could not be processed.')
+          show()
+        })
+        .finally(() => getPurchases())
     }
-    axios.post(`${uri}/api/purchase`, body, config)
-      .then(res => setModalVisible(false))
-      .catch(err => console.log(err))
-      .finally(() => getPurchases())
+    
 
 
-    console.log(body)
 
 
   }
@@ -163,7 +180,6 @@ const MakePurchase = props => {
 
   const toggleSwitch = () => {
     setIsWarehouse(!isWarehouse);
-    console.log(`switched`);
   };
 
   const [touchedPurchase, setTouchedPurchase] = useState([])
@@ -171,7 +187,13 @@ const MakePurchase = props => {
   const selectedPurchaseRecord = (purchase) => {
     setTouchedPurchase(purchase)
     setTableDetailModalVisible(true)
-    console.log("hello", touchedPurchase)
+  }
+
+  const [alertState, setAlertState] = useState(false)
+  const [alertTitle, setAlertTitle] = useState(``)
+  const [alertMsg, setAlertMsg] = useState(``)
+  const show = () => {
+    setAlertState(!alertState)
   }
 
 
@@ -180,6 +202,7 @@ const MakePurchase = props => {
     // <KeyboardAvoidingView style = {styles.containerView} behavior = "padding">
 
     <View>
+      <ShowAlert state={alertState} handleClose={show} alertTitle={alertTitle} alertMsg={alertMsg} style={styles.buttonModalContainer} />
       <Modal
         onSwipeComplete={() => setModalVisible(false)}
         swipeDirection="left"
@@ -249,13 +272,6 @@ const MakePurchase = props => {
 
                       ))
                     }
-
-                    {/* <Picker.Item label="Ahmed Ateeq" value="Ahmed Ateeq" />
-                    <Picker.Item label="Sameer Nadeem" value="Sameer Nadeem" />
-                    <Picker.Item label="Raahem Asghar" value="Raahem Asghar" />
-                    <Picker.Item label="Ali Hassan Maqsood" value="Ali Hassan Maqsood" />
-                    <Picker.Item label="Haseeb Abid" value="Haseeb Abid" />
-                    <Picker.Item label="Babar Azam" value="Babar Azam" /> */}
                   </Picker>
                 </View>
 
@@ -386,28 +402,6 @@ const MakePurchase = props => {
             ))
           }
 
-
-          {/* {
-            purchases.map(p => (
-              <TouchableOpacity onPress={() => setTableDetailModalVisible(true)}>
-                <DataTable.Row>
-                  <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>ABC34013-133</Text></DataTable.Cell>
-                  <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>59</Text></DataTable.Cell>
-                  <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>69000</Text></DataTable.Cell>
-                  <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>Ahmed Ateeq</Text></DataTable.Cell>
-                </DataTable.Row>
-              </TouchableOpacity>
-            ))
-          } */}
-
-          {/* <TouchableOpacity onPress={() => setTableDetailModalVisible(true)}>
-            <DataTable.Row>
-              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>ABC34013-133</Text></DataTable.Cell>
-              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>59</Text></DataTable.Cell>
-              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>69000</Text></DataTable.Cell>
-              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>Ahmed Ateeq</Text></DataTable.Cell>
-            </DataTable.Row>
-          </TouchableOpacity> */}
           <DataTable.Pagination
             page={page}
             numberOfPages={3}
@@ -559,7 +553,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderRadius: 40,
     marginBottom: 20,
-    fontSize: 12,
+    fontSize: 15,
     borderColor: "#008394",
     top: 60,
     height: 40,
@@ -648,19 +642,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10
   },
   modalView: {
+    borderColor: "#008394",
+    borderWidth: 2,
     margin: 20,
     backgroundColor: "white",
     borderRadius: 20,
     padding: 35,
     alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
     width: Dimensions.get('window').height > 900 ? Dimensions.get('window').width * 0.7 : Dimensions.get('window').width * 0.80,
     height: Dimensions.get('window').height > 900 ? Dimensions.get('window').height * 0.5 : Dimensions.get('window').height * 0.60
   },

@@ -5,12 +5,9 @@ import { uri } from '../api.json'
 import axios from "axios"
 const PurchaseUpdateModal = props => {
   const [isModalVisible, setModalVisible] = useState(false);
-  // const [color, setColor] = React.useState(``)
-  // const [brand, setBrand] = React.useState(``)
   const [addBrandModal, setAddBrandModal] = useState(false);
   const [isEnabled, setIsEnabled] = useState(false)
   const [quantityVal, setQuantityVal] = useState(0)
-
   const [serialNo, setSerialNo] = React.useState(``)
   const [productName, setProductName] = React.useState(``)
   const [clientName, setClientName] = React.useState(``)
@@ -94,7 +91,7 @@ const PurchaseUpdateModal = props => {
     setLocation(loc);
   }
   return (
-    <KeyboardAvoidingView>
+    // <KeyboardAvoidingView>
       <Modal
         onSwipeComplete={() => setModalVisible(false)}
         swipeDirection="left"
@@ -238,10 +235,9 @@ const PurchaseUpdateModal = props => {
         </View>
       </Modal>
 
-      {/* modal for adding brand*/}
-      
 
-    </KeyboardAvoidingView >
+
+    // </KeyboardAvoidingView >
   );
 };
 
@@ -428,21 +424,15 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10
   },
   modalView: {
-    margin: 20,
+    // margin: 20,
     backgroundColor: "white",
+    borderColor: "#008394",
+    borderWidth: 2,
     borderRadius: 20,
-    padding: 35,
+    // padding: 35,
     alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
     width: Dimensions.get('window').height > 900 ? Dimensions.get('window').width * 0.7 : Dimensions.get('window').width * 0.80,
-    height: Dimensions.get('window').height > 900 ? Dimensions.get('window').height * 0.5 : Dimensions.get('window').height * 0.60,
+    height: Dimensions.get('window').height > 900 ? Dimensions.get('window').height * 0.5 : Dimensions.get('window').height * 0.85,
     borderColor: "#008394",
 
   },

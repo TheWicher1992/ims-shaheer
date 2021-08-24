@@ -162,8 +162,7 @@ const DeliveryOrders = props => {
         clientID: clientName,
         note: notes
       }
-  
-      console.log(body)
+
   
       axios.post(`${uri}/api/order`, body, {
         headers: {
