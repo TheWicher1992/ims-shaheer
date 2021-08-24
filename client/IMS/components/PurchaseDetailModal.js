@@ -165,19 +165,14 @@ const styles = StyleSheet.create({
     paddingHorizontal:10
   },
   modalView: {
+    borderColor: "#008394",
+    borderWidth: 2,
+    borderRadius: 20,
     margin: 20,
     backgroundColor: "white",
     borderRadius: 20,
     padding: 35,
     alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
     width: '80%',
     height: Dimensions.get('window').height > 900 ? '65%' : Dimensions.get('window').height * 0.60
   },

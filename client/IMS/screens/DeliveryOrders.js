@@ -161,7 +161,6 @@ const DeliveryOrders = props => {
         note: notes
       }
   
-  
       axios.post(`${uri}/api/order`, body, {
         headers: {
           'Content-Type': 'application/json'

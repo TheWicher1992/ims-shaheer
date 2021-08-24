@@ -144,13 +144,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10
   },
   modalView: {
+    borderColor: "#008394",
+    borderWidth: 2,
     margin: 20,
     backgroundColor: "white",
     borderRadius: 20,
     padding: 35,
     alignItems: "center",
-    borderColor: "#008394",
-    borderWidth: 2,
     width: '80%',
     height: Dimensions.get('window').height > 900 ? '65%' : Dimensions.get('window').height * 0.60
   },
