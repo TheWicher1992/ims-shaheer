@@ -203,6 +203,7 @@ const MakeSale = props => {
   const [warehouseModal, setWarehouseModal] = useState(false);
   const [dOrderModal, setDOrderModal] = useState(false);
   const [isEnabled, setIsEnabled] = useState(false);
+  const [modelRefresh, setModelRefresh] = useState(false);
   const [selectedDOrder, setSelectedDOrder] = useState(``)
   const [warehouseIdTicksQuant, setWarehouseIdTicksQuant] = useState({
     ticks: {},
@@ -264,17 +265,24 @@ const MakeSale = props => {
     // console.log(`switched`);
   };
 
+  
+  const refresh = () => {
+    setModelRefresh(!modelRefresh);
+  }
+
   const warehouseClicked = (e) => {
 
     if(warehouseIdTicksQuant["ticks"][e] === false){
       // console.log("False")
       setWarehousesID([...warehousesID,e])
       warehouseIdTicksQuant["ticks"][e] = true
+      refresh()
     }
     else{
       let index = warehousesID.indexOf(e)
       warehousesID.splice(index,1)
       warehouseIdTicksQuant["ticks"][e] = false
+      refresh()
     }
     // console.log(warehouseIdTicksQuant["ticks"])
     // console.log(warehousesID)

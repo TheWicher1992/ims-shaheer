@@ -48,6 +48,14 @@ const saleSchema = new Schema({
     deliveryStatus: {
         type: Boolean,
         default: false
+    },
+    typeOfSale: {
+        type: String,
+        enum: ['Warehouse', 'DeliveryOrder',]
+    },
+    deliveryOrder: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'DeliveryOrder'
     }
 })
 
