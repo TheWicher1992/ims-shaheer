@@ -6,12 +6,11 @@ import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { FontAwesome } from '@expo/vector-icons';
 import { DataTable } from 'react-native-paper';
 import Modal from 'react-native-modal';
-import PickerCheckBox from 'react-native-picker-checkbox';
-import TableDetailModal from '../components/TableDetailModal';
 import SaleDetailModal from '../components/SaleDetailModal';
 import FilterButton from '../components/FilterButton';
 import { Picker } from '@react-native-picker/picker';
 import { uri } from '../api.json'
+import { connect } from 'react-redux'
 import axios from "axios"
 import Spinner from '../components/Spinner';
 const optionsPerPage = [2, 3, 4];
@@ -22,29 +21,6 @@ const MakeSale = props => {
   const [loading, setLoading] = useState(true)
   const [products, setProducts] = useState([])
   const [clients, setClients] = useState([])
-
-  const [Pfilters, setPFilters] = useState({
-    page: 1,
-    query: '*',
-    colour: '*',
-    brand: '*',
-    ware: '*',
-    sort: '*',
-    sortBy: '*'
-  })
-
-  const [filters, setFilters] = useState({
-    page: 1,
-    query: '*',
-    client: '*',
-    deliveryStatus: '*',
-    date: '*',
-    quantity: '*',
-    total: '*',
-    sort: '*',
-    sortBy: '*'
-  })
-
 
   const getProducts = async () => {
     const res = await axios.get(
@@ -74,17 +50,23 @@ const MakeSale = props => {
 
   const getSales = async () => {
     setLoading(true)
+    let q = search.trim()
+    
+    const getURI =
+      `${uri}/api/sale` +
+      `/${props.filters.page}` +
+      `/${(q === '' ? '*' : q)}` +
+      `/${props.filters.product.join(',')}` +
+      `/${props.filters.client.join(',')}` +
+      `/${props.filters.payment}` +
+      `/${props.filters.date}` +
+      `/${props.filters.maxQuantity}` +
+      `/${props.filters.maxTotal}`
 
-    const res = await axios.get(
-      `${uri}/api/sale`
-    )
-
-    setSales(res.data.sale)
+    const res = await axios.get(getURI)
+    console.log("uri",getURI)
+    setSales(res.data.sales)
     setLoading(false)
-
-
-    // console.log(res.data.sale)
-
   }
 
   useEffect(() => {
@@ -119,7 +101,7 @@ const MakeSale = props => {
   }, [itemsPerPage]);
 
 
-  const [search, setSearch] = React.useState(``) //for keeping track of search
+  const [search, setSearch] = React.useState(`*`) //for keeping track of search
   const onChangeSearch = (searchVal) => { //function to keep track of search as the user types
     setSearch(searchVal);
     console.log(search);
@@ -324,22 +306,20 @@ const MakeSale = props => {
                   <Text style={styles.modalTitle}>Select Warehouse</Text>
                   {/* <Text style = {{color: '#006270',fontFamily: 'Roboto',fontWeight: 'bold', fontSize: Dimensions.get('window').height === 1232 ? 28 : 22, top: 15}}> Selling Quantity: {quantityVal}</Text>
                   <Text style = {{color: '#006270',fontFamily: 'Roboto',fontWeight: 'bold', fontSize: Dimensions.get('window').height === 1232 ? 28 : 22, top: 10}}> Selected Quantity: {quantityVal}</Text> */}
-                  <View style = {styles.modalWarehouse}> 
+                  <ScrollView style = {styles.modalWarehouse}> 
                     {
                       stock.warehouseStock !== undefined && stock.warehouseStock !== [] && stock.warehouseStock.map((record,i) => (
-                        record.stock !== 0 &&
                         <View>
                             <TouchableOpacity onPress = {() => warehouseClicked(record.warehouse._id)}>
-                              <View style = {styles.input}>
+                              <View style = {styles.inputWarehouse}>
                                 <View style = {{flexDirection: 'row'}}>
-                                  <Text style={{fontSize:8}}>
+                                  <Text style={{fontSize:12}}>
                                       Warehouse: {record.warehouse.name} --- Quantity: {record.stock}
                                   </Text>
                                   {warehouseIdTicksQuant["ticks"][record.warehouse._id] === true ? (<FontAwesome
                                         name={"check"}
                                         size={Dimensions.get('window').height > 900 ? 40 : 25}
                                         color={"#008394"}
-                                        
                                     />
                                   ) : (null)}
                                 </View>
@@ -349,7 +329,7 @@ const MakeSale = props => {
                             </TouchableOpacity>
                             <View>
                               {warehouseIdTicksQuant["ticks"][record.warehouse._id] === true ? (
-                                <TextInput onChangeText={(e) => setQuantityWarehouses(record.warehouse._id,e)} style={styles.input} placeholder="Quantity" autoCorrect={false} />
+                                <TextInput onChangeText={(e) => setQuantityWarehouses(record.warehouse._id,e)} style={styles.inputWarehouse} placeholder="Quantity" autoCorrect={false} />
                               ): (null)}
                             </View>
                           
@@ -358,8 +338,9 @@ const MakeSale = props => {
 
                       ))
                     }
-                    
-                  </View> 
+
+            
+                  </ScrollView> 
                 </View>
                 
               </View>
@@ -378,12 +359,12 @@ const MakeSale = props => {
                 <View style={styles.modalView}>
                   <Text style={styles.modalTitle}>Select Order</Text>
                   {/* <Text style = {{color: '#006270',fontFamily: 'Roboto',fontWeight: 'bold', fontSize: Dimensions.get('window').height === 1232 ? 28 : 22, top: 15}}> Selling Quantity: {quantityVal}</Text> */}
-                  <View style = {styles.modalBody}> 
+                  <ScrollView style = {styles.modalBody}> 
                     {
                       stock.deliverOrderStocks !== undefined && stock.deliverOrderStocks !== [] && stock.deliverOrderStocks.map((record,i)=> ( 
                         !record.status &&  
                         <TouchableOpacity onPress = {() => setSelectedDOrder(record._id)}>
-                          <View style = {styles.input}>
+                          <View style = {styles.inputWarehouse}>
                             <View style = {{flexDirection: 'row'}}>
                               <Text>
                                   Supplier: {record.location} --- Quantity: {record.quantity}
@@ -410,7 +391,7 @@ const MakeSale = props => {
                       ))
                     }
                     
-                  </View> 
+                  </ScrollView> 
                 </View>
                 
               </View>
@@ -522,7 +503,7 @@ const MakeSale = props => {
                         </View>
 
                       
-                      <View style = {{flexDirection: 'row',  alignItems : 'center',}}>
+                      <View style = {{flexDirection: 'row',  alignItems : 'center', bottom: 25}}>
                         <TouchableOpacity style={{alignSelf: 'flex-start'}} onPress = {() => {setModalVisible(false)}}>
                           <View>
                             <View style={styles.buttonModalContainerCross}>
@@ -652,7 +633,14 @@ MakeSale.navigationOptions = navigationData => {
   };
 };
 
-export default MakeSale
+
+const mapStateToProps = (state) => (
+  {
+    filters: state.saleFilters
+  }
+)
+
+export default connect(mapStateToProps)(MakeSale)
 
 
 const styles = StyleSheet.create({
@@ -748,6 +736,17 @@ const styles = StyleSheet.create({
   },
   input: {
     width: Dimensions.get('window').width * 0.65,
+    borderColor: 'gray',
+    borderWidth: 2,
+    borderRadius: 40,
+    marginBottom: 20,
+    fontSize: 12,
+    borderColor: "#008394",
+    height: 40,
+    padding: 10,
+  },
+  inputWarehouse: {
+    width: Dimensions.get('window').height>900 ? Dimensions.get('window').width* 0.65 : Dimensions.get('window').width*0.6,
     borderColor: 'gray',
     borderWidth: 2,
     borderRadius: 40,
