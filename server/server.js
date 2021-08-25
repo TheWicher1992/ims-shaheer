@@ -4,9 +4,10 @@ const cors = require('cors')
 const PORT = process.env.PORT || 5000
 const connectDB = require('./db/db')
 const setRoutes = require('./routes/setRoutes')
+const morgan = require('morgan')
 //Cross Origin Policy for interaction between client and server
 app.use(cors())
-
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms'))
 //JSON Request body parser
 app.use(express.json())
 
