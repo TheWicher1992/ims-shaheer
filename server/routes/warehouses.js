@@ -164,8 +164,8 @@ router.get('/:page/:query/:sort/:sortBy', async (req, res) => {
         const warehouse = await Warehouse
             .find(filters)
             .sort(sortOptions)
-            .skip(itemsPerPage * page)
-            .limit(itemsPerPage)
+        // .skip(itemsPerPage * page)
+        // .limit(itemsPerPage)
 
         return res.status(200).json({
             warehouse

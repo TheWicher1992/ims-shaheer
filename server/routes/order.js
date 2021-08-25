@@ -114,7 +114,7 @@ router.get('/:page/:query/:client/:product/:sort/:sortBy', async (req, res) => {
 
 
         const clientIDs = await Client.find({
-            userName : {
+            userName: {
                 $in: query.map(q => new RegExp(q, "i"))
             }
         }).select('_id')
@@ -136,7 +136,7 @@ router.get('/:page/:query/:client/:product/:sort/:sortBy', async (req, res) => {
                     $in: productIDs.map(b => b._id)
                 }
             }
-            
+
         ]
 
         const itemsPerPage = config.get('rows-per-page')
@@ -145,8 +145,8 @@ router.get('/:page/:query/:client/:product/:sort/:sortBy', async (req, res) => {
             .find(filters)
             .populate(['product', 'client'])
             .sort(sortOptions)
-            .skip(itemsPerPage * page)
-            .limit(itemsPerPage)
+        // .skip(itemsPerPage * page)
+        // .limit(itemsPerPage)
 
         return res.status(200).json({
             deliveryOrder

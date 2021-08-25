@@ -396,7 +396,7 @@ router.get('/stock/:page/:query/:sort/:sortBy', async (req, res) => {
             .find(filters)
             .populate(['product', 'warehouse'])
             .sort(sortOptions)
-            .skip(itemsPerPage * page)
+        // .skip(itemsPerPage * page)
         // .limit(itemsPerPage)
 
         return res.status(200).json({

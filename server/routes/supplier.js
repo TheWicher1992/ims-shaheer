@@ -117,8 +117,8 @@ router.get('/:page/:query/:userName/:date/:sort/:sortBy', async (req, res) => {
 
     const suppliers = await Client
         .sort(sortOptions)
-        .skip(itemsPerPage * page)
-        .limit(itemsPerPage)
+    // .skip(itemsPerPage * page)
+    // .limit(itemsPerPage)
 
     return res.status(200).json({
         suppliers

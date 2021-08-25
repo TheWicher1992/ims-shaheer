@@ -185,10 +185,10 @@ router.get('/form-inputs', async (req, res) => {
 
 router.get(`/:id`, async (req, res) => {
 
-    try{
+    try {
 
         id = req.params.id
-        const purchases = await Purchase.find({client : id }).populate(['product','client'])
+        const purchases = await Purchase.find({ client: id }).populate(['product', 'client'])
         return res.status(200).json({
             purchases
         })
@@ -285,8 +285,8 @@ router.get('/:page/:query/:products/:clients/:payment/:date/:quantity/:amount', 
         .find(filters)
         .populate(['product', 'client'])
         .sort(sortOptions)
-        .skip(itemsPerPage * page)
-        .limit(itemsPerPage)
+    // .skip(itemsPerPage * page)
+    // .limit(itemsPerPage)
 
 
     return res.json({

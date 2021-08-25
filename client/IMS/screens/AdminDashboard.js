@@ -8,6 +8,14 @@ import axios from "axios"
 
 const AdminDashboard = props => {
 
+  useEffect(() => {
+    console.log('dashboarddd')
+    props.navigation.reset({
+      index: 0,
+      routes: [{ name: 'Profile' }],
+    });
+  }, [props.navigation])
+
   const [outOfStock, setOutOfStock] = React.useState(0);
   const [todayRevenue, settodayRevenue] = React.useState(0);
   const [pendingDeliveries, setPendingDeliveries] = React.useState(0);
@@ -46,6 +54,7 @@ const AdminDashboard = props => {
   }
 
   useEffect(() => {
+    console.log('112211')
     getOutofStock()
     getToday()
     getPending()
