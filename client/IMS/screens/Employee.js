@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, Button, Dimensions, TextInput, TouchableOpacity, KeyboardAvoidingView, useWindowDimensions } from 'react-native';
+import { StyleSheet, Text, View, Button, Dimensions, TextInput, TouchableOpacity, KeyboardAvoidingView, useWindowDimensions, ScrollView } from 'react-native';
 import HeaderButton from '../components/HeaderButton';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { FontAwesome } from '@expo/vector-icons';
@@ -12,8 +12,8 @@ import UpdateModal from '../components/UpdateModal'
 import { uri } from '../api.json'
 import axios from "axios"
 import Spinner from '../components/Spinner';
-import { ToastAndroid } from 'react-native'
 import ShowAlert from '../components/ShowAlert';
+import ExportButton from '../components/ExportAsExcel';
 
 const optionsPerPage = [2, 3, 4];
 
@@ -158,7 +158,7 @@ const Employee = props => {
 
   return (
     // <KeyboardAvoidingView style = {styles.containerView} behavior = "padding">
-    <View>
+    <ScrollView>
       <ShowAlert state={alertState} handleClose={show} alertTitle={alertTitle} alertMsg={alertMsg} style={styles.buttonModalContainer} />
       <Modal
         onSwipeComplete={() => setModalVisible(false)}
@@ -247,9 +247,10 @@ const Employee = props => {
           </View>
         </TouchableOpacity>
       </View>
+      <ExportButton data = {employees} title = "Employee.xlxs" />
       <Spinner loading={loading} />
       {!loading && <View>
-        <DataTable style={{ top: 30 }}>
+        <DataTable style={{ top: 10 }}>
           <DataTable.Header>
             {/* <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Email</Text></DataTable.Title> */}
             <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Username</Text></DataTable.Title>
@@ -293,7 +294,7 @@ const Employee = props => {
         </DataTable>
 
       </View>}
-    </View>
+    </ScrollView>
     // </KeyboardAvoidingView>
 
 
@@ -364,12 +365,12 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: Dimensions.get('window').height * 0.015
+    // marginTop: Dimensions.get('window').height * 0.015
   },
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    marginTop: Dimensions.get('window').height > 900 ? 80 : 60,
+    marginTop: Dimensions.get('window').height > 900 ? 40 : 30,
     borderRadius: 40,
     backgroundColor: '#00E0C7',
     paddingVertical: 12,
