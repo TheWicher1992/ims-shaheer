@@ -34,7 +34,7 @@ const ClientDetailModal = props => {
     
     <View style={styles.centeredView}>
         <ClientPaymentModal state={isPaymentModalVisible} initialModalClose={props.handleClose}  handleClose={handleClosePayment} title='Manage Payments' getClients={props.getClients} object={props.object} />
-        <ClientUpdateModal state={isUpdateModalVisible} handleClose={handleCloseUpdate} title='Update Client Information' getClients={props.getClients} object={props.object} />
+        <ClientUpdateModal state={isUpdateModalVisible} initialModalClose={props.handleClose} handleClose={handleCloseUpdate} title='Update Client Information' getClients={props.getClients} object={props.object} />
         <Modal
             animationType="slide"
             transparent={true}
@@ -199,16 +199,10 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 35,
     alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
     width: Dimensions.get('window').height > 900 ? '80%' : '95%',
-    height: Dimensions.get('window').height > 900 ? '65%' : Dimensions.get('window').height * 0.60
+    height: Dimensions.get('window').height > 900 ? '65%' : Dimensions.get('window').height * 0.60,
+    borderColor: "#008394",
+    borderWidth: 2,
   },
   
 });

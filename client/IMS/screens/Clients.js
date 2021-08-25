@@ -9,7 +9,7 @@ import Modal from 'react-native-modal';
 import { ToastAndroid } from 'react-native'
 import PickerCheckBox from 'react-native-picker-checkbox';
 import ClientDetailModal from '../components/ClientDetailModal';
-import FilterButton from '../components/FilterButton';
+import ExportButton from '../components/ExportAsExcel';
 import { uri } from '../api.json'
 import axios from 'axios'
 import ShowAlert from '../components/ShowAlert'
@@ -45,7 +45,6 @@ const Clients = props => {
     setLoading(true)
     const query = search.trim() === '' ? '*' : search.trim()
     const res = await axios.get(`${uri}/api/client/${query}`)
-    console.log(res.data.clients)
     res.data.clients.length === 0 ? searchWarning(): null
     setClients(res.data.clients)
     setLoading(false)
@@ -113,7 +112,6 @@ const Clients = props => {
       setAlertMsg('Client added successfully!');
       show()})
       .catch(err => {
-        console.log(err.response)
         setError()
       })
 
@@ -210,6 +208,7 @@ const Clients = props => {
         </View>
 
       </View>
+      <ExportButton data={clients} title={'clients.xlsx'}/>
       <Spinner loading={loading} />
       {!loading && <ScrollView style={styles.p2}>
 
