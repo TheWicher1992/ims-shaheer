@@ -31,6 +31,15 @@ const purchaseSchema = new Schema({
     date: {
         type: Date,
         default: Date.now
+    },
+    typeOfPurchase: {
+        type: String,
+        enum: ['Warehouse', 'DeliveryOrder'],
+        default: 'Warehouse'
+    },
+    deliveryOrder: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'DeliveryOrder'
     }
 })
 
