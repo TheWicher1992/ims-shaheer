@@ -23,9 +23,11 @@ const MakeSale = props => {
   const [clients, setClients] = useState([])
 
   const getProducts = async () => {
+
     const res = await axios.get(
       `${uri}/api/product/`
     )
+   
 
     setProducts(res.data.products)
 
@@ -40,6 +42,7 @@ const MakeSale = props => {
     const res = await axios.get(
       `${uri}/api/client/*`
     )
+    
 
 
     setClients(res.data.clients)
@@ -64,6 +67,7 @@ const MakeSale = props => {
       `/${props.filters.maxTotal}`
 
     const res = await axios.get(getURI)
+    
     console.log("uri",getURI)
     setSales(res.data.sales)
     setLoading(false)
@@ -220,7 +224,7 @@ const MakeSale = props => {
     const res = await axios.get(
       `${uri}/api/product/stock/${productName}`
     )
-
+   
     setStock(res.data.stocks)
     console.log("here it is",res.data.stocks)
 
@@ -563,7 +567,7 @@ const MakeSale = props => {
         </View>
 
       </View>
-      <FilterButton page = "sale" />
+      <FilterButton page = "sale" getSales = {getSales}/>
       <Spinner loading={loading} />
       {!loading && <ScrollView>
 

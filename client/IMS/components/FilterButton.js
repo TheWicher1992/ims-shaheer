@@ -31,7 +31,7 @@ const FilterButton = (props) => {
       );
     }
     else if(props.page === "sale"){
-      return (<SaleFilterModal state = {isFilterModalVisible} handleClose = {closeFilterModal}/>)
+      return (<SaleFilterModal state = {isFilterModalVisible} handleClose = {closeFilterModal} getSales = {props.getSales}/>)
     }
   }
 
