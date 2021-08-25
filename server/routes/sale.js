@@ -5,7 +5,11 @@ const config = require('config')
 const errors = require('../misc/errors')
 const Client = require('../models/Client')
 const Product = require('../models/Product')
+const Stock  = require('../models/Stock')
+const Warehouse = require('../models/Warehouse')
+
 // make a sale
+
 router.post('/', async (req, res) => {
     try {
         var {
@@ -18,13 +22,101 @@ router.post('/', async (req, res) => {
             total,
             note,
             date,
-            deliveryStatus
+            deliveryStatus,
+            deliveryOrderID,
+            received,
+            warehouses,
+            isWarehouse
         } = req.body
 
 
+        typeOfSale = 'DeliveryOrder'
 
-        console.log(req.body)
-        const sale = new Sale({
+        if(isWarehouse=== true){
+        typeOfSale = 'Warehouse' 
+        }
+
+        var neg = total - received 
+    
+        if(payment === 'Partial')
+        {
+
+            const clientPrev = await Client.findById(clientID)
+            let prev = clientPrev.balance
+            
+            let newBal = prev - neg
+
+        let client = await Client.findOneAndUpdate({_id : clientID},{balance : newBal})
+
+        }
+        else if(payment === 'Credit')
+        {
+            const clientPrev = await Client.findById(clientID)
+            let prev = clientPrev.balance
+            
+            let newBal = prev - total
+
+        let client = await Client.findOneAndUpdate({_id : clientID},{balance : newBal})
+            
+
+        }
+
+        
+    
+        
+        if (isWarehouse === true){
+
+        
+
+            warehouses.ids.map((id,i)=>{
+
+                if(warehouses['ticks'][id] === true){
+
+                    console.log('inside')
+                Stock.find({ product : productID , warehouse : id}).then(res => {
+                    res.map((stock)=>{
+
+                        prevStock = stock.stock
+                        if( warehouses['quant'][id]  < prevStock){
+                            newStock = prevStock - warehouses['quant'][id] 
+
+                            Stock.findOneAndUpdate({_id : stock._id}, {stock: newStock}).then(res => {
+
+                                Warehouse.findById(id).then(res=>{
+                                    let prevWarehouse = res.totalStock
+                                    let newWareStock = prevWarehouse - warehouses['quant'][id]
+
+                                    Warehouse.findOneAndUpdate({_id : id},{totalStock : newWareStock}).then(res=>{
+                                        Product.findById(productID).then(res=>{
+                                            let prev = res.totalStock
+                                            let newProdStock = prev - warehouses['quant'][id]
+
+                                            Product.findOneAndUpdate({_id: productID},{totalStock: newProdStock}).then(res=>{
+                                                console.log('success')
+                                            })
+                                        })
+                                        
+                                    })
+
+
+
+                                    })
+                            })
+                        }
+                    })
+                    
+                })
+            }
+                
+
+
+            })
+
+        }
+
+
+
+             const sale = new Sale({
             product: productID,
             quantity,
             totalWithOutDiscount,
@@ -34,8 +126,15 @@ router.post('/', async (req, res) => {
             total,
             note,
             date,
-            deliveryStatus
+            deliveryStatus,
+            typeOfSale  ,
+            deliveryOrder : deliveryOrderID
+             
         })
+            
+
+
+       
 
         await sale.save()
 

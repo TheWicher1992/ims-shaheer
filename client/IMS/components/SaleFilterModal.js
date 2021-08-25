@@ -247,7 +247,7 @@ const SaleFilterModal = props => {
                         </TouchableOpacity>
 
                         <View style={styles.bottomBox}>
-                            <TouchableOpacity onPress={() => { props.handleClose() }} style={{ width: '90%', position: "absolute", top: '5%' }}>
+                            <TouchableOpacity onPress={() => { props.handleClose() ; props.getSales() }} style={{ width: '90%', position: "absolute", top: '5%' }}>
                                 <View style={styles.bottomButton}>
                                     <View>
                                         <Text style={styles.footerText}>
