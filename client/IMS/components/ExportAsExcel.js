@@ -26,7 +26,7 @@ const ExportButton = (props) => {
   });
   }
   return (
-    <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 35, left: Dimensions.get('window').height > 900 ? Dimensions.get('window').width * 0.36 : Dimensions.get('window').width * 0.34, }}>
+    <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 10, left: Dimensions.get('window').height > 900 ? Dimensions.get('window').width * 0.36 : Dimensions.get('window').width * 0.34, }}>
       <TouchableOpacity onPress= {() => excelTest()}>
         <View style={styles.buttonFilter} >
           <View style={{ flexDirection: 'row', }}>
