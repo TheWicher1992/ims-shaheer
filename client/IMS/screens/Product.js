@@ -45,32 +45,46 @@ const Product = props => {
 
   const getProducts = async () => {
     setLoading(true)
-    const res = await axios.get(
-      `${uri}/api/product` +
-      `/${props.filters.page}` +
-      `/${query}` +
-      `/${props.filters.colour.join(',')}` +
-      `/${props.filters.brand.join(',')}` +
-      `/${props.filters.ware.join(',')}` +
-      `/${props.filters.date}/${props.filters.quantity}` +
-      `/${props.filters.price}/${props.filters.sort}` +
-      `/${props.filters.sortBy}`
-    )
+    try {
 
-    setProducts(res.data.products.reverse())
+      const res = await axios.get(
+        `${uri}/api/product` +
+        `/${props.filters.page}` +
+        `/${query}` +
+        `/${props.filters.colour.join(',')}` +
+        `/${props.filters.brand.join(',')}` +
+        `/${props.filters.ware.join(',')}` +
+        `/${props.filters.date}/${props.filters.quantity}` +
+        `/${props.filters.price}/${props.filters.sort}` +
+        `/${props.filters.sortBy}`
+      )
+
+      setProducts(res.data.products.reverse())
+
+    }
+    catch (err) {
+      console.log(err)
+    }
     setLoading(false)
+
   }
 
 
   const getBrandColours = async () => {
-    const res = await axios.get(
-      `${uri}/api/product/cb`
-    )
+    try {
+      const res = await axios.get(
+        `${uri}/api/product/cb`
+      )
 
-    setBrandAndColours(res.data)
+      setBrandAndColours(res.data)
 
-    setColor(res.data.colours[0]._id)
-    setBrand(res.data.brands[0]._id)
+      setColor(res.data.colours[0]._id)
+      setBrand(res.data.brands[0]._id)
+
+    }
+    catch (err) {
+      console.log(err)
+    }
 
     //console.log(res.data)
 
@@ -124,12 +138,12 @@ const Product = props => {
   const addProduct = () => {
     // setModalVisible(false); //closing modal on done for now
     // // console.log(color, brand)
-    if(serialNo === '' || productName === '' || amountVal === '' || description === ''){
+    if (serialNo === '' || productName === '' || amountVal === '' || description === '') {
       setAlertTitle('Warning')
       setAlertMsg('Input fields may be empty. Request could not be processed.')
       show()
     }
-    else{
+    else {
       const body = {
         title: productName,
         serial: serialNo,
@@ -138,7 +152,7 @@ const Product = props => {
         description,
         price: amountVal
       }
-  
+
       axios.post(`${uri}/api/product`, body, {
         headers: {
           'Content-Type': 'application/json'
@@ -157,7 +171,7 @@ const Product = props => {
           show()
         })
     }
-    
+
 
   }
   const onChangeSerialNo = (serial) => {
@@ -222,12 +236,12 @@ const Product = props => {
   }
 
   const addNewBrand = () => {
-    if(addBrand === ''){
+    if (addBrand === '') {
       setAlertTitle('Warning')
       setAlertMsg('Input fields may be empty. Request could not be processed.')
       show()
     }
-    else{
+    else {
       axios.post(`${uri}/api/product/brand`, {
         brand: addBrand
       }, {
@@ -239,16 +253,16 @@ const Product = props => {
         setAlertMsg('Request has been processed, Brand added.')
         show()
       })
-      .catch(res => {
-        setAlertTitle('Warning')
-        setAlertMsg('Request could not be processed.')
-        show()
-      })
-  
+        .catch(res => {
+          setAlertTitle('Warning')
+          setAlertMsg('Request could not be processed.')
+          show()
+        })
+
       getBrandColours().then(() => setAddBrandModal(false))
 
     }
-    
+
 
   }
 
@@ -264,7 +278,7 @@ const Product = props => {
     setAddColor(newColor);
   })
   const addNewColor = () => {
-    if(addColor === ''){
+    if (addColor === '') {
       setAlertTitle('Warning')
       setAlertMsg('Input fields may be empty. Request could not be processed.')
       show()
@@ -281,16 +295,16 @@ const Product = props => {
         setAlertMsg('Request has been processed, Color added.')
         show()
       })
-      .catch(res => {
-        setAlertTitle('Warning')
-        setAlertMsg('Request could not be processed.')
-        show()
-      })
-  
+        .catch(res => {
+          setAlertTitle('Warning')
+          setAlertMsg('Request could not be processed.')
+          show()
+        })
+
       getBrandColours().then(() => setAddColorModal(false))
 
     }
-    
+
   }
 
   const showAddProductForm = () => {
@@ -345,18 +359,18 @@ const Product = props => {
                       }
 
                     </Picker>
-                    
+
                   </View>
                   <View>
-                      <TouchableOpacity style = {{marginTop: 10}} onPress={() => { setAddColorModal(true) }}>
-                        <View style={styles.addButton}>
-                          <View style={{ justifyContent: 'center', alignContent: 'center', alignItems: 'center', }}>
-                            <Text style={styles.modalbuttonText}>
-                              + Add
-                            </Text>
-                          </View>
+                    <TouchableOpacity style={{ marginTop: 10 }} onPress={() => { setAddColorModal(true) }}>
+                      <View style={styles.addButton}>
+                        <View style={{ justifyContent: 'center', alignContent: 'center', alignItems: 'center', }}>
+                          <Text style={styles.modalbuttonText}>
+                            + Add
+                          </Text>
                         </View>
-                      </TouchableOpacity>
+                      </View>
+                    </TouchableOpacity>
                   </View>
 
                   <View style={{ borderWidth: 2, borderRadius: 40, borderColor: "#008394", width: Dimensions.get('window').width * 0.65, marginTop: 15, height: 40, fontSize: 8, }}>
@@ -375,13 +389,13 @@ const Product = props => {
                           <Picker.Item key={b._id} label={b.title} value={b._id} />
                         )))
                       }
-                  
+
                     </Picker>
-                    
+
 
                   </View>
                   <View>
-                    <TouchableOpacity style=  {{marginTop: 10}} onPress={() => { setAddBrandModal(true) }}>
+                    <TouchableOpacity style={{ marginTop: 10 }} onPress={() => { setAddBrandModal(true) }}>
                       <View style={styles.addButton}>
                         <View style={{ justifyContent: 'center', alignContent: 'center', alignItems: 'center' }}>
                           <Text style={styles.modalbuttonText}>
@@ -490,7 +504,7 @@ const Product = props => {
 
 
 
-      <ProductDetailModal occupation = "Admin" state={isTableDetailModalVisible} handleClose={handleClose} object={touchedProduct} title='Product Detail' getProducts={getProducts} />
+      <ProductDetailModal occupation="Admin" state={isTableDetailModalVisible} handleClose={handleClose} object={touchedProduct} title='Product Detail' getProducts={getProducts} />
       <View style={styles.screen}>
         <View>
           <Text style={styles.title}>Products</Text>
@@ -522,52 +536,52 @@ const Product = props => {
         </View>
 
       </View>
-      <View style = {{flexDirection: 'row', justifyContent: 'center', paddingRight: 60 }}> 
+      <View style={{ flexDirection: 'row', justifyContent: 'center', paddingRight: 60 }}>
         <View>
           <FilterButton getProducts={getProducts} page="product" />
         </View>
-        <View style = {{marginTop: 25}}>
-          <ExportButton data={products} title={'products.xlsx'}/>
+        <View style={{ marginTop: 25 }}>
+          <ExportButton data={products} title={'products.xlsx'} />
         </View>
       </View>
       <Spinner loading={loading} />
-      
-        <DataTable style = {{marginTop: 15}}>
-          <DataTable.Header>
-            <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Serial No.</Text></DataTable.Title>
-            <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Product</Text></DataTable.Title>
-            <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Brand</Text></DataTable.Title>
-            <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Color</Text></DataTable.Title>
-            {/* <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Quantity</Text></DataTable.Title> */}
-            <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Amount</Text></DataTable.Title>
-            {/* <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Warehouse</Text></DataTable.Title> */}
 
-          </DataTable.Header>
+      <DataTable style={{ marginTop: 15 }}>
+        <DataTable.Header>
+          <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Serial No.</Text></DataTable.Title>
+          <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Product</Text></DataTable.Title>
+          <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Brand</Text></DataTable.Title>
+          <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Color</Text></DataTable.Title>
+          {/* <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Quantity</Text></DataTable.Title> */}
+          <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Amount</Text></DataTable.Title>
+          {/* <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Warehouse</Text></DataTable.Title> */}
 
-          {!loading &&<ScrollView>
-            <View>
-          {
-            products.map((product, i) => (
-              <TouchableOpacity key={i} onPress={() => onPressModal(product)}>
-                <DataTable.Row>
-                  <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{product.serial === undefined ? 0 : product.serial}</Text></DataTable.Cell>
-                  <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{product.title}</Text></DataTable.Cell>
-                  <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{product.brand.title === undefined ? '--' : product.brand.title}</Text></DataTable.Cell>
-                  <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{product.colour.title === undefined ? '--' : product.colour.title}</Text></DataTable.Cell>
-                  <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{product.price === undefined ? 0 : product.price}</Text></DataTable.Cell>
-                  {/* <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{product.serial}</Text></DataTable.Cell> */}
-                </DataTable.Row>
-              </TouchableOpacity>
+        </DataTable.Header>
 
-            ))
-          }
+        {!loading && <ScrollView>
+          <View>
+            {
+              products.map((product, i) => (
+                <TouchableOpacity key={i} onPress={() => onPressModal(product)}>
+                  <DataTable.Row>
+                    <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{product.serial === undefined ? 0 : product.serial}</Text></DataTable.Cell>
+                    <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{product.title}</Text></DataTable.Cell>
+                    <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{product.brand.title === undefined ? '--' : product.brand.title}</Text></DataTable.Cell>
+                    <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{product.colour.title === undefined ? '--' : product.colour.title}</Text></DataTable.Cell>
+                    <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{product.price === undefined ? 0 : product.price}</Text></DataTable.Cell>
+                    {/* <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{product.serial}</Text></DataTable.Cell> */}
+                  </DataTable.Row>
+                </TouchableOpacity>
+
+              ))
+            }
           </View>
-          </ScrollView>}
+        </ScrollView>}
 
-          
-        </DataTable>
 
-      
+      </DataTable>
+
+
     </ScrollView>
 
   )

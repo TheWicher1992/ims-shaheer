@@ -3,7 +3,7 @@ const config = require('config')
 
 
 module.exports = () => {
-    const dbUri = config.get('db')
+    const dbUri = config.get('local_db')
     mongoose.connect(dbUri, { useNewUrlParser: true, useUnifiedTopology: true }, (err) => {
         if (err) {
             console.error("Error connection to database!", err.message)
