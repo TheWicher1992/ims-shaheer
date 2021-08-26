@@ -184,7 +184,7 @@ const Warehouse = props => {
 
       </View>
       <Spinner loading={loading} />
-      {!loading &&
+      
         <DataTable style = {{bottom: 30}}>
           <DataTable.Header>
             <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Name</Text></DataTable.Title>
@@ -192,7 +192,7 @@ const Warehouse = props => {
             <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Stock</Text></DataTable.Title>
 
           </DataTable.Header>
-            <ScrollView>
+            {!loading &&<ScrollView>
               <View>
             
           {
@@ -208,11 +208,11 @@ const Warehouse = props => {
           }
             
             </View>
-          </ScrollView>
+          </ScrollView>}
 
         </DataTable>
 
-      }
+      
     </ScrollView>
     // </KeyboardAvoidingView>
 

@@ -225,7 +225,7 @@ const Warehouse = props => {
         <ExportButton data={warehouses} title={'warehouses.xlsx'}/>
       </View>
       <Spinner loading={loading} />
-      {!loading && 
+      
         <DataTable style={{marginTop: 15}}>
           <DataTable.Header>
             <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Name</Text></DataTable.Title>
@@ -233,7 +233,7 @@ const Warehouse = props => {
             <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Stock</Text></DataTable.Title>
 
           </DataTable.Header>
-          <ScrollView>
+          {!loading && <ScrollView>
             <View>
           {
             warehouses.map((warehouse, i) => (
@@ -247,10 +247,10 @@ const Warehouse = props => {
             ))
           }
           </View>
-        </ScrollView>
+        </ScrollView>}
         </DataTable>
 
-      }
+      
     </ScrollView>
     // </KeyboardAvoidingView>
 

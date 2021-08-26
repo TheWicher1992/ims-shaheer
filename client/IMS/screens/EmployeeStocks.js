@@ -147,7 +147,7 @@ const EmployeeStocks = props => {
       </View>
       <View style={{ marginTop: 30 }}>
       <Spinner loading={loading} />
-        {!loading && 
+        
         <DataTable style = {{bottom: 50}}>
           <DataTable.Header>
             <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Serial No.</Text></DataTable.Title>
@@ -158,7 +158,7 @@ const EmployeeStocks = props => {
             {/* <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Warehouse</Text></DataTable.Title> */}
 
           </DataTable.Header>
-          <ScrollView>
+          {!loading && <ScrollView>
             <View>
       
           {
@@ -176,10 +176,10 @@ const EmployeeStocks = props => {
           }
                  
             </View>
-          </ScrollView>
+          </ScrollView>}
 
         </DataTable>
-        }
+        
       </View>
     </ScrollView>
     

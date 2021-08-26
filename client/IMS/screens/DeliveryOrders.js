@@ -318,7 +318,7 @@ const DeliveryOrders = props => {
 
                       
       <Spinner loading={loading} />
-      {!loading && 
+       
 
         <DataTable style={{marginTop: 15}}>
           <DataTable.Header>
@@ -328,7 +328,7 @@ const DeliveryOrders = props => {
             <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Location</Text></DataTable.Title>
             <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Status</Text></DataTable.Title>
           </DataTable.Header>
-          <ScrollView>
+          {!loading &&<ScrollView>
             <View>
           {
             orders.map((order, i) => (
@@ -345,11 +345,11 @@ const DeliveryOrders = props => {
 
           }
           </View>
-          </ScrollView>
+          </ScrollView>}
         </DataTable>
 
       
-      }
+      
     </ScrollView>
     // </KeyboardAvoidingView>
 

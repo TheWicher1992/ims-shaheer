@@ -220,7 +220,7 @@ const Product = props => {
       </View>
       <FilterButton getProducts={getProducts} page="product" />
       <Spinner loading={loading} />
-      {!loading && 
+      
         <DataTable>
           <DataTable.Header>
             <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Serial No.</Text></DataTable.Title>
@@ -233,7 +233,7 @@ const Product = props => {
 
           </DataTable.Header>
 
-          <ScrollView>
+          {!loading && <ScrollView>
             <View>
           {
             products.map((product, i) => (
@@ -251,12 +251,12 @@ const Product = props => {
             ))
           }
           </View>
-          </ScrollView>
+          </ScrollView>}
 
           
         </DataTable>
 
-      }
+      
     </ScrollView>
 
   )
