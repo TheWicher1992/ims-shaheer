@@ -58,8 +58,9 @@ const Product = props => {
         `/${props.filters.price}/${props.filters.sort}` +
         `/${props.filters.sortBy}`
       )
-
+      res.data.products.length === 0 ? searchWarning(): null
       setProducts(res.data.products.reverse())
+      
 
     }
     catch (err) {
@@ -208,23 +209,6 @@ const Product = props => {
   }
 
 
-  const [openColor, setOpenColor] = useState(false);
-  const [openBrand, setOpenBrand] = useState(false);
-  const [openWarehouse, setOpenWarehouse] = useState(false);
-  const [itemsColor, setItemsColor] = useState([
-    { label: 'Transparent', value: 'Transparent' },
-    { label: 'White', value: 'transparent' }
-  ]);
-  const [itemsBrand, setItemsBrand] = useState([
-    { label: 'PVC', value: 'PVC' },
-    { label: 'PVCC', value: 'PVCC' }
-  ]);
-  const [itemsWarehouse, setItemsWarehouse] = useState([
-    { label: '1b', value: '1b' },
-    { label: '1c', value: '1c' },
-    { label: '1d', value: '1d' },
-  ]);
-
   const [addBrandModal, setAddBrandModal] = useState(false);
   const brandModal = () => { //to toggle model on and off -- function
     setAddBrandModal(!addBrandModal);
@@ -317,6 +301,11 @@ const Product = props => {
   const [alertMsg, setAlertMsg] = useState(``)
   const show = () => {
     setAlertState(!alertState)
+  }
+  const searchWarning = () => {
+    setAlertState(!alertState) 
+    setAlertTitle('Attention')
+    setAlertMsg('No Products found!')
   }
 
 

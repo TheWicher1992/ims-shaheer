@@ -87,8 +87,7 @@ const MakeSale = props => {
       
 
     const res = await axios.get(getURI)
-    
-    console.log("uri",getURI)
+    res.data.sales.length === 0 ? searchWarning() : null
     setSales(res.data.sales)
     
       }
@@ -137,7 +136,13 @@ const MakeSale = props => {
   }
 
   const searchFunc = () => {
-    console.log(search); //printing search value for now
+    getSales()
+  }
+
+  const searchWarning = () => {
+    setAlertState(!alertState) 
+    setAlertTitle('Attention')
+    setAlertMsg('No Sales found!')
   }
 
 
@@ -406,6 +411,7 @@ const MakeSale = props => {
                   {/* <Text style = {{color: '#006270',fontFamily: 'Roboto',fontWeight: 'bold', fontSize: Dimensions.get('window').height === 1232 ? 28 : 22, top: 15}}> Selling Quantity: {quantityVal}</Text>
                   <Text style = {{color: '#006270',fontFamily: 'Roboto',fontWeight: 'bold', fontSize: Dimensions.get('window').height === 1232 ? 28 : 22, top: 10}}> Selected Quantity: {quantityVal}</Text> */}
                   <ScrollView style = {styles.modalWarehouse}> 
+                  <View>
                     {
                       stock.warehouseStock !== undefined && stock.warehouseStock !== [] && stock.warehouseStock.map((record,i) => (
                         <View>
@@ -415,7 +421,7 @@ const MakeSale = props => {
                                   <Text style={{fontSize:12,}}>
                                       Warehouse: {record.warehouse.name} --- Quantity: {record.stock}
                                   </Text>
-                                  <View style = {{bottom: 3, left: 10}}>
+                                  <View style = {{bottom: 15, left: 10}}>
                                   {warehouseIdTicksQuant["ticks"][record.warehouse._id] === true ? (<FontAwesome
                                         name={"check"}
                                         size={Dimensions.get('window').height > 900 ? 40 : 25}
@@ -439,6 +445,14 @@ const MakeSale = props => {
 
                       ))
                     }
+                    {
+                      (stock.warehouseStock !== undefined && stock.warehouseStock.length === 0 ) ?
+                      <Text style = {styles.inputWarehouse}>
+                        Nothing to show
+                      </Text>
+                      : (null)
+                    }
+                    </View>
 
             
                   </ScrollView> 
@@ -467,10 +481,10 @@ const MakeSale = props => {
                         <TouchableOpacity onPress = {() => setSelectedDOrder(record._id)}>
                           <View style = {styles.inputWarehouse}>
                             <View style = {{flexDirection: 'row'}}>
-                              <Text style = {{fontSize: 12, color: "#008394"}}>
+                              <Text style = {{fontSize: 12,}}>
                                   Supplier: {record.location} - Quantity: {record.quantity}
                               </Text>
-                              <View style = {{bottom: 3, left: 10}}>
+                              <View style = {{bottom: 15, left: 10}}>
                                 {selectedDOrder === record._id ? (<FontAwesome
                                         name={"check"}
                                         size={Dimensions.get('window').height > 900 ? 40 : 25}
@@ -490,6 +504,13 @@ const MakeSale = props => {
                        
                         
                       ))
+                    }
+                    {
+                      (stock.deliverOrderStocks !== undefined && stock.deliverOrderStocks.length === 0 ) ?
+                      <Text style = {styles.inputWarehouse}>
+                        Nothing to show
+                      </Text>
+                      : (null)
                     }
                     
                   </ScrollView> 
@@ -924,7 +945,7 @@ const styles = StyleSheet.create({
     paddingHorizontal:10
   },
   modalWarehouse:{
-    paddingVertical:Dimensions.get('window').height < 900 ? Dimensions.get('window').height * 0.05 : Dimensions.get('window').height * 0.1,
+    paddingVertical:Dimensions.get('window').height < 900 ? Dimensions.get('window').height * 0.05 : Dimensions.get('window').height * 0.05,
   },
   modalView: {
     margin: 20,

@@ -54,6 +54,7 @@ const MakePurchase = props => {
         `/${props.filters.maxTotal}`
 
       const res = await axios.get(getURI)
+      res.data.purchases.length === 0 ? searchWarning(): null
       setPurchases(res.data.purchases)
     }
     catch (err) {
@@ -94,6 +95,13 @@ const MakePurchase = props => {
   const searchFunc = () => {
     getPurchases() //printing search value for now
   }
+
+  const searchWarning = () => {
+    setAlertState(!alertState) 
+    setAlertTitle('Attention')
+    setAlertMsg('No Purchases found!')
+  }
+
 
 
   // make a sale variables below:
