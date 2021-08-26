@@ -230,7 +230,7 @@ const DeliveryOrders = props => {
       {/* <FilterButton />  */}
                       
       <Spinner loading={loading} />
-      {!loading &&
+      
 
         <DataTable style = {{bottom: 30}}>
           <DataTable.Header>
@@ -240,7 +240,7 @@ const DeliveryOrders = props => {
             <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Location</Text></DataTable.Title>
             <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Status</Text></DataTable.Title>
           </DataTable.Header>
-          <ScrollView>
+          {!loading && <ScrollView>
             <View>
               
           {
@@ -259,10 +259,10 @@ const DeliveryOrders = props => {
           }
           
           </View>
-          </ScrollView>
+          </ScrollView>}
         </DataTable>
 
-      }
+      
     </ScrollView>
     // </KeyboardAvoidingView>
 

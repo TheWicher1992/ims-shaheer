@@ -23,15 +23,22 @@ const MakeSale = props => {
   const [clients, setClients] = useState([])
 
   const getProducts = async () => {
+    try{
+      const res = await axios.get(
+        `${uri}/api/product/`
+      )
+     
+  
+      setProducts(res.data.products)
+  
+      setProductName(res.data.products[0]._id)
 
-    const res = await axios.get(
-      `${uri}/api/product/`
-    )
-   
+    }
+    catch(err){
+      console.log(err)
+    }
 
-    setProducts(res.data.products)
-
-    setProductName(res.data.products[0]._id)
+    
     // console.log("products here", res.data.products)
 
 
@@ -39,6 +46,9 @@ const MakeSale = props => {
 
 
   const getClients = async () => {
+    try{
+
+    
     const res = await axios.get(
       `${uri}/api/client/*`
     )
@@ -47,6 +57,10 @@ const MakeSale = props => {
 
     setClients(res.data.clients)
     setClientName(res.data.clients[0]._id)
+    }
+    catch(err){
+      console.log(err)
+    }
 
 
   }
@@ -65,12 +79,20 @@ const MakeSale = props => {
       `/${props.filters.date}` +
       `/${props.filters.maxQuantity}` +
       `/${props.filters.maxTotal}`
+      try{
+
+      
 
     const res = await axios.get(getURI)
     
     console.log("uri",getURI)
     setSales(res.data.sales)
-    setLoading(false)
+    
+      }
+      catch(err){
+        console.log(err)
+      }
+      setLoading(false)
   }
 
   useEffect(() => {
@@ -248,6 +270,9 @@ const MakeSale = props => {
 
 
   const getStock = async () => {
+    try{
+
+    
     const res = await axios.get(
       `${uri}/api/product/stock/${productName}`
     )
@@ -274,6 +299,10 @@ const MakeSale = props => {
       quant: {...quantMap},
       ids: [...wareIDs]
     })
+  }
+  catch(err){
+    console.log(err)
+  }
 
     
   }
@@ -332,7 +361,7 @@ const MakeSale = props => {
    return(
       // <KeyboardAvoidingView style = {styles.containerView} behavior = "padding">
       
-      <View>
+      <ScrollView>
         <Modal
             onSwipeComplete={() => setWarehouseModal(false)}
             swipeDirection="left"
@@ -604,7 +633,7 @@ const MakeSale = props => {
       </View>
       <FilterButton page = "sale" getSales = {getSales}/>
       <Spinner loading={loading} />
-      {!loading && <ScrollView>
+       
 
         <DataTable>
           <DataTable.Header>
@@ -613,7 +642,8 @@ const MakeSale = props => {
             <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Amount</Text></DataTable.Title>
             <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Client</Text></DataTable.Title>
           </DataTable.Header>
-
+          {!loading && <ScrollView>
+            <View>
           {
             sales.map((sale, i) => (
               <TouchableOpacity onPress={() => onPressModal(sale)}>
@@ -627,23 +657,10 @@ const MakeSale = props => {
             ))
 
           }
-          <DataTable.Pagination
-            page={page}
-            numberOfPages={3}
-            onPageChange={(page) => setPage(page)}
-            label="1-2 of 6"
-            optionsPerPage={optionsPerPage}
-            itemsPerPage={itemsPerPage}
-            setItemsPerPage={setItemsPerPage}
-            showFastPagination
-            optionsLabel={'Rows per page'}
-          />
+          </View>
+          </ScrollView>}
         </DataTable>
-
-      </ScrollView>
-      }
-    </View>
-    // </KeyboardAvoidingView>
+    </ScrollView>
 
 
   )

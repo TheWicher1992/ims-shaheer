@@ -531,7 +531,7 @@ const Product = props => {
         </View>
       </View>
       <Spinner loading={loading} />
-      {!loading && 
+      
         <DataTable style = {{marginTop: 15}}>
           <DataTable.Header>
             <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Serial No.</Text></DataTable.Title>
@@ -544,7 +544,7 @@ const Product = props => {
 
           </DataTable.Header>
 
-          <ScrollView>
+          {!loading &&<ScrollView>
             <View>
           {
             products.map((product, i) => (
@@ -562,12 +562,12 @@ const Product = props => {
             ))
           }
           </View>
-          </ScrollView>
+          </ScrollView>}
 
           
         </DataTable>
 
-      }
+      
     </ScrollView>
 
   )

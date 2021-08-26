@@ -389,7 +389,7 @@ const MakePurchase = props => {
           <ExportButton data={purchases} title={'purchases.xlsx'}/>
         </View>
       </View>
-      {/* <Spinner loading={loading} /> */}
+      <Spinner loading={loading} />
       {
 
         <DataTable style = {{marginTop: 15}}>
@@ -400,7 +400,7 @@ const MakePurchase = props => {
             <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Client</Text></DataTable.Title>
           </DataTable.Header>
 
-            <ScrollView>
+            {!loading && <ScrollView>
               <View>
 
               
@@ -416,7 +416,7 @@ const MakePurchase = props => {
             ))}
             </View>
 
-            </ScrollView>
+            </ScrollView>}
             
         
         </DataTable>

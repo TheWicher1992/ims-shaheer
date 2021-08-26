@@ -249,14 +249,14 @@ const Employee = props => {
       </View>
       <ExportButton data = {employees} title = "Employee.xlxs" />
       <Spinner loading={loading} />
-      {!loading && <View>
+      <View>
         <DataTable style={{ top: 10 }}>
           <DataTable.Header>
             {/* <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Email</Text></DataTable.Title> */}
             <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Username</Text></DataTable.Title>
             <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Occupation</Text></DataTable.Title>
           </DataTable.Header>
-          <ScrollView>
+          {!loading && <ScrollView>
             <View>
           {
             employees.map((employee, i) => (
@@ -281,10 +281,10 @@ const Employee = props => {
             )))
           }
           </View>
-          </ScrollView>
+          </ScrollView>}
         </DataTable>
 
-      </View>}
+      </View>
     </ScrollView>
     // </KeyboardAvoidingView>
 

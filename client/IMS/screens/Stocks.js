@@ -150,7 +150,7 @@ const Stocks = props => {
       </View>
       <View/>
       <Spinner loading={loading} />
-      {!loading &&
+      
         <DataTable style = {{bottom: 30}}>
           <DataTable.Header>
             <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Serial No.</Text></DataTable.Title>
@@ -160,7 +160,7 @@ const Stocks = props => {
 
           </DataTable.Header>
 
-          <ScrollView>
+          {!loading &&<ScrollView>
             <View>
           {
             products.map((product, i) => (
@@ -176,10 +176,10 @@ const Stocks = props => {
             ))
           }
             </View>
-          </ScrollView>
+          </ScrollView>}
         </DataTable>
 
-      }
+      
     </ScrollView>
 
 
