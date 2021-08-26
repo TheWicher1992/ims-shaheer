@@ -13,6 +13,10 @@ import { uri } from '../api.json'
 import { connect } from 'react-redux'
 import axios from "axios"
 import Spinner from '../components/Spinner';
+import ExportButton from '../components/ExportAsExcel'
+import ShowAlert from '../components/ShowAlert';
+
+
 const optionsPerPage = [2, 3, 4];
 
 const MakeSale = props => {
@@ -39,7 +43,6 @@ const MakeSale = props => {
     }
 
     
-    // console.log("products here", res.data.products)
 
 
   }
@@ -183,52 +186,72 @@ const MakeSale = props => {
   }
 
   const addSale = () => {
-    setModalVisible(false); //closing modal on done for now
-
-    console.log('Printing productName', productName)
-
-    const body = {
-      productID: productName,
-      quantity: quantityVal,
-      total: totalAmount,
-      payment: paymentType,
-      clientID: clientName,
-
-      note : notes,
-      received: amountReceived,
-      isWarehouse: isWarehouse,
-      deliveryOrder: selectedDOrder,
-      warehouses: warehouseIdTicksQuant,
-      note: notes
+    if(quantityVal === '' || totalAmount === '' || amountReceived === '' || notes === ''){
+      setAlertTitle('Warning')
+      setAlertMsg('Input fields may be empty. Request could not be processed.')
+      show()
     }
+    else{
+      // setModalVisible(false); //closing modal on done for now
+      const body = {
+        productID: productName,
+        quantity: quantityVal,
+        total: totalAmount,
+        payment: paymentType,
+        clientID: clientName,
 
-
-    console.log(body)
-    let totalQuant = 0
-    // console.log(warehouseIdTicksQuant)
-    if (body.isWarehouse) {
-      totalQuant = sum(body.warehouses.quant)
-      console.log(totalQuant,'!!!!!!!!!!!!!!!!!!!!')
-      if (totalQuant != body.quantity)
-      {console.log("quantitie do not Match")
-      return
-    }
-    else if(body.total <= body.received && body.payment ==="Partial")
-    {console.log("payment type partial but amount greater then total")
-    return}
-    else if(body.total != body.received && body.payment ==="Full")
-    {console.log("payment type full nut amount recieved and total not equal")
-    return}
-    }
-
-
-    axios.post(`${uri}/api/sale`, body, {
-      headers: {
-        'Content-Type': 'application/json'
+        note : notes,
+        received: amountReceived,
+        isWarehouse: isWarehouse,
+        deliveryOrder: selectedDOrder,
+        warehouses: warehouseIdTicksQuant,
+        note: notes
       }
-    })
-      .then(res => getSales())
-      .catch(err => console.log(err))
+
+
+      let totalQuant = 0
+      if (body.isWarehouse) {
+        totalQuant = sum(body.warehouses.quant)
+        if (totalQuant != body.quantity){
+          setAlertTitle('Warning')
+          setAlertMsg('Quantities do not match. Request could not be processed.')
+          show()
+          return
+        }
+        else if(body.total <= body.received && body.payment ==="Partial"){
+          setAlertTitle('Warning')
+          setAlertMsg('Payment type partial but amount greater then total. Request could not be processed.')
+          show()
+          return
+        }
+        else if(body.total != body.received && body.payment ==="Full"){
+          setAlertTitle('Warning')
+          setAlertMsg('Payment type partial but amount greater then total. Request could not be processed.')
+          show()
+          return
+        }
+      }
+
+
+      axios.post(`${uri}/api/sale`, body, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+        .then(res => {
+          setAlertTitle('Success')
+          setAlertMsg('Request has been processed, Sale added.')
+          show()
+          setModalVisible(false)
+        })
+        .catch(err => {
+          setAlertTitle('Warning')
+          setAlertMsg('Request could not be processed.')
+          show()
+        })
+    }
+
+    
 
   }
 
@@ -358,10 +381,18 @@ const MakeSale = props => {
     getStock()
   }
 
+  const [alertState, setAlertState] = useState(false)
+  const [alertTitle, setAlertTitle] = useState(``)
+  const [alertMsg, setAlertMsg] = useState(``)
+  const show = () => {
+    setAlertState(!alertState)
+  }
+
    return(
       // <KeyboardAvoidingView style = {styles.containerView} behavior = "padding">
       
       <ScrollView>
+       <ShowAlert state={alertState} handleClose={show} alertTitle={alertTitle} alertMsg={alertMsg} style={styles.buttonModalContainer} />
         <Modal
             onSwipeComplete={() => setWarehouseModal(false)}
             swipeDirection="left"
@@ -381,15 +412,17 @@ const MakeSale = props => {
                             <TouchableOpacity onPress = {() => warehouseClicked(record.warehouse._id)}>
                               <View style = {styles.inputWarehouse}>
                                 <View style = {{flexDirection: 'row'}}>
-                                  <Text style={{fontSize:12}}>
+                                  <Text style={{fontSize:12,}}>
                                       Warehouse: {record.warehouse.name} --- Quantity: {record.stock}
                                   </Text>
+                                  <View style = {{bottom: 3, left: 10}}>
                                   {warehouseIdTicksQuant["ticks"][record.warehouse._id] === true ? (<FontAwesome
                                         name={"check"}
                                         size={Dimensions.get('window').height > 900 ? 40 : 25}
                                         color={"#008394"}
                                     />
                                   ) : (null)}
+                                  </View>
                                 </View>
                                 
                                 
@@ -427,15 +460,15 @@ const MakeSale = props => {
                 <View style={styles.modalView}>
                   <Text style={styles.modalTitle}>Select Order</Text>
                   {/* <Text style = {{color: '#006270',fontFamily: 'Roboto',fontWeight: 'bold', fontSize: Dimensions.get('window').height === 1232 ? 28 : 22, top: 15}}> Selling Quantity: {quantityVal}</Text> */}
-                  <ScrollView style = {styles.modalBody}> 
+                  <ScrollView style = {styles.modalWarehouse}> 
                     {
                       stock.deliverOrderStocks !== undefined && stock.deliverOrderStocks !== [] && stock.deliverOrderStocks.map((record,i)=> ( 
                         !record.status &&  
                         <TouchableOpacity onPress = {() => setSelectedDOrder(record._id)}>
                           <View style = {styles.inputWarehouse}>
                             <View style = {{flexDirection: 'row'}}>
-                              <Text>
-                                  Supplier: {record.location} --- Quantity: {record.quantity}
+                              <Text style = {{fontSize: 12, color: "#008394"}}>
+                                  Supplier: {record.location} - Quantity: {record.quantity}
                               </Text>
                               <View style = {{bottom: 3, left: 10}}>
                                 {selectedDOrder === record._id ? (<FontAwesome
@@ -631,11 +664,18 @@ const MakeSale = props => {
         </View>
 
       </View>
-      <FilterButton page = "sale" getSales = {getSales}/>
+      <View style = {{flexDirection: 'row', justifyContent: 'center', paddingRight: 60 }}> 
+        <View>
+          <FilterButton page = "sale" getSales = {getSales}/>
+        </View>
+        <View style = {{marginTop: 25}}>
+          <ExportButton data={sales} title={'sales.xlsx'}/>
+        </View>
+      </View>
       <Spinner loading={loading} />
        
 
-        <DataTable>
+        <DataTable style = {{marginTop:15}}>
           <DataTable.Header>
             <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Product</Text></DataTable.Title>
             <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Quantity</Text></DataTable.Title>
@@ -718,7 +758,7 @@ const styles = StyleSheet.create({
   modalStyle: {
     backgroundColor: "#fff",
     width: Dimensions.get('window').height > 900 ? 600 : 320,
-    height: Dimensions.get('window').height > 900 ? 700 : 620,
+    height: Dimensions.get('window').height > 900 ? 700 : 640,
     borderWidth: 2,
     borderRadius: 20,
     marginBottom: 20,
@@ -737,7 +777,7 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     flexDirection: 'row',
-    marginTop: Dimensions.get('window').height > 900 ? 80 : 60,
+    marginTop: Dimensions.get('window').height > 900 ? 30 : 15,
     borderRadius: 40,
     backgroundColor: '#00E0C7',
     paddingVertical: 12,
@@ -796,13 +836,13 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderRadius: 40,
     marginBottom: 20,
-    fontSize: 12,
+    fontSize: 15,
     borderColor: "#008394",
     height: 40,
     padding: 10,
   },
   inputWarehouse: {
-    width: Dimensions.get('window').height>900 ? Dimensions.get('window').width* 0.65 : Dimensions.get('window').width*0.6,
+    width: Dimensions.get('window').height>900 ? Dimensions.get('window').width* 0.60 : Dimensions.get('window').width*0.6,
     borderColor: 'gray',
     borderWidth: 2,
     borderRadius: 40,
