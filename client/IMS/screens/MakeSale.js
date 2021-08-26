@@ -321,7 +321,6 @@ const MakeSale = props => {
     )
    
     setStock(res.data.stocks)
-    console.log("here it is",res.data.stocks)
 
 
     const wareMap = {}
@@ -343,11 +342,21 @@ const MakeSale = props => {
       ids: [...wareIDs]
     })
   }
-  catch(err){
-    catchWarning()
+    catch(err){
+      catchWarning()
+    }
+
   }
 
-    
+  const openModals = (modal) => {
+    getStock().then(() => {
+      if(modal === "Warehouse"){
+        setWarehouseModal(true)
+      }
+      else if(modal === "D-Order"){
+        setDOrderModal(true)
+      }
+    })
   }
 
 
@@ -389,8 +398,6 @@ const MakeSale = props => {
       warehouseIdTicksQuant["ticks"][e] = false
       refresh()
     }
-    // console.log(warehouseIdTicksQuant["ticks"])
-    // console.log(warehousesID)
     
   }
 
@@ -434,7 +441,7 @@ const MakeSale = props => {
                                   <Text style={{fontSize:12,}}>
                                       {record.warehouse.name} - Quantity: {record.stock}
                                   </Text>
-                                  <View style = {{bottom: Dimensions.get('window').height>900 ? 15: 5, left: 10 }}>
+                                  <View style = {{bottom: Dimensions.get('window').height>900 ? 10: 5, left: 10 }}>
                                   {warehouseIdTicksQuant["ticks"][record.warehouse._id] === true ? (<FontAwesome
                                         name={"check"}
                                         size={Dimensions.get('window').height > 900 ? 30 : 25}
@@ -497,7 +504,7 @@ const MakeSale = props => {
                               <Text style = {{fontSize: 12,}}>
                                   {record.location} - Quantity: {record.quantity}
                               </Text>
-                              <View style = {{bottom: Dimensions.get('window').height>900 ? 15: 5, left: 10}}>
+                              <View style = {{bottom: Dimensions.get('window').height>900 ? 10: 5, left: 10}}>
                                 {selectedDOrder === record._id ? (<FontAwesome
                                         name={"check"}
                                         size={Dimensions.get('window').height > 900 ? 30 : 25}
@@ -621,7 +628,7 @@ const MakeSale = props => {
                           {
                             isWarehouse ? 
                               <View>
-                                <TouchableOpacity style = {styles.buttonModalContainer} onPress = {() => setWarehouseModal(true)}>
+                                <TouchableOpacity style = {styles.buttonModalContainer} onPress = {() => openModals("Warehouse")}>
                                     <Text style = {styles.buttonModalText}>Select Warehouse</Text>
                                 </TouchableOpacity>
                               </View>
@@ -629,7 +636,7 @@ const MakeSale = props => {
                               :
 
                               <View>
-                                <TouchableOpacity style = {styles.buttonModalContainer} onPress = {() => setDOrderModal(true)} onPressIn = {()=>getStock()}>
+                                <TouchableOpacity style = {styles.buttonModalContainer} onPress = {() => openModals("D-Order") } >
                                     <Text style = {styles.buttonModalText}>Select D-Order</Text>
                                 </TouchableOpacity>
                               </View>
