@@ -13,41 +13,49 @@ import { Ionicons } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
 import { uri } from '../api.json'
 import axios from "axios"
+import Spinner from '../components/Spinner';
+import ShowAlert from '../components/ShowAlert';
+
 
 const optionsPerPage = [2, 3, 4];
 
-const EmployeeOrders = props => {
+const DeliveryOrders = props => {
   const [orders, setOrders] = useState([])
   const [products, setProducts] = useState([])
   const [clients, setClients] = useState([])
-
+  const [query, setQuery] = useState('*')
+  const [loading, setLoading] = useState(true)
   const [Pfilters, setPFilters] = useState({
     page: 1,
     query: '*',
     colour: '*',
     brand: '*',
     ware: '*',
+    client: '*',
+    product: '*',
     sort: '*',
     sortBy: '*'
   })
 
+
   const getOrders = async () => {
+    setLoading(true)
     const res = await axios.get(
-      `${uri}/api/order`
+      `${uri}/api/order/${Pfilters.page}/${query}/${Pfilters.client}/${Pfilters.product}/${Pfilters.sort}/${Pfilters.sortBy}`
     )
 
-    console.log('logging arriving order', res.data.deliveryOrder)
     setOrders(res.data.deliveryOrder)
-
+    setLoading(false)
   }
 
   const getProducts = async () => {
     const res = await axios.get(
-      `${uri}/api/product/${Pfilters.page}/${Pfilters.query}/${Pfilters.colour}/${Pfilters.brand}/${Pfilters.ware}/${Pfilters.sort}/${Pfilters.sortBy}`
+      `${uri}/api/product/`
     )
 
 
     setProducts(res.data.products)
+    setProductName(res.data.products[0]._id)
 
 
 
@@ -61,45 +69,18 @@ const EmployeeOrders = props => {
 
 
     setClients(res.data.clients)
+    setClientName(res.data.clients[0]._id)
 
 
   }
 
   useEffect(() => {
-    console.log('deli')
     getClients()
     getProducts()
     getOrders()
 
   }, [])
 
-  // useEffect(() => {
-  // }, [])
-
-
-
-  // useEffect(() => {
-  // },[])
-
-
-  const handleConfirm = (pItems) => { // temporary for picker
-    console.log('pItems =>', pItems);
-  }
-
-  const items = [ //temporary for picker for filter
-    {
-      itemKey: 1,
-      itemDescription: 'Item 1'
-    },
-    {
-      itemKey: 2,
-      itemDescription: 'Item 2'
-    },
-    {
-      itemKey: 3,
-      itemDescription: 'Item 3'
-    }
-  ];
 
   const [page, setPage] = React.useState(0); //for pages of table
   const [itemsPerPage, setItemsPerPage] = React.useState(optionsPerPage[0]); //for items per page on table
@@ -123,12 +104,17 @@ const EmployeeOrders = props => {
 
   const [search, setSearch] = React.useState(``) //for keeping track of search
   const onChangeSearch = (searchVal) => { //function to keep track of search as the user types
-    setSearch(searchVal);
-    console.log(search);
+    if (searchVal.trim() === '') {
+      setQuery('*')
+    }
+    else { setQuery(searchVal.trim()) }
   }
 
   const searchFunc = () => {
-    console.log(search); //printing search value for now
+    //printing search value for now
+    getClients()
+    getProducts()
+    getOrders()
   }
 
 
@@ -139,11 +125,6 @@ const EmployeeOrders = props => {
   const [clientName, setClientName] = React.useState(``)
   const [notes, setNotes] = React.useState(``)
 
-
-  const onChangeProductName = (prodName) => {
-    setProductName(prodName);
-  }
-
   const onChangeQuantity = (quant) => {
     setQuantityVal(quant);
   }
@@ -152,35 +133,53 @@ const EmployeeOrders = props => {
   const onChangeLocation = (locationVal) => {
     setLocation(locationVal);
   }
-  const onChangeClientName = (clName) => {
-    setClientName(clName);
-  }
 
   const onChangeNotes = (noteVal) => {
     setNotes(noteVal);
   }
 
+  const [alertState, setAlertState] = useState(false)
+  const [alertTitle, setAlertTitle] = useState(``)
+  const [alertMsg, setAlertMsg] = useState(``)
+  const show = () => {
+    setAlertState(!alertState)
+  }
+
 
   const addDeliveryOrder = () => {
-    setModalVisible(false); //closing modal on done for now
-    console.log('Printing productName', productName)
-    const body = {
-      productID: productName,
-      quantity: quantityVal,
-      location: location,
-      clientID: clientName,
-      note: notes
+    if(quantityVal === '' || notes === '' || location === ''){
+      setAlertTitle('Warning')
+      setAlertMsg('Input fields may be empty. Request could not be processed.')
+      show()
     }
-
-    console.log(body)
-
-    axios.post(`${uri}/api/order`, body, {
-      headers: {
-        'Content-Type': 'application/json'
+    else{
+      const body = {
+        productID: productName,
+        quantity: quantityVal,
+        location: location,
+        clientID: clientName,
+        note: notes
       }
-    })
-      .then(res => getOrders())
-      .catch(err => console.log(err))
+  
+      axios.post(`${uri}/api/order`, body, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+        .then(res => {
+          getOrders()
+          setAlertTitle('Success')
+          setAlertMsg('Request has been processed, Delivery Order added.')
+          show()
+          setModalVisible(false)
+        })
+        .catch(err => {
+          setAlertTitle('Warning')
+          setAlertMsg('Request could not be processed.')
+          show()
+        })
+    }
+    
   }
 
 
@@ -197,84 +196,7 @@ const EmployeeOrders = props => {
     // <KeyboardAvoidingView style = {styles.containerView} behavior = "padding">
 
     <View>
-      <Modal
-        onSwipeComplete={() => setModalVisible(false)}
-        swipeDirection="left"
-        presentationStyle="overFullScreen"
-        transparent
-        visible={isModalVisible}>
-        <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-          <View style={styles.modalStyle}>
-            <View style={{ justifyContent: 'center', alignItems: 'center', }}>
-              <Text style={styles.modalTitle}>Add Order</Text>
-              <View>
-                <View style={{ marginTop: 40, borderWidth: 2, borderRadius: 40, borderColor: "#008394", width: Dimensions.get('window').width * 0.65, height: 40, fontSize: 8, justifyContent: 'space-between' }}>
-
-                  <Picker
-                    style={{ top: 6, color: 'grey', fontFamily: 'Roboto' }}
-                    itemStyle={{ fontWeight: '100' }}
-                    placeholder="Select a Product"
-                    selectedValue={productName}
-                    onValueChange={(itemValue, itemIndex) =>
-                      setProductName(itemValue)
-                    }
-                  >
-                    {
-                      products.map((product, i) => (
-
-                        <Picker.Item label={product.title === undefined ? 0 : product.title} value={product._id === undefined ? 0 : product._id} key={product._id === undefined ? 0 : product._id} />
-
-                      ))}
-                  </Picker>
-
-                </View>
-                <TextInput onChangeText={onChangeQuantity} style={styles.input} placeholder="Quantity" autoCorrect={false} />
-                <TextInput onChangeText={onChangeLocation} style={styles.input} placeholder="Location" autoCorrect={false} />
-                <TextInput multiline={true} numberOfLines={5} onChangeText={onChangeNotes} style={styles.input} placeholder="Notes" autoCorrect={false} />
-
-                <View style={{ borderWidth: 2, borderRadius: 40, borderColor: "#008394", width: Dimensions.get('window').width * 0.65, height: 40, fontSize: 8, justifyContent: 'space-between', marginTop: 60 }}>
-                  <Picker
-                    style={{ top: 6, color: 'grey', fontFamily: 'Roboto' }}
-                    itemStyle={{ fontWeight: '100' }}
-                    placeholder="Select a Client"
-                    selectedValue={clientName}
-                    onValueChange={(itemValue, itemIndex) =>
-                      setClientName(itemValue)
-                    }
-                  >
-                    {
-                      clients.map((client, i) => (
-                        <Picker.Item label={client.userName === undefined ? 0 : client.userName} value={client._id === undefined ? 0 : client._id} />
-                      ))}
-                  </Picker>
-                </View>
-
-
-              </View>
-              <View style={{ flexDirection: 'row', alignItems: 'center', }}>
-                <TouchableOpacity style={{ alignSelf: 'flex-start' }} onPress={() => { setModalVisible(false) }}>
-                  <View>
-                    <View style={styles.buttonModalContainerCross}>
-                      <View>
-                        <Text style={styles.buttonModalText}>Cancel</Text>
-                      </View>
-                    </View>
-                  </View>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => { addDeliveryOrder() }}>
-                  <View>
-                    <View style={styles.buttonModalContainer}>
-                      <View>
-                        <Text style={styles.buttonModalText}>Done</Text>
-                      </View>
-                    </View>
-                  </View>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </View>
-        </View>
-      </Modal>
+      <ShowAlert state={alertState} handleClose={show} alertTitle={alertTitle} alertMsg={alertMsg} style={styles.buttonModalContainer} />
       <DeliveryOrderModal state={isTableDetailModalVisible} handleClose={handleClose} title='Delivery Information' object={touchedOrder === [] ? [] : touchedOrder} getOrders={getOrders} />
       <View style={styles.screen}>
         <View>
@@ -282,11 +204,8 @@ const EmployeeOrders = props => {
         </View>
       </View>
       <View style={styles.containerButton}>
-        <TouchableOpacity onPress={() => { setModalVisible(true) }}>
           <View style={styles.buttonContainer}>
-            <Text style={styles.buttonText}>Add a Order</Text>
           </View>
-        </TouchableOpacity>
         <View style={{ flexDirection: 'row', justifyContent: 'center', }}>
           <View style={styles.searchBar}>
             <TextInput onChangeText={onChangeSearch} style={styles.buttonInput} placeholder="type here..." autoCorrect={false} />
@@ -308,8 +227,10 @@ const EmployeeOrders = props => {
 
       </View>
 
-      <FilterButton />
-      <ScrollView>
+      {/* <FilterButton />  */}
+                      
+      <Spinner loading={loading} />
+      {!loading && <ScrollView style = {{marginTop: 40}}>
 
         <DataTable>
           <DataTable.Header>
@@ -334,21 +255,10 @@ const EmployeeOrders = props => {
             ))
 
           }
-
-          <DataTable.Pagination
-            page={page}
-            numberOfPages={3}
-            onPageChange={(page) => setPage(page)}
-            label="1-2 of 6"
-            optionsPerPage={optionsPerPage}
-            itemsPerPage={itemsPerPage}
-            setItemsPerPage={setItemsPerPage}
-            showFastPagination
-            optionsLabel={'Rows per page'}
-          />
         </DataTable>
 
       </ScrollView>
+      }
     </View>
     // </KeyboardAvoidingView>
 
@@ -356,7 +266,7 @@ const EmployeeOrders = props => {
   )
 }
 
-EmployeeOrders.navigationOptions = navigationData => {
+DeliveryOrders.navigationOptions = navigationData => {
   return {
     headerTitle: 'Zaki Sons',
     headerTitleAlign: 'center',
@@ -379,7 +289,7 @@ EmployeeOrders.navigationOptions = navigationData => {
 };
 
 
-export default EmployeeOrders
+export default DeliveryOrders
 
 
 const styles = StyleSheet.create({
@@ -420,9 +330,7 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     flexDirection: 'row',
-    marginTop: Dimensions.get('window').height > 900 ? 80 : 60,
-    borderRadius: 40,
-    backgroundColor: '#00E0C7',
+    marginTop: Dimensions.get('window').height > 900 ? 40 : 30,
     paddingVertical: 12,
     paddingHorizontal: 32,
     left: 15
@@ -479,7 +387,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderRadius: 40,
     marginBottom: 20,
-    fontSize: 12,
+    fontSize: 15,
     borderColor: "#008394",
     top: 60,
     height: 40,
