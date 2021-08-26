@@ -27,11 +27,17 @@ const Warehouse = props => {
 
   const getWarehouses = async () => {
     setLoading(true)
-    const res = await axios.get(
-      `${uri}/api/warehouse/${filters.page}/${filters.query}/${filters.sort}/${filters.sortBy}`
-    )
-    res.data.warehouse.length === 0 ? searchWarning(): null
-    setWarehouses(res.data.warehouse.reverse())
+    try {
+      const res = await axios.get(
+        `${uri}/api/warehouse/${filters.page}/${filters.query}/${filters.sort}/${filters.sortBy}`
+      )
+      res.data.warehouse.length === 0 ? searchWarning(): null
+      setWarehouses(res.data.warehouse.reverse())
+    }
+    catch(err){
+      catchWarning()
+    }
+    
     setLoading(false)
   }
   const [alertState, setAlertState] = useState(false)
@@ -103,7 +109,6 @@ const Warehouse = props => {
   }
 
   const addWarehouse = async () => {
-
     const body = {
       name: warehouseName,
       totalProducts: totalProducts,
@@ -140,6 +145,12 @@ const Warehouse = props => {
 
   const handleClose = () => {
     setTableDetailModalVisible(false)
+  }
+
+  const catchWarning = () => {
+    setAlertState(!alertState) 
+    setAlertTitle('Attention')
+    setAlertMsg('Something went wrong. Please restart')
   }
 
 

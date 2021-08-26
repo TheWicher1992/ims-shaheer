@@ -64,7 +64,7 @@ const Product = props => {
 
     }
     catch (err) {
-      console.log(err)
+      catchWarning()
     }
     setLoading(false)
 
@@ -84,7 +84,7 @@ const Product = props => {
 
     }
     catch (err) {
-      console.log(err)
+      catchWarning()
     }
 
     //console.log(res.data)
@@ -306,6 +306,11 @@ const Product = props => {
     setAlertState(!alertState) 
     setAlertTitle('Attention')
     setAlertMsg('No Products found!')
+  }
+  const catchWarning = () => {
+    setAlertState(!alertState) 
+    setAlertTitle('Attention')
+    setAlertMsg('Something went wrong. Please restart')
   }
 
 

@@ -39,7 +39,7 @@ const MakeSale = props => {
 
     }
     catch(err){
-      console.log(err)
+      catchWarning()
     }
 
     
@@ -62,7 +62,7 @@ const MakeSale = props => {
     setClientName(res.data.clients[0]._id)
     }
     catch(err){
-      console.log(err)
+      catchWarning()
     }
 
 
@@ -92,7 +92,7 @@ const MakeSale = props => {
     
       }
       catch(err){
-        console.log(err)
+        catchWarning()
       }
       setLoading(false)
   }
@@ -143,6 +143,11 @@ const MakeSale = props => {
     setAlertState(!alertState) 
     setAlertTitle('Attention')
     setAlertMsg('No Sales found!')
+  }
+  const catchWarning = () => {
+    setAlertState(!alertState) 
+    setAlertTitle('Attention')
+    setAlertMsg('Something went wrong. Please restart')
   }
 
 
@@ -329,7 +334,7 @@ const MakeSale = props => {
     })
   }
   catch(err){
-    console.log(err)
+    catchWarning()
   }
 
     
