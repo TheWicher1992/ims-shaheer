@@ -131,13 +131,10 @@ const SaleFilterModal = props => {
                                         <Text style={styles.sideText}>
                                             {props.filters.product.length === 1 && 'All'}
                                             {
-                                                props.filters.product.length !== 1 && props.filters.product.map(p_id => {
-                                                    if (p_id !== '*') return (
-                                                        <Text style={styles.sideText}>
-                                                            {`${filterMap.products[p_id]} `}
-                                                        </Text>
-                                                    )
-                                                })
+                                                props.filters.product.length !== 1 && 
+                                                <Text style = {styles.sideText}>
+                                                    {`(${props.filters.product.length -1}) Item(s)`}
+                                                    </Text>
                                             }
                                         </Text>
                                     </View>
@@ -160,13 +157,10 @@ const SaleFilterModal = props => {
                                         <Text style={styles.sideText}>
                                             {props.filters.client.length === 1 && 'All'}
                                             {
-                                                props.filters.client.length !== 1 && props.filters.client.map(p_id => {
-                                                    if (p_id !== '*') return (
-                                                        <Text style={styles.sideText}>
-                                                            {`${filterMap.clients[p_id]} `}
-                                                        </Text>
-                                                    )
-                                                })
+                                                props.filters.client.length !== 1 && 
+                                                <Text style = {styles.sideText}>
+                                                    {`(${props.filters.client.length -1}) Item(s)`}
+                                                    </Text>
                                             }
                                         </Text>
                                     </View>
