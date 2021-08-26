@@ -100,7 +100,7 @@ router.post('/', async (req, res) => {
             _id: client
         })
 
-        clientDB.balance = total - received
+        clientDB.balance += total - received
 
         await clientDB.save()
         //  End update client balance
