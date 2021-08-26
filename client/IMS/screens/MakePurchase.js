@@ -15,6 +15,8 @@ import { uri } from '../api.json'
 import { connect } from 'react-redux'
 import Spinner from '../components/Spinner';
 import ShowAlert from '../components/ShowAlert';
+import ExportButton from '../components/ExportAsExcel'
+
 
 const optionsPerPage = [2, 3, 4];
 const MakePurchase = props => {
@@ -379,11 +381,18 @@ const MakePurchase = props => {
         </View>
 
       </View>
-      <FilterButton getPurchases={getPurchases} page="purchase" />
-      <Spinner loading={loading} />
-      {!loading && 
+      <View style = {{flexDirection: 'row', justifyContent: 'center', paddingRight: 60 }}> 
+        <View>
+          <FilterButton getPurchases={getPurchases} page="purchase" />
+        </View>
+        <View style = {{marginTop: 25}}>
+          <ExportButton data={purchases} title={'purchases.xlsx'}/>
+        </View>
+      </View>
+      {/* <Spinner loading={loading} /> */}
+      {
 
-        <DataTable>
+        <DataTable style = {{marginTop: 15}}>
           <DataTable.Header>
             <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Product</Text></DataTable.Title>
             <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Quantity</Text></DataTable.Title>
@@ -411,7 +420,7 @@ const MakePurchase = props => {
             
         
         </DataTable>
-
+      
       }
     </ScrollView>
     // </KeyboardAvoidingView>

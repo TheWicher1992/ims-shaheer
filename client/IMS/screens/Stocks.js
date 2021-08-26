@@ -11,6 +11,7 @@ import { uri } from '../api.json'
 import axios from "axios"
 import Spinner from '../components/Spinner';
 import ShowAlert from '../components/ShowAlert'
+import ExportButton from '../components/ExportAsExcel'
 
 const optionsPerPage = [2, 3, 4];
 
@@ -144,10 +145,13 @@ const Stocks = props => {
         </View>
 
       </View>
-      <View style={{  }}/>
+      <View style = {{bottom: 40}} >
+        <ExportButton data={products} title={'stocks.xlsx'}/>
+      </View>
+      <View/>
       <Spinner loading={loading} />
       {!loading &&
-        <DataTable>
+        <DataTable style = {{bottom: 30}}>
           <DataTable.Header>
             <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Serial No.</Text></DataTable.Title>
             <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Product</Text></DataTable.Title>
