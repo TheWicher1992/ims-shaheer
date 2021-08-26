@@ -112,10 +112,15 @@ const BrandFilterModal = props => {
                             
                         </View>
                         
+                        <ScrollView>
+                            <View>
+
+                            
                         {
                             showBrands()
                         }
-
+                            </View>
+                        </ScrollView>
 
                        
                     </View>
