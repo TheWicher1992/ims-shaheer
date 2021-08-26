@@ -150,6 +150,16 @@ const MakeSale = props => {
     setNotes(noteVal);
   }
 
+  function sum( obj ) {
+    var sum = 0;
+    for( var el in obj ) {
+      if( obj.hasOwnProperty( el ) ) {
+        sum += parseFloat( obj[el] );
+      }
+    }
+    return sum;
+  }
+
   const addSale = () => {
     setModalVisible(false); //closing modal on done for now
 
@@ -172,7 +182,23 @@ const MakeSale = props => {
 
 
     console.log(body)
+    let totalQuant = 0
     // console.log(warehouseIdTicksQuant)
+    if (body.isWarehouse) {
+      totalQuant = sum(body.warehouses.quant)
+      console.log(totalQuant,'!!!!!!!!!!!!!!!!!!!!')
+      if (totalQuant != body.quantity)
+      {console.log("quantitie do not Match")
+      return
+    }
+    else if(body.total <= body.received && body.payment ==="Partial")
+    {console.log("payment type partial but amount greater then total")
+    return}
+    else if(body.total != body.received && body.payment ==="Full")
+    {console.log("payment type full nut amount recieved and total not equal")
+    return}
+    }
+
 
     axios.post(`${uri}/api/sale`, body, {
       headers: {
@@ -181,6 +207,7 @@ const MakeSale = props => {
     })
       .then(res => getSales())
       .catch(err => console.log(err))
+
   }
 
 
@@ -254,8 +281,17 @@ const MakeSale = props => {
     getStock();
   }, [])
 
-  const setQuantityWarehouses = (q, e) =>{
+  const setQuantityWarehouses = (q,s,e) =>{
+    console.log(q,s,e)
+    if(e<s)
+    {
     warehouseIdTicksQuant["quant"][q] = e
+    }
+    else
+    {
+      console.log("not enough stock in selected warehouse")
+    return
+    }
   }
 
 
@@ -271,7 +307,6 @@ const MakeSale = props => {
   }
 
   const warehouseClicked = (e) => {
-
     if(warehouseIdTicksQuant["ticks"][e] === false){
       // console.log("False")
       setWarehousesID([...warehousesID,e])
@@ -333,7 +368,7 @@ const MakeSale = props => {
                             </TouchableOpacity>
                             <View>
                               {warehouseIdTicksQuant["ticks"][record.warehouse._id] === true ? (
-                                <TextInput onChangeText={(e) => setQuantityWarehouses(record.warehouse._id,e)} style={styles.inputWarehouse} placeholder="Quantity" autoCorrect={false} />
+                                <TextInput onChangeText={(e) => setQuantityWarehouses(record.warehouse._id,record.stock,e)} style={styles.inputWarehouse} placeholder="Quantity" autoCorrect={false} />
                               ): (null)}
                             </View>
                           
