@@ -132,7 +132,7 @@ const ClientPurchaseDetail = props => {
         </View>
 
       </View>
-      <ExportButton data={purchases} title={`Purchases.xlxs`}/>
+      <ExportButton data={purchases} title={`Purchases.xlsx`}/>
 
       <View style={{marginTop: 20}}/>
       <Spinner loading={loading} />
