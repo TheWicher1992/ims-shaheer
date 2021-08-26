@@ -52,31 +52,42 @@ const PurchaseFilterModal = props => {
     const [filters, setFilters] = useState([])
 
     const getFilters = async () => {
-        const res = await axios.get(
-            `${uri}/api/purchase/filters`
-        )
-        setFilters(res.data.filters);
+        try{
+            const res = await axios.get(
+                `${uri}/api/purchase/filters`
+            )
+            setFilters(res.data.filters);
+    
+            const productMap = {}
+            res.data.filters.products.forEach(p => {
+                productMap[p._id] = p.title
+            })
+    
+            const clientMap = {}
+            res.data.filters.clients.forEach(c => {
+                clientMap[c._id] = c.userName
+            })
+    
+            setFilterMap({
+                clients: {
+                    ...clientMap
+                },
+                products: {
+                    ...productMap
+                }
+            })
+            console.log(clientMap, productMap)
+        }
+        catch(err){
+            catchWarning()
+        }
+        
+    }
 
-        const productMap = {}
-        res.data.filters.products.forEach(p => {
-            productMap[p._id] = p.title
-        })
-
-        const clientMap = {}
-        res.data.filters.clients.forEach(c => {
-            clientMap[c._id] = c.userName
-        })
-
-        setFilterMap({
-            clients: {
-                ...clientMap
-            },
-            products: {
-                ...productMap
-            }
-        })
-        console.log(clientMap, productMap)
-        // console.log("purchase filters", res.data.filters)
+    const catchWarning = () => {
+        setAlertState(!alertState) 
+        setAlertTitle('Attention')
+        setAlertMsg('Something went wrong. Please restart')
     }
 
 

@@ -40,22 +40,37 @@ const Stocks = props => {
     setAlertMsg('Client with this name already exists.')
     show()
   }
+
+
   useEffect(() => {
     setModalVisible(props.state);
   }, [props.state]);
+
+
   const getStock = async () => {
     setLoading(true)
-    const res = await axios.get(
-      `${uri}/api/product/stock/${filters.page}/${filters.query}/${filters.sort}/${filters.sortBy}`
-    )
-    res.data.stocks.length === 0 ? searchWarning(): null
-    setProducts(res.data.stocks.reverse())
+    try {
+      const res = await axios.get(
+        `${uri}/api/product/stock/${filters.page}/${filters.query}/${filters.sort}/${filters.sortBy}`
+      )
+      res.data.stocks.length === 0 ? searchWarning(): null
+      setProducts(res.data.stocks.reverse())
+    }
+    catch(err){
+        catchWarning()
+    }
     setLoading(false)
     //setSelectedProduct(res.data.warehouse[0]._id)
   }
   useEffect(() => {
     getStock()
   }, [])
+
+  const catchWarning = () => {
+    setAlertState(!alertState) 
+    setAlertTitle('Attention')
+    setAlertMsg('Something went wrong. Please restart')
+  }
 
 
   const [page, setPage] = React.useState(0); //for pages of table
