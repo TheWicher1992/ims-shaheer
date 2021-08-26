@@ -419,12 +419,12 @@ const MakeSale = props => {
                               <View style = {styles.inputWarehouse}>
                                 <View style = {{flexDirection: 'row'}}>
                                   <Text style={{fontSize:12,}}>
-                                      Warehouse: {record.warehouse.name} --- Quantity: {record.stock}
+                                      {record.warehouse.name} - Quantity: {record.stock}
                                   </Text>
-                                  <View style = {{bottom: 15, left: 10}}>
+                                  <View style = {{bottom: Dimensions.get('window').height>900 ? 15: 5, left: 10 }}>
                                   {warehouseIdTicksQuant["ticks"][record.warehouse._id] === true ? (<FontAwesome
                                         name={"check"}
-                                        size={Dimensions.get('window').height > 900 ? 40 : 25}
+                                        size={Dimensions.get('window').height > 900 ? 30 : 25}
                                         color={"#008394"}
                                     />
                                   ) : (null)}
@@ -482,12 +482,12 @@ const MakeSale = props => {
                           <View style = {styles.inputWarehouse}>
                             <View style = {{flexDirection: 'row'}}>
                               <Text style = {{fontSize: 12,}}>
-                                  Supplier: {record.location} - Quantity: {record.quantity}
+                                  {record.location} - Quantity: {record.quantity}
                               </Text>
-                              <View style = {{bottom: 15, left: 10}}>
+                              <View style = {{bottom: Dimensions.get('window').height>900 ? 15: 5, left: 10}}>
                                 {selectedDOrder === record._id ? (<FontAwesome
                                         name={"check"}
-                                        size={Dimensions.get('window').height > 900 ? 40 : 25}
+                                        size={Dimensions.get('window').height > 900 ? 30 : 25}
                                         color={"#008394"}
                                         
                                     />
