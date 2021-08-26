@@ -99,7 +99,7 @@ const MakeSale = props => {
         </View>
 
       </View>
-      <ExportButton data={sales} title={`Sale.xlxs`}/>
+      <ExportButton data={sales} title={`Sale.xlsx`}/>
       <Spinner loading={loading} />
       {!loading && <ScrollView>
 

@@ -31,11 +31,18 @@ const Product = props => {
 
 
   const [touchedProduct, setTouchedProduct] = useState([])
-
+  const catchWarning = () => {
+    setAlertState(!alertState) 
+    setAlertTitle('Attention')
+    setAlertMsg('Something went wrong. Please restart')
+  }
   const [query, setQuery] = useState('*')
 
   const getProducts = async () => {
     setLoading(true)
+    try{
+
+    
     const res = await axios.get(
       `${uri}/api/product` +
       `/${props.filters.page}` +
@@ -49,11 +56,18 @@ const Product = props => {
     )
 
     setProducts(res.data.products.reverse())
+    }
+    catch(err){
+      catchWarning()
+    }
     setLoading(false)
   }
 
 
   const getBrandColours = async () => {
+    try{
+    
+    
     const res = await axios.get(
       `${uri}/api/product/cb`
     )
@@ -62,6 +76,10 @@ const Product = props => {
 
     setColor(res.data.colours[0]._id)
     setBrand(res.data.brands[0]._id)
+    }
+    catch(err){
+      catchWarning()
+    }
 
     //console.log(res.data)
 
