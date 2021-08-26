@@ -412,7 +412,7 @@ const MakeSale = props => {
           >
              <View style={styles.centeredView}>
                 <View style={styles.modalView}>
-                  <Text style={styles.modalTitle}>Select Warehouse</Text>
+                  <Text style={styles.modalTitleNew}>Select Warehouse</Text>
                   {/* <Text style = {{color: '#006270',fontFamily: 'Roboto',fontWeight: 'bold', fontSize: Dimensions.get('window').height === 1232 ? 28 : 22, top: 15}}> Selling Quantity: {quantityVal}</Text>
                   <Text style = {{color: '#006270',fontFamily: 'Roboto',fontWeight: 'bold', fontSize: Dimensions.get('window').height === 1232 ? 28 : 22, top: 10}}> Selected Quantity: {quantityVal}</Text> */}
                   <ScrollView style = {styles.modalWarehouse}> 
@@ -477,7 +477,7 @@ const MakeSale = props => {
           >
              <View style={styles.centeredView}>
                 <View style={styles.modalView}>
-                  <Text style={styles.modalTitle}>Select Order</Text>
+                  <Text style={styles.modalTitleNew}>Select Order</Text>
                   {/* <Text style = {{color: '#006270',fontFamily: 'Roboto',fontWeight: 'bold', fontSize: Dimensions.get('window').height === 1232 ? 28 : 22, top: 15}}> Selling Quantity: {quantityVal}</Text> */}
                   <ScrollView style = {styles.modalWarehouse}> 
                     {
@@ -780,6 +780,14 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: Dimensions.get('window').height === 1232 ? 36 : 28,
     top: 20,
+  },
+  modalTitleNew: {
+    color: '#006270',
+    fontSize: 30,
+    fontFamily: 'Roboto',
+    fontWeight: 'bold',
+    fontSize: Dimensions.get('window').height === 1232 ? 36 : 28,
+    top: 0,
   },
   modalStyle: {
     backgroundColor: "#fff",
