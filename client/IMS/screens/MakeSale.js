@@ -159,6 +159,7 @@ const MakeSale = props => {
   const [paymentType,setPaymentType] = React.useState(`Partial`) //this is the type of payment
   const [clientName, setClientName] = React.useState(``)
   const [notes, setNotes] = React.useState(``)
+  const [selectDOrderQuantity,setSelectDOrderQuantity] = React.useState(0)
 
 
   const onChangeProductName = (prodName) => {
@@ -237,6 +238,15 @@ const MakeSale = props => {
         else if(body.total != body.received && body.payment ==="Full"){
           setAlertTitle('Warning')
           setAlertMsg('Payment type partial but amount greater then total. Request could not be processed.')
+          show()
+          return
+        }
+      }
+      else{
+        if (quantityVal !== selectDOrderQuantity)
+        {
+          setAlertTitle('Warning')
+          setAlertMsg('Quantities do not match. Request could not be processed.')
           show()
           return
         }
@@ -339,9 +349,7 @@ const MakeSale = props => {
 
     
   }
-  useEffect(()=>{
-    getStock();
-  }, [])
+
 
   const setQuantityWarehouses = (q,s,e) =>{
     console.log(q,s,e)
@@ -483,7 +491,7 @@ const MakeSale = props => {
                     {
                       stock.deliverOrderStocks !== undefined && stock.deliverOrderStocks !== [] && stock.deliverOrderStocks.map((record,i)=> ( 
                         !record.status &&  
-                        <TouchableOpacity onPress = {() => setSelectedDOrder(record._id)}>
+                        <TouchableOpacity onPress = {() => {setSelectedDOrder(record._id);  setSelectDOrderQuantity(record.quantity)}}>
                           <View style = {styles.inputWarehouse}>
                             <View style = {{flexDirection: 'row'}}>
                               <Text style = {{fontSize: 12,}}>
