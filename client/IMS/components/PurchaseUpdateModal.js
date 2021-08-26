@@ -25,32 +25,9 @@ const PurchaseUpdateModal = props => {
   const [location, setLocation] = useState(``)
   const [notes, setNotes] = useState(``)
   const [amountRecieved,setAmountReceived] = useState(0)
- 
-  console.log(props.obj)
-
-  const updatePurchase = () => {
-    const body = {
-      title: productName,
-      serial: serialNo,
-      brandID: brand,
-      colourID: color,
-      description,
-      price: amountVal
-    }
-
-
-    const config = {
-      headers: {
-        "Content-Type": "application/json"
-      }
-    }
-
-    axios.put(`${uri}/api/product/${id}`, body, config)
-      .then(() => props.getProducts())
-      .catch(err => console.log(err.response))
-      .finally(() => props.handleClose())
-
-  }
+  const [alertState, setAlertState] = useState(false)
+  const [alertTitle, setAlertTitle] = useState(``)
+  const [alertMsg, setAlertMsg] = useState(``)
 
   useEffect(() => {
     props.warehouse === undefined ? null : setWarehouse(props.warehouse._id)
@@ -69,7 +46,6 @@ const PurchaseUpdateModal = props => {
 
   const toggleSwitch = () => {
     setIsWarehouse(!isWarehouse); 
-    console.log(`switched`);
   };
   useEffect(() => {
     setModalVisible(props.state);
@@ -100,7 +76,12 @@ const PurchaseUpdateModal = props => {
   }
 
   const pressDone = () => {
-
+    if(totalAmount === '' || amountRecieved === '' || location === ''){
+      setAlertTitle('Warning')
+      setAlertMsg('Input fields may be empty. Request could not be processed.')
+      show()
+    }
+    else{
     const body = {
       product : productName,
       quantity: quantityVal,
@@ -122,18 +103,30 @@ const PurchaseUpdateModal = props => {
 
     axios.put(`${uri}/api/purchase/${id}`, body, config)
         .then(() => {
+          setAlertTitle('Success')
+          setAlertMsg('Request has been processed, purchase updated.')
+          show()
           props.handleClose()
+          props.initialModalClose()
+          props.getPurchases()
         })
         .catch(err =>{
-          console.log(err)
+          catchWarning()
         })
-
+      }
   }
-
-
+  const show = () => {
+    setAlertState(!alertState)
+  }
+  const catchWarning = () => {
+    setAlertState(!alertState) 
+    setAlertTitle('Attention')
+    setAlertMsg('Something went wrong. Please restart')
+  }
 
   return (
     <KeyboardAvoidingView>
+      <ShowAlert state={alertState} handleClose={show} alertTitle={alertTitle} alertMsg={alertMsg} style={styles.buttonModalContainer} />
       <Modal
         onSwipeComplete={() => setModalVisible(false)}
         swipeDirection="left"

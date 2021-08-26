@@ -3,6 +3,7 @@ import { Modal, StyleSheet, Text, View, TouchableOpacity, Dimensions, ScrollView
 import PurchaseUpdateModal from "./PurchaseUpdateModal";
 import axios from 'axios'
 import { uri } from '../api.json'
+import ShowAlert from '../components/ShowAlert';
 
 const PurchaseDetailModal = props => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -30,20 +31,39 @@ const PurchaseDetailModal = props => {
   const handleCloseUpdate = () => {
     setUpdateModalVisible(false)
   }
+  const catchWarning = () => {
+    setAlertState(!alertState) 
+    setAlertTitle('Attention')
+    setAlertMsg('Something went wrong. Please restart')
+  }
   const getPreFormValues = async () => {
+    try{
+
+    
     const res = await axios.get(`${uri}/api/purchase/form-inputs`)
     setFormInputs(res.data)
     setProductName(res.data.products[0]._id)
     setWarehouse(res.data.warehouses[0]._id)
     setClientName(res.data.clients[0]._id)
+    }
+    catch(err){
+      catchWarning()
+    }
   }
   function handleClose() {
     setModalVisible(false);
   }
+  const [alertState, setAlertState] = useState(false)
+  const [alertTitle, setAlertTitle] = useState(``)
+  const [alertMsg, setAlertMsg] = useState(``)
+  const show = () => {
+    setAlertState(!alertState)
+  }
   return (
 
     <View style={styles.centeredView}>
-      <PurchaseUpdateModal state={isUpdateModalVisible} handleClose={handleCloseUpdate}  warehouse={warehouse} title='Update Purchase' obj={props.object} formInputs={formInputs} />
+      <ShowAlert state={alertState} handleClose={show} alertTitle={alertTitle} alertMsg={alertMsg} style={styles.buttonModalContainer} />
+      <PurchaseUpdateModal getPurchases={props.getPurchase} initialModalClose={props.handleClose} state={isUpdateModalVisible} handleClose={handleCloseUpdate}  warehouse={warehouse} title='Update Purchase' obj={props.object} formInputs={formInputs} />
       <Modal
         animationType="slide"
         transparent={true}
@@ -67,7 +87,8 @@ const PurchaseDetailModal = props => {
                 <Text style={styles.bodyText}>Amount Received: {props.object.received}  </Text>
                 <Text style={styles.bodyText}>Notes:  {props.object.note} </Text>
                 <Text style={styles.bodyText}>Date:  {props.object.date} </Text>
-                <Text style={styles.bodyText}>Delivered from: To be done </Text>
+                <Text style={styles.bodyText}>Type:  {props.object.typeOfPurchase === undefined ? (null) : props.object.typeOfPurchase} </Text>
+                {props.object.typeOfPurchase === undefined ? (null) :(props.object.typeOfPurchase === 'Warehouse' ? (<Text style={styles.bodyText}>No Location</Text>) : (<Text style={styles.bodyText}>Location: {props.object.deliveryOrder.location === undefined ? '' :props.object.deliveryOrder.location }</Text>))}
 
               </View>
             </ScrollView>
