@@ -256,7 +256,8 @@ const Employee = props => {
             <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Username</Text></DataTable.Title>
             <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Occupation</Text></DataTable.Title>
           </DataTable.Header>
-
+          <ScrollView>
+            <View>
           {
             employees.map((employee, i) => (
               <TouchableOpacity key={i} onPress={() => onPressModal(employee)}>
@@ -279,18 +280,8 @@ const Employee = props => {
 
             )))
           }
-
-          {/* <DataTable.Pagination
-              page={page}
-              numberOfPages={3}
-              onPageChange={(page) => setPage(page)}
-              label="1-2 of 6"
-              optionsPerPage={optionsPerPage}
-              itemsPerPage={itemsPerPage}
-              setItemsPerPage={setItemsPerPage}
-              showFastPagination
-              optionsLabel={'Rows per page'}
-            /> */}
+          </View>
+          </ScrollView>
         </DataTable>
 
       </View>}

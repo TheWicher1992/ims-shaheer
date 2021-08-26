@@ -57,7 +57,7 @@ const Product = props => {
       `/${props.filters.sortBy}`
     )
 
-    setProducts(res.data.products)
+    setProducts(res.data.products.reverse())
     setLoading(false)
   }
 
@@ -307,7 +307,7 @@ const Product = props => {
 
 
   return (
-    <View>
+    <ScrollView>
       <ShowAlert state={alertState} handleClose={show} alertTitle={alertTitle} alertMsg={alertMsg} style={styles.buttonModalContainer} />
       <Modal
         onSwipeComplete={() => setModalVisible(false)}
@@ -490,7 +490,7 @@ const Product = props => {
 
 
 
-      <ProductDetailModal state={isTableDetailModalVisible} handleClose={handleClose} object={touchedProduct} title='Product Detail' getProducts={getProducts} />
+      <ProductDetailModal occupation = "Admin" state={isTableDetailModalVisible} handleClose={handleClose} object={touchedProduct} title='Product Detail' getProducts={getProducts} />
       <View style={styles.screen}>
         <View>
           <Text style={styles.title}>Products</Text>
@@ -506,7 +506,7 @@ const Product = props => {
           <View style={styles.searchBar}>
             <TextInput onChangeText={onChangeSearch} style={styles.buttonInput} placeholder="type here..." autoCorrect={false} />
           </View>
-          <View style={{ top: 14 }}>
+          <View style={{ top: 15 }}>
             <TouchableOpacity onPress={() => { searchFunc() }}>
               <View style={styles.searchButton}>
                 <FontAwesome
@@ -524,7 +524,7 @@ const Product = props => {
       </View>
       <FilterButton getProducts={getProducts} page="product" />
       <Spinner loading={loading} />
-      {!loading && <ScrollView style={{ top: 25 }}>
+      {!loading && 
         <DataTable>
           <DataTable.Header>
             <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Serial No.</Text></DataTable.Title>
@@ -537,7 +537,8 @@ const Product = props => {
 
           </DataTable.Header>
 
-
+          <ScrollView>
+            <View>
           {
             products.map((product, i) => (
               <TouchableOpacity key={i} onPress={() => onPressModal(product)}>
@@ -553,22 +554,14 @@ const Product = props => {
 
             ))
           }
+          </View>
+          </ScrollView>
 
-          <DataTable.Pagination
-            page={page}
-            numberOfPages={3}
-            onPageChange={(page) => setPage(page)}
-            label="1-2 of 6"
-            optionsPerPage={optionsPerPage}
-            itemsPerPage={itemsPerPage}
-            setItemsPerPage={setItemsPerPage}
-            showFastPagination
-            optionsLabel={'Rows per page'}
-          />
+          
         </DataTable>
 
-      </ScrollView>}
-    </View>
+      }
+    </ScrollView>
 
   )
 }
@@ -644,7 +637,7 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     flexDirection: 'row',
-    marginTop: Dimensions.get('window').height > 900 ? 80 : 60,
+    marginTop: Dimensions.get('window').height > 900 ? 40 : 30,
     borderRadius: 40,
     backgroundColor: '#00E0C7',
     paddingVertical: 12,
