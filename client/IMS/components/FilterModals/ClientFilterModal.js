@@ -138,10 +138,13 @@ const ClientFilterModal = props => {
 
                         </View>
 
-
+                        <ScrollView>
+                            <View> 
                         {
                             showClients()
                         }
+                            </View>
+                        </ScrollView>
 
 
                     </View>

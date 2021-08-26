@@ -114,10 +114,13 @@ const ColorFilterModal = props => {
 
                         </View>
 
-
+                        <ScrollView>
+                            <View>
                         {
                             showColours()
                         }
+                            </View>
+                        </ScrollView>
 
 
                     </View>
