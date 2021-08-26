@@ -201,7 +201,7 @@ const MakePurchase = props => {
   return (
     // <KeyboardAvoidingView style = {styles.containerView} behavior = "padding">
 
-    <View>
+    <ScrollView>
       <ShowAlert state={alertState} handleClose={show} alertTitle={alertTitle} alertMsg={alertMsg} style={styles.buttonModalContainer} />
       <KeyboardAvoidingView>
       <Modal
@@ -363,7 +363,7 @@ const MakePurchase = props => {
           <View style={styles.searchBar}>
             <TextInput onChangeText={onChangeSearch} style={styles.buttonInput} placeholder="type here..." autoCorrect={false} />
           </View>
-          <View style={{ top: 14 }}>
+          <View style={{ top: 15 }}>
             <TouchableOpacity onPress={() => { searchFunc() }}>
               <View style={styles.searchButton}>
                 <FontAwesome
@@ -381,7 +381,7 @@ const MakePurchase = props => {
       </View>
       <FilterButton getPurchases={getPurchases} page="purchase" />
       <Spinner loading={loading} />
-      {!loading && <ScrollView>
+      {!loading && 
 
         <DataTable>
           <DataTable.Header>
@@ -391,8 +391,11 @@ const MakePurchase = props => {
             <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Client</Text></DataTable.Title>
           </DataTable.Header>
 
-          {
-            purchases.map(p => (
+            <ScrollView>
+              <View>
+
+              
+            {purchases.map(p => (
               <TouchableOpacity onPress={() => selectedPurchaseRecord(p)}>
                 <DataTable.Row>
                   <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{p.product.title}</Text></DataTable.Cell>
@@ -401,24 +404,16 @@ const MakePurchase = props => {
                   <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{p.client.userName}</Text></DataTable.Cell>
                 </DataTable.Row>
               </TouchableOpacity>
-            ))
-          }
+            ))}
+            </View>
 
-          <DataTable.Pagination
-            page={page}
-            numberOfPages={3}
-            onPageChange={(page) => setPage(page)}
-            label="1-2 of 6"
-            optionsPerPage={optionsPerPage}
-            itemsPerPage={itemsPerPage}
-            setItemsPerPage={setItemsPerPage}
-            showFastPagination
-            optionsLabel={'Rows per page'}
-          />
+            </ScrollView>
+            
+        
         </DataTable>
 
-      </ScrollView>}
-    </View>
+      }
+    </ScrollView>
     // </KeyboardAvoidingView>
 
 
@@ -496,7 +491,7 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     flexDirection: 'row',
-    marginTop: Dimensions.get('window').height > 900 ? 80 : 60,
+    marginTop: Dimensions.get('window').height > 900 ? 40 : 30,
     borderRadius: 40,
     backgroundColor: '#00E0C7',
     paddingVertical: 12,

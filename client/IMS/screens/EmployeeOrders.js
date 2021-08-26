@@ -195,7 +195,7 @@ const DeliveryOrders = props => {
   return (
     // <KeyboardAvoidingView style = {styles.containerView} behavior = "padding">
 
-    <View>
+    <ScrollView>
       <ShowAlert state={alertState} handleClose={show} alertTitle={alertTitle} alertMsg={alertMsg} style={styles.buttonModalContainer} />
       <DeliveryOrderModal state={isTableDetailModalVisible} handleClose={handleClose} title='Delivery Information' object={touchedOrder === [] ? [] : touchedOrder} getOrders={getOrders} />
       <View style={styles.screen}>
@@ -210,7 +210,7 @@ const DeliveryOrders = props => {
           <View style={styles.searchBar}>
             <TextInput onChangeText={onChangeSearch} style={styles.buttonInput} placeholder="type here..." autoCorrect={false} />
           </View>
-          <View style={{ top: 14 }}>
+          <View style={{ top: 15 }}>
             <TouchableOpacity onPress={() => { searchFunc() }}>
               <View style={styles.searchButton}>
                 <FontAwesome
@@ -230,9 +230,9 @@ const DeliveryOrders = props => {
       {/* <FilterButton />  */}
                       
       <Spinner loading={loading} />
-      {!loading && <ScrollView style = {{marginTop: 40}}>
+      {!loading &&
 
-        <DataTable>
+        <DataTable style = {{bottom: 30}}>
           <DataTable.Header>
             <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Product</Text></DataTable.Title>
             <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Client</Text></DataTable.Title>
@@ -240,7 +240,9 @@ const DeliveryOrders = props => {
             <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Location</Text></DataTable.Title>
             <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Status</Text></DataTable.Title>
           </DataTable.Header>
-
+          <ScrollView>
+            <View>
+              
           {
             orders.map((order, i) => (
               <TouchableOpacity key={i} onPress={() => onPressModal(order)}>
@@ -255,11 +257,13 @@ const DeliveryOrders = props => {
             ))
 
           }
+          
+          </View>
+          </ScrollView>
         </DataTable>
 
-      </ScrollView>
       }
-    </View>
+    </ScrollView>
     // </KeyboardAvoidingView>
 
 
@@ -299,6 +303,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Roboto',
     fontWeight: 'bold',
     fontSize: Dimensions.get('window').height === 1232 ? 36 : 28,
+    bottom: 25
   },
   modalTitle: {
     color: '#006270',
@@ -347,7 +352,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
     //top: 45,
     margin: 20,
-    display: 'flex'
+    display: 'flex',
   },
   buttonModalContainerCross: {
     justifyContent: 'center',
@@ -380,6 +385,7 @@ const styles = StyleSheet.create({
   containerButton: {
     alignItems: 'flex-start',
     justifyContent: 'flex-start',
+    bottom: 70,
   },
   input: {
     width: Dimensions.get('window').width * 0.65,

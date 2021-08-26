@@ -112,7 +112,7 @@ const EmployeeStocks = props => {
 
   return (
     // <KeyboardAvoidingView style = {styles.containerView} behavior = "padding">
-    <View>
+    <ScrollView>
       <ShowAlert state={alertState} handleClose={show} alertTitle={alertTitle} alertMsg={alertMsg} style={styles.buttonModalContainer} />
       <StockModal state={isTableDetailModalVisible} handleClose={handleClose} object={touchedProduct !== [] ? touchedProduct : null} title='Stock Detail' getStock={getStock} />
       <View style={styles.screen}>
@@ -129,7 +129,7 @@ const EmployeeStocks = props => {
           <View style={styles.searchBar}>
             <TextInput onChangeText={onChangeSearch} style={styles.buttonInput} placeholder="type here..." autoCorrect={false} />
           </View>
-          <View style={{ top: 14 }}>
+          <View style={{ top: 15 }}>
             <TouchableOpacity onPress={() => { searchFunc() }}>
               <View style={styles.searchButton}>
                 <FontAwesome
@@ -147,8 +147,8 @@ const EmployeeStocks = props => {
       </View>
       <View style={{ marginTop: 30 }}>
       <Spinner loading={loading} />
-        {!loading && <ScrollView style={{ top: 20 }}>
-        <DataTable>
+        {!loading && 
+        <DataTable style = {{bottom: 50}}>
           <DataTable.Header>
             <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Serial No.</Text></DataTable.Title>
             <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Product</Text></DataTable.Title>
@@ -158,8 +158,9 @@ const EmployeeStocks = props => {
             {/* <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Warehouse</Text></DataTable.Title> */}
 
           </DataTable.Header>
-
-
+          <ScrollView>
+            <View>
+      
           {
             products.map((product, i) => (
               <TouchableOpacity key={i} onPress={() => onPressModal(product)}>
@@ -173,12 +174,14 @@ const EmployeeStocks = props => {
 
             ))
           }
+                 
+            </View>
+          </ScrollView>
 
         </DataTable>
-
-        </ScrollView>}
+        }
       </View>
-    </View>
+    </ScrollView>
     
 
 
@@ -218,6 +221,8 @@ const styles = StyleSheet.create({
     fontFamily: 'Roboto',
     fontWeight: 'bold',
     fontSize: Dimensions.get('window').height === 1232 ? 36 : 28,
+    bottom: 25
+
   },
   modalTitle: {
     color: '#006270',
@@ -300,6 +305,7 @@ const styles = StyleSheet.create({
   containerButton: {
     alignItems: 'flex-start',
     justifyContent: 'flex-start',
+    bottom: 70,
   },
   input: {
     width: Dimensions.get('window').width * 0.65,
