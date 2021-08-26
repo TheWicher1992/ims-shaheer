@@ -3,6 +3,8 @@ import { Modal, StyleSheet, Text, View, TouchableOpacity, Dimensions, TextInput,
 import { Picker } from '@react-native-picker/picker';
 import { uri } from '../api.json'
 import axios from "axios"
+import ShowAlert from '../components/ShowAlert';
+
 const PurchaseUpdateModal = props => {
   const [isModalVisible, setModalVisible] = useState(false);
   const [addBrandModal, setAddBrandModal] = useState(false);
@@ -22,6 +24,9 @@ const PurchaseUpdateModal = props => {
   const [totalAmount, setTotalAmount] = useState(0)
   const [location, setLocation] = useState(``)
   const [notes, setNotes] = useState(``)
+  const [amountRecieved,setAmountReceived] = useState(0)
+ 
+  console.log(props.obj)
 
   const updatePurchase = () => {
     const body = {
@@ -32,6 +37,7 @@ const PurchaseUpdateModal = props => {
       description,
       price: amountVal
     }
+
 
     const config = {
       headers: {
@@ -47,20 +53,22 @@ const PurchaseUpdateModal = props => {
   }
 
   useEffect(() => {
-
+    props.warehouse === undefined ? null : setWarehouse(props.warehouse._id)
     setSerialNo(props.obj.serial)
     setID(props.obj._id)
-    props.obj.product === undefined ? null : setProductName(props.obj.product.title)
+    props.obj.product === undefined ? null : setProductName(props.obj.product._id)
     setAmountVal(props.obj.price)
+    props.obj.payment === '' ? setPaymentType('Partial') : setPaymentType(props.obj.payment)
     setDescription(props.obj.description)
     setQuantityVal(props.obj.quantity !== undefined && props.obj.quantity)
     setNotes(props.obj.note !== undefined && props.obj.note)
     setTotalAmount(props.obj.amount !== undefined ? props.obj.amount : ``)
-    props.obj.client === undefined ? null : setClientName(props.obj.client.userName)
+    props.obj.received === undefined ? 0 : setAmountReceived(props.obj.received);
+    props.obj.client === undefined ? null : setClientName(props.obj.client._id)
   }, [props.obj])
 
   const toggleSwitch = () => {
-    setIsWarehouse(!isWarehouse);
+    setIsWarehouse(!isWarehouse); 
     console.log(`switched`);
   };
   useEffect(() => {
@@ -90,6 +98,40 @@ const PurchaseUpdateModal = props => {
   const onChangeLocation = (loc) => {
     setLocation(loc);
   }
+
+  const pressDone = () => {
+
+    const body = {
+      product : productName,
+      quantity: quantityVal,
+      client : clientName,
+      payment : paymentType,
+      total: totalAmount,
+      received : amountRecieved,
+      note : notes,
+      isDeliveryOrder : !isWarehouse,
+      location : location,
+      warehouseID : warehouse
+    }
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json"
+      }
+    }
+
+    axios.put(`${uri}/api/purchase/${id}`, body, config)
+        .then(() => {
+          props.handleClose()
+        })
+        .catch(err =>{
+          console.log(err)
+        })
+
+  }
+
+
+
   return (
     <KeyboardAvoidingView>
       <Modal
@@ -124,7 +166,7 @@ const PurchaseUpdateModal = props => {
                 </View>
                 <View style={{ marginTop: 10 }}>
                   <TextInput onChangeText={onChangeQuantity} style={styles.input} placeholder="Quantity" autoCorrect={false} value={props.obj.quantity === undefined ? '0' : quantityVal.toString()} />
-                  {paymentType === 'Partial' && <TextInput onChangeText={onChangeAmountReceived} style={styles.input} placeholder="Amount Received" value={props.obj.received === undefined ? '0' : props.obj.received.toString()} autoCorrect={false} />
+                  {paymentType === 'Partial' && <TextInput onChangeText={onChangeAmountReceived} style={styles.input} placeholder="Amount Received" value={props.obj.received === undefined ? '0' : amountRecieved.toString()} autoCorrect={false} />
                   }
                   <TextInput onChangeText={onChangeTotalAmount} style={styles.input} placeholder="Total Amount" value={props.obj.total === undefined ? '0' : totalAmount.toString()} autoCorrect={false} />
                   <TextInput onChangeText={onChangeNotes} style={styles.input} placeholder="Notes" value={props.obj.note === undefined ? '0' : notes} autoCorrect={false} />
@@ -220,7 +262,7 @@ const PurchaseUpdateModal = props => {
                     </View>
                   </View>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => { props.handleClose() }}>
+                <TouchableOpacity onPress={() => { pressDone() }}>
                   <View>
                     <View style={styles.buttonModalContainer}>
                       <View>
