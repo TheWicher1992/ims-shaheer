@@ -58,17 +58,29 @@ const MakePurchase = props => {
       setPurchases(res.data.purchases)
     }
     catch (err) {
-      console.log(err)
+      catchWarning()
     }
     setLoading(false)
   }
-
+  const catchWarning = () => {
+    setAlertState(!alertState) 
+    setAlertTitle('Attention')
+    setAlertMsg('Something went wrong. Please restart')
+  }
+  
   const getPreFormValues = async () => {
+    try{
+
+    
     const res = await axios.get(`${uri}/api/purchase/form-inputs`)
     setFormInputs(res.data)
     setProductName(res.data.products[0]._id)
     setWarehouse(res.data.warehouses[0]._id)
     setClientName(res.data.clients[0]._id)
+    }
+    catch(err){
+      catchWarning()
+    }
   }
 
 
