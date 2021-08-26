@@ -345,8 +345,10 @@ const Product = props => {
                       }
 
                     </Picker>
-                    <View>
-                      <TouchableOpacity onPress={() => { setAddColorModal(true) }}>
+                    
+                  </View>
+                  <View>
+                      <TouchableOpacity style = {{marginTop: 10}} onPress={() => { setAddColorModal(true) }}>
                         <View style={styles.addButton}>
                           <View style={{ justifyContent: 'center', alignContent: 'center', alignItems: 'center', }}>
                             <Text style={styles.modalbuttonText}>
@@ -355,15 +357,9 @@ const Product = props => {
                           </View>
                         </View>
                       </TouchableOpacity>
-                    </View>
-
-
-
-
-
-
                   </View>
-                  <View style={{ borderWidth: 2, borderRadius: 40, borderColor: "#008394", width: Dimensions.get('window').width * 0.65, marginTop: 40, height: 40, fontSize: 8, }}>
+
+                  <View style={{ borderWidth: 2, borderRadius: 40, borderColor: "#008394", width: Dimensions.get('window').width * 0.65, marginTop: 15, height: 40, fontSize: 8, }}>
                     <Picker
                       style={{ top: 6, color: 'grey', fontFamily: 'Roboto' }}
                       //itemStyle={{ transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }]}}
@@ -379,11 +375,13 @@ const Product = props => {
                           <Picker.Item key={b._id} label={b.title} value={b._id} />
                         )))
                       }
-                      {/* <Picker.Item label="PVC" value="PVC" />
-                      <Picker.Item label="PVCC" value="PVCC" /> */}
-
+                  
                     </Picker>
-                    <TouchableOpacity onPress={() => { setAddBrandModal(true) }}>
+                    
+
+                  </View>
+                  <View>
+                    <TouchableOpacity style=  {{marginTop: 10}} onPress={() => { setAddBrandModal(true) }}>
                       <View style={styles.addButton}>
                         <View style={{ justifyContent: 'center', alignContent: 'center', alignItems: 'center' }}>
                           <Text style={styles.modalbuttonText}>
@@ -392,13 +390,12 @@ const Product = props => {
                         </View>
                       </View>
                     </TouchableOpacity>
-
                   </View>
 
 
                 </View>
 
-                <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 30, }}>
+                <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10, }}>
                   <TouchableOpacity style={{ alignSelf: 'flex-start' }} onPress={() => { setModalVisible(false) }}>
                     <View>
                       <View style={styles.buttonModalContainerCross}>
@@ -795,14 +792,8 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 35,
     alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
+    borderColor: "#008394",
+    borderWidth: 2,
     width: Dimensions.get('window').height > 900 ? Dimensions.get('window').width * 0.7 : Dimensions.get('window').width * 0.80,
     height: Dimensions.get('window').height > 900 ? Dimensions.get('window').height * 0.5 : Dimensions.get('window').height * 0.60
   },
