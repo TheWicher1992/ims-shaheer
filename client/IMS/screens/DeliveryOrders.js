@@ -15,6 +15,8 @@ import { uri } from '../api.json'
 import axios from "axios"
 import Spinner from '../components/Spinner';
 import ShowAlert from '../components/ShowAlert';
+import ExportButton from '../components/ExportAsExcel';
+
 
 
 const optionsPerPage = [2, 3, 4];
@@ -37,18 +39,32 @@ const DeliveryOrders = props => {
     sortBy: '*'
   })
 
-
+  const catchWarning = () => {
+    setAlertState(!alertState) 
+    setAlertTitle('Attention')
+    setAlertMsg('Something went wrong. Please restart')
+  }
   const getOrders = async () => {
     setLoading(true)
+    try{
+
+    
     const res = await axios.get(
       `${uri}/api/order/${Pfilters.page}/${query}/${Pfilters.client}/${Pfilters.product}/${Pfilters.sort}/${Pfilters.sortBy}`
     )
 
     setOrders(res.data.deliveryOrder)
+    }
+    catch(err){
+      catchWarning()
+    }
     setLoading(false)
   }
 
   const getProducts = async () => {
+    try{
+
+    
     const res = await axios.get(
       `${uri}/api/product/`
     )
@@ -56,6 +72,10 @@ const DeliveryOrders = props => {
 
     setProducts(res.data.products)
     setProductName(res.data.products[0]._id)
+    }
+    catch(err){
+      catchWarning()
+    }
 
 
 
@@ -63,6 +83,9 @@ const DeliveryOrders = props => {
 
 
   const getClients = async () => {
+    try{
+
+    
     const res = await axios.get(
       `${uri}/api/client/*`
     )
@@ -70,7 +93,10 @@ const DeliveryOrders = props => {
 
     setClients(res.data.clients)
     setClientName(res.data.clients[0]._id)
-
+    }
+    catch(err){
+      catchWarning()
+    }
 
   }
 
@@ -195,7 +221,7 @@ const DeliveryOrders = props => {
   return (
     // <KeyboardAvoidingView style = {styles.containerView} behavior = "padding">
 
-    <View>
+    <ScrollView>
       <ShowAlert state={alertState} handleClose={show} alertTitle={alertTitle} alertMsg={alertMsg} style={styles.buttonModalContainer} />
       <Modal
         onSwipeComplete={() => setModalVisible(false)}
@@ -287,14 +313,14 @@ const DeliveryOrders = props => {
       <View style={styles.containerButton}>
         <TouchableOpacity onPress={() => { setModalVisible(true) }}>
           <View style={styles.buttonContainer}>
-            <Text style={styles.buttonText}>Add a Order</Text>
+            <Text style={styles.buttonText}>Add an Order</Text>
           </View>
         </TouchableOpacity>
         <View style={{ flexDirection: 'row', justifyContent: 'center', }}>
           <View style={styles.searchBar}>
             <TextInput onChangeText={onChangeSearch} style={styles.buttonInput} placeholder="type here..." autoCorrect={false} />
           </View>
-          <View style={{ top: 14 }}>
+          <View style={{ top: 15 }}>
             <TouchableOpacity onPress={() => { searchFunc() }}>
               <View style={styles.searchButton}>
                 <FontAwesome
@@ -310,13 +336,15 @@ const DeliveryOrders = props => {
         </View>
 
       </View>
+      <View >
+        <ExportButton data={orders} title={'DeliveryOrder.xlsx'}/>
+      </View>
 
-      {/* <FilterButton />  */}
                       
       <Spinner loading={loading} />
-      {!loading && <ScrollView style = {{marginTop: 40}}>
+       
 
-        <DataTable>
+        <DataTable style={{marginTop: 15}}>
           <DataTable.Header>
             <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Product</Text></DataTable.Title>
             <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Client</Text></DataTable.Title>
@@ -324,7 +352,8 @@ const DeliveryOrders = props => {
             <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Location</Text></DataTable.Title>
             <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Status</Text></DataTable.Title>
           </DataTable.Header>
-
+          {!loading &&<ScrollView>
+            <View>
           {
             orders.map((order, i) => (
               <TouchableOpacity key={i} onPress={() => onPressModal(order)}>
@@ -339,11 +368,13 @@ const DeliveryOrders = props => {
             ))
 
           }
+          </View>
+          </ScrollView>}
         </DataTable>
 
-      </ScrollView>
-      }
-    </View>
+      
+      
+    </ScrollView>
     // </KeyboardAvoidingView>
 
 
@@ -383,6 +414,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Roboto',
     fontWeight: 'bold',
     fontSize: Dimensions.get('window').height === 1232 ? 36 : 28,
+    bottom: 20,
   },
   modalTitle: {
     color: '#006270',
@@ -414,7 +446,7 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     flexDirection: 'row',
-    marginTop: Dimensions.get('window').height > 900 ? 80 : 60,
+    marginTop: Dimensions.get('window').height > 900 ? 40 : 30,
     borderRadius: 40,
     backgroundColor: '#00E0C7',
     paddingVertical: 12,
@@ -466,6 +498,7 @@ const styles = StyleSheet.create({
   containerButton: {
     alignItems: 'flex-start',
     justifyContent: 'flex-start',
+    bottom: 20,
   },
   input: {
     width: Dimensions.get('window').width * 0.65,

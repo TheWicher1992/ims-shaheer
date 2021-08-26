@@ -3,16 +3,13 @@ import { useState, useEffect } from 'react';
 import { StyleSheet, Text, View, Button, Dimensions, TextInput, TouchableOpacity, KeyboardAvoidingView, ScrollView } from 'react-native';
 import HeaderButton from '../components/HeaderButton';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
-import { FontAwesome } from '@expo/vector-icons';
 import { DataTable } from 'react-native-paper';
-import Modal from 'react-native-modal';
-import PickerCheckBox from 'react-native-picker-checkbox';
 import TableDetailModal from '../components/TableDetailModal';
-import FilterButton from '../components/FilterButton';
-import { Picker } from '@react-native-picker/picker';
 import { uri } from '../api.json'
 import axios from "axios"
 import Spinner from '../components/Spinner';
+import ExportButton from '../components/ExportAsExcel'
+
 const optionsPerPage = [2, 3, 4];
 
 const MakeSale = props => {
@@ -102,7 +99,7 @@ const MakeSale = props => {
         </View>
 
       </View>
-      
+      <ExportButton data={sales} title={`Sale.xlsx`}/>
       <Spinner loading={loading} />
       {!loading && <ScrollView>
 
@@ -127,17 +124,6 @@ const MakeSale = props => {
             ))
 
           }
-          <DataTable.Pagination
-            page={page}
-            numberOfPages={3}
-            onPageChange={(page) => setPage(page)}
-            label="1-2 of 6"
-            optionsPerPage={optionsPerPage}
-            itemsPerPage={itemsPerPage}
-            setItemsPerPage={setItemsPerPage}
-            showFastPagination
-            optionsLabel={'Rows per page'}
-          />
         </DataTable>
 
       </ScrollView>

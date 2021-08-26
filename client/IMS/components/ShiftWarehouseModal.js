@@ -27,12 +27,24 @@ const ShiftWarehouseModal = props => {
     setAlertMsg('Something Went Wrong')
     show()
   }
+  const catchWarning = () => {
+    setAlertState(!alertState) 
+    setAlertTitle('Attention')
+    setAlertMsg('Something went wrong. Please restart')
+  }
   const getWarehouses = async () => {
+    try{
+
+    
     const res = await axios.get(
       `${uri}/api/warehouse/${filters.page}/${filters.query}/${filters.sort}/${filters.sortBy}`
     )
     setWarehouses(res.data.warehouse.reverse())
     setSelectedWarehouse(res.data.warehouse[0]._id)
+    }
+    catch(err){
+      catchWarning()
+    }
   }
   useEffect(() => {
     getWarehouses()

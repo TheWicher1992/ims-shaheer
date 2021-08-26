@@ -54,6 +54,9 @@ const SaleFilterModal = props => {
     const [filters, setFilters] = useState([])
 
     const getFilters = async () => {
+        try{
+
+        
         const res = await axios.get(
             `${uri}/api/sale/filters`
         )
@@ -77,7 +80,16 @@ const SaleFilterModal = props => {
                 ...productMap
             }
         })
+    } 
+    catch(err) {
+        catchWarning()
+    }
         
+    }
+    const catchWarning = () => {
+        setAlertState(!alertState) 
+        setAlertTitle('Attention')
+        setAlertMsg('Something went wrong. Please restart')
     }
 
 

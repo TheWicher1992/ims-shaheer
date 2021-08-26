@@ -6,14 +6,12 @@ import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { FontAwesome } from '@expo/vector-icons';
 import { DataTable } from 'react-native-paper';
 import Modal from 'react-native-modal';
-import PickerCheckBox from 'react-native-picker-checkbox';
 import WarehouseDetailModal from '../components/WarehouseDetailModal';
-import FilterButton from '../components/FilterButton';
 import axios from 'axios'
 import { uri } from '../api.json'
 import Spinner from '../components/Spinner';
 import ShowAlert from '../components/ShowAlert';
-
+import ExportButton from '../components/ExportAsExcel'
 const optionsPerPage = [2, 3, 4];
 
 const Warehouse = props => {
@@ -29,11 +27,17 @@ const Warehouse = props => {
 
   const getWarehouses = async () => {
     setLoading(true)
-    const res = await axios.get(
-      `${uri}/api/warehouse/${filters.page}/${filters.query}/${filters.sort}/${filters.sortBy}`
-    )
-    res.data.warehouse.length === 0 ? searchWarning(): null
-    setWarehouses(res.data.warehouse.reverse())
+    try {
+      const res = await axios.get(
+        `${uri}/api/warehouse/${filters.page}/${filters.query}/${filters.sort}/${filters.sortBy}`
+      )
+      res.data.warehouse.length === 0 ? searchWarning(): null
+      setWarehouses(res.data.warehouse.reverse())
+    }
+    catch(err){
+      catchWarning()
+    }
+    
     setLoading(false)
   }
   const [alertState, setAlertState] = useState(false)
@@ -105,7 +109,6 @@ const Warehouse = props => {
   }
 
   const addWarehouse = async () => {
-
     const body = {
       name: warehouseName,
       totalProducts: totalProducts,
@@ -144,13 +147,19 @@ const Warehouse = props => {
     setTableDetailModalVisible(false)
   }
 
+  const catchWarning = () => {
+    setAlertState(!alertState) 
+    setAlertTitle('Attention')
+    setAlertMsg('Something went wrong. Please restart')
+  }
+
 
 
 
   return (
     // <KeyboardAvoidingView style = {styles.containerView} behavior = "padding">
 
-    <View>
+    <ScrollView>
       <ShowAlert state={alertState} handleClose={show} alertTitle={alertTitle} alertMsg={alertMsg} style={styles.buttonModalContainer} />
       <Modal
         onSwipeComplete={() => setModalVisible(false)}
@@ -207,7 +216,7 @@ const Warehouse = props => {
           <View style={styles.searchBar}>
             <TextInput onChangeText={onChangeSearch} style={styles.buttonInput} placeholder="type here..." autoCorrect={false} />
           </View>
-          <View style={{ top: 14 }}>
+          <View style={{ top: 15 }}>
             <TouchableOpacity onPress={() => { searchFunc() }}>
               <View style={styles.searchButton}>
                 <FontAwesome
@@ -223,16 +232,20 @@ const Warehouse = props => {
         </View>
 
       </View>
+      <View style = {{marginTop: 20}} >
+        <ExportButton data={warehouses} title={'warehouses.xlsx'}/>
+      </View>
       <Spinner loading={loading} />
-      {!loading && <ScrollView style={{ top: 30 }}>
-        <DataTable>
+      
+        <DataTable style={{marginTop: 15}}>
           <DataTable.Header>
             <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Name</Text></DataTable.Title>
             <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Total Products</Text></DataTable.Title>
             <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Stock</Text></DataTable.Title>
 
           </DataTable.Header>
-
+          {!loading && <ScrollView>
+            <View>
           {
             warehouses.map((warehouse, i) => (
               <TouchableOpacity key={i} onPress={() => onPressModal(warehouse)}>
@@ -244,23 +257,12 @@ const Warehouse = props => {
               </TouchableOpacity>
             ))
           }
-
-          <DataTable.Pagination
-            page={page}
-            numberOfPages={3}
-            onPageChange={(page) => setPage(page)}
-            label="1-2 of 6"
-            optionsPerPage={optionsPerPage}
-            itemsPerPage={itemsPerPage}
-            setItemsPerPage={setItemsPerPage}
-            showFastPagination
-            optionsLabel={'Rows per page'}
-          />
+          </View>
+        </ScrollView>}
         </DataTable>
 
-      </ScrollView>
-      }
-    </View>
+      
+    </ScrollView>
     // </KeyboardAvoidingView>
 
 
@@ -331,7 +333,7 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     flexDirection: 'row',
-    marginTop: Dimensions.get('window').height > 900 ? 80 : 60,
+    marginTop: Dimensions.get('window').height > 900 ? 40 : 30,
     borderRadius: 40,
     backgroundColor: '#00E0C7',
     paddingVertical: 12,

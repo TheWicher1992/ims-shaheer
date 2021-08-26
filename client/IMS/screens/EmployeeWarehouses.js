@@ -29,11 +29,18 @@ const Warehouse = props => {
 
   const getWarehouses = async () => {
     setLoading(true)
+    try{
+
+    
     const res = await axios.get(
       `${uri}/api/warehouse/${filters.page}/${filters.query}/${filters.sort}/${filters.sortBy}`
     )
     res.data.warehouse.length === 0 ? searchWarning(): null
     setWarehouses(res.data.warehouse.reverse())
+    }
+    catch(err){
+      catchWarning()
+    }
     setLoading(false)
   }
   const [alertState, setAlertState] = useState(false)
@@ -81,6 +88,11 @@ const Warehouse = props => {
   const searchFunc = () => {
     //console.log(search); //printing search value for now
     getWarehouses();
+  } 
+  const catchWarning = () => {
+    setAlertState(!alertState) 
+    setAlertTitle('Attention')
+    setAlertMsg('Something went wrong. Please restart')
   }
 
 
@@ -106,31 +118,7 @@ const Warehouse = props => {
     setStock(stocks);
   }
 
-  const addWarehouse = async () => {
-
-    const body = {
-      name: warehouseName,
-      totalProducts: totalProducts,
-      totalStock: stock
-    }
-
-    await axios.post(`${uri}/api/warehouse`, body,
-      {
-        headers: {
-          "Content-Type": "application/json"
-        }
-      }
-
-    )
-      .then(() => {
-      setAlertTitle('Success');
-      setAlertMsg('Warehouses Added Successfully');
-      show()})
-      .catch(err => setError())
-
-    getWarehouses()
-    setModalVisible(false); //closing modal on done for now
-  }
+  
 
   const [itemsPerPage, setItemsPerPage] = React.useState(optionsPerPage[0]); //for items per page on table
   const [touchedWarehouse, setTouchedWarehouse] = React.useState([])
@@ -152,7 +140,7 @@ const Warehouse = props => {
   return (
     // <KeyboardAvoidingView style = {styles.containerView} behavior = "padding">
 
-    <View>
+    <ScrollView>
       <ShowAlert state={alertState} handleClose={show} alertTitle={alertTitle} alertMsg={alertMsg} style={styles.buttonModalContainer} />
       <WarehouseDetailModal state={isTableDetailModalVisible} handleClose={handleClose} title='Warehouse Information' object={touchedWarehouse === [] ? [] : touchedWarehouse} getWarehouses={getWarehouses} occupation={'Admin'} />
       <View style={styles.screen}>
@@ -167,7 +155,7 @@ const Warehouse = props => {
           <View style={styles.searchBar}>
             <TextInput onChangeText={onChangeSearch} style={styles.buttonInput} placeholder="type here..." autoCorrect={false} />
           </View>
-          <View style={{ top: 14 }}>
+          <View style={{ top: 15 }}>
             <TouchableOpacity onPress={() => { searchFunc() }}>
               <View style={styles.searchButton}>
                 <FontAwesome
@@ -184,15 +172,17 @@ const Warehouse = props => {
 
       </View>
       <Spinner loading={loading} />
-      {!loading && <ScrollView style={{ top: 30 }}>
-        <DataTable>
+      
+        <DataTable style = {{bottom: 30}}>
           <DataTable.Header>
             <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Name</Text></DataTable.Title>
             <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Total Products</Text></DataTable.Title>
             <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Stock</Text></DataTable.Title>
 
           </DataTable.Header>
-
+            {!loading &&<ScrollView>
+              <View>
+            
           {
             warehouses.map((warehouse, i) => (
               <TouchableOpacity key={i} onPress={() => onPressModal(warehouse)}>
@@ -204,12 +194,14 @@ const Warehouse = props => {
               </TouchableOpacity>
             ))
           }
+            
+            </View>
+          </ScrollView>}
 
         </DataTable>
 
-      </ScrollView>
-      }
-    </View>
+      
+    </ScrollView>
     // </KeyboardAvoidingView>
 
 
@@ -331,6 +323,7 @@ const styles = StyleSheet.create({
   containerButton: {
     alignItems: 'flex-start',
     justifyContent: 'flex-start',
+    bottom: 80
   },
   input: {
     width: Dimensions.get('window').width * 0.65,

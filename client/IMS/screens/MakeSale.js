@@ -13,6 +13,10 @@ import { uri } from '../api.json'
 import { connect } from 'react-redux'
 import axios from "axios"
 import Spinner from '../components/Spinner';
+import ExportButton from '../components/ExportAsExcel'
+import ShowAlert from '../components/ShowAlert';
+
+
 const optionsPerPage = [2, 3, 4];
 
 const MakeSale = props => {
@@ -23,22 +27,31 @@ const MakeSale = props => {
   const [clients, setClients] = useState([])
 
   const getProducts = async () => {
+    try{
+      const res = await axios.get(
+        `${uri}/api/product/`
+      )
+     
+  
+      setProducts(res.data.products)
+  
+      setProductName(res.data.products[0]._id)
 
-    const res = await axios.get(
-      `${uri}/api/product/`
-    )
-   
+    }
+    catch(err){
+      catchWarning()
+    }
 
-    setProducts(res.data.products)
-
-    setProductName(res.data.products[0]._id)
-    // console.log("products here", res.data.products)
+    
 
 
   }
 
 
   const getClients = async () => {
+    try{
+
+    
     const res = await axios.get(
       `${uri}/api/client/*`
     )
@@ -47,6 +60,10 @@ const MakeSale = props => {
 
     setClients(res.data.clients)
     setClientName(res.data.clients[0]._id)
+    }
+    catch(err){
+      catchWarning()
+    }
 
 
   }
@@ -65,12 +82,19 @@ const MakeSale = props => {
       `/${props.filters.date}` +
       `/${props.filters.maxQuantity}` +
       `/${props.filters.maxTotal}`
+      try{
+
+      
 
     const res = await axios.get(getURI)
-    
-    console.log("uri",getURI)
+    res.data.sales.length === 0 ? searchWarning() : null
     setSales(res.data.sales)
-    setLoading(false)
+    
+      }
+      catch(err){
+        catchWarning()
+      }
+      setLoading(false)
   }
 
   useEffect(() => {
@@ -112,7 +136,18 @@ const MakeSale = props => {
   }
 
   const searchFunc = () => {
-    console.log(search); //printing search value for now
+    getSales()
+  }
+
+  const searchWarning = () => {
+    setAlertState(!alertState) 
+    setAlertTitle('Attention')
+    setAlertMsg('No Sales found!')
+  }
+  const catchWarning = () => {
+    setAlertState(!alertState) 
+    setAlertTitle('Attention')
+    setAlertMsg('Something went wrong. Please restart')
   }
 
 
@@ -161,52 +196,72 @@ const MakeSale = props => {
   }
 
   const addSale = () => {
-    setModalVisible(false); //closing modal on done for now
-
-    console.log('Printing productName', productName)
-
-    const body = {
-      productID: productName,
-      quantity: quantityVal,
-      total: totalAmount,
-      payment: paymentType,
-      clientID: clientName,
-
-      note : notes,
-      received: amountReceived,
-      isWarehouse: isWarehouse,
-      deliveryOrder: selectedDOrder,
-      warehouses: warehouseIdTicksQuant,
-      note: notes
+    if(quantityVal === '' || totalAmount === '' || amountReceived === '' || notes === ''){
+      setAlertTitle('Warning')
+      setAlertMsg('Input fields may be empty. Request could not be processed.')
+      show()
     }
+    else{
+      // setModalVisible(false); //closing modal on done for now
+      const body = {
+        productID: productName,
+        quantity: quantityVal,
+        total: totalAmount,
+        payment: paymentType,
+        clientID: clientName,
 
-
-    console.log(body)
-    let totalQuant = 0
-    // console.log(warehouseIdTicksQuant)
-    if (body.isWarehouse) {
-      totalQuant = sum(body.warehouses.quant)
-      console.log(totalQuant,'!!!!!!!!!!!!!!!!!!!!')
-      if (totalQuant != body.quantity)
-      {console.log("quantitie do not Match")
-      return
-    }
-    else if(body.total <= body.received && body.payment ==="Partial")
-    {console.log("payment type partial but amount greater then total")
-    return}
-    else if(body.total != body.received && body.payment ==="Full")
-    {console.log("payment type full nut amount recieved and total not equal")
-    return}
-    }
-
-
-    axios.post(`${uri}/api/sale`, body, {
-      headers: {
-        'Content-Type': 'application/json'
+        note : notes,
+        received: amountReceived,
+        isWarehouse: isWarehouse,
+        deliveryOrder: selectedDOrder,
+        warehouses: warehouseIdTicksQuant,
+        note: notes
       }
-    })
-      .then(res => getSales())
-      .catch(err => console.log(err))
+
+
+      let totalQuant = 0
+      if (body.isWarehouse) {
+        totalQuant = sum(body.warehouses.quant)
+        if (totalQuant != body.quantity){
+          setAlertTitle('Warning')
+          setAlertMsg('Quantities do not match. Request could not be processed.')
+          show()
+          return
+        }
+        else if(body.total <= body.received && body.payment ==="Partial"){
+          setAlertTitle('Warning')
+          setAlertMsg('Payment type partial but amount greater then total. Request could not be processed.')
+          show()
+          return
+        }
+        else if(body.total != body.received && body.payment ==="Full"){
+          setAlertTitle('Warning')
+          setAlertMsg('Payment type partial but amount greater then total. Request could not be processed.')
+          show()
+          return
+        }
+      }
+
+
+      axios.post(`${uri}/api/sale`, body, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+        .then(res => {
+          setAlertTitle('Success')
+          setAlertMsg('Request has been processed, Sale added.')
+          show()
+          setModalVisible(false)
+        })
+        .catch(err => {
+          setAlertTitle('Warning')
+          setAlertMsg('Request could not be processed.')
+          show()
+        })
+    }
+
+    
 
   }
 
@@ -248,6 +303,9 @@ const MakeSale = props => {
 
 
   const getStock = async () => {
+    try{
+
+    
     const res = await axios.get(
       `${uri}/api/product/stock/${productName}`
     )
@@ -274,6 +332,10 @@ const MakeSale = props => {
       quant: {...quantMap},
       ids: [...wareIDs]
     })
+  }
+  catch(err){
+    catchWarning()
+  }
 
     
   }
@@ -329,10 +391,18 @@ const MakeSale = props => {
     getStock()
   }
 
+  const [alertState, setAlertState] = useState(false)
+  const [alertTitle, setAlertTitle] = useState(``)
+  const [alertMsg, setAlertMsg] = useState(``)
+  const show = () => {
+    setAlertState(!alertState)
+  }
+
    return(
       // <KeyboardAvoidingView style = {styles.containerView} behavior = "padding">
       
-      <View>
+      <ScrollView>
+       <ShowAlert state={alertState} handleClose={show} alertTitle={alertTitle} alertMsg={alertMsg} style={styles.buttonModalContainer} />
         <Modal
             onSwipeComplete={() => setWarehouseModal(false)}
             swipeDirection="left"
@@ -342,25 +412,28 @@ const MakeSale = props => {
           >
              <View style={styles.centeredView}>
                 <View style={styles.modalView}>
-                  <Text style={styles.modalTitle}>Select Warehouse</Text>
+                  <Text style={styles.modalTitleNew}>Select Warehouse</Text>
                   {/* <Text style = {{color: '#006270',fontFamily: 'Roboto',fontWeight: 'bold', fontSize: Dimensions.get('window').height === 1232 ? 28 : 22, top: 15}}> Selling Quantity: {quantityVal}</Text>
                   <Text style = {{color: '#006270',fontFamily: 'Roboto',fontWeight: 'bold', fontSize: Dimensions.get('window').height === 1232 ? 28 : 22, top: 10}}> Selected Quantity: {quantityVal}</Text> */}
                   <ScrollView style = {styles.modalWarehouse}> 
+                  <View>
                     {
                       stock.warehouseStock !== undefined && stock.warehouseStock !== [] && stock.warehouseStock.map((record,i) => (
                         <View>
                             <TouchableOpacity onPress = {() => warehouseClicked(record.warehouse._id)}>
                               <View style = {styles.inputWarehouse}>
                                 <View style = {{flexDirection: 'row'}}>
-                                  <Text style={{fontSize:12}}>
-                                      Warehouse: {record.warehouse.name} --- Quantity: {record.stock}
+                                  <Text style={{fontSize:12,}}>
+                                      {record.warehouse.name} - Quantity: {record.stock}
                                   </Text>
+                                  <View style = {{bottom: Dimensions.get('window').height>900 ? 15: 5, left: 10 }}>
                                   {warehouseIdTicksQuant["ticks"][record.warehouse._id] === true ? (<FontAwesome
                                         name={"check"}
-                                        size={Dimensions.get('window').height > 900 ? 40 : 25}
+                                        size={Dimensions.get('window').height > 900 ? 30 : 25}
                                         color={"#008394"}
                                     />
                                   ) : (null)}
+                                  </View>
                                 </View>
                                 
                                 
@@ -377,6 +450,14 @@ const MakeSale = props => {
 
                       ))
                     }
+                    {
+                      (stock.warehouseStock !== undefined && stock.warehouseStock.length === 0 ) ?
+                      <Text style = {styles.inputWarehouse}>
+                        Nothing to show
+                      </Text>
+                      : (null)
+                    }
+                    </View>
 
             
                   </ScrollView> 
@@ -396,22 +477,22 @@ const MakeSale = props => {
           >
              <View style={styles.centeredView}>
                 <View style={styles.modalView}>
-                  <Text style={styles.modalTitle}>Select Order</Text>
+                  <Text style={styles.modalTitleNew}>Select Order</Text>
                   {/* <Text style = {{color: '#006270',fontFamily: 'Roboto',fontWeight: 'bold', fontSize: Dimensions.get('window').height === 1232 ? 28 : 22, top: 15}}> Selling Quantity: {quantityVal}</Text> */}
-                  <ScrollView style = {styles.modalBody}> 
+                  <ScrollView style = {styles.modalWarehouse}> 
                     {
                       stock.deliverOrderStocks !== undefined && stock.deliverOrderStocks !== [] && stock.deliverOrderStocks.map((record,i)=> ( 
                         !record.status &&  
                         <TouchableOpacity onPress = {() => setSelectedDOrder(record._id)}>
                           <View style = {styles.inputWarehouse}>
                             <View style = {{flexDirection: 'row'}}>
-                              <Text>
-                                  Supplier: {record.location} --- Quantity: {record.quantity}
+                              <Text style = {{fontSize: 12,}}>
+                                  {record.location} - Quantity: {record.quantity}
                               </Text>
-                              <View style = {{bottom: 3, left: 10}}>
+                              <View style = {{bottom: Dimensions.get('window').height>900 ? 15: 5, left: 10}}>
                                 {selectedDOrder === record._id ? (<FontAwesome
                                         name={"check"}
-                                        size={Dimensions.get('window').height > 900 ? 40 : 25}
+                                        size={Dimensions.get('window').height > 900 ? 30 : 25}
                                         color={"#008394"}
                                         
                                     />
@@ -428,6 +509,13 @@ const MakeSale = props => {
                        
                         
                       ))
+                    }
+                    {
+                      (stock.deliverOrderStocks !== undefined && stock.deliverOrderStocks.length === 0 ) ?
+                      <Text style = {styles.inputWarehouse}>
+                        Nothing to show
+                      </Text>
+                      : (null)
                     }
                     
                   </ScrollView> 
@@ -602,18 +690,26 @@ const MakeSale = props => {
         </View>
 
       </View>
-      <FilterButton page = "sale" getSales = {getSales}/>
+      <View style = {{flexDirection: 'row', justifyContent: 'center', paddingRight: 60 }}> 
+        <View>
+          <FilterButton page = "sale" getSales = {getSales}/>
+        </View>
+        <View style = {{marginTop: 25}}>
+          <ExportButton data={sales} title={'sales.xlsx'}/>
+        </View>
+      </View>
       <Spinner loading={loading} />
-      {!loading && <ScrollView>
+       
 
-        <DataTable>
+        <DataTable style = {{marginTop:15}}>
           <DataTable.Header>
             <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Product</Text></DataTable.Title>
             <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Quantity</Text></DataTable.Title>
             <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Amount</Text></DataTable.Title>
             <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Client</Text></DataTable.Title>
           </DataTable.Header>
-
+          {!loading && <ScrollView>
+            <View>
           {
             sales.map((sale, i) => (
               <TouchableOpacity onPress={() => onPressModal(sale)}>
@@ -627,23 +723,10 @@ const MakeSale = props => {
             ))
 
           }
-          <DataTable.Pagination
-            page={page}
-            numberOfPages={3}
-            onPageChange={(page) => setPage(page)}
-            label="1-2 of 6"
-            optionsPerPage={optionsPerPage}
-            itemsPerPage={itemsPerPage}
-            setItemsPerPage={setItemsPerPage}
-            showFastPagination
-            optionsLabel={'Rows per page'}
-          />
+          </View>
+          </ScrollView>}
         </DataTable>
-
-      </ScrollView>
-      }
-    </View>
-    // </KeyboardAvoidingView>
+    </ScrollView>
 
 
   )
@@ -698,10 +781,18 @@ const styles = StyleSheet.create({
     fontSize: Dimensions.get('window').height === 1232 ? 36 : 28,
     top: 20,
   },
+  modalTitleNew: {
+    color: '#006270',
+    fontSize: 30,
+    fontFamily: 'Roboto',
+    fontWeight: 'bold',
+    fontSize: Dimensions.get('window').height === 1232 ? 36 : 28,
+    top: 0,
+  },
   modalStyle: {
     backgroundColor: "#fff",
     width: Dimensions.get('window').height > 900 ? 600 : 320,
-    height: Dimensions.get('window').height > 900 ? 700 : 620,
+    height: Dimensions.get('window').height > 900 ? 700 : 640,
     borderWidth: 2,
     borderRadius: 20,
     marginBottom: 20,
@@ -720,7 +811,7 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     flexDirection: 'row',
-    marginTop: Dimensions.get('window').height > 900 ? 80 : 60,
+    marginTop: Dimensions.get('window').height > 900 ? 30 : 15,
     borderRadius: 40,
     backgroundColor: '#00E0C7',
     paddingVertical: 12,
@@ -779,13 +870,13 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderRadius: 40,
     marginBottom: 20,
-    fontSize: 12,
+    fontSize: 15,
     borderColor: "#008394",
     height: 40,
     padding: 10,
   },
   inputWarehouse: {
-    width: Dimensions.get('window').height>900 ? Dimensions.get('window').width* 0.65 : Dimensions.get('window').width*0.6,
+    width: Dimensions.get('window').height>900 ? Dimensions.get('window').width* 0.60 : Dimensions.get('window').width*0.6,
     borderColor: 'gray',
     borderWidth: 2,
     borderRadius: 40,
@@ -867,7 +958,7 @@ const styles = StyleSheet.create({
     paddingHorizontal:10
   },
   modalWarehouse:{
-    paddingVertical:Dimensions.get('window').height < 900 ? Dimensions.get('window').height * 0.05 : Dimensions.get('window').height * 0.1,
+    paddingVertical:Dimensions.get('window').height < 900 ? Dimensions.get('window').height * 0.05 : Dimensions.get('window').height * 0.05,
   },
   modalView: {
     margin: 20,

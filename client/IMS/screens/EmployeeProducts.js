@@ -1,42 +1,89 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react'
-import { StyleSheet, Text, View, Button, Dimensions, TextInput, TouchableOpacity, KeyboardAvoidingView, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, Button, Dimensions, TextInput, TouchableOpacity, KeyboardAvoidingView, ScrollView, Pressable, Image } from 'react-native';
 import HeaderButton from '../components/HeaderButton';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { FontAwesome } from '@expo/vector-icons';
 import { DataTable } from 'react-native-paper';
 import Modal from 'react-native-modal';
-import TableDetailModal from '../components/TableDetailModal';
+import ProductDetailModal from '../components/ProductDetailModal';
 import FilterButton from '../components/FilterButton';
-import {Picker} from '@react-native-picker/picker';
-import DropDownPicker from 'react-native-dropdown-picker';
+import { Picker } from '@react-native-picker/picker';
 import { uri } from '../api.json'
 import axios from "axios"
+import { connect } from 'react-redux'
+import Spinner from '../components/Spinner';
+import ShowAlert from '../components/ShowAlert';
 
 
 const optionsPerPage = [2, 3, 4];
 
-const EmployeeProducts = props => {
+const Product = props => {
 
 
   const [products, setProducts] = useState([])
-
-  const [filters, setFilters] = useState({
-    page: 1,
-    query: '*',
-    colour: '*',
-    brand: '*',
-    ware: '*',
-    sort: '*',
-    sortBy: '*'
+  const [loading, setLoading] = useState(true)
+  const [brandsAndColours, setBrandAndColours] = useState({
+    brands: [],
+    colours: []
   })
 
+
+
+  const [touchedProduct, setTouchedProduct] = useState([])
+  const catchWarning = () => {
+    setAlertState(!alertState) 
+    setAlertTitle('Attention')
+    setAlertMsg('Something went wrong. Please restart')
+  }
+  const [query, setQuery] = useState('*')
+
   const getProducts = async () => {
+    setLoading(true)
+    try{
+
+    
     const res = await axios.get(
-      `${uri}/api/product/${filters.page}/${filters.query}/${filters.colour}/${filters.brand}/${filters.ware}/${filters.sort}/${filters.sortBy}`
+      `${uri}/api/product` +
+      `/${props.filters.page}` +
+      `/${query}` +
+      `/${props.filters.colour.join(',')}` +
+      `/${props.filters.brand.join(',')}` +
+      `/${props.filters.ware.join(',')}` +
+      `/${props.filters.date}/${props.filters.quantity}` +
+      `/${props.filters.price}/${props.filters.sort}` +
+      `/${props.filters.sortBy}`
     )
 
-    setProducts(res.data.products)
+    setProducts(res.data.products.reverse())
+    }
+    catch(err){
+      catchWarning()
+    }
+    setLoading(false)
+  }
+
+
+  const getBrandColours = async () => {
+    try{
+    
+    
+    const res = await axios.get(
+      `${uri}/api/product/cb`
+    )
+
+    setBrandAndColours(res.data)
+
+    setColor(res.data.colours[0]._id)
+    setBrand(res.data.brands[0]._id)
+    }
+    catch(err){
+      catchWarning()
+    }
+
+    //console.log(res.data)
+
+
   }
 
 
@@ -64,205 +111,116 @@ const EmployeeProducts = props => {
   const [search, setSearch] = React.useState(``) //for keeping track of search
   const onChangeSearch = (searchVal) => { //function to keep track of search as the user types
     setSearch(searchVal);
-    console.log(search);
+    let q = searchVal.trim()
+    setQuery(q === '' ? '*' : q)
+    // setFilters({ ...filters, query: searchVal })
+    // console.log(search);
   }
 
   const searchFunc = () => {
-    console.log(search); //printing search value for now
+    //printing search value for now
+    getProducts()
   }
 
 
   // make a sale variables below:
   const [serialNo, setSerialNo] = React.useState(``)
   const [productName, setProductName] = React.useState(``)
-  const [quantityVal, setQuantityVal] = React.useState(0)
   const [amountVal, setAmountVal] = React.useState(0)
   const [color, setColor] = React.useState(``)
   const [brand, setBrand] = React.useState(``)
-  const [warehouse, setWarehouse] = React.useState(``)
   const [description, setDescription] = React.useState(``)
-
-  const onChangeSerialNo = (serial) => {
-    setSerialNo(serial);
-  }
-
-  const onChangeProductName = (prodName) => {
-    setProductName(prodName);
-  }
-
-  const onChangeQuantity = (quant) => {
-    setQuantityVal(quant);
-  }
-
-  const onChangeAmount = (amount) => {
-    setAmountVal(amount);
-  }
-
-  const onChangeColor = (colorName) => {
-    console.log(colorname)
-    setColor(colorName);
-  }
-
-  const onChangeBrand = (brandName) => {
-    setBrand(brandName);
-  }
-
-  const onChangeWarehouse = (warehouseName) => {
-    setWarehouse(warehouseName);
-  }
-
-  const onChangeDescription = (desc) => {
-    setDescription(desc);
-  }
-
   const addProduct = () => {
-    setModalVisible(false); //closing modal on done for now
+    // setModalVisible(false); //closing modal on done for now
+    // // console.log(color, brand)
+    if(serialNo === '' || productName === '' || amountVal === '' || description === ''){
+      setAlertTitle('Warning')
+      setAlertMsg('Input fields may be empty. Request could not be processed.')
+      show()
+    }
+    else{
+      const body = {
+        title: productName,
+        serial: serialNo,
+        brandID: brand,
+        colourID: color,
+        description,
+        price: amountVal
+      }
+  
+      axios.post(`${uri}/api/product`, body, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+        .then(res => {
+          getProducts()
+          setAlertTitle('Success')
+          setAlertMsg('Request has been processed, Product added.')
+          show()
+          setModalVisible(false)
+        })
+        .catch(err => {
+          setAlertTitle('Warning')
+          setAlertMsg('Request could not be processed.')
+          show()
+        })
+    }
+    
+
   }
+
+
+
 
 
   const [isTableDetailModalVisible, setTableDetailModalVisible] = React.useState(false);
+
+  const onPressModal = (prod) => {
+    setTableDetailModalVisible(true),
+      setTouchedProduct(prod)
+  }
 
   const handleClose = () => {
     setTableDetailModalVisible(false)
   }
 
+
   
-  const [openColor, setOpenColor] = useState(false);
-  const [openBrand, setOpenBrand] = useState(false);  
-  const [openWarehouse, setOpenWarehouse] = useState(false);
-  const [itemsColor, setItemsColor] = useState([
-    {label: 'Transparent', value: 'Transparent'},
-    {label: 'White', value: 'transparent'}
-  ]);
-  const [itemsBrand, setItemsBrand] = useState([
-    {label: 'PVC', value: 'PVC'},
-    {label: 'PVCC', value: 'PVCC'}
-  ]);
-  const [itemsWarehouse, setItemsWarehouse] = useState([
-    {label: '1b', value: '1b'},
-    {label: '1c', value: '1c'},
-    {label: '1d', value: '1d'},
-  ]);
+  
+  
+
+
+  
+
+  const showAddProductForm = () => {
+
+    getBrandColours().then(() => setModalVisible(true))
+  }
+
+  const [alertState, setAlertState] = useState(false)
+  const [alertTitle, setAlertTitle] = useState(``)
+  const [alertMsg, setAlertMsg] = useState(``)
+  const show = () => {
+    setAlertState(!alertState)
+  }
 
 
   return (
-    // <KeyboardAvoidingView style = {styles.containerView} behavior = "padding">
-
-    <View>
-      <Modal
-        onSwipeComplete={() => setModalVisible(false)}
-        swipeDirection="left"
-        presentationStyle="overFullScreen"
-        transparent
-        visible={isModalVisible}>
-
-        <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', }}>
-          <ScrollView>
-            <View style={styles.modalStyle}>
-              <View style={{ justifyContent: 'center', alignItems: 'center', }}>
-                <Text style={styles.modalTitle}>Add a Product</Text>
-                <View>
-                  <TextInput onChangeText={onChangeSerialNo} style={styles.input} placeholder="Serial" autoCorrect={false} />
-                  <TextInput onChangeText={onChangeProductName} style={styles.input} placeholder="Product" autoCorrect={false} />
-                  <TextInput onChangeText={onChangeAmount} style={styles.input} placeholder="Amount" autoCorrect={false} />
-                    <TextInput multiline={true} numberOfLines={5} onChangeText={onChangeDescription} style={styles.input} placeholder="Description" autoCorrect={false} />
-                  <View style = {{borderWidth: 2, borderRadius: 40,borderColor: "#008394",width: Dimensions.get('window').width * 0.65, top: 60, height: 40, fontSize: 8,  }}>
-                    <Picker
-                      style = {{top:6, color: 'grey', fontFamily: 'Roboto'}}
-                      itemStyle={{ fontWeight: '100' }}
-                      selectedValue = {color}
-                      onValueChange={(itemValue, itemIndex) =>
-                        setColor(itemValue)
-                      }
-                    >
-                      <Picker.Item label="Transparent" value="Transparent" />
-                      <Picker.Item label="White" value="White" />
-                      <Picker.Item label="Black" value="Black" />
-                      <Picker.Item label="Blue" value="Blue" />
-                      <Picker.Item label="Brown" value="Brown" />
-                      <Picker.Item label="Pink" value="Pink" />
-                    </Picker>
-
-                  </View>
-                  <View style = {{borderWidth: 2, borderRadius: 40,borderColor: "#008394",width: Dimensions.get('window').width * 0.65, top: 80, height: 40, fontSize: 8,  }}>
-                    <Picker
-                      style = {{top:6, color: 'grey', fontFamily: 'Roboto'}}
-                      //itemStyle={{ transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }]}}
-                      itemStyle={{ fontWeight: '100' }}
-                      
-                      selectedValue = {brand}
-                      onValueChange={(itemValue, itemIndex) =>
-                        setBrand(itemValue)
-                      }
-                    >
-                      <Picker.Item label="PVC" value="PVC" />
-                      <Picker.Item label="PVCC" value="PVCC" />
-                      
-                    </Picker>
-
-                  </View>
-                  <View style = {{borderWidth: 2, borderRadius: 40,borderColor: "#008394",width: Dimensions.get('window').width * 0.65, top: 100, height: 40, fontSize: 8,  }}>
-                    <Picker
-                      style = {{top:6, color: 'grey', fontFamily: 'Roboto'}}
-                      //itemStyle={{ transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }]}}
-                      itemStyle={{  }}
-                      selectedValue = {warehouse}
-                      onValueChange={(itemValue, itemIndex) =>
-                        setWarehouse(itemValue)
-                      }
-                    >
-                      <Picker.Item label="1b" value="1b" />
-                      <Picker.Item label="1c" value="1c" />
-                      <Picker.Item label="1d" value="1d" />
-                      
-                    </Picker>
-
-                  </View>
-                  
-                  
-                </View>
-
-                <View style={{ flexDirection: 'row', alignItems: 'center', top: 105 }}>
-                  <TouchableOpacity style={{ alignSelf: 'flex-start' }} onPress={() => { setModalVisible(false) }}>
-                    <View>
-                      <View style={styles.buttonModalContainerCross}>
-                        <View>
-                          <Text style={styles.buttonModalText}>Cancel</Text>
-                        </View>
-                      </View>
-                    </View>
-                  </TouchableOpacity>
-                  <TouchableOpacity onPress={() => { addProduct() }}>
-                    <View>
-                      <View style={styles.buttonModalContainer}>
-                        <View>
-                          <Text style={styles.buttonModalText}>Done</Text>
-                        </View>
-                      </View>
-                    </View>
-                  </TouchableOpacity>
-                </View>
-              </View>
-            </View>
-          </ScrollView>
-        </View>
-
-      </Modal>
-
-      <TableDetailModal state={isTableDetailModalVisible} handleClose={handleClose} title='Employee Information' name='Raahem Asghar' email='raahemasghar97@gmail.com' occupation="Employee" />
+    <ScrollView>
+      <ShowAlert state={alertState} handleClose={show} alertTitle={alertTitle} alertMsg={alertMsg} style={styles.buttonModalContainer} />
+      <ProductDetailModal state={isTableDetailModalVisible} handleClose={handleClose} object={touchedProduct} title='Product Detail' getProducts={getProducts} occupation="Employee"/>
       <View style={styles.screen}>
         <View>
-          <Text style={styles.title}>Employee Products</Text>
+          <Text style={styles.title}>Products</Text>
         </View>
       </View>
       <View style={styles.containerButton}>
-          <View style={styles.buttonContainer}>
-          </View>
         <View style={{ flexDirection: 'row', justifyContent: 'center', }}>
           <View style={styles.searchBar}>
             <TextInput onChangeText={onChangeSearch} style={styles.buttonInput} placeholder="type here..." autoCorrect={false} />
           </View>
-          <View style={{ top: 14 }}>
+          <View style={{ top: 15 }}>
             <TouchableOpacity onPress={() => { searchFunc() }}>
               <View style={styles.searchButton}>
                 <FontAwesome
@@ -278,55 +236,52 @@ const EmployeeProducts = props => {
         </View>
 
       </View>
-      <FilterButton />
-      <View style={{ flexDirection: 'row', }}>
-        {/* <ScrollView horizontal = {true}> */}
+      <FilterButton getProducts={getProducts} page="product" />
+      <Spinner loading={loading} />
+      
         <DataTable>
           <DataTable.Header>
             <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Serial No.</Text></DataTable.Title>
             <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Product</Text></DataTable.Title>
             <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Brand</Text></DataTable.Title>
-            <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Color</Text></DataTable.Title>  
+            <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Color</Text></DataTable.Title>
+            {/* <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Quantity</Text></DataTable.Title> */}
+            <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Amount</Text></DataTable.Title>
+            {/* <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Warehouse</Text></DataTable.Title> */}
+
           </DataTable.Header>
 
-
+          {!loading && <ScrollView>
+            <View>
           {
             products.map((product, i) => (
-              <TouchableOpacity key={i} onPress={() => setTableDetailModalVisible(true)}>
+              <TouchableOpacity key={i} onPress={() => onPressModal(product)}>
                 <DataTable.Row>
                   <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{product.serial === undefined ? 0 : product.serial}</Text></DataTable.Cell>
                   <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{product.title}</Text></DataTable.Cell>
                   <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{product.brand.title === undefined ? '--' : product.brand.title}</Text></DataTable.Cell>
                   <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{product.colour.title === undefined ? '--' : product.colour.title}</Text></DataTable.Cell>
+                  <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{product.price === undefined ? 0 : product.price}</Text></DataTable.Cell>
+                  {/* <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{product.serial}</Text></DataTable.Cell> */}
                 </DataTable.Row>
               </TouchableOpacity>
 
             ))
           }
-          <DataTable.Pagination
-            page={page}
-            numberOfPages={3}
-            onPageChange={(page) => setPage(page)}
-            label="1-2 of 6"
-            optionsPerPage={optionsPerPage}
-            itemsPerPage={itemsPerPage}
-            setItemsPerPage={setItemsPerPage}
-            showFastPagination
-            optionsLabel={'Rows per page'}
-          />
+          </View>
+          </ScrollView>}
+
+          
         </DataTable>
 
-        {/* </ScrollView> */}
-      </View>
-    </View>
-    // </KeyboardAvoidingView>
-
+      
+    </ScrollView>
 
   )
 }
 
 
-EmployeeProducts.navigationOptions = navigationData => {
+Product.navigationOptions = navigationData => {
   return {
     headerTitle: 'Zaki Sons',
     headerTitleAlign: 'center',
@@ -348,7 +303,13 @@ EmployeeProducts.navigationOptions = navigationData => {
   };
 };
 
-export default EmployeeProducts
+const mapStateToProps = (state) => (
+  {
+    filters: state.productFilters
+  }
+)
+
+export default connect(mapStateToProps)(Product)
 
 
 const styles = StyleSheet.create({
@@ -390,8 +351,9 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     flexDirection: 'row',
-    marginTop: Dimensions.get('window').height > 900 ? 50 : 25,
+    marginTop: Dimensions.get('window').height > 900 ? 50 : 40,
     borderRadius: 40,
+    backgroundColor: '#00E0C7',
     paddingVertical: 12,
     paddingHorizontal: 32,
     left: 15
@@ -448,9 +410,9 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderRadius: 40,
     marginBottom: 20,
-    fontSize: 12,
+    fontSize: 15,
     borderColor: "#008394",
-    top: 60,
+    //top: 60,
     height: 40,
     padding: 10,
   },
@@ -537,15 +499,38 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 35,
     alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
+    borderColor: "#008394",
+    borderWidth: 2,
     width: Dimensions.get('window').height > 900 ? Dimensions.get('window').width * 0.7 : Dimensions.get('window').width * 0.80,
     height: Dimensions.get('window').height > 900 ? Dimensions.get('window').height * 0.5 : Dimensions.get('window').height * 0.60
+  },
+  addButton: {
+    borderRadius: 40,
+    backgroundColor: '#00E0C7',
+    height: 24,
+    width: 80,
+  },
+  modalbuttonText: {
+    fontWeight: 'bold',
+    color: 'white',
+    fontSize: 12,
+    marginTop: 3.5,
+  },
+  modalBody: {
+    paddingVertical: '30%',
+    paddingHorizontal: 10
+  },
+  backButtonModalContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignContent: 'space-between',
+    borderRadius: 40,
+    backgroundColor: '#008394',
+    paddingVertical: 8,
+    paddingHorizontal: 24,
+    top: Dimensions.get('window').height > 900 ? (Dimensions.get('window').width > 480 ? 35 : null) : null,
+    margin: 20,
+    display: 'flex',
+
   },
 })

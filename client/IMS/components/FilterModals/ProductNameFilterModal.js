@@ -135,10 +135,13 @@ const ProductNameFilterModal = props => {
 
                         </View>
 
-
+                        <ScrollView>
+                            <View> 
                         {
                             showProducts()
                         }
+                            </View>
+                        </ScrollView>
 
 
                     </View>

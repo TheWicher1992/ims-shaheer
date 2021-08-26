@@ -11,6 +11,7 @@ import { uri } from '../api.json'
 import axios from "axios"
 import Spinner from '../components/Spinner';
 import ShowAlert from '../components/ShowAlert'
+import ExportButton from '../components/ExportAsExcel'
 
 const optionsPerPage = [2, 3, 4];
 
@@ -39,22 +40,37 @@ const Stocks = props => {
     setAlertMsg('Client with this name already exists.')
     show()
   }
+
+
   useEffect(() => {
     setModalVisible(props.state);
   }, [props.state]);
+
+
   const getStock = async () => {
     setLoading(true)
-    const res = await axios.get(
-      `${uri}/api/product/stock/${filters.page}/${filters.query}/${filters.sort}/${filters.sortBy}`
-    )
-    res.data.stocks.length === 0 ? searchWarning(): null
-    setProducts(res.data.stocks.reverse())
+    try {
+      const res = await axios.get(
+        `${uri}/api/product/stock/${filters.page}/${filters.query}/${filters.sort}/${filters.sortBy}`
+      )
+      res.data.stocks.length === 0 ? searchWarning(): null
+      setProducts(res.data.stocks.reverse())
+    }
+    catch(err){
+        catchWarning()
+    }
     setLoading(false)
     //setSelectedProduct(res.data.warehouse[0]._id)
   }
   useEffect(() => {
     getStock()
   }, [])
+
+  const catchWarning = () => {
+    setAlertState(!alertState) 
+    setAlertTitle('Attention')
+    setAlertMsg('Something went wrong. Please restart')
+  }
 
 
   const [page, setPage] = React.useState(0); //for pages of table
@@ -113,7 +129,7 @@ const Stocks = props => {
 
   return (
     // <KeyboardAvoidingView style = {styles.containerView} behavior = "padding">
-    <View>
+    <ScrollView>
       <ShowAlert state={alertState} handleClose={show} alertTitle={alertTitle} alertMsg={alertMsg} style={styles.buttonModalContainer} />
       <StockModal state={isTableDetailModalVisible} handleClose={handleClose} object={touchedProduct !== [] ? touchedProduct : null} title='Stock Detail' getStock={getStock} />
       <View style={styles.screen}>
@@ -128,7 +144,7 @@ const Stocks = props => {
           <View style={styles.searchBar}>
             <TextInput onChangeText={onChangeSearch} style={styles.buttonInput} placeholder="type here..." autoCorrect={false} />
           </View>
-          <View style={{ top: 14 }}>
+          <View style={{ top: 15 }}>
             <TouchableOpacity onPress={() => { searchFunc() }}>
               <View style={styles.searchButton}>
                 <FontAwesome
@@ -144,10 +160,13 @@ const Stocks = props => {
         </View>
 
       </View>
-      <View style={{ marginTop: 20 }}/>
+      <View style = {{bottom: 40}} >
+        <ExportButton data={products} title={'stocks.xlsx'}/>
+      </View>
+      <View/>
       <Spinner loading={loading} />
-      {!loading && <ScrollView style={{ top: 20 }}>
-        <DataTable>
+      
+        <DataTable style = {{bottom: 30}}>
           <DataTable.Header>
             <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Serial No.</Text></DataTable.Title>
             <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Product</Text></DataTable.Title>
@@ -156,7 +175,8 @@ const Stocks = props => {
 
           </DataTable.Header>
 
-
+          {!loading &&<ScrollView>
+            <View>
           {
             products.map((product, i) => (
               <TouchableOpacity key={i} onPress={() => onPressModal(product)}>
@@ -170,10 +190,12 @@ const Stocks = props => {
 
             ))
           }
+            </View>
+          </ScrollView>}
         </DataTable>
 
-      </ScrollView>}
-    </View>
+      
+    </ScrollView>
 
 
 
@@ -214,6 +236,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Roboto',
     fontWeight: 'bold',
     fontSize: Dimensions.get('window').height === 1232 ? 36 : 28,
+    bottom: 20
   },
   modalTitle: {
     color: '#006270',
@@ -296,6 +319,7 @@ const styles = StyleSheet.create({
   containerButton: {
     alignItems: 'flex-start',
     justifyContent: 'flex-start',
+    bottom: 60
   },
   input: {
     width: Dimensions.get('window').width * 0.65,

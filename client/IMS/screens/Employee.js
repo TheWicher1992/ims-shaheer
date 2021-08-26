@@ -67,6 +67,11 @@ const Employee = props => {
   const show = () => {
     setAlertState(!alertState)
   }
+  const catchWarning = () => {
+    setAlertState(!alertState) 
+    setAlertTitle('Attention')
+    setAlertMsg('Something went wrong. Please restart')
+  }
   const setError = () => {
     setAlertTitle('Error')
     setAlertMsg('User already exists.')
@@ -139,9 +144,15 @@ const Employee = props => {
 
   const getEmployees = async () => {
     setLoading(true)
-    const res = await axios.get(`${uri}/api/auth/all`)
+    try{
+      const res = await axios.get(`${uri}/api/auth/all`)
     setEmployees(res.data.employees)
     setAdmins(res.data.admins)
+    }
+    catch(err){
+      catchWarning()
+    }
+    
     setLoading(false)
   }
 
@@ -249,14 +260,15 @@ const Employee = props => {
       </View>
       <ExportButton data = {employees} title = "Employee.xlxs" />
       <Spinner loading={loading} />
-      {!loading && <View>
+      <View>
         <DataTable style={{ top: 10 }}>
           <DataTable.Header>
             {/* <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Email</Text></DataTable.Title> */}
             <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Username</Text></DataTable.Title>
             <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Occupation</Text></DataTable.Title>
           </DataTable.Header>
-
+          {!loading && <ScrollView>
+            <View>
           {
             employees.map((employee, i) => (
               <TouchableOpacity key={i} onPress={() => onPressModal(employee)}>
@@ -279,21 +291,11 @@ const Employee = props => {
 
             )))
           }
-
-          {/* <DataTable.Pagination
-              page={page}
-              numberOfPages={3}
-              onPageChange={(page) => setPage(page)}
-              label="1-2 of 6"
-              optionsPerPage={optionsPerPage}
-              itemsPerPage={itemsPerPage}
-              setItemsPerPage={setItemsPerPage}
-              showFastPagination
-              optionsLabel={'Rows per page'}
-            /> */}
+          </View>
+          </ScrollView>}
         </DataTable>
 
-      </View>}
+      </View>
     </ScrollView>
     // </KeyboardAvoidingView>
 

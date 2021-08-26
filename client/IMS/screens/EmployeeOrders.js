@@ -40,29 +40,43 @@ const DeliveryOrders = props => {
 
   const getOrders = async () => {
     setLoading(true)
+    try{    
     const res = await axios.get(
       `${uri}/api/order/${Pfilters.page}/${query}/${Pfilters.client}/${Pfilters.product}/${Pfilters.sort}/${Pfilters.sortBy}`
     )
-
     setOrders(res.data.deliveryOrder)
+    }
+    catch(err){
+      catchWarning()
+    }
     setLoading(false)
+  }
+  const catchWarning = () => {
+    setAlertState(!alertState) 
+    setAlertTitle('Attention')
+    setAlertMsg('Something went wrong. Please restart')
   }
 
   const getProducts = async () => {
-    const res = await axios.get(
-      `${uri}/api/product/`
-    )
-
-
-    setProducts(res.data.products)
-    setProductName(res.data.products[0]._id)
-
-
-
+    try{
+      const res = await axios.get(
+        `${uri}/api/product/`
+      )
+  
+  
+      setProducts(res.data.products)
+      setProductName(res.data.products[0]._id)
+    }
+    catch(err){
+      catchWarning()
+    }
   }
 
 
   const getClients = async () => {
+    try{
+
+    
     const res = await axios.get(
       `${uri}/api/client/*`
     )
@@ -70,7 +84,10 @@ const DeliveryOrders = props => {
 
     setClients(res.data.clients)
     setClientName(res.data.clients[0]._id)
-
+    }
+    catch(err){
+      catchWarning()
+    }
 
   }
 
@@ -124,64 +141,12 @@ const DeliveryOrders = props => {
   const [location, setLocation] = React.useState(``)
   const [clientName, setClientName] = React.useState(``)
   const [notes, setNotes] = React.useState(``)
-
-  const onChangeQuantity = (quant) => {
-    setQuantityVal(quant);
-  }
-
-
-  const onChangeLocation = (locationVal) => {
-    setLocation(locationVal);
-  }
-
-  const onChangeNotes = (noteVal) => {
-    setNotes(noteVal);
-  }
-
   const [alertState, setAlertState] = useState(false)
   const [alertTitle, setAlertTitle] = useState(``)
   const [alertMsg, setAlertMsg] = useState(``)
   const show = () => {
     setAlertState(!alertState)
   }
-
-
-  const addDeliveryOrder = () => {
-    if(quantityVal === '' || notes === '' || location === ''){
-      setAlertTitle('Warning')
-      setAlertMsg('Input fields may be empty. Request could not be processed.')
-      show()
-    }
-    else{
-      const body = {
-        productID: productName,
-        quantity: quantityVal,
-        location: location,
-        clientID: clientName,
-        note: notes
-      }
-  
-      axios.post(`${uri}/api/order`, body, {
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      })
-        .then(res => {
-          getOrders()
-          setAlertTitle('Success')
-          setAlertMsg('Request has been processed, Delivery Order added.')
-          show()
-          setModalVisible(false)
-        })
-        .catch(err => {
-          setAlertTitle('Warning')
-          setAlertMsg('Request could not be processed.')
-          show()
-        })
-    }
-    
-  }
-
 
   const [isTableDetailModalVisible, setTableDetailModalVisible] = React.useState(false);
 
@@ -195,7 +160,7 @@ const DeliveryOrders = props => {
   return (
     // <KeyboardAvoidingView style = {styles.containerView} behavior = "padding">
 
-    <View>
+    <ScrollView>
       <ShowAlert state={alertState} handleClose={show} alertTitle={alertTitle} alertMsg={alertMsg} style={styles.buttonModalContainer} />
       <DeliveryOrderModal state={isTableDetailModalVisible} handleClose={handleClose} title='Delivery Information' object={touchedOrder === [] ? [] : touchedOrder} getOrders={getOrders} />
       <View style={styles.screen}>
@@ -210,7 +175,7 @@ const DeliveryOrders = props => {
           <View style={styles.searchBar}>
             <TextInput onChangeText={onChangeSearch} style={styles.buttonInput} placeholder="type here..." autoCorrect={false} />
           </View>
-          <View style={{ top: 14 }}>
+          <View style={{ top: 15 }}>
             <TouchableOpacity onPress={() => { searchFunc() }}>
               <View style={styles.searchButton}>
                 <FontAwesome
@@ -230,9 +195,9 @@ const DeliveryOrders = props => {
       {/* <FilterButton />  */}
                       
       <Spinner loading={loading} />
-      {!loading && <ScrollView style = {{marginTop: 40}}>
+      
 
-        <DataTable>
+        <DataTable style = {{bottom: 30}}>
           <DataTable.Header>
             <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Product</Text></DataTable.Title>
             <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Client</Text></DataTable.Title>
@@ -240,7 +205,9 @@ const DeliveryOrders = props => {
             <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Location</Text></DataTable.Title>
             <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Status</Text></DataTable.Title>
           </DataTable.Header>
-
+          {!loading && <ScrollView>
+            <View>
+              
           {
             orders.map((order, i) => (
               <TouchableOpacity key={i} onPress={() => onPressModal(order)}>
@@ -255,11 +222,13 @@ const DeliveryOrders = props => {
             ))
 
           }
+          
+          </View>
+          </ScrollView>}
         </DataTable>
 
-      </ScrollView>
-      }
-    </View>
+      
+    </ScrollView>
     // </KeyboardAvoidingView>
 
 
@@ -299,6 +268,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Roboto',
     fontWeight: 'bold',
     fontSize: Dimensions.get('window').height === 1232 ? 36 : 28,
+    bottom: 25
   },
   modalTitle: {
     color: '#006270',
@@ -347,7 +317,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
     //top: 45,
     margin: 20,
-    display: 'flex'
+    display: 'flex',
   },
   buttonModalContainerCross: {
     justifyContent: 'center',
@@ -380,6 +350,7 @@ const styles = StyleSheet.create({
   containerButton: {
     alignItems: 'flex-start',
     justifyContent: 'flex-start',
+    bottom: 70,
   },
   input: {
     width: Dimensions.get('window').width * 0.65,
