@@ -29,11 +29,18 @@ const Warehouse = props => {
 
   const getWarehouses = async () => {
     setLoading(true)
+    try{
+
+    
     const res = await axios.get(
       `${uri}/api/warehouse/${filters.page}/${filters.query}/${filters.sort}/${filters.sortBy}`
     )
     res.data.warehouse.length === 0 ? searchWarning(): null
     setWarehouses(res.data.warehouse.reverse())
+    }
+    catch(err){
+      catchWarning()
+    }
     setLoading(false)
   }
   const [alertState, setAlertState] = useState(false)
@@ -81,6 +88,11 @@ const Warehouse = props => {
   const searchFunc = () => {
     //console.log(search); //printing search value for now
     getWarehouses();
+  } 
+  const catchWarning = () => {
+    setAlertState(!alertState) 
+    setAlertTitle('Attention')
+    setAlertMsg('Something went wrong. Please restart')
   }
 
 
@@ -106,31 +118,7 @@ const Warehouse = props => {
     setStock(stocks);
   }
 
-  const addWarehouse = async () => {
-
-    const body = {
-      name: warehouseName,
-      totalProducts: totalProducts,
-      totalStock: stock
-    }
-
-    await axios.post(`${uri}/api/warehouse`, body,
-      {
-        headers: {
-          "Content-Type": "application/json"
-        }
-      }
-
-    )
-      .then(() => {
-      setAlertTitle('Success');
-      setAlertMsg('Warehouses Added Successfully');
-      show()})
-      .catch(err => setError())
-
-    getWarehouses()
-    setModalVisible(false); //closing modal on done for now
-  }
+  
 
   const [itemsPerPage, setItemsPerPage] = React.useState(optionsPerPage[0]); //for items per page on table
   const [touchedWarehouse, setTouchedWarehouse] = React.useState([])

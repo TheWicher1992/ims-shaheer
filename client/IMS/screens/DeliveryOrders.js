@@ -39,18 +39,32 @@ const DeliveryOrders = props => {
     sortBy: '*'
   })
 
-
+  const catchWarning = () => {
+    setAlertState(!alertState) 
+    setAlertTitle('Attention')
+    setAlertMsg('Something went wrong. Please restart')
+  }
   const getOrders = async () => {
     setLoading(true)
+    try{
+
+    
     const res = await axios.get(
       `${uri}/api/order/${Pfilters.page}/${query}/${Pfilters.client}/${Pfilters.product}/${Pfilters.sort}/${Pfilters.sortBy}`
     )
 
     setOrders(res.data.deliveryOrder)
+    }
+    catch(err){
+      catchWarning()
+    }
     setLoading(false)
   }
 
   const getProducts = async () => {
+    try{
+
+    
     const res = await axios.get(
       `${uri}/api/product/`
     )
@@ -58,6 +72,10 @@ const DeliveryOrders = props => {
 
     setProducts(res.data.products)
     setProductName(res.data.products[0]._id)
+    }
+    catch(err){
+      catchWarning()
+    }
 
 
 
@@ -65,6 +83,9 @@ const DeliveryOrders = props => {
 
 
   const getClients = async () => {
+    try{
+
+    
     const res = await axios.get(
       `${uri}/api/client/*`
     )
@@ -72,7 +93,10 @@ const DeliveryOrders = props => {
 
     setClients(res.data.clients)
     setClientName(res.data.clients[0]._id)
-
+    }
+    catch(err){
+      catchWarning()
+    }
 
   }
 

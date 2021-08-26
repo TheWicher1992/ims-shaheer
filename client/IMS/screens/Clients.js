@@ -43,10 +43,16 @@ const Clients = props => {
   const [loading, setLoading] = useState(true)
   const getClients = async () => {
     setLoading(true)
-    const query = search.trim() === '' ? '*' : search.trim()
+    try{
+      const query = search.trim() === '' ? '*' : search.trim()
     const res = await axios.get(`${uri}/api/client/${query}`)
     res.data.clients.length === 0 ? searchWarning(): null
     setClients(res.data.clients)
+    }
+    catch(err){
+      catchWarning()
+    }
+    
     setLoading(false)
   }
 
@@ -91,6 +97,11 @@ const Clients = props => {
 
   const onChangePhoneNumber = (phNumber) => {
     setPhoneNumber(phNumber);
+  }
+  const catchWarning = () => {
+    setAlertState(!alertState) 
+    setAlertTitle('Attention')
+    setAlertMsg('Something went wrong. Please restart')
   }
 
 

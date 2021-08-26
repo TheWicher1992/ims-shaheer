@@ -67,6 +67,11 @@ const Employee = props => {
   const show = () => {
     setAlertState(!alertState)
   }
+  const catchWarning = () => {
+    setAlertState(!alertState) 
+    setAlertTitle('Attention')
+    setAlertMsg('Something went wrong. Please restart')
+  }
   const setError = () => {
     setAlertTitle('Error')
     setAlertMsg('User already exists.')
@@ -139,9 +144,15 @@ const Employee = props => {
 
   const getEmployees = async () => {
     setLoading(true)
-    const res = await axios.get(`${uri}/api/auth/all`)
+    try{
+      const res = await axios.get(`${uri}/api/auth/all`)
     setEmployees(res.data.employees)
     setAdmins(res.data.admins)
+    }
+    catch(err){
+      catchWarning()
+    }
+    
     setLoading(false)
   }
 

@@ -40,29 +40,43 @@ const DeliveryOrders = props => {
 
   const getOrders = async () => {
     setLoading(true)
+    try{    
     const res = await axios.get(
       `${uri}/api/order/${Pfilters.page}/${query}/${Pfilters.client}/${Pfilters.product}/${Pfilters.sort}/${Pfilters.sortBy}`
     )
-
     setOrders(res.data.deliveryOrder)
+    }
+    catch(err){
+      catchWarning()
+    }
     setLoading(false)
+  }
+  const catchWarning = () => {
+    setAlertState(!alertState) 
+    setAlertTitle('Attention')
+    setAlertMsg('Something went wrong. Please restart')
   }
 
   const getProducts = async () => {
-    const res = await axios.get(
-      `${uri}/api/product/`
-    )
-
-
-    setProducts(res.data.products)
-    setProductName(res.data.products[0]._id)
-
-
-
+    try{
+      const res = await axios.get(
+        `${uri}/api/product/`
+      )
+  
+  
+      setProducts(res.data.products)
+      setProductName(res.data.products[0]._id)
+    }
+    catch(err){
+      catchWarning()
+    }
   }
 
 
   const getClients = async () => {
+    try{
+
+    
     const res = await axios.get(
       `${uri}/api/client/*`
     )
@@ -70,7 +84,10 @@ const DeliveryOrders = props => {
 
     setClients(res.data.clients)
     setClientName(res.data.clients[0]._id)
-
+    }
+    catch(err){
+      catchWarning()
+    }
 
   }
 
@@ -124,64 +141,12 @@ const DeliveryOrders = props => {
   const [location, setLocation] = React.useState(``)
   const [clientName, setClientName] = React.useState(``)
   const [notes, setNotes] = React.useState(``)
-
-  const onChangeQuantity = (quant) => {
-    setQuantityVal(quant);
-  }
-
-
-  const onChangeLocation = (locationVal) => {
-    setLocation(locationVal);
-  }
-
-  const onChangeNotes = (noteVal) => {
-    setNotes(noteVal);
-  }
-
   const [alertState, setAlertState] = useState(false)
   const [alertTitle, setAlertTitle] = useState(``)
   const [alertMsg, setAlertMsg] = useState(``)
   const show = () => {
     setAlertState(!alertState)
   }
-
-
-  const addDeliveryOrder = () => {
-    if(quantityVal === '' || notes === '' || location === ''){
-      setAlertTitle('Warning')
-      setAlertMsg('Input fields may be empty. Request could not be processed.')
-      show()
-    }
-    else{
-      const body = {
-        productID: productName,
-        quantity: quantityVal,
-        location: location,
-        clientID: clientName,
-        note: notes
-      }
-  
-      axios.post(`${uri}/api/order`, body, {
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      })
-        .then(res => {
-          getOrders()
-          setAlertTitle('Success')
-          setAlertMsg('Request has been processed, Delivery Order added.')
-          show()
-          setModalVisible(false)
-        })
-        .catch(err => {
-          setAlertTitle('Warning')
-          setAlertMsg('Request could not be processed.')
-          show()
-        })
-    }
-    
-  }
-
 
   const [isTableDetailModalVisible, setTableDetailModalVisible] = React.useState(false);
 
