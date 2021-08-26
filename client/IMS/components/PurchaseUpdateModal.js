@@ -56,7 +56,7 @@ const PurchaseUpdateModal = props => {
     setQuantityVal(props.obj.quantity !== undefined && props.obj.quantity)
     setNotes(props.obj.note !== undefined && props.obj.note)
     setTotalAmount(props.obj.amount !== undefined ? props.obj.amount : ``)
-
+    props.obj.client === undefined ? null : setClientName(props.obj.client.userName)
   }, [props.obj])
 
   const toggleSwitch = () => {
@@ -91,7 +91,7 @@ const PurchaseUpdateModal = props => {
     setLocation(loc);
   }
   return (
-    // <KeyboardAvoidingView>
+    <KeyboardAvoidingView>
       <Modal
         onSwipeComplete={() => setModalVisible(false)}
         swipeDirection="left"
@@ -150,7 +150,7 @@ const PurchaseUpdateModal = props => {
                   <Picker
                     style={{ top: 6, color: 'grey', fontFamily: 'Roboto' }}
                     itemStyle={{ fontWeight: '100' }}
-                    selectedValue={props.obj.client === undefined ? clientName : props.obj.client.userName}
+                    selectedValue={clientName}
                     onValueChange={(itemValue, itemIndex) =>
                       setClientName(itemValue)
                     }
@@ -237,7 +237,7 @@ const PurchaseUpdateModal = props => {
 
 
 
-    // </KeyboardAvoidingView >
+</KeyboardAvoidingView >
   );
 };
 
