@@ -91,7 +91,7 @@ const PurchaseUpdateModal = props => {
     setLocation(loc);
   }
   return (
-    // <KeyboardAvoidingView>
+    <KeyboardAvoidingView>
       <Modal
         onSwipeComplete={() => setModalVisible(false)}
         swipeDirection="left"
@@ -237,7 +237,7 @@ const PurchaseUpdateModal = props => {
 
 
 
-    // </KeyboardAvoidingView >
+</KeyboardAvoidingView >
   );
 };
 

@@ -203,6 +203,7 @@ const MakePurchase = props => {
 
     <View>
       <ShowAlert state={alertState} handleClose={show} alertTitle={alertTitle} alertMsg={alertMsg} style={styles.buttonModalContainer} />
+      <KeyboardAvoidingView>
       <Modal
         onSwipeComplete={() => setModalVisible(false)}
         swipeDirection="left"
@@ -345,6 +346,7 @@ const MakePurchase = props => {
           </View>
         </View>
       </Modal>
+      </KeyboardAvoidingView>
       <PurchaseDetailModal state={isTableDetailModalVisible} handleClose={handleClose} title='Purchase Detail' object={touchedPurchase} />
       <View style={styles.screen}>
         <View>
