@@ -9,6 +9,7 @@ import { uri } from '../api.json'
 import axios from "axios"
 import Spinner from '../components/Spinner';
 import ExportButton from '../components/ExportAsExcel'
+import ShowAlert from '../components/ShowAlert';
 
 const optionsPerPage = [2, 3, 4];
 
@@ -18,15 +19,30 @@ const MakeSale = props => {
   const [loading, setLoading] = useState(true)
   const [products, setProducts] = useState([])
   const [clients, setClients] = useState([])
-
+  const catchWarning = () => {
+    setAlertState(!alertState) 
+    setAlertTitle('Attention')
+    setAlertMsg('Something went wrong. Please restart')
+  }
+  const [alertState, setAlertState] = useState(false)
+  const [alertTitle, setAlertTitle] = useState(``)
+  const [alertMsg, setAlertMsg] = useState(``)
+  const show = () => {
+    setAlertState(!alertState)
+  }
   const getSales = async () => {
     setLoading(true)
+    try{
 
+    
     const res = await axios.get(
       `${uri}/api/sale/${props.navigation.getParam('clientID')}`
     )
-    console.log(props.navigation.getParam('clientID'))
     setSales(res.data.sales)
+    }
+    catch(err){
+      catchWarning()
+    }
     setLoading(false)
 
   }
@@ -79,7 +95,7 @@ const MakeSale = props => {
     // <KeyboardAvoidingView style = {styles.containerView} behavior = "padding">
 
     <View>
-      
+      <ShowAlert state={alertState} handleClose={show} alertTitle={alertTitle} alertMsg={alertMsg} style={styles.buttonModalContainer} />
       <TableDetailModal state={isTableDetailModalVisible} handleClose={handleClose} title='Employee Information' name='Raahem Asghar' email='raahemasghar97@gmail.com' occupation="Employee" />
       <View style={styles.screen}>
         <View>

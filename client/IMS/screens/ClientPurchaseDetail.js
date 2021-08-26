@@ -9,6 +9,7 @@ import axios from 'axios'
 import { uri } from '../api.json'
 import Spinner from '../components/Spinner';
 import ExportButton from '../components/ExportAsExcel'
+import ShowAlert from '../components/ShowAlert';
 
 const optionsPerPage = [2, 3, 4];
 const ClientPurchaseDetail = props => {
@@ -26,13 +27,26 @@ const ClientPurchaseDetail = props => {
     setModalVisible(!isModalVisible);
   };
 
+  const catchWarning = () => {
+    setAlertState(!alertState) 
+    setAlertTitle('Attention')
+    setAlertMsg('Something went wrong. Please restart')
+  }
+
   const [purchases, setPurchases] = useState([])
   const [loading, setLoading] = useState(true)
   const getPurchases = async () => {
     setLoading(true)
+    try{
+      
+    
     const res = await axios.get(`${uri}/api/purchase/${props.navigation.getParam('clientID')}`
     )
     setPurchases(res.data.purchases)
+    }
+    catch(err){
+      catchWarning()
+    }
     setLoading(false)
   }
 
@@ -60,8 +74,12 @@ const ClientPurchaseDetail = props => {
 
   const [isWarehouse, setIsWarehouse] = useState(false)
   // const [isDeliveryOrder, setIsDeliveryOrder] = useState(!isWarehouse)
-  const [isEnabled, setIsEnabled] = useState(false);
-
+  const [alertState, setAlertState] = useState(false)
+  const [alertTitle, setAlertTitle] = useState(``)
+  const [alertMsg, setAlertMsg] = useState(``)
+  const show = () => {
+    setAlertState(!alertState)
+  }
 
 
 
@@ -96,7 +114,6 @@ const ClientPurchaseDetail = props => {
 
   const toggleSwitch = () => {
     setIsWarehouse(!isWarehouse);
-    console.log(`switched`);
   };
 
   const [touchedPurchase, setTouchedPurchase] = useState([])
@@ -104,7 +121,6 @@ const ClientPurchaseDetail = props => {
   const selectedPurchaseRecord = (purchase) => {
     setTouchedPurchase(purchase)
     setTableDetailModalVisible(true)
-    console.log("hello", touchedPurchase)
   }
 
 
@@ -113,6 +129,7 @@ const ClientPurchaseDetail = props => {
     // <KeyboardAvoidingView style = {styles.containerView} behavior = "padding">
 
     <View>
+      <ShowAlert state={alertState} handleClose={show} alertTitle={alertTitle} alertMsg={alertMsg} style={styles.buttonModalContainer} />
       <PurchaseDetailModal state={isTableDetailModalVisible} handleClose={handleClose} title='Purchase Detail' object={touchedPurchase} screen='new' />
       <View style={styles.screen}>
         <View>
