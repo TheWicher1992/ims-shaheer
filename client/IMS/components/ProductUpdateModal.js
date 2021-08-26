@@ -22,6 +22,7 @@ const ProductUpdateModal = props => {
   const show = () => {
     setAlertState(!alertState)
   }
+  
 
   const updateProduct = () => {
     if(serialNo === '' || productName === '' || amountVal === '' || description === ''){

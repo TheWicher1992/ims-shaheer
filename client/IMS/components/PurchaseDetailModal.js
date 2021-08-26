@@ -43,7 +43,7 @@ const PurchaseDetailModal = props => {
   return (
 
     <View style={styles.centeredView}>
-      <PurchaseUpdateModal state={isUpdateModalVisible} handleClose={handleCloseUpdate} title='Update Purchase' obj={props.object} formInputs={formInputs} />
+      <PurchaseUpdateModal state={isUpdateModalVisible} handleClose={handleCloseUpdate}  warehouse={warehouse} title='Update Purchase' obj={props.object} formInputs={formInputs} />
       <Modal
         animationType="slide"
         transparent={true}
