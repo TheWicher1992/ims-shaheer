@@ -136,7 +136,7 @@ const Clients = props => {
   return (
     // <KeyboardAvoidingView style = {styles.containerView} behavior = "padding">
     // <ScrollView >
-    <View>
+    <ScrollView>
       <ShowAlert state={alertState} handleClose={show} alertTitle={alertTitle} alertMsg={alertMsg} style={styles.buttonModalContainer} />
       <Modal
         onSwipeComplete={() => setModalVisible(false)}
@@ -192,7 +192,7 @@ const Clients = props => {
           <View style={styles.searchBar}>
             <TextInput onChangeText={onChangeSearch} style={styles.buttonInput} placeholder="type here..." autoCorrect={false} />
           </View>
-          <View style={{ top: 14 }}>
+          <View style={{ top: 15 }}>
             <TouchableOpacity onPress={() => { searchFunc() }}>
               <View style={styles.searchButton}>
                 <FontAwesome
@@ -210,7 +210,7 @@ const Clients = props => {
       </View>
       <ExportButton data={clients} title={'clients.xlsx'}/>
       <Spinner loading={loading} />
-      {!loading && <ScrollView style={styles.p2}>
+      {!loading && 
 
         <DataTable>
           <DataTable.Header>
@@ -218,7 +218,8 @@ const Clients = props => {
             <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Balance</Text></DataTable.Title>
             <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Phone Number</Text></DataTable.Title>
           </DataTable.Header>
-
+          <ScrollView>
+            <View>
           {
             clients.map(c => (
               <TouchableOpacity key={c._id} onPress={() => onPressRecord(c)}>
@@ -232,11 +233,13 @@ const Clients = props => {
 
             ))
           }
+          </View>
+          </ScrollView>
         </DataTable>
 
-      </ScrollView>}
-    </View>
-    // </KeyboardAvoidingView>
+      }
+    </ScrollView>
+
 
 
   )
@@ -278,6 +281,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Roboto',
     fontWeight: 'bold',
     fontSize: Dimensions.get('window').height === 1232 ? 36 : 28,
+    bottom: 35
   },
   modalTitle: {
     color: '#006270',
@@ -309,14 +313,11 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     flexDirection: 'row',
-    marginTop: Dimensions.get('window').height > 900 ? 80 : 60,
     borderRadius: 40,
     backgroundColor: '#00E0C7',
     paddingVertical: 12,
     paddingHorizontal: 32,
     left: 15
-    // right: Dimensions.get('window').width / 5
-    // we can also change the container to center and implement the right styling
   },
   buttonModalContainer: {
     justifyContent: 'center',

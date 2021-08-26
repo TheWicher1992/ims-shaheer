@@ -77,7 +77,8 @@ const ProductDetailModal = props => {
                     <Text style={styles.bodyText}>Description: {props.object.description}</Text></View>)}
                 </View>
               </ScrollView>
-              <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center' }}>
+              {
+                props.occupation === 'Admin' ? (<View style={{ flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center' }}>
                 <TouchableOpacity onPress={() => props.handleClose()}>
                   <View style={styles.buttonModalContainer}>
                     <Text style={styles.buttonModalText}>Back</Text>
@@ -107,7 +108,15 @@ const ProductDetailModal = props => {
                     <Text style={styles.buttonModalText}>Delete</Text>
                   </View>
                 </TouchableOpacity>
-              </View>
+              </View>) : (<View style={{ flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center' }}>
+                <TouchableOpacity onPress={() => props.handleClose()}>
+                  <View style={styles.buttonModalContainer}>
+                    <Text style={styles.buttonModalText}>Back</Text>
+                  </View>
+                </TouchableOpacity>
+              </View>)
+              }
+              
             </View>
 
 
