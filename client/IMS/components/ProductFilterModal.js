@@ -157,16 +157,14 @@ const ProductFilterModal = props => {
                                     <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-end', paddingRight: '8%' }}>
 
                                         {
-                                            props.filters.colour.map((record, i) => (
-                                                <Text style={styles.sideText}>
-                                                    {filterMap["colour"][record]}
-                                                </Text>
-                                            ))
-                                        }
-                                        {
-                                            props.filters.colour.length === 1 && (<Text style={styles.sideText}>
+                                            props.filters.colour.length === 1 ? (<Text style={styles.sideText}>
                                                 All
                                             </Text>)
+                                            : (
+                                                <Text style = {styles.sideText}>
+                                                    {`(${props.filters.colour.length -1}) Item(s)`}
+                                                </Text>
+                                            )
                                         }
                                     </View>
                                 </View>
@@ -186,16 +184,14 @@ const ProductFilterModal = props => {
                                     </View>
                                     <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-end', paddingRight: '8%' }}>
                                         {
-                                            props.filters.brand.map((record, i) => (
-                                                <Text style={styles.sideText}>
-                                                    {filterMap["brand"][record]}
-                                                </Text>
-                                            ))
-                                        }
-                                        {
-                                            props.filters.brand.length === 1 && (<Text style={styles.sideText}>
+                                            props.filters.brand.length === 1 ? (<Text style={styles.sideText}>
                                                 All
                                             </Text>)
+                                            : (
+                                                <Text style = {styles.sideText}>
+                                                    {`(${props.filters.brand.length -1}) Item(s)`}
+                                                </Text>
+                                            )
                                         }
                                     </View>
                                 </View>
@@ -208,12 +204,12 @@ const ProductFilterModal = props => {
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                     <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-start' }}>
                                         <Text style={styles.normalText}>
-                                            Price
+                                            Amount
                                         </Text>
                                     </View>
                                     <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-end', paddingRight: '8%' }}>
                                         <Text style={styles.sideText}>
-                                            {props.filters.price}
+                                            {props.filters.price === 0 ? 'All' : props.filters.price }
                                         </Text>
                                     </View>
                                 </View>
@@ -265,20 +261,17 @@ const ProductFilterModal = props => {
                                     </View>
                                     <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-end', paddingRight: '8%' }}>
                                         {
-                                            props.filters.ware.map((record, i) => (
-                                                <Text style={styles.sideText}>
-                                                    {filterMap["warehouse"][record]}
-                                                </Text>
-                                            ))
-                                        }
-                                        {
-                                            props.filters.ware.length === 1 && (<Text style={styles.sideText}>
+                                            props.filters.ware.length === 1 ? (<Text style={styles.sideText}>
                                                 All
                                             </Text>)
+                                            : (
+                                                <Text style = {styles.sideText}>
+                                                    {`(${props.filters.ware.length -1}) Item(s)`}
+                                                </Text>
+                                            )
                                         }
-                                        {/* {
-                                            console.log(filterMap)
-                                        } */}
+                                        
+                                       
                                     </View>
                                 </View>
                             </View>
@@ -333,7 +326,7 @@ const styles = StyleSheet.create({
 
     },
     sideText: {
-        fontSize: Dimensions.get('window').height > 900 ? 24 : 16,
+        fontSize: Dimensions.get('window').height > 900 ? 26 : 18,
         fontWeight: '600',
         color: "#008394",
         textAlign: 'right',
