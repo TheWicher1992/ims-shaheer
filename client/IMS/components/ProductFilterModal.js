@@ -60,56 +60,71 @@ const ProductFilterModal = props => {
     const [filters, setFilters] = useState([])
 
     const getFilters = async () => {
-        const res = await axios.get(
-            `${uri}/api/product/filters`
-        )
-        setFilters(res.data.filters);
-        // console.log("res--->", res.data.filters)
-        let colourMap = {};
-        (res.data.filters.colours).forEach(element => {
-            colourMap[element._id] = element.title
-        });
-        // console.log(colourMap)
-        // setFilterMap({...filterMap,colour : {
-        //     ...colourMap
-        // }})
-
-        let wareMap = {};
-        (res.data.filters.warehouses).forEach(element => {
-            wareMap[element._id] = element.name
-        });
-        // setFilterMap({...filterMap,warehouse : {
-        //     ...wareMap
-        // }})
-        // console.log(wareMap)
-
-        let brandMap = {};
-        (res.data.filters.brands).forEach(element => {
-            brandMap[element._id] = element.title
-        });
-        // setFilterMap({...filterMap,brand : {
-        //     ...brandMap
-        // }})      
-        // console.log(brandMap)
-
-        setFilterMap(
-            {
-                colour: {
-                    ...colourMap
-                },
-                warehouse: {
-                    ...wareMap
-                },
-                brand: {
-                    ...brandMap
+        try{
+            const res = await axios.get(
+                `${uri}/api/product/filters`
+            )
+            setFilters(res.data.filters);
+            // console.log("res--->", res.data.filters)
+            let colourMap = {};
+            (res.data.filters.colours).forEach(element => {
+                colourMap[element._id] = element.title
+            });
+            // console.log(colourMap)
+            // setFilterMap({...filterMap,colour : {
+            //     ...colourMap
+            // }})
+    
+            let wareMap = {};
+            (res.data.filters.warehouses).forEach(element => {
+                wareMap[element._id] = element.name
+            });
+            // setFilterMap({...filterMap,warehouse : {
+            //     ...wareMap
+            // }})
+            // console.log(wareMap)
+    
+            let brandMap = {};
+            (res.data.filters.brands).forEach(element => {
+                brandMap[element._id] = element.title
+            });
+            // setFilterMap({...filterMap,brand : {
+            //     ...brandMap
+            // }})      
+            // console.log(brandMap)
+    
+            setFilterMap(
+                {
+                    colour: {
+                        ...colourMap
+                    },
+                    warehouse: {
+                        ...wareMap
+                    },
+                    brand: {
+                        ...brandMap
+                    }
                 }
-            }
-        )
-
+            )
+    
+        }
+        catch(err){
+            catchWarning()
+        }
+        
     }
+
     useEffect(() => {
         getFilters()
     }, [])
+
+    const catchWarning = () => {
+        setAlertState(!alertState) 
+        setAlertTitle('Attention')
+        setAlertMsg('Something went wrong. Please restart')
+    }
+
+    
 
     return (
 

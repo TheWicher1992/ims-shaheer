@@ -82,9 +82,14 @@ const SaleFilterModal = props => {
         })
     } 
     catch(err) {
-        console.log(err)
+        catchWarning()
     }
         
+    }
+    const catchWarning = () => {
+        setAlertState(!alertState) 
+        setAlertTitle('Attention')
+        setAlertMsg('Something went wrong. Please restart')
     }
 
 
