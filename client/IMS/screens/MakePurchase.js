@@ -377,7 +377,7 @@ const MakePurchase = props => {
           </View>
         </Modal>
       </KeyboardAvoidingView>
-      <PurchaseDetailModal state={isTableDetailModalVisible} handleClose={handleClose} title='Purchase Detail' object={touchedPurchase} />
+      <PurchaseDetailModal state={isTableDetailModalVisible} handleClose={handleClose} title='Purchase Detail' object={touchedPurchase} getPurchase={getPurchases}/>
       <View style={styles.screen}>
         <View>
           <Text style={styles.title}>Purchases</Text>

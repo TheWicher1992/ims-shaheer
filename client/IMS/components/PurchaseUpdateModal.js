@@ -103,18 +103,26 @@ const PurchaseUpdateModal = props => {
 
     axios.put(`${uri}/api/purchase/${id}`, body, config)
         .then(() => {
+          setAlertTitle('Success')
+          setAlertMsg('Request has been processed, purchase updated.')
+          show()
           props.handleClose()
+          props.initialModalClose()
+          props.getPurchases()
         })
         .catch(err =>{
-          console.log(err)
+          catchWarning()
         })
       }
   }
   const show = () => {
     setAlertState(!alertState)
   }
-
-
+  const catchWarning = () => {
+    setAlertState(!alertState) 
+    setAlertTitle('Attention')
+    setAlertMsg('Something went wrong. Please restart')
+  }
 
   return (
     <KeyboardAvoidingView>
