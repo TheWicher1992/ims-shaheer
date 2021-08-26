@@ -14,7 +14,7 @@ import axios from "axios"
 import { connect } from 'react-redux'
 import Spinner from '../components/Spinner';
 import ShowAlert from '../components/ShowAlert';
-
+import ExportButton from '../components/ExportAsExcel'
 
 const optionsPerPage = [2, 3, 4];
 
@@ -522,10 +522,17 @@ const Product = props => {
         </View>
 
       </View>
-      <FilterButton getProducts={getProducts} page="product" />
+      <View style = {{flexDirection: 'row', justifyContent: 'center', paddingRight: 60 }}> 
+        <View>
+          <FilterButton getProducts={getProducts} page="product" />
+        </View>
+        <View style = {{marginTop: 25}}>
+          <ExportButton data={products} title={'products.xlsx'}/>
+        </View>
+      </View>
       <Spinner loading={loading} />
       {!loading && 
-        <DataTable>
+        <DataTable style = {{marginTop: 15}}>
           <DataTable.Header>
             <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Serial No.</Text></DataTable.Title>
             <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Product</Text></DataTable.Title>

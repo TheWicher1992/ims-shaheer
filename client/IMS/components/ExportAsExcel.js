@@ -21,7 +21,7 @@ const ExportButton = (props) => {
   
   await Sharing.shareAsync(uri, {
     mimeType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-    dialogTitle: 'MyWater data',
+    dialogTitle: `${props.title}`,
     UTI: 'com.microsoft.excel.xlsx'
   });
   }

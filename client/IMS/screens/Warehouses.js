@@ -6,14 +6,12 @@ import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { FontAwesome } from '@expo/vector-icons';
 import { DataTable } from 'react-native-paper';
 import Modal from 'react-native-modal';
-import PickerCheckBox from 'react-native-picker-checkbox';
 import WarehouseDetailModal from '../components/WarehouseDetailModal';
-import FilterButton from '../components/FilterButton';
 import axios from 'axios'
 import { uri } from '../api.json'
 import Spinner from '../components/Spinner';
 import ShowAlert from '../components/ShowAlert';
-
+import ExportButton from '../components/ExportAsExcel'
 const optionsPerPage = [2, 3, 4];
 
 const Warehouse = props => {
@@ -223,9 +221,12 @@ const Warehouse = props => {
         </View>
 
       </View>
+      <View style = {{marginTop: 20}} >
+        <ExportButton data={warehouses} title={'warehouses.xlsx'}/>
+      </View>
       <Spinner loading={loading} />
       {!loading && 
-        <DataTable style={{marginTop: 25}}>
+        <DataTable style={{marginTop: 15}}>
           <DataTable.Header>
             <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Name</Text></DataTable.Title>
             <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Total Products</Text></DataTable.Title>

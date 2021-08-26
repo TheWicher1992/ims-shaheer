@@ -208,11 +208,13 @@ const Clients = props => {
         </View>
 
       </View>
-      <ExportButton data={clients} title={'clients.xlsx'}/>
+      <View style = {{marginTop: 20}}>
+        <ExportButton data={clients} title={'clients.xlsx'}/>
+      </View>
       <Spinner loading={loading} />
       {!loading && 
 
-        <DataTable>
+        <DataTable style = {{marginTop: 10}}>
           <DataTable.Header>
             <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Name</Text></DataTable.Title>
             <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Balance</Text></DataTable.Title>

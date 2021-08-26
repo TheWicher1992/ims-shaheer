@@ -15,6 +15,8 @@ import { uri } from '../api.json'
 import axios from "axios"
 import Spinner from '../components/Spinner';
 import ShowAlert from '../components/ShowAlert';
+import ExportButton from '../components/ExportAsExcel';
+
 
 
 const optionsPerPage = [2, 3, 4];
@@ -287,7 +289,7 @@ const DeliveryOrders = props => {
       <View style={styles.containerButton}>
         <TouchableOpacity onPress={() => { setModalVisible(true) }}>
           <View style={styles.buttonContainer}>
-            <Text style={styles.buttonText}>Add a Order</Text>
+            <Text style={styles.buttonText}>Add an Order</Text>
           </View>
         </TouchableOpacity>
         <View style={{ flexDirection: 'row', justifyContent: 'center', }}>
@@ -310,13 +312,15 @@ const DeliveryOrders = props => {
         </View>
 
       </View>
+      <View >
+        <ExportButton data={orders} title={'DeliveryOrder.xlsx'}/>
+      </View>
 
-      {/* <FilterButton />  */}
                       
       <Spinner loading={loading} />
       {!loading && 
 
-        <DataTable style={{marginTop: 25}}>
+        <DataTable style={{marginTop: 15}}>
           <DataTable.Header>
             <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Product</Text></DataTable.Title>
             <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Client</Text></DataTable.Title>
@@ -386,6 +390,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Roboto',
     fontWeight: 'bold',
     fontSize: Dimensions.get('window').height === 1232 ? 36 : 28,
+    bottom: 20,
   },
   modalTitle: {
     color: '#006270',
@@ -469,6 +474,7 @@ const styles = StyleSheet.create({
   containerButton: {
     alignItems: 'flex-start',
     justifyContent: 'flex-start',
+    bottom: 20,
   },
   input: {
     width: Dimensions.get('window').width * 0.65,
