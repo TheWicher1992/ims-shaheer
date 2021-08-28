@@ -7,7 +7,6 @@ const StockModal = props => {
   const [isUpdateModalVisible, setUpdateModalVisible] = React.useState(false);
   const handleCloseUpdate = () => {
     setUpdateModalVisible(false)
-    props.handleClose()
   }
   useEffect(() => {
     setModalVisible(props.state);

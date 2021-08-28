@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Modal, StyleSheet, Text, View, TouchableOpacity, Dimensions, TextInput } from "react-native";
+import { Modal, StyleSheet, Text, View, TouchableOpacity, Dimensions, TextInput, TouchableWithoutFeedback } from "react-native";
 import { Picker } from '@react-native-picker/picker';
 import axios from 'axios'
 import { uri } from '../api.json'
@@ -104,7 +104,9 @@ const UpdateModal = props => {
           props.handleClose();
         }}
       >
-
+         <TouchableWithoutFeedback onPress={() => props.handleClose()}>
+            <View style={styles.modalOverlay} />
+          </TouchableWithoutFeedback>
         <View style={styles.centeredView}>
           {
             props.title === 'Select Warehouse' ? (<View style={styles.modalView}>
@@ -285,6 +287,13 @@ const styles = StyleSheet.create({
     borderColor: "#008394",
     padding: 13
 
+  },
+  modalOverlay: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
   },
 
 });

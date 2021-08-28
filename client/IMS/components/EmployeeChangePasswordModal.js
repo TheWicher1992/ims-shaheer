@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Modal, StyleSheet, Text, View, TouchableOpacity, Dimensions, TextInput } from "react-native";
+import { Modal, StyleSheet, Text, View, TouchableOpacity, Dimensions, TextInput, TouchableWithoutFeedback } from "react-native";
 import { uri } from '../api.json'
 import axios from "axios"
 import ShowAlert from './ShowAlert';
@@ -80,6 +80,9 @@ const EmployeeChangePasswordModal = props => {
             props.handleClose();
             }}
         > 
+        <TouchableWithoutFeedback onPress={() => props.handleClose()}>
+            <View style={styles.modalOverlay} />
+          </TouchableWithoutFeedback>
        
             <View style={styles.centeredView}>
                 <View style={styles.modalView}>
@@ -208,6 +211,13 @@ const styles = StyleSheet.create({
   modalBody:{
     paddingVertical:'25%',
     paddingHorizontal:10
+  },
+  modalOverlay: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
   },
   modalView: {
     margin: 20,
