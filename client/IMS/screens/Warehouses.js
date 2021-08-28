@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react'
-import { StyleSheet, Text, View, Button, Dimensions, TextInput, TouchableOpacity, KeyboardAvoidingView, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, Button, Dimensions, TextInput, TouchableOpacity, KeyboardAvoidingView, ScrollView, TouchableWithoutFeedback } from 'react-native';
 import HeaderButton from '../components/HeaderButton';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { FontAwesome } from '@expo/vector-icons';
@@ -166,7 +166,11 @@ const Warehouse = props => {
         swipeDirection="left"
         presentationStyle="overFullScreen"
         transparent
+        animationType="slide"
         visible={isModalVisible}>
+           <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
+            <View style={styles.modalOverlay} />
+          </TouchableWithoutFeedback>
         <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
           <View style={styles.modalStyle}>
             <View style={{ justifyContent: 'center', alignItems: 'center', }}>
@@ -484,5 +488,12 @@ const styles = StyleSheet.create({
     elevation: 5,
     width: Dimensions.get('window').height > 900 ? Dimensions.get('window').width * 0.7 : Dimensions.get('window').width * 0.80,
     height: Dimensions.get('window').height > 900 ? Dimensions.get('window').height * 0.5 : Dimensions.get('window').height * 0.60
+  },
+  modalOverlay: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
   },
 })

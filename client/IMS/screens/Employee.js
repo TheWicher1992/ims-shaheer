@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, Button, Dimensions, TextInput, TouchableOpacity, KeyboardAvoidingView, useWindowDimensions, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, Button, Dimensions, TextInput, TouchableOpacity, TouchableWithoutFeedback, ScrollView } from 'react-native';
 import HeaderButton from '../components/HeaderButton';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { FontAwesome } from '@expo/vector-icons';
@@ -172,11 +172,15 @@ const Employee = props => {
     <ScrollView>
       <ShowAlert state={alertState} handleClose={show} alertTitle={alertTitle} alertMsg={alertMsg} style={styles.buttonModalContainer} />
       <Modal
+        animationType="slide"
         onSwipeComplete={() => setModalVisible(false)}
         swipeDirection="left"
         presentationStyle="overFullScreen"
         transparent
         visible={isModalVisible}>
+          <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
+            <View style={styles.modalOverlay} />
+          </TouchableWithoutFeedback>
 
         <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
           <View style={styles.modalStyle}>
@@ -380,6 +384,13 @@ const styles = StyleSheet.create({
     left: 15
     // right: Dimensions.get('window').width / 5
     // we can also change the container to center and implement the right styling
+  },
+  modalOverlay: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
   },
   buttonModalContainer: {
     justifyContent: 'center',

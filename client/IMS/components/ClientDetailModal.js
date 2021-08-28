@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Modal, StyleSheet, Text, View, TouchableOpacity, Dimensions, ScrollView } from "react-native";
+import { Modal, StyleSheet, Text, View, TouchableOpacity, Dimensions, ScrollView, TouchableWithoutFeedback } from "react-native";
 import ClientUpdateModal from "./ClientUpdateModal";
 import ClientPaymentModal from "./ClientPaymentModal"
 
@@ -45,6 +45,9 @@ const ClientDetailModal = props => {
             props.handleClose();
             }}
         > 
+         <TouchableWithoutFeedback onPress={() => props.handleClose()}>
+            <View style={styles.modalOverlay} />
+          </TouchableWithoutFeedback>
             <View style={styles.centeredView}>
             <View style={styles.modalView}>
               <Text style={styles.modalTitle}>{props.title}</Text>
@@ -192,6 +195,13 @@ const styles = StyleSheet.create({
   modalBody:{
     paddingVertical:'30%',
     paddingHorizontal:10
+  },
+  modalOverlay: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
   },
   modalView: {
     margin: 20,

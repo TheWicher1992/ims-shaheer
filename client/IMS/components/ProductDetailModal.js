@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Alert, Modal, StyleSheet, Text, View, TouchableOpacity, Dimensions, KeyboardAvoidingView, ScrollView } from "react-native";
+import { Alert, Modal, StyleSheet, Text, View, TouchableOpacity, Dimensions, KeyboardAvoidingView, ScrollView, TouchableWithoutFeedback } from "react-native";
 import ProductUpdateModal from "./ProductUpdateModal";
 import { uri } from '../api.json'
 import axios from "axios"
@@ -15,7 +15,6 @@ const ProductDetailModal = props => {
 
   const handleCloseUpdate = () => {
     setUpdateModalVisible(false)
-    props.handleClose()
   }
 
   function handleClose() {
@@ -62,6 +61,9 @@ const ProductDetailModal = props => {
             props.handleClose();
           }}
         >
+          <TouchableWithoutFeedback onPress={() => props.handleClose()}>
+            <View style={styles.modalOverlay} />
+          </TouchableWithoutFeedback>
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
               <Text style={styles.modalTitle}>{props.title}</Text>
@@ -71,7 +73,7 @@ const ProductDetailModal = props => {
                     <Text style={styles.bodyText}>Serial: {props.object.serial}</Text>
                     <Text style={styles.bodyText}>Color: {props.object.colour === undefined ? '--' : props.object.colour.title}</Text>
                     <Text style={styles.bodyText}>Brand: {props.object.brand === undefined ? '--' : props.object.brand.title}</Text>
-                    <Text style={styles.bodyText}>Price: {props.object.price}</Text>
+                    {props.occupation === 'Admin' ? <Text style={styles.bodyText}>Price: {props.object.price}</Text> : null}
                     <Text style={styles.bodyText}>Stock: {props.object.totalStock}</Text>
                     <Text style={styles.bodyText}>Date Added: {props.object.date}</Text>
                     <Text style={styles.bodyText}>Description: {props.object.description}</Text></View>)}
@@ -213,6 +215,13 @@ const styles = StyleSheet.create({
     //elevation: 5,
     width: '80%',
     height: Dimensions.get('window').height > 900 ? '65%' : Dimensions.get('window').height * 0.60
+  },
+  modalOverlay: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
   },
 
 });
