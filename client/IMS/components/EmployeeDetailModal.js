@@ -4,6 +4,7 @@ import ProductUpdateModal from "./ProductUpdateModal";
 import { uri } from '../api.json'
 import axios from "axios"
 import ShowAlert from './ShowAlert'
+import EmployeeChangePasswordModal from "./EmployeeChangePasswordModal";
 
 const EmployeeDetailModal = props => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -35,6 +36,7 @@ const EmployeeDetailModal = props => {
   return (
     <KeyboardAvoidingView>
         <ShowAlert state={alertState} handleClose={show} alertTitle={'Success'} alertMsg={'Employee has been deleted successfully! Press OK to go back.'}/>
+        <EmployeeChangePasswordModal state={isUpdateModalVisible} initialModalClose={props.handleClose} handleClose={handleCloseUpdate} title='Change Details' getClients={props.getClients} object={props.object} />
       <View style={styles.centeredView}>
         <Modal
           animationType="slide"
@@ -64,11 +66,11 @@ const EmployeeDetailModal = props => {
                     <Text style={styles.buttonModalText}>Back</Text>
                   </View>
                 </TouchableOpacity>
-                {/* <TouchableOpacity onPress={() => { setUpdateModalVisible(true) }}>
+                <TouchableOpacity onPress={() => { setUpdateModalVisible(true) }}>
                   <View style={styles.backButtonModalContainer}>
                     <Text style={styles.buttonModalText}>Update</Text>
                   </View>
-                </TouchableOpacity> */}
+                </TouchableOpacity>
                 <TouchableOpacity onPress={() =>
                   Alert.alert(
                     "Confirmation",
@@ -156,7 +158,7 @@ const styles = StyleSheet.create({
   },
   buttonModalText: {
     color: '#ffffff',
-    fontSize: Dimensions.get('window').height > 900 ? (Dimensions.get('window').width > 480 ? 24 : 16) : 16,
+    fontSize: Dimensions.get('window').height > 900 ? (Dimensions.get('window').width > 480 ? 24 : 14) : 14,
     fontFamily: 'Roboto',
     fontWeight: 'bold'
   },
