@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react'
-import { StyleSheet, Text, View, Button, Dimensions, TextInput, TouchableOpacity, KeyboardAvoidingView, ScrollView, Pressable, Image } from 'react-native';
+import { StyleSheet, Text, View, Button, Dimensions, TextInput, TouchableOpacity, KeyboardAvoidingView, ScrollView, TouchableWithoutFeedback } from 'react-native';
 import HeaderButton from '../components/HeaderButton';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { FontAwesome } from '@expo/vector-icons';
@@ -320,10 +320,13 @@ const Product = props => {
       <Modal
         onSwipeComplete={() => setModalVisible(false)}
         swipeDirection="left"
+        animationType="slide"
         presentationStyle="overFullScreen"
         transparent
         visible={isModalVisible}>
-
+          <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
+            <View style={styles.modalOverlay} />
+          </TouchableWithoutFeedback>
         <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', }}>
           <ScrollView>
             <View style={styles.modalStyle}>
@@ -833,5 +836,12 @@ const styles = StyleSheet.create({
     margin: 20,
     display: 'flex',
 
+  },
+  modalOverlay: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
   },
 })

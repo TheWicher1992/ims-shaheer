@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Modal, StyleSheet, Text, View, TouchableOpacity, Dimensions, ScrollView } from "react-native";
+import { Modal, StyleSheet, Text, View, TouchableOpacity, Dimensions, ScrollView, TouchableWithoutFeedback } from "react-native";
 import PurchaseUpdateModal from "./PurchaseUpdateModal";
 import axios from 'axios'
 import { uri } from '../api.json'
@@ -74,6 +74,9 @@ const PurchaseDetailModal = props => {
           props.handleClose();
         }}
       >
+        <TouchableWithoutFeedback onPress={() => props.handleClose()}>
+            <View style={styles.modalOverlay} />
+          </TouchableWithoutFeedback>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
             <Text style={styles.modalTitle}>{props.title}</Text>
@@ -196,6 +199,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: '80%',
     height: Dimensions.get('window').height > 900 ? '65%' : Dimensions.get('window').height * 0.60
+  },
+  modalOverlay: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
   },
 
 });

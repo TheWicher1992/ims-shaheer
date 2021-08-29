@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Button, Switch, Dimensions, TextInput, TouchableOpacity, KeyboardAvoidingView, ScrollView} from 'react-native'; 
+import { StyleSheet, Text, View, Button, Switch, Dimensions, TextInput, TouchableOpacity, KeyboardAvoidingView, ScrollView, TouchableWithoutFeedback} from 'react-native'; 
 import HeaderButton from '../components/HeaderButton';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { FontAwesome } from '@expo/vector-icons';
@@ -425,6 +425,9 @@ const MakeSale = props => {
             transparent
             visible={warehouseModal}
           >
+            <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
+            <View style={styles.modalOverlay} />
+          </TouchableWithoutFeedback>
              <View style={styles.centeredView}>
                 <View style={styles.modalView}>
                   <Text style={styles.modalTitleNew}>Select Warehouse</Text>
@@ -490,6 +493,9 @@ const MakeSale = props => {
             transparent
             visible={dOrderModal}
           >
+            <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
+            <View style={styles.modalOverlay} />
+          </TouchableWithoutFeedback>
              <View style={styles.centeredView}>
                 <View style={styles.modalView}>
                   <Text style={styles.modalTitleNew}>Select Order</Text>
@@ -544,7 +550,11 @@ const MakeSale = props => {
             presentationStyle="overFullScreen"
             transparent
             visible={isModalVisible}>
+              <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
+            <View style={styles.modalOverlay} />
+          </TouchableWithoutFeedback>
             <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+              <ScrollView style={{paddingVertical: 10}} showsVerticalScrollIndicator={false}>
                 <View style={styles.modalStyle}>
                   <View style = {{justifyContent: 'center', alignItems : 'center', }}>
                       <Text style = {styles.modalTitle}>Make a Sale</Text>
@@ -667,7 +677,9 @@ const MakeSale = props => {
                       </View>
             </View>
           </View>
+          </ScrollView>
         </View>
+        
       </Modal>
       <SaleDetailModal state={isTableDetailModalVisible} handleClose={handleClose} title="Sale Information" object={touchedSale} occupation = "Admin" />
       <View style={styles.screen}>
@@ -1002,5 +1014,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     fontWeight: 'bold',
     marginRight: Dimensions.get('window').width * 0.80 / 2
+  },
+  modalOverlay: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
   },
 })
