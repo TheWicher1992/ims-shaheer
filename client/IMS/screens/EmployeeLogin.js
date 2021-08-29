@@ -7,10 +7,10 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import ShowAlert from '../components/ShowAlert';
 import Spinner from '../components/Spinner';
 const EmployeeLogin = props => {
-    useEffect(() => {
-        props.loadUser(props.navigation)
-        AsyncStorage.getItem('token').then(token => console.log("token--->", token))
-    }, [])
+    // useEffect(() => {
+    //     props.loadUser(props.navigation)
+    //     AsyncStorage.getItem('token').then(token => console.log("token--->", token))
+    // }, [])
     const [isEnabled, setIsEnabled] = useState(false);
     const toggleSwitch = () => {
         AsyncStorage.removeItem('token').then(() => props.navigation.navigate({ routeName: 'Login', params: { switchVal: false } })
