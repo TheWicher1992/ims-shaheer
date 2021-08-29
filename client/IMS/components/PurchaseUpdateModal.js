@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Modal, StyleSheet, Text, View, TouchableOpacity, Dimensions, TextInput, KeyboardAvoidingView, ScrollView, Switch } from "react-native";
+import { Modal, StyleSheet, Text, View, TouchableOpacity, Dimensions, TextInput, KeyboardAvoidingView, ScrollView, Switch, TouchableWithoutFeedback } from "react-native";
 import { Picker } from '@react-native-picker/picker';
 import { uri } from '../api.json'
 import axios from "axios"
@@ -128,12 +128,17 @@ const PurchaseUpdateModal = props => {
     <KeyboardAvoidingView>
       <ShowAlert state={alertState} handleClose={show} alertTitle={alertTitle} alertMsg={alertMsg} style={styles.buttonModalContainer} />
       <Modal
+      animationType="slide"
         onSwipeComplete={() => setModalVisible(false)}
         swipeDirection="left"
         presentationStyle="overFullScreen"
         transparent
         visible={isModalVisible}>
+          <TouchableWithoutFeedback onPress={() => props.handleClose()}>
+            <View style={styles.modalOverlay} />
+          </TouchableWithoutFeedback>
         <View style={styles.centeredView}>
+        <ScrollView style={{paddingVertical: 10}} showsVerticalScrollIndicator={false}>
           <View style={styles.modalView}>
             <View style={{ justifyContent: 'center', alignItems: 'center', }}>
               <Text style={styles.modalTitle}>Update Purchase</Text>
@@ -267,6 +272,7 @@ const PurchaseUpdateModal = props => {
               </View>
             </View>
           </View>
+          </ScrollView>
         </View>
       </Modal>
 
@@ -523,6 +529,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     fontWeight: 'bold',
     marginRight: Dimensions.get('window').width * 0.80 / 2
+  },
+  modalOverlay: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
   },
 
 });

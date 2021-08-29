@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
     color: '#008394',
     fontFamily: 'Roboto',
     fontWeight: 'bold',
-    fontSize: Dimensions.get('window').height === 1232 ? 32 : 24
+    fontSize: Dimensions.get('window').height > 900 ? 32 : 24
 
   },
   containers: {
@@ -142,13 +142,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     alignSelf: 'center',
-    marginTop: Dimensions.get('window').height < 900 ? Dimensions.get('window').height * 0.06 : Dimensions.get('window').height * 0.045,
+    marginTop: Dimensions.get('window').height < 900 ? Dimensions.get('window').height * 0.04 : Dimensions.get('window').height * 0.045,
   },
   containerText: {
     color: '#008394',
     fontFamily: 'Roboto',
     fontWeight: 'bold',
-    fontSize: Dimensions.get('window').height === 1232 ? 26 : 20
+    fontSize: Dimensions.get('window').height > 900 ? 26 : 20
   },
   buttonContainer: {
     flexDirection: 'row',
@@ -180,7 +180,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontFamily: 'Roboto',
     fontWeight: 'bold',
-    fontSize: Dimensions.get('window').height === 1232 ? 26 : 20,
+    fontSize: Dimensions.get('window').height > 900 ? 26 : 20,
     textAlign: 'center'
 
   },
