@@ -70,9 +70,15 @@ router.post('/', async (req, res) => {
             }
         }
 
+        const brandName = await Brand.findOne({
+            _id: brandID
+        })
+        const colourName = await ProductColour.findOne({
+            _id: colourID
+        })
 
         const product = new Product({
-            title,
+            title: `${title}-${brandName.title}-${colourName.title}`,
             serial,
             brand: brandID,
             colour: colourID,
@@ -303,12 +309,12 @@ router.get('/stock/:id', async (req, res) => {
 
         const warehouseStock = await Stock.find({
             product: productID,
-            stock : {$gt : 0}
+            stock: { $gt: 0 }
         }).populate(`warehouse`)
 
         const deliverOrderStocks = await DeliveryOrder.find({
             product: productID,
-            quantity: {$gt : 0}
+            quantity: { $gt: 0 }
         })
 
 
@@ -454,7 +460,7 @@ router.get('/:page/:query/:colour/:brand/:warehouse/:date/:quantity/:price/:sort
         const price = parseInt(req.params.price)
         const quantity = req.params.quantity === '*' ? '*' : parseInt(req.params.quantity)
         const sortOptions = {
-            [sort]: sortBy
+            'date': 'asc'
         }
 
 
@@ -540,7 +546,7 @@ router.get('/:page/:query/:colour/:brand/:warehouse/:date/:quantity/:price/:sort
             .find(filters)
             .populate(['brand', 'colour'])
             .sort(sortOptions)
-            .skip(itemsPerPage * page)
+        //    .skip(itemsPerPage * page)
         // .limit(itemsPerPage)
 
         return res.status(200).json({
