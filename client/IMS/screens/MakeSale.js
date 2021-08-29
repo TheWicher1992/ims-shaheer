@@ -400,7 +400,7 @@ const MakeSale = props => {
         transparent
         visible={warehouseModal}
       >
-        <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
+        <TouchableWithoutFeedback onPress={() => setWarehouseModal(false)}>
           <View style={styles.modalOverlay} />
         </TouchableWithoutFeedback>
         <View style={styles.centeredView}>
@@ -468,7 +468,7 @@ const MakeSale = props => {
         transparent
         visible={dOrderModal}
       >
-        <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
+        <TouchableWithoutFeedback onPress={() => setDOrderModal(false)}>
           <View style={styles.modalOverlay} />
         </TouchableWithoutFeedback>
         <View style={styles.centeredView}>
