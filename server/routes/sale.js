@@ -5,8 +5,30 @@ const config = require('config')
 const errors = require('../misc/errors')
 const Client = require('../models/Client')
 const Product = require('../models/Product')
-const Stock  = require('../models/Stock')
+const Stock = require('../models/Stock')
 const Warehouse = require('../models/Warehouse')
+
+
+router.get('/form-inputs', async (req, res) => {
+    //clients and product names
+    try {
+        const clients = await Client.find().select('userName')
+        const products = await Product.find().select('title')
+            .populate('colour', ['title'])
+            .populate('brand', ['title'])
+
+        return res.status(200).json({
+            clients,
+            products
+        })
+
+
+    } catch (err) {
+        return res.status(500).json({
+            error: errors.SERVER_ERROR
+        })
+    }
+})
 
 // make a sale
 
@@ -32,82 +54,80 @@ router.post('/', async (req, res) => {
 
         typeOfSale = 'DeliveryOrder'
 
-        if(isWarehouse=== true){
-        typeOfSale = 'Warehouse' 
+        if (isWarehouse === true) {
+            typeOfSale = 'Warehouse'
         }
 
-        var neg = total - received 
-    
-        if(payment === 'Partial')
-        {
+        var neg = total - received
+
+        if (payment === 'Partial') {
 
             const clientPrev = await Client.findById(clientID)
             let prev = clientPrev.balance
-            
+
             let newBal = prev - neg
 
-        let client = await Client.findOneAndUpdate({_id : clientID},{balance : newBal})
+            let client = await Client.findOneAndUpdate({ _id: clientID }, { balance: newBal })
 
         }
-        else if(payment === 'Credit')
-        {
+        else if (payment === 'Credit') {
             const clientPrev = await Client.findById(clientID)
             let prev = clientPrev.balance
-            
+
             let newBal = prev - total
 
-        let client = await Client.findOneAndUpdate({_id : clientID},{balance : newBal})
-            
+            let client = await Client.findOneAndUpdate({ _id: clientID }, { balance: newBal })
+
 
         }
 
-        
-    
-        
-        if (isWarehouse === true){
 
-        
 
-            warehouses.ids.map((id,i)=>{
 
-                if(warehouses['ticks'][id] === true){
+        if (isWarehouse === true) {
+
+
+
+            warehouses.ids.map((id, i) => {
+
+                if (warehouses['ticks'][id] === true) {
 
                     console.log('inside')
-                Stock.find({ product : productID , warehouse : id}).then(res => {
-                    res.map((stock)=>{
+                    Stock.find({ product: productID, warehouse: id }).then(res => {
+                        res.map((stock) => {
 
-                        prevStock = stock.stock
-                        if( warehouses['quant'][id]  < prevStock){
-                            newStock = prevStock - warehouses['quant'][id] 
+                            prevStock = stock.stock
+                            if (warehouses['quant'][id] < prevStock) {
+                                newStock = prevStock - warehouses['quant'][id]
 
-                            Stock.findOneAndUpdate({_id : stock._id}, {stock: newStock}).then(res => {
+                                Stock.findOneAndUpdate({ _id: stock._id }, { stock: newStock }).then(res => {
 
-                                Warehouse.findById(id).then(res=>{
-                                    let prevWarehouse = res.totalStock
-                                    let newWareStock = prevWarehouse - warehouses['quant'][id]
+                                    Warehouse.findById(id).then(res => {
+                                        let prevWarehouse = res.totalStock
+                                        let newWareStock = prevWarehouse - warehouses['quant'][id]
 
-                                    Warehouse.findOneAndUpdate({_id : id},{totalStock : newWareStock}).then(res=>{
-                                        Product.findById(productID).then(res=>{
-                                            let prev = res.totalStock
-                                            let newProdStock = prev - warehouses['quant'][id]
+                                        Warehouse.findOneAndUpdate({ _id: id }, { totalStock: newWareStock }).then(res => {
+                                            Product.findById(productID).then(res => {
+                                                let prev = res.totalStock
+                                                let newProdStock = prev - warehouses['quant'][id]
 
-                                            Product.findOneAndUpdate({_id: productID},{totalStock: newProdStock}).then(res=>{
-                                                console.log('success')
+                                                Product.findOneAndUpdate({ _id: productID }, { totalStock: newProdStock }).then(res => {
+                                                    console.log('success')
+                                                })
                                             })
+
                                         })
-                                        
-                                    })
 
 
 
                                     })
-                            })
-                        }
+                                })
+                            }
+                        })
+
                     })
-                    
-                })
-            }
-                
+                }
+
 
 
             })
@@ -116,7 +136,7 @@ router.post('/', async (req, res) => {
 
 
 
-             const sale = new Sale({
+        const sale = new Sale({
             product: productID,
             quantity,
             totalWithOutDiscount,
@@ -127,14 +147,14 @@ router.post('/', async (req, res) => {
             note,
             date,
             deliveryStatus,
-            typeOfSale  ,
-            deliveryOrder : deliveryOrderID
-             
+            typeOfSale,
+            deliveryOrder: deliveryOrderID
+
         })
-            
 
 
-       
+
+
 
         await sale.save()
 

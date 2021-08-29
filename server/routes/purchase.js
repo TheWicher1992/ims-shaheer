@@ -169,7 +169,8 @@ router.get('/form-inputs', async (req, res) => {
         const clients = await Client.find().select('userName')
         const warehouses = await Warehouse.find().select('name')
         const products = await Product.find().select('title')
-
+            .populate('colour', ['title'])
+            .populate('brand', ['title'])
         return res.json({
             clients, warehouses, products
         })
@@ -337,7 +338,7 @@ router.put('/:id', async (req, res) => {
 
         //if DeliveryOrder
         if (isDeliveryOrder) {
-            console.log("called") 
+            console.log("called")
             const deliveryOrder = new DeliveryOrder({
                 client,
                 product,
@@ -347,9 +348,9 @@ router.put('/:id', async (req, res) => {
             })
             await deliveryOrder.save()
             purchase.typeOfPurchase = 'DeliveryOrder'
-            purchase.deliveryOrder = deliveryOrder._id 
+            purchase.deliveryOrder = deliveryOrder._id
 
-            
+
         }
         else {
             console.log("notCalled")
@@ -409,7 +410,7 @@ router.put('/:id', async (req, res) => {
 
     }
     catch (err) {
-        console.log('1',err)
+        console.log('1', err)
         return res.status(500).json({
             error: errors.SERVER_ERROR
         })

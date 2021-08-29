@@ -26,47 +26,20 @@ const MakeSale = props => {
   const [products, setProducts] = useState([])
   const [clients, setClients] = useState([])
 
-  const getProducts = async () => {
+
+  const getPreFormValues = async () => {
     try {
-      const res = await axios.get(
-        `${uri}/api/product/`
-      )
-
-
+      const res = await axios.get(`${uri}/api/sale/form-inputs`)
       setProducts(res.data.products)
-
       setProductName(res.data.products[0]._id)
-
-    }
-    catch (err) {
-      catchWarning()
-    }
-
-
-
-
-  }
-
-
-  const getClients = async () => {
-    try {
-
-
-      const res = await axios.get(
-        `${uri}/api/client/*`
-      )
-
-
-
       setClients(res.data.clients)
       setClientName(res.data.clients[0]._id)
-    }
-    catch (err) {
+    } catch (err) {
       catchWarning()
     }
-
-
   }
+
+
 
   const getSales = async () => {
     setLoading(true)
@@ -97,13 +70,14 @@ const MakeSale = props => {
     setLoading(false)
   }
 
+
+
+
   useEffect(() => {
 
     props.navigation.addListener('didFocus', () => {
       getSales()
-
-      getProducts()
-      getClients()
+      getPreFormValues()
     })
 
 
