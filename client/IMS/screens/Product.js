@@ -58,9 +58,9 @@ const Product = props => {
         `/${props.filters.price}/${props.filters.sort}` +
         `/${props.filters.sortBy}`
       )
-      res.data.products.length === 0 ? searchWarning(): null
+      res.data.products.length === 0 ? searchWarning() : null
       setProducts(res.data.products.reverse())
-      
+
 
     }
     catch (err) {
@@ -94,7 +94,9 @@ const Product = props => {
 
 
   useEffect(() => {
-    getProducts()
+    props.navigation.addListener('didFocus', () => {
+      getProducts()
+    })
   }, [])
 
 
@@ -303,12 +305,12 @@ const Product = props => {
     setAlertState(!alertState)
   }
   const searchWarning = () => {
-    setAlertState(!alertState) 
+    setAlertState(!alertState)
     setAlertTitle('Attention')
     setAlertMsg('No Products found!')
   }
   const catchWarning = () => {
-    setAlertState(!alertState) 
+    setAlertState(!alertState)
     setAlertTitle('Attention')
     setAlertMsg('Something went wrong. Please restart')
   }
@@ -324,9 +326,9 @@ const Product = props => {
         presentationStyle="overFullScreen"
         transparent
         visible={isModalVisible}>
-          <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
-            <View style={styles.modalOverlay} />
-          </TouchableWithoutFeedback>
+        <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
+          <View style={styles.modalOverlay} />
+        </TouchableWithoutFeedback>
         <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', }}>
           <ScrollView>
             <View style={styles.modalStyle}>

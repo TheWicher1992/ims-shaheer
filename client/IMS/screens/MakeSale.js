@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Button, Switch, Dimensions, TextInput, TouchableOpacity, KeyboardAvoidingView, ScrollView, TouchableWithoutFeedback} from 'react-native'; 
+import { StyleSheet, Text, View, Button, Switch, Dimensions, TextInput, TouchableOpacity, KeyboardAvoidingView, ScrollView, TouchableWithoutFeedback } from 'react-native';
 import HeaderButton from '../components/HeaderButton';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { FontAwesome } from '@expo/vector-icons';
@@ -27,41 +27,41 @@ const MakeSale = props => {
   const [clients, setClients] = useState([])
 
   const getProducts = async () => {
-    try{
+    try {
       const res = await axios.get(
         `${uri}/api/product/`
       )
-     
-  
+
+
       setProducts(res.data.products)
-  
+
       setProductName(res.data.products[0]._id)
 
     }
-    catch(err){
+    catch (err) {
       catchWarning()
     }
 
-    
+
 
 
   }
 
 
   const getClients = async () => {
-    try{
-
-    
-    const res = await axios.get(
-      `${uri}/api/client/*`
-    )
-    
+    try {
 
 
-    setClients(res.data.clients)
-    setClientName(res.data.clients[0]._id)
+      const res = await axios.get(
+        `${uri}/api/client/*`
+      )
+
+
+
+      setClients(res.data.clients)
+      setClientName(res.data.clients[0]._id)
     }
-    catch(err){
+    catch (err) {
       catchWarning()
     }
 
@@ -71,7 +71,7 @@ const MakeSale = props => {
   const getSales = async () => {
     setLoading(true)
     let q = search.trim()
-    
+
     const getURI =
       `${uri}/api/sale` +
       `/${props.filters.page}` +
@@ -82,26 +82,30 @@ const MakeSale = props => {
       `/${props.filters.date}` +
       `/${props.filters.maxQuantity}` +
       `/${props.filters.maxTotal}`
-      try{
+    try {
 
-      
 
-    const res = await axios.get(getURI)
-    res.data.sales.length === 0 ? searchWarning() : null
-    setSales(res.data.sales)
-    
-      }
-      catch(err){
-        catchWarning()
-      }
-      setLoading(false)
+
+      const res = await axios.get(getURI)
+      res.data.sales.length === 0 ? searchWarning() : null
+      setSales(res.data.sales)
+
+    }
+    catch (err) {
+      catchWarning()
+    }
+    setLoading(false)
   }
 
   useEffect(() => {
-    getSales()
 
-    getProducts()
-    getClients()
+    props.navigation.addListener('didFocus', () => {
+      getSales()
+
+      getProducts()
+      getClients()
+    })
+
 
   }, [])
 
@@ -140,12 +144,12 @@ const MakeSale = props => {
   }
 
   const searchWarning = () => {
-    setAlertState(!alertState) 
+    setAlertState(!alertState)
     setAlertTitle('Attention')
     setAlertMsg('No Sales found!')
   }
   const catchWarning = () => {
-    setAlertState(!alertState) 
+    setAlertState(!alertState)
     setAlertTitle('Attention')
     setAlertMsg('Something went wrong. Please restart')
   }
@@ -156,10 +160,10 @@ const MakeSale = props => {
   const [quantityVal, setQuantityVal] = React.useState(0)
   const [totalAmount, setTotalAmount] = React.useState(0) //this is total amount
   const [amountReceived, setAmountReceived] = React.useState(0) //this is amount received
-  const [paymentType,setPaymentType] = React.useState(`Partial`) //this is the type of payment
+  const [paymentType, setPaymentType] = React.useState(`Partial`) //this is the type of payment
   const [clientName, setClientName] = React.useState(``)
   const [notes, setNotes] = React.useState(``)
-  const [selectDOrderQuantity,setSelectDOrderQuantity] = React.useState(0)
+  const [selectDOrderQuantity, setSelectDOrderQuantity] = React.useState(0)
 
 
   const onChangeProductName = (prodName) => {
@@ -186,23 +190,23 @@ const MakeSale = props => {
     setNotes(noteVal);
   }
 
-  function sum( obj ) {
+  function sum(obj) {
     var sum = 0;
-    for( var el in obj ) {
-      if( obj.hasOwnProperty( el ) ) {
-        sum += parseFloat( obj[el] );
+    for (var el in obj) {
+      if (obj.hasOwnProperty(el)) {
+        sum += parseFloat(obj[el]);
       }
     }
     return sum;
   }
 
   const addSale = () => {
-    if(quantityVal === '' || totalAmount === '' || amountReceived === '' || notes === ''){
+    if (quantityVal === '' || totalAmount === '' || amountReceived === '' || notes === '') {
       setAlertTitle('Warning')
       setAlertMsg('Input fields may be empty. Request could not be processed.')
       show()
     }
-    else{
+    else {
       // setModalVisible(false); //closing modal on done for now
       const body = {
         productID: productName,
@@ -211,7 +215,7 @@ const MakeSale = props => {
         payment: paymentType,
         clientID: clientName,
 
-        note : notes,
+        note: notes,
         received: amountReceived,
         isWarehouse: isWarehouse,
         deliveryOrder: selectedDOrder,
@@ -223,28 +227,27 @@ const MakeSale = props => {
       let totalQuant = 0
       if (body.isWarehouse) {
         totalQuant = sum(body.warehouses.quant)
-        if (totalQuant != body.quantity){
+        if (totalQuant != body.quantity) {
           setAlertTitle('Warning')
           setAlertMsg('Quantities do not match. Request could not be processed.')
           show()
           return
         }
-        else if(body.total <= body.received && body.payment ==="Partial"){
+        else if (body.total <= body.received && body.payment === "Partial") {
           setAlertTitle('Warning')
           setAlertMsg('Payment type partial but amount greater then total. Request could not be processed.')
           show()
           return
         }
-        else if(body.total != body.received && body.payment ==="Full"){
+        else if (body.total != body.received && body.payment === "Full") {
           setAlertTitle('Warning')
           setAlertMsg('Payment type partial but amount greater then total. Request could not be processed.')
           show()
           return
         }
       }
-      else{
-        if (quantityVal !== selectDOrderQuantity)
-        {
+      else {
+        if (quantityVal !== selectDOrderQuantity) {
           setAlertTitle('Warning')
           setAlertMsg('Quantities do not match. Request could not be processed.')
           show()
@@ -271,7 +274,7 @@ const MakeSale = props => {
         })
     }
 
-    
+
 
   }
 
@@ -288,14 +291,14 @@ const MakeSale = props => {
   const [warehouseIdTicksQuant, setWarehouseIdTicksQuant] = useState({
     ticks: {},
     quant: {},
-    ids : []
+    ids: []
   })
   const [warehousesID, setWarehousesID] = useState([]) //keep track of warehouses
 
   const onPressModal = (prod) => {
     setTableDetailModalVisible(true),
-    console.log(prod),
-    setTouchedSale(prod)
+      console.log(prod),
+      setTouchedSale(prod)
   }
 
 
@@ -308,41 +311,41 @@ const MakeSale = props => {
     setTableDetailModalVisible(false)
   }
 
-  const [stock,setStock] = useState([])
+  const [stock, setStock] = useState([])
 
 
 
   const getStock = async () => {
-    try{
-
-    
-    const res = await axios.get(
-      `${uri}/api/product/stock/${productName}`
-    )
-   
-    setStock(res.data.stocks)
+    try {
 
 
-    const wareMap = {}
-    const quantMap = {}
-    const wareIDs = []
-    res.data.stocks.warehouseStock.forEach(e => {
-      if(e.stock!== 0){
-        wareMap[e.warehouse._id] = false
-        quantMap[e.warehouse._id] = 0
-        wareIDs.push(e.warehouse._id)
-      }
-      
-    })
-    // console.log("here pp ", wareMap)
-    // console.log("here qq ", quantMap)
-    setWarehouseIdTicksQuant({
-      ticks: {...wareMap},
-      quant: {...quantMap},
-      ids: [...wareIDs]
-    })
-  }
-    catch(err){
+      const res = await axios.get(
+        `${uri}/api/product/stock/${productName}`
+      )
+
+      setStock(res.data.stocks)
+
+
+      const wareMap = {}
+      const quantMap = {}
+      const wareIDs = []
+      res.data.stocks.warehouseStock.forEach(e => {
+        if (e.stock !== 0) {
+          wareMap[e.warehouse._id] = false
+          quantMap[e.warehouse._id] = 0
+          wareIDs.push(e.warehouse._id)
+        }
+
+      })
+      // console.log("here pp ", wareMap)
+      // console.log("here qq ", quantMap)
+      setWarehouseIdTicksQuant({
+        ticks: { ...wareMap },
+        quant: { ...quantMap },
+        ids: [...wareIDs]
+      })
+    }
+    catch (err) {
       catchWarning()
     }
 
@@ -350,55 +353,53 @@ const MakeSale = props => {
 
   const openModals = (modal) => {
     getStock().then(() => {
-      if(modal === "Warehouse"){
+      if (modal === "Warehouse") {
         setWarehouseModal(true)
       }
-      else if(modal === "D-Order"){
+      else if (modal === "D-Order") {
         setDOrderModal(true)
       }
     })
   }
 
 
-  const setQuantityWarehouses = (q,s,e) =>{
-    console.log(q,s,e)
-    if(e<s)
-    {
-    warehouseIdTicksQuant["quant"][q] = e
+  const setQuantityWarehouses = (q, s, e) => {
+    console.log(q, s, e)
+    if (e < s) {
+      warehouseIdTicksQuant["quant"][q] = e
     }
-    else
-    {
+    else {
       console.log("not enough stock in selected warehouse")
-    return
+      return
     }
   }
 
 
-  
+
   const toggleSwitch = () => {
     setIsWarehouse(!isWarehouse);
     // console.log(`switched`);
   };
 
-  
+
   const refresh = () => {
     setModelRefresh(!modelRefresh);
   }
 
   const warehouseClicked = (e) => {
-    if(warehouseIdTicksQuant["ticks"][e] === false){
+    if (warehouseIdTicksQuant["ticks"][e] === false) {
       // console.log("False")
-      setWarehousesID([...warehousesID,e])
+      setWarehousesID([...warehousesID, e])
       warehouseIdTicksQuant["ticks"][e] = true
       refresh()
     }
-    else{
+    else {
       let index = warehousesID.indexOf(e)
-      warehousesID.splice(index,1)
+      warehousesID.splice(index, 1)
       warehouseIdTicksQuant["ticks"][e] = false
       refresh()
     }
-    
+
   }
 
   const setProductAndStock = (prod) => {
@@ -413,275 +414,275 @@ const MakeSale = props => {
     setAlertState(!alertState)
   }
 
-   return(
-      // <KeyboardAvoidingView style = {styles.containerView} behavior = "padding">
-      
-      <ScrollView>
-       <ShowAlert state={alertState} handleClose={show} alertTitle={alertTitle} alertMsg={alertMsg} style={styles.buttonModalContainer} />
-        <Modal
-            onSwipeComplete={() => setWarehouseModal(false)}
-            swipeDirection="left"
-            presentationStyle="overFullScreen"
-            transparent
-            visible={warehouseModal}
-          >
-            <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
-            <View style={styles.modalOverlay} />
-          </TouchableWithoutFeedback>
-             <View style={styles.centeredView}>
-                <View style={styles.modalView}>
-                  <Text style={styles.modalTitleNew}>Select Warehouse</Text>
-                  {/* <Text style = {{color: '#006270',fontFamily: 'Roboto',fontWeight: 'bold', fontSize: Dimensions.get('window').height === 1232 ? 28 : 22, top: 15}}> Selling Quantity: {quantityVal}</Text>
-                  <Text style = {{color: '#006270',fontFamily: 'Roboto',fontWeight: 'bold', fontSize: Dimensions.get('window').height === 1232 ? 28 : 22, top: 10}}> Selected Quantity: {quantityVal}</Text> */}
-                  <ScrollView style = {styles.modalWarehouse}> 
-                  <View>
-                    {
-                      stock.warehouseStock !== undefined && stock.warehouseStock !== [] && stock.warehouseStock.map((record,i) => (
-                        <View>
-                            <TouchableOpacity onPress = {() => warehouseClicked(record.warehouse._id)}>
-                              <View style = {styles.inputWarehouse}>
-                                <View style = {{flexDirection: 'row'}}>
-                                  <Text style={{fontSize:12,}}>
-                                      {record.warehouse.name} - Quantity: {record.stock}
-                                  </Text>
-                                  <View style = {{bottom: Dimensions.get('window').height>900 ? 10: 5, left: 10 }}>
-                                  {warehouseIdTicksQuant["ticks"][record.warehouse._id] === true ? (<FontAwesome
-                                        name={"check"}
-                                        size={Dimensions.get('window').height > 900 ? 30 : 25}
-                                        color={"#008394"}
-                                    />
-                                  ) : (null)}
-                                  </View>
-                                </View>
-                                
-                                
-                              </View> 
-                            </TouchableOpacity>
-                            <View>
-                              {warehouseIdTicksQuant["ticks"][record.warehouse._id] === true ? (
-                                <TextInput onChangeText={(e) => setQuantityWarehouses(record.warehouse._id,record.stock,e)} style={styles.inputWarehouse} placeholder="Quantity" autoCorrect={false} />
-                              ): (null)}
-                            </View>
-                          
-                        </View>
-                        
+  return (
+    // <KeyboardAvoidingView style = {styles.containerView} behavior = "padding">
 
-                      ))
-                    }
-                    {
-                      (stock.warehouseStock !== undefined && stock.warehouseStock.length === 0 ) ?
-                      <Text style = {styles.inputWarehouse}>
-                        Nothing to show
-                      </Text>
-                      : (null)
-                    }
+    <ScrollView>
+      <ShowAlert state={alertState} handleClose={show} alertTitle={alertTitle} alertMsg={alertMsg} style={styles.buttonModalContainer} />
+      <Modal
+        onSwipeComplete={() => setWarehouseModal(false)}
+        swipeDirection="left"
+        presentationStyle="overFullScreen"
+        transparent
+        visible={warehouseModal}
+      >
+        <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
+          <View style={styles.modalOverlay} />
+        </TouchableWithoutFeedback>
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text style={styles.modalTitleNew}>Select Warehouse</Text>
+            {/* <Text style = {{color: '#006270',fontFamily: 'Roboto',fontWeight: 'bold', fontSize: Dimensions.get('window').height === 1232 ? 28 : 22, top: 15}}> Selling Quantity: {quantityVal}</Text>
+                  <Text style = {{color: '#006270',fontFamily: 'Roboto',fontWeight: 'bold', fontSize: Dimensions.get('window').height === 1232 ? 28 : 22, top: 10}}> Selected Quantity: {quantityVal}</Text> */}
+            <ScrollView style={styles.modalWarehouse}>
+              <View>
+                {
+                  stock.warehouseStock !== undefined && stock.warehouseStock !== [] && stock.warehouseStock.map((record, i) => (
+                    <View key={i}>
+                      <TouchableOpacity onPress={() => warehouseClicked(record.warehouse._id)}>
+                        <View style={styles.inputWarehouse}>
+                          <View style={{ flexDirection: 'row' }}>
+                            <Text style={{ fontSize: 12, }}>
+                              {record.warehouse.name} - Quantity: {record.stock}
+                            </Text>
+                            <View style={{ bottom: Dimensions.get('window').height > 900 ? 10 : 5, left: 10 }}>
+                              {warehouseIdTicksQuant["ticks"][record.warehouse._id] === true ? (<FontAwesome
+                                name={"check"}
+                                size={Dimensions.get('window').height > 900 ? 30 : 25}
+                                color={"#008394"}
+                              />
+                              ) : (null)}
+                            </View>
+                          </View>
+
+
+                        </View>
+                      </TouchableOpacity>
+                      <View>
+                        {warehouseIdTicksQuant["ticks"][record.warehouse._id] === true ? (
+                          <TextInput onChangeText={(e) => setQuantityWarehouses(record.warehouse._id, record.stock, e)} style={styles.inputWarehouse} placeholder="Quantity" autoCorrect={false} />
+                        ) : (null)}
+                      </View>
+
                     </View>
 
-            
-                  </ScrollView> 
-                </View>
-                
+
+                  ))
+                }
+                {
+                  (stock.warehouseStock !== undefined && stock.warehouseStock.length === 0) ?
+                    <Text style={styles.inputWarehouse}>
+                      Nothing to show
+                    </Text>
+                    : (null)
+                }
               </View>
-          </Modal>
 
 
-          {/* d order ---  */}
-          <Modal
-            onSwipeComplete={() => setDOrderModal(false)}
-            swipeDirection="left"
-            presentationStyle="overFullScreen"
-            transparent
-            visible={dOrderModal}
-          >
-            <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
-            <View style={styles.modalOverlay} />
-          </TouchableWithoutFeedback>
-             <View style={styles.centeredView}>
-                <View style={styles.modalView}>
-                  <Text style={styles.modalTitleNew}>Select Order</Text>
-                  {/* <Text style = {{color: '#006270',fontFamily: 'Roboto',fontWeight: 'bold', fontSize: Dimensions.get('window').height === 1232 ? 28 : 22, top: 15}}> Selling Quantity: {quantityVal}</Text> */}
-                  <ScrollView style = {styles.modalWarehouse}> 
-                    {
-                      stock.deliverOrderStocks !== undefined && stock.deliverOrderStocks !== [] && stock.deliverOrderStocks.map((record,i)=> ( 
-                        !record.status &&  
-                        <TouchableOpacity onPress = {() => {setSelectedDOrder(record._id);  setSelectDOrderQuantity(record.quantity)}}>
-                          <View style = {styles.inputWarehouse}>
-                            <View style = {{flexDirection: 'row'}}>
-                              <Text style = {{fontSize: 12,}}>
-                                  {record.location} - Quantity: {record.quantity}
-                              </Text>
-                              <View style = {{bottom: Dimensions.get('window').height>900 ? 10: 5, left: 10}}>
-                                {selectedDOrder === record._id ? (<FontAwesome
-                                        name={"check"}
-                                        size={Dimensions.get('window').height > 900 ? 30 : 25}
-                                        color={"#008394"}
-                                        
-                                    />
-                                  ) : (null)}
-                              </View>
-                                
-                            </View>
-                            
+            </ScrollView>
+          </View>
 
-                            
-                          </View>
-                        </TouchableOpacity>
-                        
-                       
-                        
-                      ))
+        </View>
+      </Modal>
+
+
+      {/* d order ---  */}
+      <Modal
+        onSwipeComplete={() => setDOrderModal(false)}
+        swipeDirection="left"
+        presentationStyle="overFullScreen"
+        transparent
+        visible={dOrderModal}
+      >
+        <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
+          <View style={styles.modalOverlay} />
+        </TouchableWithoutFeedback>
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text style={styles.modalTitleNew}>Select Order</Text>
+            {/* <Text style = {{color: '#006270',fontFamily: 'Roboto',fontWeight: 'bold', fontSize: Dimensions.get('window').height === 1232 ? 28 : 22, top: 15}}> Selling Quantity: {quantityVal}</Text> */}
+            <ScrollView style={styles.modalWarehouse}>
+              {
+                stock.deliverOrderStocks !== undefined && stock.deliverOrderStocks !== [] && stock.deliverOrderStocks.map((record, i) => (
+                  !record.status &&
+                  <TouchableOpacity key={i} onPress={() => { setSelectedDOrder(record._id); setSelectDOrderQuantity(record.quantity) }}>
+                    <View style={styles.inputWarehouse}>
+                      <View style={{ flexDirection: 'row' }}>
+                        <Text style={{ fontSize: 12, }}>
+                          {record.location} - Quantity: {record.quantity}
+                        </Text>
+                        <View style={{ bottom: Dimensions.get('window').height > 900 ? 10 : 5, left: 10 }}>
+                          {selectedDOrder === record._id ? (<FontAwesome
+                            name={"check"}
+                            size={Dimensions.get('window').height > 900 ? 30 : 25}
+                            color={"#008394"}
+
+                          />
+                          ) : (null)}
+                        </View>
+
+                      </View>
+
+
+
+                    </View>
+                  </TouchableOpacity>
+
+
+
+                ))
+              }
+              {
+                (stock.deliverOrderStocks !== undefined && stock.deliverOrderStocks.length === 0) ?
+                  <Text style={styles.inputWarehouse}>
+                    Nothing to show
+                  </Text>
+                  : (null)
+              }
+
+            </ScrollView>
+          </View>
+
+        </View>
+      </Modal>
+      <Modal
+        onSwipeComplete={() => setModalVisible(false)}
+        swipeDirection="left"
+        presentationStyle="overFullScreen"
+        transparent
+        visible={isModalVisible}>
+        <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
+          <View style={styles.modalOverlay} />
+        </TouchableWithoutFeedback>
+        <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+          <ScrollView style={{ paddingVertical: 10 }} showsVerticalScrollIndicator={false}>
+            <View style={styles.modalStyle}>
+              <View style={{ justifyContent: 'center', alignItems: 'center', }}>
+                <Text style={styles.modalTitle}>Make a Sale</Text>
+                <View style={{ marginTop: 40, borderWidth: 2, borderRadius: 40, borderColor: "#008394", width: Dimensions.get('window').width * 0.65, height: 40, fontSize: 8, justifyContent: 'space-between' }}>
+
+                  <Picker
+                    style={{ top: 6, color: 'grey', fontFamily: 'Roboto' }}
+                    itemStyle={{ fontWeight: '100' }}
+                    placeholder="Select a Product"
+                    selectedValue={productName}
+                    onValueChange={(itemValue, itemIndex) =>
+                      setProductAndStock(itemValue)
+                      // setProductName(itemValue)
                     }
+                  >
                     {
-                      (stock.deliverOrderStocks !== undefined && stock.deliverOrderStocks.length === 0 ) ?
-                      <Text style = {styles.inputWarehouse}>
-                        Nothing to show
-                      </Text>
-                      : (null)
-                    }
-                    
-                  </ScrollView> 
+                      products.map((product, i) => (
+
+                        <Picker.Item label={product.title === undefined ? 0 : product.title} value={product._id === undefined ? 0 : product._id} key={i} />
+
+                      ))}
+                  </Picker>
+
                 </View>
-                
-              </View>
-          </Modal>
-        <Modal
-            onSwipeComplete={() => setModalVisible(false)}
-            swipeDirection="left"
-            presentationStyle="overFullScreen"
-            transparent
-            visible={isModalVisible}>
-              <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
-            <View style={styles.modalOverlay} />
-          </TouchableWithoutFeedback>
-            <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-              <ScrollView style={{paddingVertical: 10}} showsVerticalScrollIndicator={false}>
-                <View style={styles.modalStyle}>
-                  <View style = {{justifyContent: 'center', alignItems : 'center', }}>
-                      <Text style = {styles.modalTitle}>Make a Sale</Text>
-                        <View style={{ marginTop: 40,borderWidth: 2, borderRadius: 40, borderColor: "#008394", width: Dimensions.get('window').width * 0.65, height: 40, fontSize: 8, justifyContent: 'space-between' }}>
+                <View style={{ marginTop: 20, borderWidth: 2, borderRadius: 40, borderColor: "#008394", width: Dimensions.get('window').width * 0.65, height: 40, fontSize: 8, justifyContent: 'space-between' }}>
 
-                          <Picker
-                            style={{ top: 6, color: 'grey', fontFamily: 'Roboto' }}
-                            itemStyle={{ fontWeight: '100' }}
-                            placeholder="Select a Product"
-                            selectedValue={productName}
-                            onValueChange={(itemValue, itemIndex) =>
-                              setProductAndStock(itemValue)
-                              // setProductName(itemValue)
-                            }
-                          >
-                           {
-                            products.map((product,i) => (
-                            
-                            <Picker.Item label= {product.title === undefined ? 0 : product.title} value={product._id === undefined ? 0 : product._id}  key = {product._id === undefined ? 0 : product._id}/>
-                            
-                            ))} 
-                          </Picker>
+                  <Picker
+                    style={{ top: 6, color: 'grey', fontFamily: 'Roboto' }}
+                    itemStyle={{ fontWeight: '100' }}
+                    placeholder="Select a Client"
+                    selectedValue={clientName}
+                    onValueChange={(itemValue, itemIndex) =>
+                      setClientName(itemValue)
+                    }
+                  >
+                    {
+                      clients.map((client, i) => (
+                        <Picker.Item key={i} label={client.userName === undefined ? 0 : client.userName} value={client._id === undefined ? 0 : client._id} />
+                      ))}
+                  </Picker>
 
-                        </View>
-                        <View style={{marginTop: 20,borderWidth: 2, borderRadius: 40, borderColor: "#008394", width: Dimensions.get('window').width * 0.65, height: 40, fontSize: 8, justifyContent: 'space-between' }}>
+                </View>
 
-                          <Picker
-                            style={{ top: 6, color: 'grey', fontFamily: 'Roboto' }}
-                            itemStyle={{ fontWeight: '100' }}
-                            placeholder="Select a Client"
-                            selectedValue={clientName}
-                            onValueChange={(itemValue, itemIndex) =>
-                              setClientName(itemValue)
-                            }
-                          >
-                            {
-                            clients.map((client,i) => (
-                            <Picker.Item label={client.userName === undefined ? 0 : client.userName} value={client._id === undefined ? 0 : client._id}/>
-                            ))}
-                          </Picker>
+                <View style={{ marginTop: 20 }}>
+                  <TextInput onChangeText={onChangeQuantity} style={styles.input} placeholder="Quantity" autoCorrect={false} />
+                  <TextInput onChangeText={onChangeTotalAmount} style={styles.input} placeholder="Total Amount" autoCorrect={false} />
+                  <TextInput onChangeText={onChangeAmountReceived} style={styles.input} placeholder="Amount Received" autoCorrect={false} />
+                  <TextInput multiline={true} numberOfLines={5} onChangeText={onChangeNotes} style={styles.input} placeholder="Notes" autoCorrect={false} />
 
-                        </View>
+                  <View style={{ borderWidth: 2, borderRadius: 40, borderColor: "#008394", width: Dimensions.get('window').width * 0.65, height: 40, fontSize: 8, justifyContent: 'space-between' }}>
 
-                        <View style = {{marginTop: 20}}>
-                          <TextInput onChangeText={onChangeQuantity} style={styles.input} placeholder="Quantity" autoCorrect={false} />
-                          <TextInput onChangeText={onChangeTotalAmount} style={styles.input} placeholder="Total Amount" autoCorrect={false} />
-                          <TextInput onChangeText={onChangeAmountReceived} style={styles.input} placeholder="Amount Received" autoCorrect={false} />
-                          <TextInput multiline = {true} numberOfLines = {5} onChangeText={onChangeNotes} style={styles.input} placeholder="Notes" autoCorrect={false} />
+                    <Picker
+                      style={{ top: 6, color: 'grey', fontFamily: 'Roboto' }}
+                      itemStyle={{ fontWeight: '100' }}
+                      placeholder="Select a Payment Type"
+                      selectedValue={paymentType}
+                      onValueChange={(itemValue, itemIndex) =>
+                        setPaymentType(itemValue)
+                      }
+                    >
+                      <Picker.Item label="Partial" value="Partial" />
+                      <Picker.Item label="Credit" value="Credit" />
+                      <Picker.Item label="Full" value="Full" />
+                    </Picker>
 
-                          <View style={{borderWidth: 2, borderRadius: 40, borderColor: "#008394", width: Dimensions.get('window').width * 0.65, height: 40, fontSize: 8, justifyContent: 'space-between' }}>
+                  </View>
 
-                            <Picker
-                              style={{ top: 6, color: 'grey', fontFamily: 'Roboto' }}
-                              itemStyle={{ fontWeight: '100' }}
-                              placeholder="Select a Payment Type"
-                              selectedValue={paymentType}
-                              onValueChange={(itemValue, itemIndex) =>
-                                setPaymentType(itemValue)
-                              }
-                            >
-                              <Picker.Item label="Partial" value="Partial" />
-                              <Picker.Item label="Credit" value="Credit" />
-                              <Picker.Item label="Full" value="Full" />
-                            </Picker>
+                  <View>
+                    <View style={styles.label}>
+                      <Text style={styles.switch}>D/O</Text>
+                      <Switch
+                        trackColor={{ false: "#00E0C7", true: "#006270" }}
+                        thumbColor={isEnabled ? "white" : "#006270"}
+                        onValueChange={toggleSwitch}
+                        value={isWarehouse}
+                      />
+                      <Text style={styles.switch}>W</Text>
+                    </View>
+                  </View>
 
-                          </View>
-
-                          <View>
-                            <View style={styles.label}>
-                              <Text style={styles.switch}>D/O</Text>
-                                <Switch
-                                  trackColor={{ false: "#00E0C7", true: "#006270" }}
-                                  thumbColor={isEnabled ? "white" : "#006270"}
-                                  onValueChange={toggleSwitch}
-                                  value={isWarehouse}
-                                />
-                              <Text style={styles.switch}>W</Text>
-                            </View>
-                          </View>
-                          
-                          {
-                            isWarehouse ? 
-                              <View>
-                                <TouchableOpacity style = {styles.buttonModalContainer} onPress = {() => openModals("Warehouse")}>
-                                    <Text style = {styles.buttonModalText}>Select Warehouse</Text>
-                                </TouchableOpacity>
-                              </View>
-
-                              :
-
-                              <View>
-                                <TouchableOpacity style = {styles.buttonModalContainer} onPress = {() => openModals("D-Order") } >
-                                    <Text style = {styles.buttonModalText}>Select D-Order</Text>
-                                </TouchableOpacity>
-                              </View>
-                          }
-
-                        </View>
-
-                      
-                      <View style = {{flexDirection: 'row',  alignItems : 'center', bottom: 25}}>
-                        <TouchableOpacity style={{alignSelf: 'flex-start'}} onPress = {() => {setModalVisible(false)}}>
-                          <View>
-                            <View style={styles.buttonModalContainerCross}>
-                              <View>
-                                <Text style={styles.buttonModalText}>Cancel</Text>
-                              </View>
-                            </View>
-                          </View>
-                        </TouchableOpacity>   
-                        <TouchableOpacity onPress = {() => {addSale()}}>
-                          <View>
-                            <View style={styles.buttonModalContainer}>
-                              <View>
-                                <Text style={styles.buttonModalText}>Done</Text>
-                              </View>
-                            </View>
-                          </View>
+                  {
+                    isWarehouse ?
+                      <View>
+                        <TouchableOpacity style={styles.buttonModalContainer} onPress={() => openModals("Warehouse")}>
+                          <Text style={styles.buttonModalText}>Select Warehouse</Text>
                         </TouchableOpacity>
                       </View>
+
+                      :
+
+                      <View>
+                        <TouchableOpacity style={styles.buttonModalContainer} onPress={() => openModals("D-Order")} >
+                          <Text style={styles.buttonModalText}>Select D-Order</Text>
+                        </TouchableOpacity>
+                      </View>
+                  }
+
+                </View>
+
+
+                <View style={{ flexDirection: 'row', alignItems: 'center', bottom: 25 }}>
+                  <TouchableOpacity style={{ alignSelf: 'flex-start' }} onPress={() => { setModalVisible(false) }}>
+                    <View>
+                      <View style={styles.buttonModalContainerCross}>
+                        <View>
+                          <Text style={styles.buttonModalText}>Cancel</Text>
+                        </View>
+                      </View>
+                    </View>
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={() => { addSale() }}>
+                    <View>
+                      <View style={styles.buttonModalContainer}>
+                        <View>
+                          <Text style={styles.buttonModalText}>Done</Text>
+                        </View>
+                      </View>
+                    </View>
+                  </TouchableOpacity>
+                </View>
+              </View>
             </View>
-          </View>
           </ScrollView>
         </View>
-        
+
       </Modal>
-      <SaleDetailModal state={isTableDetailModalVisible} handleClose={handleClose} title="Sale Information" object={touchedSale} occupation = "Admin" />
+      <SaleDetailModal state={isTableDetailModalVisible} handleClose={handleClose} title="Sale Information" object={touchedSale} occupation="Admin" />
       <View style={styles.screen}>
         <View>
           <Text style={styles.title}>Sales</Text>
@@ -717,42 +718,42 @@ const MakeSale = props => {
         </View>
 
       </View>
-      <View style = {{flexDirection: 'row', justifyContent: 'center', paddingRight: 60 }}> 
+      <View style={{ flexDirection: 'row', justifyContent: 'center', paddingRight: 60 }}>
         <View>
-          <FilterButton page = "sale" getSales = {getSales}/>
+          <FilterButton page="sale" getSales={getSales} />
         </View>
-        <View style = {{marginTop: 25}}>
-          <ExportButton data={sales} title={'sales.xlsx'}/>
+        <View style={{ marginTop: 25 }}>
+          <ExportButton data={sales} title={'sales.xlsx'} />
         </View>
       </View>
       <Spinner loading={loading} />
-       
 
-        <DataTable style = {{marginTop:15}}>
-          <DataTable.Header>
-            <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Product</Text></DataTable.Title>
-            <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Quantity</Text></DataTable.Title>
-            <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Amount</Text></DataTable.Title>
-            <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Client</Text></DataTable.Title>
-          </DataTable.Header>
-          {!loading && <ScrollView>
-            <View>
-          {
-            sales.map((sale, i) => (
-              <TouchableOpacity onPress={() => onPressModal(sale)}>
-                <DataTable.Row>
-                  <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{sale.product === null ? '--' : sale.product.title}</Text></DataTable.Cell>
-                  <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{sale.quantity === undefined ? '--' : sale.quantity}</Text></DataTable.Cell>
-                  <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>69000</Text></DataTable.Cell>
-                  <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{sale.client === null ? '--' : sale.client.userName}</Text></DataTable.Cell>
-                </DataTable.Row>
-              </TouchableOpacity>
-            ))
 
-          }
+      <DataTable style={{ marginTop: 15 }}>
+        <DataTable.Header>
+          <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Product</Text></DataTable.Title>
+          <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Quantity</Text></DataTable.Title>
+          <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Amount</Text></DataTable.Title>
+          <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Client</Text></DataTable.Title>
+        </DataTable.Header>
+        {!loading && <ScrollView>
+          <View>
+            {
+              sales.map((sale, i) => (
+                <TouchableOpacity key={i} onPress={() => onPressModal(sale)}>
+                  <DataTable.Row>
+                    <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{sale.product === null ? '--' : sale.product.title}</Text></DataTable.Cell>
+                    <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{sale.quantity === undefined ? '--' : sale.quantity}</Text></DataTable.Cell>
+                    <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>69000</Text></DataTable.Cell>
+                    <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{sale.client === null ? '--' : sale.client.userName}</Text></DataTable.Cell>
+                  </DataTable.Row>
+                </TouchableOpacity>
+              ))
+
+            }
           </View>
-          </ScrollView>}
-        </DataTable>
+        </ScrollView>}
+      </DataTable>
     </ScrollView>
 
 
@@ -903,7 +904,7 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   inputWarehouse: {
-    width: Dimensions.get('window').height>900 ? Dimensions.get('window').width* 0.60 : Dimensions.get('window').width*0.6,
+    width: Dimensions.get('window').height > 900 ? Dimensions.get('window').width * 0.60 : Dimensions.get('window').width * 0.6,
     borderColor: 'gray',
     borderWidth: 2,
     borderRadius: 40,
@@ -980,12 +981,12 @@ const styles = StyleSheet.create({
     marginTop: 22
   },
 
-  modalBody:{
-    paddingVertical:Dimensions.get('window').height < 900 ? Dimensions.get('window').height * 0.05 : Dimensions.get('window').height * 0.1,
-    paddingHorizontal:10
+  modalBody: {
+    paddingVertical: Dimensions.get('window').height < 900 ? Dimensions.get('window').height * 0.05 : Dimensions.get('window').height * 0.1,
+    paddingHorizontal: 10
   },
-  modalWarehouse:{
-    paddingVertical:Dimensions.get('window').height < 900 ? Dimensions.get('window').height * 0.05 : Dimensions.get('window').height * 0.05,
+  modalWarehouse: {
+    paddingVertical: Dimensions.get('window').height < 900 ? Dimensions.get('window').height * 0.05 : Dimensions.get('window').height * 0.05,
   },
   modalView: {
     margin: 20,
@@ -1002,7 +1003,7 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
     width: Dimensions.get('window').height > 900 ? Dimensions.get('window').width * 0.7 : Dimensions.get('window').width * 0.80,
-    height: Dimensions.get('window').height > 900 ? Dimensions.get('window').height* 0.6 : Dimensions.get('window').height * 0.80
+    height: Dimensions.get('window').height > 900 ? Dimensions.get('window').height * 0.6 : Dimensions.get('window').height * 0.80
   },
   switch: {
     color: '#008394',

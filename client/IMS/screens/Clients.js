@@ -43,21 +43,23 @@ const Clients = props => {
   const [loading, setLoading] = useState(true)
   const getClients = async () => {
     setLoading(true)
-    try{
+    try {
       const query = search.trim() === '' ? '*' : search.trim()
-    const res = await axios.get(`${uri}/api/client/${query}`)
-    res.data.clients.length === 0 ? searchWarning(): null
-    setClients(res.data.clients)
+      const res = await axios.get(`${uri}/api/client/${query}`)
+      res.data.clients.length === 0 ? searchWarning() : null
+      setClients(res.data.clients)
     }
-    catch(err){
+    catch (err) {
       catchWarning()
     }
-    
+
     setLoading(false)
   }
 
   useEffect(() => {
-    getClients()
+    props.navigation.addListener('didFocus', () => {
+      getClients()
+    })
   }, [])
 
   React.useEffect(() => { //for table
@@ -75,7 +77,7 @@ const Clients = props => {
   }
 
   const searchWarning = () => {
-    setAlertState(!alertState) 
+    setAlertState(!alertState)
     setAlertTitle('Attention')
     setAlertMsg('No clients found!')
   }
@@ -99,7 +101,7 @@ const Clients = props => {
     setPhoneNumber(phNumber);
   }
   const catchWarning = () => {
-    setAlertState(!alertState) 
+    setAlertState(!alertState)
     setAlertTitle('Attention')
     setAlertMsg('Something went wrong. Please restart')
   }
@@ -121,7 +123,8 @@ const Clients = props => {
       getClients();
       setAlertTitle('Success');
       setAlertMsg('Client added successfully!');
-      show()})
+      show()
+    })
       .catch(err => {
         setError()
       })
@@ -156,9 +159,9 @@ const Clients = props => {
         presentationStyle="overFullScreen"
         transparent
         visible={isModalVisible}>
-          <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
-            <View style={styles.modalOverlay} />
-          </TouchableWithoutFeedback>
+        <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
+          <View style={styles.modalOverlay} />
+        </TouchableWithoutFeedback>
         <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
           <View style={styles.modalStyle}>
             <View style={{ justifyContent: 'center', alignItems: 'center', }}>
@@ -191,7 +194,7 @@ const Clients = props => {
           </View>
         </View>
       </Modal>
-      <ClientDetailModal navigator = {props.navigation} state={isTableDetailModalVisible} handleClose={handleClose} object={touchedClient} title='Client Details' getClients={getClients} />
+      <ClientDetailModal navigator={props.navigation} state={isTableDetailModalVisible} handleClose={handleClose} object={touchedClient} title='Client Details' getClients={getClients} />
       <View style={styles.screen}>
         <View>
           <Text style={styles.title}>Clients</Text>
@@ -223,39 +226,39 @@ const Clients = props => {
         </View>
 
       </View>
-      <View style = {{marginTop: 20}}>
-        <ExportButton data={clients} title={'clients.xlsx'}/>
+      <View style={{ marginTop: 20 }}>
+        <ExportButton data={clients} title={'clients.xlsx'} />
       </View>
-      
+
       <Spinner loading={loading} />
-        <DataTable style = {{marginTop: 10}}>
-          <DataTable.Header>
-            <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Name</Text></DataTable.Title>
-            <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Balance</Text></DataTable.Title>
-            <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Phone Number</Text></DataTable.Title>
-          </DataTable.Header>
-      
+      <DataTable style={{ marginTop: 10 }}>
+        <DataTable.Header>
+          <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Name</Text></DataTable.Title>
+          <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Balance</Text></DataTable.Title>
+          <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Phone Number</Text></DataTable.Title>
+        </DataTable.Header>
 
-          {!loading && <ScrollView >
-            <View>
-          {
-            clients.map(c => (
-              <TouchableOpacity key={c._id} onPress={() => onPressRecord(c)}>
 
-                <DataTable.Row>
-                  <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{c.userName}</Text></DataTable.Cell>
-                  <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{c.balance}</Text></DataTable.Cell>
-                  <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{c.phone}</Text></DataTable.Cell>
-                </DataTable.Row>
-              </TouchableOpacity>
+        {!loading && <ScrollView >
+          <View>
+            {
+              clients.map(c => (
+                <TouchableOpacity key={c._id} onPress={() => onPressRecord(c)}>
 
-            ))
-          }
+                  <DataTable.Row>
+                    <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{c.userName}</Text></DataTable.Cell>
+                    <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{c.balance}</Text></DataTable.Cell>
+                    <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{c.phone}</Text></DataTable.Cell>
+                  </DataTable.Row>
+                </TouchableOpacity>
+
+              ))
+            }
           </View>
-          </ScrollView>}
-        </DataTable>
+        </ScrollView>}
+      </DataTable>
 
-      
+
     </ScrollView>
 
 
