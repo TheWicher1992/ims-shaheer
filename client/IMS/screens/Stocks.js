@@ -53,21 +53,23 @@ const Stocks = props => {
       const res = await axios.get(
         `${uri}/api/product/stock/${filters.page}/${filters.query}/${filters.sort}/${filters.sortBy}`
       )
-      res.data.stocks.length === 0 ? searchWarning(): null
+      res.data.stocks.length === 0 ? searchWarning() : null
       setProducts(res.data.stocks.reverse())
     }
-    catch(err){
-        catchWarning()
+    catch (err) {
+      catchWarning()
     }
     setLoading(false)
     //setSelectedProduct(res.data.warehouse[0]._id)
   }
   useEffect(() => {
-    getStock()
+    props.navigation.addListener('didFocus', () => {
+      getStock()
+    })
   }, [])
 
   const catchWarning = () => {
-    setAlertState(!alertState) 
+    setAlertState(!alertState)
     setAlertTitle('Attention')
     setAlertMsg('Something went wrong. Please restart')
   }
@@ -83,7 +85,7 @@ const Stocks = props => {
   };
 
   const searchWarning = () => {
-    setAlertState(!alertState) 
+    setAlertState(!alertState)
     setAlertTitle('Attention')
     setAlertMsg('No stock found!')
   }
@@ -114,7 +116,7 @@ const Stocks = props => {
   const [brand, setBrand] = React.useState(``)
   const [description, setDescription] = React.useState(``)
   const [isTableDetailModalVisible, setTableDetailModalVisible] = React.useState(false);
-  
+
   const onPressModal = (prod) => {
     setTableDetailModalVisible(true),
       setTouchedProduct(prod)
@@ -160,41 +162,41 @@ const Stocks = props => {
         </View>
 
       </View>
-      <View style = {{bottom: 40}} >
-        <ExportButton data={products} title={'stocks.xlsx'}/>
+      <View style={{ bottom: 40 }} >
+        <ExportButton data={products} title={'stocks.xlsx'} />
       </View>
-      <View/>
+      <View />
       <Spinner loading={loading} />
-      
-        <DataTable style = {{bottom: 30}}>
-          <DataTable.Header>
-            <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Serial No.</Text></DataTable.Title>
-            <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Product</Text></DataTable.Title>
-            <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Warehouse</Text></DataTable.Title>
-            <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Stock</Text></DataTable.Title>
 
-          </DataTable.Header>
+      <DataTable style={{ bottom: 30 }}>
+        <DataTable.Header>
+          <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Serial No.</Text></DataTable.Title>
+          <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Product</Text></DataTable.Title>
+          <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Warehouse</Text></DataTable.Title>
+          <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Stock</Text></DataTable.Title>
 
-          {!loading &&<ScrollView>
-            <View>
-          {
-            products.map((product, i) => (
-              <TouchableOpacity key={i} onPress={() => onPressModal(product)}>
-                <DataTable.Row>
-                  <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{product.product === undefined ? 0 : product.product.serial}</Text></DataTable.Cell>
-                  <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{product.product === undefined ? 0 : product.product.title}</Text></DataTable.Cell>
-                  <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{product.warehouse === undefined ? '--' : product.warehouse.name}</Text></DataTable.Cell>
-                  <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{product === undefined ? '--' : product.stock}</Text></DataTable.Cell>
-                </DataTable.Row>
-              </TouchableOpacity>
+        </DataTable.Header>
 
-            ))
-          }
-            </View>
-          </ScrollView>}
-        </DataTable>
+        {!loading && <ScrollView>
+          <View>
+            {
+              products.map((product, i) => (
+                <TouchableOpacity key={i} onPress={() => onPressModal(product)}>
+                  <DataTable.Row>
+                    <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{product.product === undefined ? 0 : product.product.serial}</Text></DataTable.Cell>
+                    <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{product.product === undefined ? 0 : product.product.title}</Text></DataTable.Cell>
+                    <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{product.warehouse === undefined ? '--' : product.warehouse.name}</Text></DataTable.Cell>
+                    <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{product === undefined ? '--' : product.stock}</Text></DataTable.Cell>
+                  </DataTable.Row>
+                </TouchableOpacity>
 
-      
+              ))
+            }
+          </View>
+        </ScrollView>}
+      </DataTable>
+
+
     </ScrollView>
 
 

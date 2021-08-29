@@ -40,40 +40,40 @@ const DeliveryOrders = props => {
   })
 
   const catchWarning = () => {
-    setAlertState(!alertState) 
+    setAlertState(!alertState)
     setAlertTitle('Attention')
     setAlertMsg('Something went wrong. Please restart')
   }
   const getOrders = async () => {
     setLoading(true)
-    try{
+    try {
 
-    
-    const res = await axios.get(
-      `${uri}/api/order/${Pfilters.page}/${query}/${Pfilters.client}/${Pfilters.product}/${Pfilters.sort}/${Pfilters.sortBy}`
-    )
 
-    setOrders(res.data.deliveryOrder)
+      const res = await axios.get(
+        `${uri}/api/order/${Pfilters.page}/${query}/${Pfilters.client}/${Pfilters.product}/${Pfilters.sort}/${Pfilters.sortBy}`
+      )
+
+      setOrders(res.data.deliveryOrder)
     }
-    catch(err){
+    catch (err) {
       catchWarning()
     }
     setLoading(false)
   }
 
   const getProducts = async () => {
-    try{
-
-    
-    const res = await axios.get(
-      `${uri}/api/product/`
-    )
+    try {
 
 
-    setProducts(res.data.products)
-    setProductName(res.data.products[0]._id)
+      const res = await axios.get(
+        `${uri}/api/product/`
+      )
+
+
+      setProducts(res.data.products)
+      setProductName(res.data.products[0]._id)
     }
-    catch(err){
+    catch (err) {
       catchWarning()
     }
 
@@ -83,27 +83,29 @@ const DeliveryOrders = props => {
 
 
   const getClients = async () => {
-    try{
-
-    
-    const res = await axios.get(
-      `${uri}/api/client/*`
-    )
+    try {
 
 
-    setClients(res.data.clients)
-    setClientName(res.data.clients[0]._id)
+      const res = await axios.get(
+        `${uri}/api/client/*`
+      )
+
+
+      setClients(res.data.clients)
+      setClientName(res.data.clients[0]._id)
     }
-    catch(err){
+    catch (err) {
       catchWarning()
     }
 
   }
 
   useEffect(() => {
-    getClients()
-    getProducts()
-    getOrders()
+    props.navigation.addListener('didFocus', () => {
+      getClients()
+      getProducts()
+      getOrders()
+    })
 
   }, [])
 
@@ -173,12 +175,12 @@ const DeliveryOrders = props => {
 
 
   const addDeliveryOrder = () => {
-    if(quantityVal === '' || notes === '' || location === ''){
+    if (quantityVal === '' || notes === '' || location === '') {
       setAlertTitle('Warning')
       setAlertMsg('Input fields may be empty. Request could not be processed.')
       show()
     }
-    else{
+    else {
       const body = {
         productID: productName,
         quantity: quantityVal,
@@ -186,7 +188,7 @@ const DeliveryOrders = props => {
         clientID: clientName,
         note: notes
       }
-  
+
       axios.post(`${uri}/api/order`, body, {
         headers: {
           'Content-Type': 'application/json'
@@ -205,7 +207,7 @@ const DeliveryOrders = props => {
           show()
         })
     }
-    
+
   }
 
 
@@ -230,9 +232,9 @@ const DeliveryOrders = props => {
         transparent
         animationType="slide"
         visible={isModalVisible}>
-           <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
-            <View style={styles.modalOverlay} />
-          </TouchableWithoutFeedback>
+        <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
+          <View style={styles.modalOverlay} />
+        </TouchableWithoutFeedback>
         <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
           <View style={styles.modalStyle}>
             <View style={{ justifyContent: 'center', alignItems: 'center', }}>
@@ -258,7 +260,7 @@ const DeliveryOrders = props => {
                   </Picker>
 
                 </View>
-                <View style = {{bottom: 40}}>
+                <View style={{ bottom: 40 }}>
                   <TextInput onChangeText={onChangeQuantity} style={styles.input} placeholder="Quantity" autoCorrect={false} />
                   <TextInput onChangeText={onChangeLocation} style={styles.input} placeholder="Location" autoCorrect={false} />
                   <TextInput multiline={true} numberOfLines={5} onChangeText={onChangeNotes} style={styles.input} placeholder="Notes" autoCorrect={false} />
@@ -341,43 +343,43 @@ const DeliveryOrders = props => {
 
       </View>
       <View >
-        <ExportButton data={orders} title={'DeliveryOrder.xlsx'}/>
+        <ExportButton data={orders} title={'DeliveryOrder.xlsx'} />
       </View>
 
-                      
+
       <Spinner loading={loading} />
-       
 
-        <DataTable style={{marginTop: 15}}>
-          <DataTable.Header>
-            <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Product</Text></DataTable.Title>
-            <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Client</Text></DataTable.Title>
-            <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Quantity</Text></DataTable.Title>
-            <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Location</Text></DataTable.Title>
-            <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Status</Text></DataTable.Title>
-          </DataTable.Header>
-          {!loading &&<ScrollView>
-            <View>
-          {
-            orders.map((order, i) => (
-              <TouchableOpacity key={i} onPress={() => onPressModal(order)}>
-                <DataTable.Row>
-                  <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{order.product.title === null ? '--' : order.product.title}</Text></DataTable.Cell>
-                  <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{order.client.userName === undefined ? '--' : order.client.userName}</Text></DataTable.Cell>
-                  <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{order.quantity === undefined ? '--' : order.quantity}</Text></DataTable.Cell>
-                  <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{order.location === undefined ? '--' : order.location}</Text></DataTable.Cell>
-                  {order.status === true ? <DataTable.Cell style={styles.cells}><Ionicons name={'checkmark'} size={25} color={'#006270'} /></DataTable.Cell> : <DataTable.Cell style={styles.cells}><Entypo name={'cross'} size={25} color={'red'} /></DataTable.Cell>}
-                </DataTable.Row>
-              </TouchableOpacity>
-            ))
 
-          }
+      <DataTable style={{ marginTop: 15 }}>
+        <DataTable.Header>
+          <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Product</Text></DataTable.Title>
+          <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Client</Text></DataTable.Title>
+          <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Quantity</Text></DataTable.Title>
+          <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Location</Text></DataTable.Title>
+          <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Status</Text></DataTable.Title>
+        </DataTable.Header>
+        {!loading && <ScrollView>
+          <View>
+            {
+              orders.map((order, i) => (
+                <TouchableOpacity key={i} onPress={() => onPressModal(order)}>
+                  <DataTable.Row>
+                    <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{order.product.title === null ? '--' : order.product.title}</Text></DataTable.Cell>
+                    <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{order.client.userName === undefined ? '--' : order.client.userName}</Text></DataTable.Cell>
+                    <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{order.quantity === undefined ? '--' : order.quantity}</Text></DataTable.Cell>
+                    <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{order.location === undefined ? '--' : order.location}</Text></DataTable.Cell>
+                    {order.status === true ? <DataTable.Cell style={styles.cells}><Ionicons name={'checkmark'} size={25} color={'#006270'} /></DataTable.Cell> : <DataTable.Cell style={styles.cells}><Entypo name={'cross'} size={25} color={'red'} /></DataTable.Cell>}
+                  </DataTable.Row>
+                </TouchableOpacity>
+              ))
+
+            }
           </View>
-          </ScrollView>}
-        </DataTable>
+        </ScrollView>}
+      </DataTable>
 
-      
-      
+
+
     </ScrollView>
     // </KeyboardAvoidingView>
 
