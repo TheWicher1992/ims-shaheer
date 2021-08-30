@@ -35,7 +35,7 @@ const EmployeeDetailModal = props => {
   return (
     <KeyboardAvoidingView>
         <ShowAlert state={alertState} handleClose={show} alertTitle={'Success'} alertMsg={'Employee has been deleted successfully! Press OK to go back.'}/>
-        <EmployeeChangePasswordModal state={isUpdateModalVisible} initialModalClose={props.handleClose} handleClose={handleCloseUpdate} title='Change Details' getClients={props.getClients} object={props.object} />
+        <EmployeeChangePasswordModal state={isUpdateModalVisible} initialModalClose={props.handleClose} handleClose={handleCloseUpdate} title='Change Details' getEmployees={props.getEmployees} object={props.object} occupation={props.occupation} />
       <View style={styles.centeredView}>
         <Modal
           animationType="slide"

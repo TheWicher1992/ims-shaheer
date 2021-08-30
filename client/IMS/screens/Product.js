@@ -23,6 +23,7 @@ const Product = props => {
 
   const [products, setProducts] = useState([])
   const [loading, setLoading] = useState(true)
+  const [stock, setStock] = useState(``)
   const [brandsAndColours, setBrandAndColours] = useState({
     brands: [],
     colours: []
@@ -196,6 +197,10 @@ const Product = props => {
     setDescription(desc);
   }
 
+  const onChangeStock = (stock) => {
+    setStock(stock);
+  }
+
 
 
 
@@ -255,6 +260,8 @@ const Product = props => {
 
 
   const [addColorModal, setAddColorModal] = useState(false);
+  const [warehouses, setWarehouses] = useState([])
+  const [selectedWarehouse, setSelectedWarehouse] = useState(``)
   const colorModal = () => {
     setAddColorModal(!addColorModal);
   }
@@ -294,8 +301,9 @@ const Product = props => {
   }
 
   const showAddProductForm = () => {
-
-    getBrandColours().then(() => setModalVisible(true))
+    getBrandColours().then(() => {
+      setModalVisible(true)})
+    
   }
 
   const [alertState, setAlertState] = useState(false)
@@ -313,6 +321,20 @@ const Product = props => {
     setAlertState(!alertState)
     setAlertTitle('Attention')
     setAlertMsg('Something went wrong. Please restart')
+  }
+  
+  const getWarehouses = async () => {
+    try {
+      const res = await axios.get(
+        `${uri}/api/warehouse/${1}/${'*'}/${'*'}/${'*'}`
+      )
+      setWarehouses(res.data.warehouse)
+      setSelectedWarehouse(res.data.warehouse[0]._id)
+    }
+    catch (err) {
+      catchWarning()
+    }
+
   }
 
 
@@ -338,7 +360,29 @@ const Product = props => {
                   <TextInput onChangeText={onChangeSerialNo} style={styles.input} placeholder="Serial" autoCorrect={false} />
                   <TextInput onChangeText={onChangeProductName} style={styles.input} placeholder="Product" autoCorrect={false} />
                   <TextInput onChangeText={onChangeAmount} style={styles.input} placeholder="Amount" autoCorrect={false} />
+                  <TextInput onChangeText={onChangeStock} style={styles.input} placeholder="Stock" autoCorrect={false} />
                   <TextInput multiline={true} numberOfLines={5} onChangeText={onChangeDescription} style={styles.input} placeholder="Description" autoCorrect={false} />
+
+                  <View style={{ borderWidth: 2, marginBottom: 20, borderRadius: 40, borderColor: "#008394", width: Dimensions.get('window').width * 0.65, height: 40, fontSize: 8, justifyContent: 'space-between' }}>
+                    <Picker
+                      style={{ top: 6, color: 'grey', fontFamily: 'Roboto' }}
+                      itemStyle={{ fontWeight: '100' }}
+                      placeholder="Select a Warehouse"
+                      selectedValue={selectedWarehouse}
+                      onValueChange={(itemValue, itemIndex) =>
+                        setSelectedWarehouse(itemValue)
+                      }
+                    >
+
+                      {
+                        warehouses.map((w => (
+                          <Picker.Item key={w._id} label={w.title} value={w._id} />
+                        )))
+                      }
+
+                    </Picker>
+
+                  </View>
 
                   <View style={{ borderWidth: 2, borderRadius: 40, borderColor: "#008394", width: Dimensions.get('window').width * 0.65, height: 40, fontSize: 8, justifyContent: 'space-between' }}>
                     <Picker
@@ -637,7 +681,7 @@ const styles = StyleSheet.create({
   modalStyle: {
     backgroundColor: "#fff",
     width: Dimensions.get('window').height > 900 ? 600 : 320,
-    height: Dimensions.get('window').height > 900 ? 680 : 600,
+    height: Dimensions.get('window').height > 900 ? 700 : 680,
     borderWidth: 2,
     borderRadius: 20,
     marginBottom: 20,
