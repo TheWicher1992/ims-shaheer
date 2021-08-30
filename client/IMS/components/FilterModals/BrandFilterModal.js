@@ -36,7 +36,7 @@ const BrandFilterModal = props => {
             return (
                 <View>
                     {props.object.map((record,i) => (
-                        <View>
+                        <View key = {i}>
 
                             <TouchableOpacity style = {styles.TextBox} onPress={() => setFilterBrand(record, i)}>
                                 <View style={{ paddingLeft: '5%' }}>

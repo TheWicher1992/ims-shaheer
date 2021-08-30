@@ -34,7 +34,7 @@ const WarehouseFilterModal = props => {
             return (
                 <View>
                     {props.object.map((record,i) => (
-                        <View>
+                        <View key = {i}>
 
                             <ScrollView>
                             <View style = {{}}>
