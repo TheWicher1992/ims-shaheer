@@ -108,7 +108,7 @@ AdminDashboard.navigationOptions = navigationData => {
     headerStyle: {
       backgroundColor: '#008394',
     },
-    headerLeft: (
+    headerLeft: () =>(
       <HeaderButtons HeaderButtonComponent={HeaderButton}>
         <Item
           title="Menu"
@@ -119,7 +119,7 @@ AdminDashboard.navigationOptions = navigationData => {
         />
       </HeaderButtons>
     ),
-    headerRight: (
+    headerRight: () => (
       <HeaderNavigation navigation={navigationData.navigation} />
     )
   };

@@ -273,4 +273,102 @@ router.delete('/employee/:id', async (req, res) => {
 
 })
 
+router.put('/edit-admin/:id', /*adminAuth,*/ async (req, res) => {
+    try {
+        var {
+            password,
+        } = req.body
+        console.log(password)
+        const id = req.params.id
+
+        const admin = await Admin.findOne({
+            _id:id
+        })
+
+        if (!admin) {
+            return res.status(400).json({
+                error: "User not found"
+            })
+        }
+
+        const salt = await bcrypt.genSalt(10)
+        const hashedPassword = await bcrypt.hash(password, salt)
+
+        admin.password = hashedPassword
+
+        await admin.save()
+
+        const payload = {
+            type: 'admin',
+            id: admin._id
+        }
+
+
+        const token = await jwt.sign(payload, config.get('token-secret'), { expiresIn: 360000 })
+
+        return res.status(200).json({
+            token,
+            password
+        })
+    }
+    catch (err) {
+        console.log(err)
+        return res.status(500).json({
+            error: SERVER_ERROR
+        })
+    }
+
+})
+
+router.put('/edit-employee/:id', /*adminAuth,*/ async (req, res) => {
+    try {
+        var {
+            password,
+        } = req.body
+        console.log(password)
+        const id = req.params.id
+
+        const employee = await Employee.findOne({
+            _id:id,
+        })
+
+        if (!employee) {
+            return res.status(400).json({
+                error: "User does not exist"
+            })
+        }
+
+        const salt = await bcrypt.genSalt(10)
+        const hashedPassword = await bcrypt.hash(password, salt)
+        
+        employee.password = hashedPassword
+
+        await employee.save()
+
+        const payload = {
+            type: 'employee',
+            id: employee._id
+        }
+
+
+        const token = await jwt.sign(payload, config.get('token-secret'), { expiresIn: 360000 })
+
+        return res.status(200).json({
+            token,
+            password
+        })
+    }
+    catch (err) {
+        console.log(err)
+        return res.status(500).json({
+            error: SERVER_ERROR
+        })
+    }
+
+
+})
+
+
+
+
 module.exports = router

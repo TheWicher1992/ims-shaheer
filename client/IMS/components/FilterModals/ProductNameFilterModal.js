@@ -47,7 +47,7 @@ const ProductNameFilterModal = props => {
             return (
                 <View>
                     {props.object.map((record, i) => (
-                        <ScrollView nestedScrollEnabled = {true} style = {{}}>
+                        <ScrollView  key={i} nestedScrollEnabled = {true} style = {{}}>
 
                        
                         <View style = {{height: '100%', flexGrow: 1}}>
