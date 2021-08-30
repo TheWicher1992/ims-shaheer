@@ -1,13 +1,11 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Button, Dimensions, TextInput, TouchableOpacity, KeyboardAvoidingView, ScrollView, Switch, TouchableWithoutFeedback } from 'react-native';
+import { StyleSheet, Text, View, Button, Dimensions, TextInput, TouchableOpacity, KeyboardAvoidingView, ScrollView, Switch, TouchableWithoutFeedback, Modal } from 'react-native';
 import HeaderButton from '../components/HeaderButton';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { FontAwesome } from '@expo/vector-icons';
 import { DataTable } from 'react-native-paper';
-import Modal from 'react-native-modal';
 import { Picker } from '@react-native-picker/picker';
-import TableDetailModal from '../components/TableDetailModal';
 import PurchaseDetailModal from '../components/PurchaseDetailModal';
 import FilterButton from '../components/FilterButton';
 import axios from 'axios'
@@ -239,18 +237,37 @@ const MakePurchase = props => {
       <KeyboardAvoidingView>
         <Modal
           onSwipeComplete={() => setModalVisible(false)}
+          animationType="slide"
+          transparent={true}
           swipeDirection="left"
-          presentationStyle="overFullScreen"
-          transparent
           visible={isModalVisible}>
           <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
             <View style={styles.modalOverlay} />
           </TouchableWithoutFeedback>
           <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-            <ScrollView style={{ paddingVertical: 10 }} showsVerticalScrollIndicator={false}>
+            {/* <ScrollView style={{ paddingVertical: 10 }} showsVerticalScrollIndicator={false}> */}
               <View style={styles.modalStyle}>
                 <View style={{ justifyContent: 'center', alignItems: 'center', }}>
+                  
+
+                <View style = {{flexDirection: 'row'}}>
+                  <View style = {{ right: Dimensions.get('window').height > 900 ? Dimensions.get('window').width * 0.1 : Dimensions.get('window').width * 0.04, top: 38}}>
+                    <TouchableOpacity onPress = {() => setModalVisible(false)}>
+                      <FontAwesome
+                        name = {"arrow-left"}
+                        size = {Dimensions.get('window').height > 900 ? 30:25}
+                        color = {"#008394"}
+                      />
+                    </TouchableOpacity>
+                    
+                  </View>
+                  
                   <Text style={styles.modalTitle}>Make a Purchase</Text>
+
+                  
+                </View>
+
+
                   <View>
 
                     <View style={{ borderWidth: 2, borderRadius: 40, borderColor: "#008394", width: Dimensions.get('window').width * 0.65, top: 50, height: 40, fontSize: 8, }}>
@@ -359,29 +376,32 @@ const MakePurchase = props => {
 
 
                   </View>
-                  <View style={{ flexDirection: 'row', alignItems: 'center', bottom: Dimensions.get('window').height < 700 ? 25 : 15, }}>
-                    <TouchableOpacity style={{ alignSelf: 'flex-start' }} onPress={() => { setModalVisible(false) }}>
-                      <View>
-                        <View style={styles.buttonModalContainerCross}>
-                          <View>
-                            <Text style={styles.buttonModalText}>Cancel</Text>
+                  
+
+                    <View style={{ flexDirection: 'row', alignItems: 'center',justifyContent: 'center', bottom: Dimensions.get('window').height < 700 ? 25 : 15, }}>
+                      <TouchableOpacity style={{ alignSelf: 'flex-start' }} onPress={() => { setModalVisible(false) }}>
+                        <View>
+                          <View style={styles.buttonModalContainerCross}>
+                            <View>
+                              <Text style={styles.buttonModalText}>Cancel</Text>
+                            </View>
                           </View>
                         </View>
-                      </View>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={() => { addPurchase() }}>
-                      <View>
-                        <View style={styles.buttonModalContainer}>
-                          <View>
-                            <Text style={styles.buttonModalText}>Done</Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity onPress={() => { addPurchase() }}>
+                        <View>
+                          <View style={styles.buttonModalContainer}>
+                            <View>
+                              <Text style={styles.buttonModalText}>Done</Text>
+                            </View>
                           </View>
                         </View>
-                      </View>
-                    </TouchableOpacity>
-                  </View>
+                      </TouchableOpacity>
+                    </View>
+
                 </View>
               </View>
-            </ScrollView>
+            {/* </ScrollView> */}
           </View>
         </Modal>
       </KeyboardAvoidingView>
@@ -516,8 +536,8 @@ const styles = StyleSheet.create({
   },
   modalStyle: {
     backgroundColor: "#fff",
-    width: Dimensions.get('window').height > 900 ? 600 : 320,
-    height: Dimensions.get('window').height > 900 ? 720 : 640,
+    width: Dimensions.get('window').height > 900 ? Dimensions.get('window').width * 0.80 : Dimensions.get('window').width * 0.80,
+    height: Dimensions.get('window').height > 900 ? Dimensions.get('window').height * 0.60 : Dimensions.get('window').height * 0.85,
     borderWidth: 2,
     borderRadius: 20,
     marginBottom: 20,
