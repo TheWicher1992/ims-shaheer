@@ -578,7 +578,7 @@ const MakeSale = props => {
                 
                 <View style = {styles.modalBody}>
                   <View style={styles.input}>
-                    <View style = {{bottom: 20}}>
+                    <View style = {{bottom: 10}}>
                       <Picker
                         style={{ top: 6, color: 'grey', fontFamily: 'Roboto' }}
                         itemStyle={{ fontWeight: '100' }}
@@ -599,7 +599,7 @@ const MakeSale = props => {
                       </View>
                   </View>
                 <View style={styles.input}>
-                <View style = {{bottom: 20}}>
+                <View style = {{bottom: 10}}>
                   <Picker
                     style={{ top: 6, color: 'grey', fontFamily: 'Roboto' }}
                     itemStyle={{ fontWeight: '100' }}

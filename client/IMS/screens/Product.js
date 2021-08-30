@@ -728,7 +728,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
 
     width: Dimensions.get('window').height > 900 ? Dimensions.get('window').width * 0.80 : Dimensions.get('window').width * 0.80,
-    height: Dimensions.get('window').height > 900 ? Dimensions.get('window').height * 0.5 : Dimensions.get('window').height * 0.75,
+    height: Dimensions.get('window').height > 900 ? Dimensions.get('window').height * 0.65 : Dimensions.get('window').height * 0.90,
 
     borderWidth: 2,
     borderRadius: 20,
