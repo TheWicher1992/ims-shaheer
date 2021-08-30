@@ -490,13 +490,8 @@ router.get('/:page/:query/:colour/:brand/:warehouse/:date/:quantity/:price/:sort
             }
         }
 
-        if (price !== 0) filters['price'] = {
-            $lte: price
-        }
-        if (quantity !== '*') filters['totalStock'] = {
-            $lte: quantity
-        }
-
+        if (price !== 0) filters['price'] = price
+        if (quantity !== '*') filters['totalStock'] = quantity
 
         console.log(filters)
         const colourIDs = await ProductColour.find({

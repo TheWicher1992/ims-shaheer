@@ -240,12 +240,8 @@ router.get('/:page/:query/:products/:clients/:payment/:date/:quantity/:amount', 
         }
     }
 
-    if (amount !== '*') filters['total'] = {
-        $lte: amount
-    }
-    if (quantity !== '*') filters['quantity'] = {
-        $lte: quantity
-    }
+    if (amount !== '*') filters['total'] = amount
+    if (quantity !== '*') filters['quantity'] = quantity
     if (payment !== '*') filters['payment'] = payment
 
     const productIDs = await Product.find({
