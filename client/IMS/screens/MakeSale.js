@@ -1,11 +1,10 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Button, Switch, Dimensions, TextInput, TouchableOpacity, KeyboardAvoidingView, ScrollView, TouchableWithoutFeedback } from 'react-native';
+import { StyleSheet, Text, View, Button, Switch, Dimensions, TextInput, TouchableOpacity, KeyboardAvoidingView, ScrollView, TouchableWithoutFeedback, Modal } from 'react-native';
 import HeaderButton from '../components/HeaderButton';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { FontAwesome } from '@expo/vector-icons';
 import { DataTable } from 'react-native-paper';
-import Modal from 'react-native-modal';
 import SaleDetailModal from '../components/SaleDetailModal';
 import FilterButton from '../components/FilterButton';
 import { Picker } from '@react-native-picker/picker';
@@ -34,6 +33,7 @@ const MakeSale = props => {
       setProductName(res.data.products[0]._id)
       setClients(res.data.clients)
       setClientName(res.data.clients[0]._id)
+      console.log("client data",res.data)
     } catch (err) {
       catchWarning()
     }
@@ -74,7 +74,6 @@ const MakeSale = props => {
 
 
   useEffect(() => {
-
     props.navigation.addListener('didFocus', () => {
       getSales()
       getPreFormValues()
@@ -389,15 +388,16 @@ const MakeSale = props => {
   }
 
   return (
-    // <KeyboardAvoidingView style = {styles.containerView} behavior = "padding">
-
+    
+  
     <ScrollView>
       <ShowAlert state={alertState} handleClose={show} alertTitle={alertTitle} alertMsg={alertMsg} style={styles.buttonModalContainer} />
+      <View style = {styles.centeredView}>
       <Modal
         onSwipeComplete={() => setWarehouseModal(false)}
+        animationType="slide"
+        transparent={true}
         swipeDirection="left"
-        presentationStyle="overFullScreen"
-        transparent
         visible={warehouseModal}
       >
         <TouchableWithoutFeedback onPress={() => setWarehouseModal(false)}>
@@ -405,9 +405,22 @@ const MakeSale = props => {
         </TouchableWithoutFeedback>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <Text style={styles.modalTitleNew}>Select Warehouse</Text>
-            {/* <Text style = {{color: '#006270',fontFamily: 'Roboto',fontWeight: 'bold', fontSize: Dimensions.get('window').height === 1232 ? 28 : 22, top: 15}}> Selling Quantity: {quantityVal}</Text>
-                  <Text style = {{color: '#006270',fontFamily: 'Roboto',fontWeight: 'bold', fontSize: Dimensions.get('window').height === 1232 ? 28 : 22, top: 10}}> Selected Quantity: {quantityVal}</Text> */}
+            <View style = {{flexDirection: 'row'}}>
+                  <View style = {{ right: Dimensions.get('window').height > 900 ? Dimensions.get('window').width * 0.1 : Dimensions.get('window').width * 0.04, top: 7}}>
+                    <TouchableOpacity onPress = {() => setWarehouseModal(false)}>
+                      <FontAwesome
+                        name = {"arrow-left"}
+                        size = {Dimensions.get('window').height > 900 ? 30:25}
+                        color = {"#008394"}
+                      />
+                    </TouchableOpacity>
+                    
+                  </View>
+                  
+                  <Text style={styles.modalTitleNew}>Select Warehouse</Text>
+
+                  
+                </View>
             <ScrollView style={styles.modalWarehouse}>
               <View>
                 {
@@ -444,7 +457,7 @@ const MakeSale = props => {
                   ))
                 }
                 {
-                  (stock.warehouseStock !== undefined && stock.warehouseStock.length === 0) ?
+                  (stock.warehouseStock === undefined || stock.warehouseStock.length === 0) ?
                     <Text style={styles.inputWarehouse}>
                       Nothing to show
                     </Text>
@@ -463,9 +476,9 @@ const MakeSale = props => {
       {/* d order ---  */}
       <Modal
         onSwipeComplete={() => setDOrderModal(false)}
+        animationType="slide"
+        transparent={true}
         swipeDirection="left"
-        presentationStyle="overFullScreen"
-        transparent
         visible={dOrderModal}
       >
         <TouchableWithoutFeedback onPress={() => setDOrderModal(false)}>
@@ -473,8 +486,21 @@ const MakeSale = props => {
         </TouchableWithoutFeedback>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <Text style={styles.modalTitleNew}>Select Order</Text>
-            {/* <Text style = {{color: '#006270',fontFamily: 'Roboto',fontWeight: 'bold', fontSize: Dimensions.get('window').height === 1232 ? 28 : 22, top: 15}}> Selling Quantity: {quantityVal}</Text> */}
+            <View style = {{flexDirection: 'row'}}>
+              <View style = {{ right: Dimensions.get('window').height > 900 ? Dimensions.get('window').width * 0.1 : Dimensions.get('window').width * 0.04, top: 7}}>
+                <TouchableOpacity onPress = {() => setDOrderModal(false)}>
+                  <FontAwesome
+                    name = {"arrow-left"}
+                    size = {Dimensions.get('window').height > 900 ? 30:25}
+                    color = {"#008394"}
+                  />
+                </TouchableOpacity>
+               
+              </View>
+          
+              <Text style={styles.modalTitleNew}>Select Order</Text>              
+            </View>
+            
             <ScrollView style={styles.modalWarehouse}>
               {
                 stock.deliverOrderStocks !== undefined && stock.deliverOrderStocks !== [] && stock.deliverOrderStocks.map((record, i) => (
@@ -507,7 +533,7 @@ const MakeSale = props => {
                 ))
               }
               {
-                (stock.deliverOrderStocks !== undefined && stock.deliverOrderStocks.length === 0) ?
+                (stock.deliverOrderStocks === undefined || stock.deliverOrderStocks.length === 0) ?
                   <Text style={styles.inputWarehouse}>
                     Nothing to show
                   </Text>
@@ -519,43 +545,61 @@ const MakeSale = props => {
 
         </View>
       </Modal>
+      
       <Modal
         onSwipeComplete={() => setModalVisible(false)}
+        animationType="slide"
+        transparent={true}
         swipeDirection="left"
-        presentationStyle="overFullScreen"
-        transparent
-        visible={isModalVisible}>
+        visible={isModalVisible}
+      >
         <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
           <View style={styles.modalOverlay} />
         </TouchableWithoutFeedback>
-        <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-          <ScrollView style={{ paddingVertical: 10 }} showsVerticalScrollIndicator={false}>
+        <View style = {styles.centeredView}>
+          {/* <ScrollView  showsVerticalScrollIndicator={false}> */}
             <View style={styles.modalStyle}>
               <View style={{ justifyContent: 'center', alignItems: 'center', }}>
-                <Text style={styles.modalTitle}>Make a Sale</Text>
-                <View style={{ marginTop: 40, borderWidth: 2, borderRadius: 40, borderColor: "#008394", width: Dimensions.get('window').width * 0.65, height: 40, fontSize: 8, justifyContent: 'space-between' }}>
-
-                  <Picker
-                    style={{ top: 6, color: 'grey', fontFamily: 'Roboto' }}
-                    itemStyle={{ fontWeight: '100' }}
-                    placeholder="Select a Product"
-                    selectedValue={productName}
-                    onValueChange={(itemValue, itemIndex) =>
-                      setProductAndStock(itemValue)
-                      // setProductName(itemValue)
-                    }
-                  >
-                    {
-                      products.map((product, i) => (
-
-                        <Picker.Item label={product.title === undefined ? 0 : product.title} value={product._id === undefined ? 0 : product._id} key={i} />
-
-                      ))}
-                  </Picker>
-
+                <View style = {{flexDirection: 'row'}}>
+                  <View style = {{ right: Dimensions.get('window').height > 900 ? Dimensions.get('window').width * 0.16 : Dimensions.get('window').width * 0.1, top: Dimensions.get('window').height > 900 ? 26 :28}}>
+                    <TouchableOpacity onPress = {() => setModalVisible(false)}>
+                      <FontAwesome
+                        name = {"arrow-left"}
+                        size = {Dimensions.get('window').height > 900 ? 36:25}
+                        color = {"#008394"}
+                      />
+                    </TouchableOpacity>
+                    
+                  </View>
+                  
+                  <Text style={styles.modalTitle}>Make a Sale</Text>
+                  
                 </View>
-                <View style={{ marginTop: 20, borderWidth: 2, borderRadius: 40, borderColor: "#008394", width: Dimensions.get('window').width * 0.65, height: 40, fontSize: 8, justifyContent: 'space-between' }}>
+                
+                <View style = {styles.modalBody}>
+                  <View style={styles.input}>
+                    <View style = {{bottom: 20}}>
+                      <Picker
+                        style={{ top: 6, color: 'grey', fontFamily: 'Roboto' }}
+                        itemStyle={{ fontWeight: '100' }}
+                        placeholder="Select a Product"
+                        selectedValue={productName}
+                        onValueChange={(itemValue, itemIndex) =>
+                          setProductAndStock(itemValue)
+                          // setProductName(itemValue)
+                        }
+                      >
+                        {
+                          products.map((product, i) => (
 
+                            <Picker.Item label={product.title === undefined ? 0 : product.title} value={product._id === undefined ? 0 : product._id} key={i} />
+
+                          ))}
+                      </Picker>
+                      </View>
+                  </View>
+                <View style={styles.input}>
+                <View style = {{bottom: 20}}>
                   <Picker
                     style={{ top: 6, color: 'grey', fontFamily: 'Roboto' }}
                     itemStyle={{ fontWeight: '100' }}
@@ -570,16 +614,18 @@ const MakeSale = props => {
                         <Picker.Item key={i} label={client.userName === undefined ? 0 : client.userName} value={client._id === undefined ? 0 : client._id} />
                       ))}
                   </Picker>
-
+                  </View>
                 </View>
 
-                <View style={{ marginTop: 20 }}>
+      
+                <View style={{ }}>
                   <TextInput onChangeText={onChangeQuantity} style={styles.input} placeholder="Quantity" autoCorrect={false} />
                   <TextInput onChangeText={onChangeTotalAmount} style={styles.input} placeholder="Total Amount" autoCorrect={false} />
                   <TextInput onChangeText={onChangeAmountReceived} style={styles.input} placeholder="Amount Received" autoCorrect={false} />
                   <TextInput multiline={true} numberOfLines={5} onChangeText={onChangeNotes} style={styles.input} placeholder="Notes" autoCorrect={false} />
 
-                  <View style={{ borderWidth: 2, borderRadius: 40, borderColor: "#008394", width: Dimensions.get('window').width * 0.65, height: 40, fontSize: 8, justifyContent: 'space-between' }}>
+                  <View style={styles.input}>
+                  <View style = {{bottom: 10}}>
 
                     <Picker
                       style={{ top: 6, color: 'grey', fontFamily: 'Roboto' }}
@@ -594,6 +640,7 @@ const MakeSale = props => {
                       <Picker.Item label="Credit" value="Credit" />
                       <Picker.Item label="Full" value="Full" />
                     </Picker>
+                    </View>
 
                   </View>
 
@@ -630,7 +677,7 @@ const MakeSale = props => {
                 </View>
 
 
-                <View style={{ flexDirection: 'row', alignItems: 'center', bottom: 25 }}>
+                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', bottom: 25 }}>
                   <TouchableOpacity style={{ alignSelf: 'flex-start' }} onPress={() => { setModalVisible(false) }}>
                     <View>
                       <View style={styles.buttonModalContainerCross}>
@@ -650,12 +697,14 @@ const MakeSale = props => {
                     </View>
                   </TouchableOpacity>
                 </View>
+                </View>
               </View>
             </View>
-          </ScrollView>
+          {/* </ScrollView> */}
         </View>
 
       </Modal>
+      </View>
       <SaleDetailModal state={isTableDetailModalVisible} handleClose={handleClose} title="Sale Information" object={touchedSale} occupation="Admin" />
       <View style={styles.screen}>
         <View>
@@ -729,6 +778,7 @@ const MakeSale = props => {
         </ScrollView>}
       </DataTable>
     </ScrollView>
+  
 
 
   )
@@ -774,6 +824,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Roboto',
     fontWeight: 'bold',
     fontSize: Dimensions.get('window').height === 1232 ? 36 : 28,
+    bottom: 25,
   },
   modalTitle: {
     color: '#006270',
@@ -792,12 +843,12 @@ const styles = StyleSheet.create({
     top: 0,
   },
   modalStyle: {
+    padding: 35,
     backgroundColor: "#fff",
-    width: Dimensions.get('window').height > 900 ? 600 : 320,
-    height: Dimensions.get('window').height > 900 ? 700 : 640,
+    width: Dimensions.get('window').height > 900 ? Dimensions.get('window').width * 0.80 : Dimensions.get('window').width * 0.80,
+    height: Dimensions.get('window').height > 900 ? Dimensions.get('window').height * 0.60 : Dimensions.get('window').height * 0.85,
     borderWidth: 2,
     borderRadius: 20,
-    marginBottom: 20,
     borderColor: "#008394",
   },
   subtitle: {
@@ -956,7 +1007,7 @@ const styles = StyleSheet.create({
   },
 
   modalBody: {
-    paddingVertical: Dimensions.get('window').height < 900 ? Dimensions.get('window').height * 0.05 : Dimensions.get('window').height * 0.1,
+    paddingVertical: Dimensions.get('window').height < 900 ? Dimensions.get('window').height * 0.05 : Dimensions.get('window').height * 0.05,
     paddingHorizontal: 10
   },
   modalWarehouse: {
@@ -968,16 +1019,8 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 35,
     alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
     width: Dimensions.get('window').height > 900 ? Dimensions.get('window').width * 0.7 : Dimensions.get('window').width * 0.80,
-    height: Dimensions.get('window').height > 900 ? Dimensions.get('window').height * 0.6 : Dimensions.get('window').height * 0.80
+    height: Dimensions.get('window').height > 900 ? Dimensions.get('window').height * 0.5 : Dimensions.get('window').height * 0.80
   },
   switch: {
     color: '#008394',
