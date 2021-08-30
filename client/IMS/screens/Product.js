@@ -23,6 +23,7 @@ const Product = props => {
 
   const [products, setProducts] = useState([])
   const [loading, setLoading] = useState(true)
+  const [stock, setStock] = useState(``)
   const [brandsAndColours, setBrandAndColours] = useState({
     brands: [],
     colours: []
@@ -196,6 +197,10 @@ const Product = props => {
     setDescription(desc);
   }
 
+  const onChangeStock = (stock) => {
+    setStock(stock);
+  }
+
 
 
 
@@ -355,6 +360,7 @@ const Product = props => {
                   <TextInput onChangeText={onChangeSerialNo} style={styles.input} placeholder="Serial" autoCorrect={false} />
                   <TextInput onChangeText={onChangeProductName} style={styles.input} placeholder="Product" autoCorrect={false} />
                   <TextInput onChangeText={onChangeAmount} style={styles.input} placeholder="Amount" autoCorrect={false} />
+                  <TextInput onChangeText={onChangeStock} style={styles.input} placeholder="Stock" autoCorrect={false} />
                   <TextInput multiline={true} numberOfLines={5} onChangeText={onChangeDescription} style={styles.input} placeholder="Description" autoCorrect={false} />
 
                   <View style={{ borderWidth: 2, marginBottom: 20, borderRadius: 40, borderColor: "#008394", width: Dimensions.get('window').width * 0.65, height: 40, fontSize: 8, justifyContent: 'space-between' }}>
@@ -675,7 +681,7 @@ const styles = StyleSheet.create({
   modalStyle: {
     backgroundColor: "#fff",
     width: Dimensions.get('window').height > 900 ? 600 : 320,
-    height: Dimensions.get('window').height > 900 ? 680 : 630,
+    height: Dimensions.get('window').height > 900 ? 700 : 680,
     borderWidth: 2,
     borderRadius: 20,
     marginBottom: 20,
