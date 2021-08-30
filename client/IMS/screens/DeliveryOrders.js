@@ -279,7 +279,7 @@ const DeliveryOrders = props => {
                   >
                     {
                       clients.map((client, i) => (
-                        <Picker.Item label={client.userName === undefined ? 0 : client.userName} value={client._id === undefined ? 0 : client._id} />
+                        <Picker.Item key = {client._id} label={client.userName === undefined ? 0 : client.userName} value={client._id === undefined ? 0 : client._id} />
                       ))}
                   </Picker>
                 </View>
