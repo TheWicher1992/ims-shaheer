@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Modal, StyleSheet, Text, View, TouchableOpacity, Dimensions, TextInput, Button, ScrollView } from "react-native";
+import { Modal, StyleSheet, Text, View, TouchableOpacity, Dimensions, TextInput, TouchableWithoutFeedback, ScrollView } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import { connect } from 'react-redux'
 import { setProdQuant,resetProdQuant } from '../../actions/productFilters'
@@ -9,6 +9,19 @@ import Slider from '@react-native-community/slider';
 const QuantityFilterModal = props => {
 
     const [modalVisible, setModalVisible] = useState(false);
+    const [valueSales,setValueSales] = useState(0)
+    const [valuePurchases,setValuePurchases] = useState(0)
+    const [valueProducts,setValueProducts] = useState(0)
+
+    const onChangeValueSales = (val) => {
+        setValueSales(val)
+    }
+    const onChangeValueProduct = (val) => {
+        setValueProducts(val)
+    }
+    const onChangeValuePurchases = (val) => {
+        setValuePurchases(val)
+    }
 
     useEffect(() => {
         setModalVisible(props.state);
@@ -17,28 +30,33 @@ const QuantityFilterModal = props => {
     function handleClose() {
         setModalVisible(false);
     }
-    const setQuantity = (sliderValue) => {
-        if (props.title === "product"){
-            props.setProdQuant(sliderValue);
+    const setQuantity = () => {
+        if (props.title === "product" && valueProducts !== 0){
+            props.setProdQuant(valueProducts);
+        }   
+        else if(props.title === "purchase" && valuePurchases !== 0){
+            props.setPurchaseEMaxQuant(valuePurchases);
         }
-        else if(props.title === "purchase"){
-            props.setPurchaseEMaxQuant(sliderValue);
+        else if(props.title === "sale" && valueSales !== 0){
+            props.setSaleMaxQuant(valueSales);
         }
-        else if(props.title === "sale"){
-            props.setSaleMaxQuant(sliderValue);
-        }
+        
     }
 
     const clearQuantity = () => {
         if (props.title === "product"){
             props.resetProdQuant()
+            setValueProducts(0)
         }
         else if(props.title === "purchase"){
             props.resetPurchaseMaxQuant()
+            setValuePurchases(0)
         }
         else if(props.title === "sale"){
             props.resetSaleMaxQuant()
+            setValueSales(0)
         }
+        
         
     }
     const showQuantity = () => {
@@ -46,21 +64,21 @@ const QuantityFilterModal = props => {
             return (
                 <View style={styles.container}>
                     <Text style = {styles.normalText}>
-                    Value of slider is : {props.quantFilter}
+                    Value applied is : {props.quantFilter}
                     </Text>
+                    <View style = {{marginTop: 20}}>
+                        <TextInput onChangeText = {onChangeValueProduct} placeholder = "quantity" style = {styles.input}></TextInput>
+                    </View> 
 
-                    <Slider
-                    maximumValue={props.maxStock}
-                    minimumValue={0}
-                    minimumTrackTintColor="#008394"
-                    maximumTrackTintColor="#000000"
-                    step={1}
-                    value={ props.quantFilter === '*' ? 0: props.quantFilter}
-                        
-                    onValueChange={
-                        (sliderValue) => setQuantity(sliderValue)
-                    }
-                    />
+                    <View style = {{justifyContent: 'center', alignContent:'center'}}>
+                        <TouchableOpacity onPress = {() => setQuantity()}>
+                            <View style = {styles.clearButton}>
+                                <Text style = {styles.clearButtonText}>
+                                    Apply
+                                </Text>
+                            </View>
+                        </TouchableOpacity>
+                    </View>
                 </View>
             )
        }
@@ -68,21 +86,22 @@ const QuantityFilterModal = props => {
         return (
             <View style={styles.container}>
                 <Text style = {styles.normalText}>
-                Value of slider is : {props.quantPurchaseFilter}
+                Value applied is : {props.quantPurchaseFilter}
                 </Text>
 
-                <Slider
-                maximumValue={props.maxStock}
-                minimumValue={0}
-                minimumTrackTintColor="#008394"
-                maximumTrackTintColor="#000000"
-                step={1}
-                value={ props.quantPurchaseFilter === '*' ? 0: props.quantPurchaseFilter}
-                    
-                onValueChange={
-                    (sliderValue) => setQuantity(sliderValue)
-                }
-                />
+                <View style = {{marginTop: 20}}>
+                        <TextInput onChangeText = {onChangeValuePurchases} placeholder = "quantity" style = {styles.input}></TextInput>
+                    </View> 
+
+                    <View style = {{justifyContent: 'center', alignContent:'center'}}>
+                        <TouchableOpacity onPress = {() => setQuantity()}>
+                            <View style = {styles.clearButton}>
+                                <Text style = {styles.clearButtonText}>
+                                    Apply
+                                </Text>
+                            </View>
+                        </TouchableOpacity>
+                    </View>
             </View>
         )
        }
@@ -90,21 +109,23 @@ const QuantityFilterModal = props => {
             return (
                 <View style={styles.container}>
                     <Text style = {styles.normalText}>
-                    Value of slider is : {props.quantSaleFilter}
+                    Value applied is : {props.quantSaleFilter}
                     </Text>
+                    <View style = {{marginTop: 20}}>
+                        <TextInput onChangeText = {onChangeValueSales} placeholder = "quantity" style = {styles.input}></TextInput>
+                    </View> 
 
-                    <Slider
-                    maximumValue={props.maxStock}
-                    minimumValue={0}
-                    minimumTrackTintColor="#008394"
-                    maximumTrackTintColor="#000000"
-                    step={1}
-                    value={ props.quantSaleFilter === '*' ? 0: props.quantSaleFilter}
-                        
-                    onValueChange={
-                        (sliderValue) => setQuantity(sliderValue)
-                    }
-                    />
+                    <View style = {{justifyContent: 'center', alignContent:'center'}}>
+                        <TouchableOpacity onPress = {() => setQuantity()}>
+                            <View style = {styles.clearButton}>
+                                <Text style = {styles.clearButtonText}>
+                                    Apply
+                                </Text>
+                            </View>
+                        </TouchableOpacity>
+                    </View>
+                    
+                    
                 </View>
             )
        }
@@ -119,12 +140,15 @@ const QuantityFilterModal = props => {
                 presentationStyle="overFullScreen"
                 transparent
                 visible={modalVisible}>
+                    <TouchableWithoutFeedback onPress={() => props.handleClose()}>
+                        <View style={styles.modalOverlay} />
+                    </TouchableWithoutFeedback>
                 <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
                     <View style={styles.modalStyle}>
                             
                         <View style={styles.topTextBox}>
-                            <View style= {{flexDirection: 'row', justifyContent: 'space-between', alignContent: 'center'}}>
-                                <TouchableOpacity onPress = {() => props.handleClose()} style = {{marginTop: Dimensions.get('window').height > 900 ? '7%':'7%', paddingLeft: '5%'}}>
+                            <View style= {{flexDirection: 'row', justifyContent: 'space-between', alignContent: 'center',  marginTop: Dimensions.get('window').height * 0.03,}}>
+                                <TouchableOpacity onPress = {() => props.handleClose()} style = {{ paddingLeft: '5%', marginTop: 5}}>
                                     <FontAwesome
                                     name = {"arrow-left"}
                                     size = {Dimensions.get('window').height > 900 ? 40:25}
@@ -132,7 +156,7 @@ const QuantityFilterModal = props => {
                                     />
                                 </TouchableOpacity>
                                 
-                                <View style={{ justifyContent: 'center', alignItems: 'flex-start', marginTop: '6.25%',}}>
+                                <View style={{ justifyContent: 'center', alignItems: 'flex-start',}}>
                                 
                                     <Text style={styles.topText}>
                                         Quantity
@@ -266,6 +290,24 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         backgroundColor: '#ecf0f1',
     },
+    modalOverlay: {
+        position: 'absolute',
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right: 0,
+    },
+    input: {
+        width: Dimensions.get('window').width * 0.65,
+        borderColor: 'gray',
+        borderWidth: 2,
+        borderRadius: 40,
+        marginBottom: 20,
+        fontSize: 15,
+        borderColor: "#008394",
+        height: 40,
+        padding: 10,
+      },
 
 });
 

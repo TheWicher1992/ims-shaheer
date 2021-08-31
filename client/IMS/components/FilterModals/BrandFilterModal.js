@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Modal, StyleSheet, Text, View, TouchableOpacity, Dimensions, TextInput, Button, ScrollView } from "react-native";
+import { Modal, StyleSheet, Text, View, TouchableOpacity, Dimensions, TextInput, TouchableWithoutFeedback, ScrollView } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import { connect } from 'react-redux'
 import { setProdBrand, resetProdBrand, removeProdBrand, } from '../../actions/productFilters'
@@ -79,12 +79,15 @@ const BrandFilterModal = props => {
                 presentationStyle="overFullScreen"
                 transparent
                 visible={modalVisible}>
+                    <TouchableWithoutFeedback onPress={() => props.handleClose()}>
+                        <View style={styles.modalOverlay} />
+                    </TouchableWithoutFeedback>
                 <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
                     <View style={styles.modalStyle}>
                             
                         <View style={styles.topTextBox}>
-                            <View style= {{flexDirection: 'row', justifyContent: 'space-between', alignContent: 'center'}}>
-                                <TouchableOpacity onPress = {() => props.handleClose()} style = {{marginTop: Dimensions.get('window').height > 900 ? '7%':'7%', paddingLeft: '5%'}}>
+                            <View style= {{flexDirection: 'row', justifyContent: 'space-between', alignContent: 'center',marginTop: Dimensions.get('window').height * 0.03}}>
+                                <TouchableOpacity onPress = {() => props.handleClose()} style = {{ paddingLeft: '5%',marginTop: 5}}>
                                     <FontAwesome
                                     name = {"arrow-left"}
                                     size = {Dimensions.get('window').height > 900 ? 40:25}
@@ -92,7 +95,7 @@ const BrandFilterModal = props => {
                                     />
                                 </TouchableOpacity>
                                 
-                                <View style={{ justifyContent: 'center', alignItems: 'flex-start', marginTop: '6.25%',}}>
+                                <View style={{ justifyContent: 'center', alignItems: 'flex-start',}}>
                                 
                                     <Text style={styles.topText}>
                                         Brands
@@ -236,7 +239,14 @@ const styles = StyleSheet.create({
         backgroundColor: '#119EC2',
         // width: {(amountVal/50) * 300},
         height:30,
-    }
+    },
+    modalOverlay: {
+        position: 'absolute',
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right: 0,
+    },
 
 });
 
