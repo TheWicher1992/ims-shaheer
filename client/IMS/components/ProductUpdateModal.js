@@ -82,6 +82,9 @@ const ProductUpdateModal = props => {
     setAddBrandModal(!addBrandModal);
   };
   const [addBrand, setAddBrand] = useState(``);
+  const [stock, setStock] = useState(``);
+  const [warehouses, setWarehouses] = useState([])
+  const [selectedWarehouse, setSelectedWarehouse] = useState(``)
   const [brandsAndColours, setBrandAndColours] = useState({
     brands: [],
     colours: []
@@ -165,6 +168,9 @@ const ProductUpdateModal = props => {
   const onChangeSerialNo = (serial) => {
     setSerialNo(serial);
   }
+  const onChangeStock = (stock) => {
+    setStock(stock);
+  }
 
   const onChangeProductName = (prodName) => {
     setProductName(prodName);
@@ -184,6 +190,21 @@ const ProductUpdateModal = props => {
     )
     setBrandAndColours(res.data)
   }
+  const getWarehouses = async () => {
+    try {
+      const res = await axios.get(
+        `${uri}/api/warehouse/${1}/${'*'}/${'*'}/${'*'}`
+      )
+      setWarehouses(res.data.warehouse)
+      setSelectedWarehouse(res.data.warehouse[0]._id)
+    }
+    catch (err) {
+      catchWarning()
+    }
+
+  }
+
+
   return (
     <KeyboardAvoidingView>
       <ShowAlert state={alertState} handleClose={show} alertTitle={alertTitle} alertMsg={alertMsg} style={styles.buttonModalContainer} />
@@ -206,7 +227,28 @@ const ProductUpdateModal = props => {
                   <TextInput onChangeText={onChangeSerialNo} style={styles.input} placeholder="Serial" value={serialNo} autoCorrect={false} />
                   <TextInput onChangeText={onChangeProductName} style={styles.input} placeholder="Product" value={productName} autoCorrect={false} />
                   <TextInput onChangeText={onChangeAmount} style={styles.input} placeholder="Amount" value={amountVal === undefined ? '0' : amountVal.toString()} autoCorrect={false} />
+                  <TextInput onChangeText={onChangeStock} style={styles.input} placeholder="Stock" autoCorrect={false} />
                   <TextInput multiline={true} numberOfLines={5} onChangeText={onChangeDescription} value={description} style={styles.input} placeholder="Description" autoCorrect={false} />
+                  <View style={{ borderWidth: 2, marginBottom: 20, borderRadius: 40, borderColor: "#008394", width: Dimensions.get('window').width * 0.65, height: 40, fontSize: 8, justifyContent: 'space-between' }}>
+                    <Picker
+                      style={{ top: 6, color: 'grey', fontFamily: 'Roboto' }}
+                      itemStyle={{ fontWeight: '100' }}
+                      placeholder="Select a Warehouse"
+                      selectedValue={selectedWarehouse}
+                      onValueChange={(itemValue, itemIndex) =>
+                        setSelectedWarehouse(itemValue)
+                      }
+                    >
+
+                      {
+                        warehouses.map((w => (
+                          <Picker.Item key={w._id} label={w.title} value={w._id} />
+                        )))
+                      }
+
+                    </Picker>
+
+                  </View>
 
                   <View style={{ borderWidth: 2, borderRadius: 40, borderColor: "#008394", width: Dimensions.get('window').width * 0.65, height: 40, fontSize: 8, justifyContent: 'space-between' }}>
                     <Picker
@@ -300,6 +342,7 @@ const ProductUpdateModal = props => {
           onSwipeComplete={() => setAddBrandModal(false)}
           swipeDirection="left"
           presentationStyle="overFullScreen"
+          animationType="slide"
           visible={addBrandModal}
           transparent
         >
@@ -333,6 +376,7 @@ const ProductUpdateModal = props => {
           onSwipeComplete={() => setAddColorModal(false)}
           swipeDirection="left"
           presentationStyle="overFullScreen"
+          animationType="slide"
           visible={addColorModal}
           transparent
         >
@@ -372,20 +416,20 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontFamily: 'Roboto',
     fontWeight: 'bold',
-    fontSize: Dimensions.get('window').height === 1232 ? 36 : 28,
+    fontSize: Dimensions.get('window').height > 900 ? 36 : 28,
   },
   modalTitle: {
     color: '#006270',
     fontSize: 30,
     fontFamily: 'Roboto',
     fontWeight: 'bold',
-    fontSize: Dimensions.get('window').height === 1232 ? 36 : 28,
+    fontSize: Dimensions.get('window').height > 900 ? 36 : 28,
     top: 20,
   },
   modalStyle: {
     backgroundColor: "#fff",
-    width: Dimensions.get('window').height > 900 ? 600 : 320,
-    height: Dimensions.get('window').height > 900 ? 680 : 600,
+    width: Dimensions.get('window').height > 900 ? Dimensions.get('window').width * 0.80 : Dimensions.get('window').width * 0.80,
+    height: Dimensions.get('window').height > 900 ? Dimensions.get('window').height * 0.65 : Dimensions.get('window').height * 0.90,
     borderWidth: 2,
     borderRadius: 20,
     //marginBottom: 20,

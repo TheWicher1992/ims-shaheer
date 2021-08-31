@@ -262,7 +262,7 @@ const styles = StyleSheet.create({
 },
 switch: {
     color: '#008394',
-    fontSize: Dimensions.get('window').height === 1232 ? 18 : 16,
+    fontSize: Dimensions.get('window').height > 900 ? 18 : 16,
     fontFamily: 'Roboto',
   },
 label: {
