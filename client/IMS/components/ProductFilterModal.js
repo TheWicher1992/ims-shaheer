@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Modal, StyleSheet, Text, View, TouchableOpacity, Dimensions, TextInput, Button } from "react-native";
+import { Modal, StyleSheet, Text, View, TouchableOpacity, Dimensions, TextInput, TouchableWithoutFeedback } from "react-native";
 import ColorFilterModal from "./FilterModals/ColorFilterModal";
 import BrandFilterModal from "./FilterModals/BrandFilterModal";
 import WarehouseFilterModal from "./FilterModals/WarehouseFilterModal";
@@ -136,12 +136,15 @@ const ProductFilterModal = props => {
                 presentationStyle="overFullScreen"
                 transparent
                 visible={modalVisible}>
+                    <TouchableWithoutFeedback onPress={() => {props.handleClose(); props.getProducts()}}>
+                        <View style={styles.modalOverlay} />
+                    </TouchableWithoutFeedback>
                 <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
                     <View style={styles.modalStyle}>
 
                         <View style={styles.topTextBox}>
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                                <View style={{ justifyContent: 'center', alignItems: 'flex-start', marginTop: '6.25%', paddingLeft: '5%' }}>
+                                <View style={{ justifyContent: 'center', alignItems: 'flex-start', marginTop: Dimensions.get('window').height * 0.03, paddingLeft: '5%' }}>
                                     <Text style={styles.topText}>
                                         Filter
                                     </Text>
@@ -162,7 +165,7 @@ const ProductFilterModal = props => {
 
 
                         <TouchableOpacity style={styles.TextBox} onPress={() => setColorFilterModal(true)}>
-                            <View style={{ marginTop: '9.5%', paddingLeft: '5%' }}>
+                            <View style={{ marginTop: Dimensions.get('window').height * 0.05, paddingLeft: '5%' }}>
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                     <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-start' }}>
                                         <Text style={styles.normalText}>
@@ -190,7 +193,7 @@ const ProductFilterModal = props => {
 
 
                         <TouchableOpacity style={styles.TextBox} onPress={() => setBrandFilterModal(true)}>
-                            <View style={{ marginTop: '9.5%', paddingLeft: '5%' }}>
+                            <View style={{marginTop: Dimensions.get('window').height * 0.05, paddingLeft: '5%' }}>
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                     <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-start' }}>
                                         <Text style={styles.normalText}>
@@ -215,7 +218,7 @@ const ProductFilterModal = props => {
 
 
                         <TouchableOpacity style={styles.TextBox} onPress={() => setPriceFilterModal(true)}>
-                            <View style={{ marginTop: '9.5%', paddingLeft: '5%' }}>
+                            <View style={{ marginTop: Dimensions.get('window').height * 0.05, paddingLeft: '5%' }}>
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                     <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-start' }}>
                                         <Text style={styles.normalText}>
@@ -232,7 +235,7 @@ const ProductFilterModal = props => {
                         </TouchableOpacity>
 
                         <TouchableOpacity style={styles.TextBox} onPress={() => setDateFilterModal(true)}>
-                            <View style={{ marginTop: '9.5%', paddingLeft: '5%' }}>
+                            <View style={{ marginTop: Dimensions.get('window').height * 0.05, paddingLeft: '5%' }}>
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                     <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-start' }}>
                                         <Text style={styles.normalText}>
@@ -250,7 +253,7 @@ const ProductFilterModal = props => {
                         </TouchableOpacity>
 
                         <TouchableOpacity style={styles.TextBox} onPress={() => setQuantityFilterModal(true)}>
-                            <View style={{ marginTop: '9.5%', paddingLeft: '5%' }}>
+                            <View style={{ marginTop: Dimensions.get('window').height * 0.05, paddingLeft: '5%' }}>
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                     <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-start' }}>
                                         <Text style={styles.normalText}>
@@ -267,7 +270,7 @@ const ProductFilterModal = props => {
                         </TouchableOpacity>
 
                         <TouchableOpacity style={styles.TextBox} onPress={() => setWarehouseFilterModal(true)}>
-                            <View style={{ marginTop: '9.5%', paddingLeft: '5%' }}>
+                            <View style={ {marginTop: Dimensions.get('window').height * 0.05, paddingLeft: '5%' }}>
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                     <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-start' }}>
                                         <Text style={styles.normalText}>
@@ -413,7 +416,14 @@ const styles = StyleSheet.create({
         marginTop: Dimensions.get('window').height > 900 ? 30 : 0,
         // left: Dimensions.get('window').width * 0.4,
 
-    }
+    },
+    modalOverlay: {
+        position: 'absolute',
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right: 0,
+    },
 
 });
 
