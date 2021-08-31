@@ -21,9 +21,13 @@ router.get('/ledger/:id', async (req, res) => {
             client: clientId
         })
 
-        const ledger = [...payments, ...sales, ...payments]
+        const ledger = [
+            ...purchases.map(p => ({ ...JSON.parse(JSON.stringify(p)), type: "Purchase" })),
+            ...sales.map(s => ({ ...JSON.parse(JSON.stringify(s)), type: "Sale" })),
+            ...payments.map(p => ({ ...JSON.parse(JSON.stringify(p)), type: "Payment" }))
+        ]
 
-        ledger.sort((a, b) => a.date < b.date)
+        ledger.sort((a, b) => new Date(a.date) - new Date(b.date))
 
         return res.json({
             ledger
