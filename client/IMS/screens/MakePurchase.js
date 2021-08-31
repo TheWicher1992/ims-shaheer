@@ -39,7 +39,6 @@ const MakePurchase = props => {
 
     try {
 
-
       const getURI =
         `${uri}/api/purchase` +
         `/${props.filters.page}` +
@@ -50,6 +49,7 @@ const MakePurchase = props => {
         `/${props.filters.date}` +
         `/${props.filters.maxQuantity}` +
         `/${props.filters.maxTotal}`
+      console.log("Filters --->\n", getURI)
 
       const res = await axios.get(getURI)
       res.data.purchases.length === 0 ? searchWarning() : null
@@ -90,7 +90,9 @@ const MakePurchase = props => {
 
   }, [])
 
-
+  useEffect(() => {
+    getPurchases()
+  }, [props.filters])
 
   React.useEffect(() => { //for table
     setPage(0);
@@ -246,166 +248,166 @@ const MakePurchase = props => {
           </TouchableWithoutFeedback>
           <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
             {/* <ScrollView style={{ paddingVertical: 10 }} showsVerticalScrollIndicator={false}> */}
-              <View style={styles.modalStyle}>
-                <View style={{ justifyContent: 'center', alignItems: 'center', }}>
-                  
+            <View style={styles.modalStyle}>
+              <View style={{ justifyContent: 'center', alignItems: 'center', }}>
 
-                <View style = {{flexDirection: 'row'}}>
-                  <View style = {{ right: Dimensions.get('window').height > 900 ? Dimensions.get('window').width * 0.1 : Dimensions.get('window').width * 0.04, top: 38}}>
-                    <TouchableOpacity onPress = {() => setModalVisible(false)}>
+
+                <View style={{ flexDirection: 'row' }}>
+                  <View style={{ right: Dimensions.get('window').height > 900 ? Dimensions.get('window').width * 0.1 : Dimensions.get('window').width * 0.04, top: 38 }}>
+                    <TouchableOpacity onPress={() => setModalVisible(false)}>
                       <FontAwesome
-                        name = {"arrow-left"}
-                        size = {Dimensions.get('window').height > 900 ? 30:25}
-                        color = {"#008394"}
+                        name={"arrow-left"}
+                        size={Dimensions.get('window').height > 900 ? 30 : 25}
+                        color={"#008394"}
                       />
                     </TouchableOpacity>
-                    
+
                   </View>
-                  
+
                   <Text style={styles.modalTitle}>Make a Purchase</Text>
 
-                  
+
                 </View>
 
 
-                  <View>
+                <View>
 
-                    <View style={{ borderWidth: 2, borderRadius: 40, borderColor: "#008394", width: Dimensions.get('window').width * 0.65, top: 50, height: 40, fontSize: 8, }}>
-                      <Picker
-                        style={{ top: 6, color: 'grey', fontFamily: 'Roboto' }}
-                        itemStyle={{ fontWeight: '100' }}
-                        selectedValue={productName}
-                        onValueChange={(itemValue, itemIndex) =>
-                          setProductName(itemValue)
-                        }
-                      >
-                        {
-                          formInputs.products.map(p => (
-                            <Picker.Item key={p._id} label={p.title} value={p._id} />
-
-                          ))
-                        }
-
-                      </Picker>
-                    </View>
-                    <View style={{ marginTop: 10 }}>
-                      <TextInput onChangeText={onChangeQuantity} style={styles.input} placeholder="Quantity" autoCorrect={false} />
-                      {paymentType === 'Partial' && <TextInput onChangeText={onChangeAmountReceived} style={styles.input} placeholder="Amount Received" autoCorrect={false} />
+                  <View style={{ borderWidth: 2, borderRadius: 40, borderColor: "#008394", width: Dimensions.get('window').width * 0.65, top: 50, height: 40, fontSize: 8, }}>
+                    <Picker
+                      style={{ top: 6, color: 'grey', fontFamily: 'Roboto' }}
+                      itemStyle={{ fontWeight: '100' }}
+                      selectedValue={productName}
+                      onValueChange={(itemValue, itemIndex) =>
+                        setProductName(itemValue)
                       }
-                      <TextInput onChangeText={onChangeTotalAmount} style={styles.input} placeholder="Total Amount" autoCorrect={false} />
-                      <TextInput onChangeText={onChangeNotes} style={styles.input} placeholder="Notes" autoCorrect={false} />
+                    >
+                      {
+                        formInputs.products.map(p => (
+                          <Picker.Item key={p._id} label={p.title} value={p._id} />
+
+                        ))
+                      }
+
+                    </Picker>
+                  </View>
+                  <View style={{ marginTop: 10 }}>
+                    <TextInput onChangeText={onChangeQuantity} style={styles.input} placeholder="Quantity" autoCorrect={false} />
+                    {paymentType === 'Partial' && <TextInput onChangeText={onChangeAmountReceived} style={styles.input} placeholder="Amount Received" autoCorrect={false} />
+                    }
+                    <TextInput onChangeText={onChangeTotalAmount} style={styles.input} placeholder="Total Amount" autoCorrect={false} />
+                    <TextInput onChangeText={onChangeNotes} style={styles.input} placeholder="Notes" autoCorrect={false} />
+                  </View>
+
+                  <View style={{ borderWidth: 2, borderRadius: 40, borderColor: "#008394", width: Dimensions.get('window').width * 0.65, top: 60, height: 40, fontSize: 8, }}>
+                    <Picker
+                      style={{ top: 6, color: 'grey', fontFamily: 'Roboto' }}
+                      itemStyle={{ fontWeight: '100' }}
+                      placeholder="Select a Payment Type"
+                      selectedValue={paymentType}
+                      onValueChange={(itemValue, itemIndex) =>
+                        setPaymentType(itemValue)
+                      }
+                    >
+                      <Picker.Item label="Partial" value="Partial" />
+                      <Picker.Item label="Credit" value="Credit" />
+                      <Picker.Item label="Full" value="Full" />
+                    </Picker>
+                  </View>
+
+                  <View style={{ borderWidth: 2, borderRadius: 40, borderColor: "#008394", width: Dimensions.get('window').width * 0.65, top: 80, height: 40, fontSize: 8, }}>
+                    <Picker
+                      style={{ top: 6, color: 'grey', fontFamily: 'Roboto' }}
+                      itemStyle={{ fontWeight: '100' }}
+                      selectedValue={clientName}
+                      onValueChange={(itemValue, itemIndex) =>
+                        setClientName(itemValue)
+                      }
+                    >
+                      {
+                        formInputs.clients.map(c => (
+                          <Picker.Item key={c._id} label={c.userName} value={c._id} />
+
+                        ))
+                      }
+                    </Picker>
+                  </View>
+
+
+                  <View style={{ marginTop: 90, }}>
+                    <View style={styles.label}>
+                      <Text style={styles.switch}>D/O</Text>
+                      <Switch
+                        trackColor={{ false: "#00E0C7", true: "#006270" }}
+                        thumbColor={isEnabled ? "white" : "#006270"}
+                        onValueChange={toggleSwitch}
+                        value={isWarehouse}
+                      />
+                      <Text style={styles.switch}>W</Text>
                     </View>
+                  </View>
 
-                    <View style={{ borderWidth: 2, borderRadius: 40, borderColor: "#008394", width: Dimensions.get('window').width * 0.65, top: 60, height: 40, fontSize: 8, }}>
-                      <Picker
-                        style={{ top: 6, color: 'grey', fontFamily: 'Roboto' }}
-                        itemStyle={{ fontWeight: '100' }}
-                        placeholder="Select a Payment Type"
-                        selectedValue={paymentType}
-                        onValueChange={(itemValue, itemIndex) =>
-                          setPaymentType(itemValue)
-                        }
-                      >
-                        <Picker.Item label="Partial" value="Partial" />
-                        <Picker.Item label="Credit" value="Credit" />
-                        <Picker.Item label="Full" value="Full" />
-                      </Picker>
-                    </View>
+                  {/* DELIVERY ORDER LOCATION OR  */}
+                  <View>
+                    {/* this is for either warehouse selection  */}
+                    {isWarehouse ?
+                      <View style={{ borderWidth: 2, borderRadius: 40, borderColor: "#008394", width: Dimensions.get('window').width * 0.65, height: 40, fontSize: 8, marginBottom: 20 }}>
+                        <Picker
+                          style={{ top: 6, color: 'grey', fontFamily: 'Roboto' }}
+                          itemStyle={{ fontWeight: '100' }}
+                          selectedValue={warehouse}
+                          onValueChange={(itemValue, itemIndex) =>
+                            setWarehouse(itemValue)
+                          }
+                        >
 
-                    <View style={{ borderWidth: 2, borderRadius: 40, borderColor: "#008394", width: Dimensions.get('window').width * 0.65, top: 80, height: 40, fontSize: 8, }}>
-                      <Picker
-                        style={{ top: 6, color: 'grey', fontFamily: 'Roboto' }}
-                        itemStyle={{ fontWeight: '100' }}
-                        selectedValue={clientName}
-                        onValueChange={(itemValue, itemIndex) =>
-                          setClientName(itemValue)
-                        }
-                      >
-                        {
-                          formInputs.clients.map(c => (
-                            <Picker.Item key={c._id} label={c.userName} value={c._id} />
-
-                          ))
-                        }
-                      </Picker>
-                    </View>
-
-
-                    <View style={{ marginTop: 90, }}>
-                      <View style={styles.label}>
-                        <Text style={styles.switch}>D/O</Text>
-                        <Switch
-                          trackColor={{ false: "#00E0C7", true: "#006270" }}
-                          thumbColor={isEnabled ? "white" : "#006270"}
-                          onValueChange={toggleSwitch}
-                          value={isWarehouse}
-                        />
-                        <Text style={styles.switch}>W</Text>
-                      </View>
-                    </View>
-
-                    {/* DELIVERY ORDER LOCATION OR  */}
-                    <View>
-                      {/* this is for either warehouse selection  */}
-                      {isWarehouse ?
-                        <View style={{ borderWidth: 2, borderRadius: 40, borderColor: "#008394", width: Dimensions.get('window').width * 0.65, height: 40, fontSize: 8, marginBottom: 20 }}>
-                          <Picker
-                            style={{ top: 6, color: 'grey', fontFamily: 'Roboto' }}
-                            itemStyle={{ fontWeight: '100' }}
-                            selectedValue={warehouse}
-                            onValueChange={(itemValue, itemIndex) =>
-                              setWarehouse(itemValue)
-                            }
-                          >
-
-                            {
-                              formInputs.warehouses.map(w => (
-                                <Picker.Item key={w._id} label={w.name} value={w._id} />
-                              ))
-                            }
-                            {/* <Picker.Item label="W1" value="W1" />
+                          {
+                            formInputs.warehouses.map(w => (
+                              <Picker.Item key={w._id} label={w.name} value={w._id} />
+                            ))
+                          }
+                          {/* <Picker.Item label="W1" value="W1" />
                         <Picker.Item label="W2" value="W2" />
                         <Picker.Item label="W3" value="W3" /> */}
 
-                          </Picker>
-                        </View>
+                        </Picker>
+                      </View>
 
-                        :
-                        <TextInput onChangeText={onChangeLocation} style={styles.inputLast} placeholder="Location" autoCorrect={false} />
-                      }</View>
+                      :
+                      <TextInput onChangeText={onChangeLocation} style={styles.inputLast} placeholder="Location" autoCorrect={false} />
+                    }</View>
 
-
-                  </View>
-                  
-
-                    <View style={{ flexDirection: 'row', alignItems: 'center',justifyContent: 'center', bottom: Dimensions.get('window').height < 700 ? 25 : 15, }}>
-                      <TouchableOpacity style={{ alignSelf: 'flex-start' }} onPress={() => { setModalVisible(false) }}>
-                        <View>
-                          <View style={styles.buttonModalContainerCross}>
-                            <View>
-                              <Text style={styles.buttonModalText}>Cancel</Text>
-                            </View>
-                          </View>
-                        </View>
-                      </TouchableOpacity>
-                      <TouchableOpacity onPress={() => { addPurchase() }}>
-                        <View>
-                          <View style={styles.buttonModalContainer}>
-                            <View>
-                              <Text style={styles.buttonModalText}>Done</Text>
-                            </View>
-                          </View>
-                        </View>
-                      </TouchableOpacity>
-                    </View>
 
                 </View>
+
+
+                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', bottom: Dimensions.get('window').height < 700 ? 25 : 15, }}>
+                  <TouchableOpacity style={{ alignSelf: 'flex-start' }} onPress={() => { setModalVisible(false) }}>
+                    <View>
+                      <View style={styles.buttonModalContainerCross}>
+                        <View>
+                          <Text style={styles.buttonModalText}>Cancel</Text>
+                        </View>
+                      </View>
+                    </View>
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={() => { addPurchase() }}>
+                    <View>
+                      <View style={styles.buttonModalContainer}>
+                        <View>
+                          <Text style={styles.buttonModalText}>Done</Text>
+                        </View>
+                      </View>
+                    </View>
+                  </TouchableOpacity>
+                </View>
+
               </View>
+            </View>
             {/* </ScrollView> */}
           </View>
         </Modal>
       </KeyboardAvoidingView>
-      <PurchaseDetailModal state={isTableDetailModalVisible} handleClose={handleClose} title='Purchase Detail' object={touchedPurchase} getPurchase={getPurchases} />
+      <PurchaseDetailModal state={isTableDetailModalVisible} handleClose={handleClose} title='Purchase Detail' object={touchedPurchase} getPurchase={() => { }} />
       <View style={styles.screen}>
         <View>
           <Text style={styles.title}>Purchases</Text>
@@ -439,7 +441,7 @@ const MakePurchase = props => {
       </View>
       <View style={{ flexDirection: 'row', justifyContent: 'center', paddingRight: 60 }}>
         <View>
-          <FilterButton getPurchases={getPurchases} page="purchase" />
+          <FilterButton getPurchases={() => { }} page="purchase" />
         </View>
         <View style={{ marginTop: 25 }}>
           <ExportButton data={purchases} title={'purchases.xlsx'} />
