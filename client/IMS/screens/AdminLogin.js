@@ -129,7 +129,7 @@ const AdminLogin = props => {
 
                 </View>
                 <View style={styles.container}>
-                    {Dimensions.get('window').height === 1232 ? <Text style={styles.footer}>Zaki Sons</Text> : console.log(Dimensions.get('window').height)}
+                    {Dimensions.get('window').height > 900 ? <Text style={styles.footer}>Zaki Sons</Text> : console.log(Dimensions.get('window').height)}
                 </View>
             </View>
         </>

@@ -6,7 +6,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: Dimensions.get('window').height === 1232 ? Dimensions.get('window').height * 0.12 : Dimensions.get('window').height * 0.05
+        marginTop: Dimensions.get('window').height > 900 ? Dimensions.get('window').height * 0.12 : Dimensions.get('window').height * 0.05
     },
     footer: {
         color: 'black',
@@ -17,13 +17,13 @@ const styles = StyleSheet.create({
     },
     title: {
         color: '#006270',
-        fontSize: Dimensions.get('window').height === 1232 ? 36 : 28,
+        fontSize: Dimensions.get('window').height > 900 ? 36 : 28,
         fontFamily: 'Roboto',
         fontWeight: 'bold'
     },  
     subtitle: {
         color: '#008394',
-        fontSize: Dimensions.get('window').height === 1232 ? 25 : 18,
+        fontSize: Dimensions.get('window').height > 900 ? 25 : 18,
         marginTop: 50,
         fontFamily: 'Roboto',
     },
@@ -122,12 +122,12 @@ const styles = StyleSheet.create({
       },
     switch: {
         color: '#008394',
-        fontSize: Dimensions.get('window').height === 1232 ? 25 : 16,
+        fontSize: Dimensions.get('window').height > 900 ? 25 : 16,
         fontFamily: 'Roboto',
     },
     note: {
         color: '#008394',
-        fontSize: Dimensions.get('window').height === 1232 ? 16 : 14,
+        fontSize: Dimensions.get('window').height > 900 ? 16 : 14,
         fontFamily: 'Roboto',
     }
 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View, TouchableOpacity, Dimensions } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Dimensions, ScrollView } from 'react-native';
 import HeaderButton from '../components/HeaderButton';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import HeaderNavigation from '../components/HeaderNavigation';
@@ -63,6 +63,7 @@ const AdminDashboard = props => {
 
 
   return (
+    <ScrollView>
     <View style={{ marginTop: Dimensions.get('window').height < 900 ? 5 : 60 }}>
       <View style={{ justifyContent: 'center', alignSelf: 'center', }}>
         <Text style={styles.titleText}>Admin Dashboard</Text>
@@ -97,6 +98,7 @@ const AdminDashboard = props => {
         </View>
       </View>
     </View>
+    </ScrollView>
   )
 }
 

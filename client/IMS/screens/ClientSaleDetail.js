@@ -183,14 +183,14 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontFamily: 'Roboto',
     fontWeight: 'bold',
-    fontSize: Dimensions.get('window').height === 1232 ? 36 : 28,
+    fontSize: Dimensions.get('window').height > 900 ? 36 : 28,
   },
   modalTitle: {
     color: '#006270',
     fontSize: 30,
     fontFamily: 'Roboto',
     fontWeight: 'bold',
-    fontSize: Dimensions.get('window').height === 1232 ? 36 : 28,
+    fontSize: Dimensions.get('window').height > 900 ? 36 : 28,
     top: 20,
   },
   modalStyle: {
