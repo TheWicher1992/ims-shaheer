@@ -3,6 +3,44 @@ const router = express.Router()
 const Client = require('../models/Client')
 const config = require('config')
 const { SERVER_ERROR, CLIENT_DOES_NOT_EXIST, DOES_NOT_EXIST, SAME_PHONENUMBER_ALREADY_EXISTS, SAME_USERNAME_ALREADY_EXISTS } = require('../misc/errors')
+const Purchase = require('../models/Purchase')
+const Sale = require('../models/Sale')
+const Payment = require('../models/Payment')
+
+router.get('/ledger/:id', async (req, res) => {
+    try {
+        const clientId = req.params.id
+
+        const purchases = await Purchase.find({
+            client: clientId
+        })
+        const sales = await Sale.find({
+            client: clientId
+        })
+        const payments = await Payment.find({
+            client: clientId
+        })
+
+        const ledger = [
+            ...purchases.map(p => ({ ...JSON.parse(JSON.stringify(p)), type: "Purchase" })),
+            ...sales.map(s => ({ ...JSON.parse(JSON.stringify(s)), type: "Sale" })),
+            ...payments.map(p => ({ ...JSON.parse(JSON.stringify(p)), type: "Payment" }))
+        ]
+
+        ledger.sort((a, b) => new Date(a.date) - new Date(b.date))
+
+        return res.json({
+            ledger
+        })
+
+
+    } catch (err) {
+        return res.status(500).json({
+            error: SERVER_ERROR
+        })
+    }
+})
+
 router.post('/', async (req, res) => {
     try {
         var {
