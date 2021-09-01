@@ -66,7 +66,7 @@ const ClientDetailModal = props => {
                                 <Text style={styles.buttonModalText}>Sales</Text>
                             </View>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress = {() => {props.handleClose(), props.navigator.navigate({routeName: 'ClientPurchaseDetail', params: { clientID: props.object._id }})}}>
+                        <TouchableOpacity onPress = {() => {props.handleClose(), props.navigator.navigate({routeName: 'ClientPurchaseDetail', params: { clientID: props.object._id, clientName: props.object.userName }})}}>
                             <View style={styles.backButtonModalContainer}>
                                 <Text style={styles.buttonModalText}>Purchases</Text>
                             </View>
@@ -86,6 +86,11 @@ const ClientDetailModal = props => {
                         <TouchableOpacity onPress = {() => {setUpdateModalVisible(true)}}>
                             <View style={styles.backButtonModalContainer}>
                                 <Text style={styles.buttonModalText}>Update</Text>
+                            </View>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress = {() => {props.handleClose(), props.navigator.navigate({routeName: 'ClientLedger', params: { clientID: props.object._id }})}}>
+                            <View style={styles.backButtonModalContainer}>
+                                <Text style={styles.buttonModalText}>Ledger</Text>
                             </View>
                         </TouchableOpacity>
                     </View>
@@ -209,7 +214,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 35,
     alignItems: "center",
-    width: Dimensions.get('window').height > 900 ? '80%' : '95%',
+    width: Dimensions.get('window').height > 900 ? '80%' : '98%',
     height: Dimensions.get('window').height > 900 ? '65%' : Dimensions.get('window').height * 0.60,
     borderColor: "#008394",
     borderWidth: 2,
