@@ -22,6 +22,9 @@ const saleSchema = new Schema({
     totalWithOutDiscount: {
         type: Number
     },
+    received: {
+        type: Number
+    },
     client: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Client'

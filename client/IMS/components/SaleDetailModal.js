@@ -78,6 +78,7 @@ const SaleDetailModal= props => {
                             <Text style={styles.bodyText}>Client: {props.object.client === undefined ? '--' : props.object.client.userName}</Text>
                             <Text style={styles.bodyText}>note: {props.object.note}</Text>
                             <Text style={styles.bodyText}>date: {props.object.date}</Text>
+                            <Text style={styles.bodyText}>Received: {props.object.received}</Text>
                             </View>
                           )}
                     </View>

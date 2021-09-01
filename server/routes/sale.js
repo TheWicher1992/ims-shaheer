@@ -50,6 +50,7 @@ router.post('/', async (req, res) => {
             isWarehouse
         } = req.body
 
+        console.log(req.body)
 
         typeOfSale = 'DeliveryOrder'
 
@@ -145,6 +146,7 @@ router.post('/', async (req, res) => {
             total,
             note,
             date,
+            received,
             deliveryStatus,
             typeOfSale,
             deliveryOrder: deliveryOrderID
