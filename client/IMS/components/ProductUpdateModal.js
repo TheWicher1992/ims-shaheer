@@ -269,8 +269,9 @@ const ProductUpdateModal = props => {
                         )))
                       }
                     </Picker>
+                  </View>
                     <View>
-                      <TouchableOpacity onPress={() => { setAddColorModal(true) }}>
+                      <TouchableOpacity style={{ marginTop: 10 }} onPress={() => { setAddColorModal(true) }}>
                         <View style={styles.addButton}>
                           <View style={{ justifyContent: 'center', alignContent: 'center', alignItems: 'center', }}>
                             <Text style={styles.modalbuttonText}>
@@ -280,8 +281,8 @@ const ProductUpdateModal = props => {
                         </View>
                       </TouchableOpacity>
                     </View>
-                  </View>
-                  <View style={{ borderWidth: 2, borderRadius: 40, borderColor: "#008394", width: Dimensions.get('window').width * 0.65, marginTop: 40, height: 40, fontSize: 8, }}>
+                 
+                  <View style={{ borderWidth: 2, borderRadius: 40, borderColor: "#008394", width: Dimensions.get('window').width * 0.65, marginTop: 15, height: 40, fontSize: 8, }}>
                     <Picker
                       style={{ top: 6, color: 'grey', fontFamily: 'Roboto' }}
                       itemStyle={{ fontWeight: '100' }}
@@ -299,7 +300,9 @@ const ProductUpdateModal = props => {
                         )))
                       }
                     </Picker>
-                    <TouchableOpacity onPress={() => { setAddBrandModal(true) }}>
+                    </View>
+                    <View>
+                    <TouchableOpacity style={{ marginTop: 15 }} onPress={() => { setAddBrandModal(true) }}>
                       <View style={styles.addButton}>
                         <View style={{ justifyContent: 'center', alignContent: 'center', alignItems: 'center' }}>
                           <Text style={styles.modalbuttonText}>
@@ -310,7 +313,7 @@ const ProductUpdateModal = props => {
                     </TouchableOpacity>
                   </View>
                 </View>
-                <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 30, }}>
+                <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10, }}>
                   <TouchableOpacity style={{ alignSelf: 'flex-start' }} onPress={() => { props.handleClose() }}>
                     <View>
                       <View style={styles.buttonModalContainerCross}>
@@ -588,8 +591,8 @@ const styles = StyleSheet.create({
     marginTop: 22
   },
   modalBody: {
-    paddingVertical: Dimensions.get('window').height < 900 ? Dimensions.get('window').height * 0.11 : Dimensions.get('window').height * 0.1,
-    paddingHorizontal: 10
+    paddingVertical: Dimensions.get('window').height < 900 ? Dimensions.get('window').height * 0.05 : Dimensions.get('window').height * 0.08,
+    paddingHorizontal: 10,
   },
   modalView: {
     margin: 20,
@@ -597,14 +600,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 35,
     alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
+    marginTop: Dimensions.get('window').height > 900 ? Dimensions.get('window').height * 0.282 : Dimensions.get('window').height * 0.2,
     width: Dimensions.get('window').height > 900 ? Dimensions.get('window').width * 0.7 : Dimensions.get('window').width * 0.80,
     height: Dimensions.get('window').height > 900 ? Dimensions.get('window').height * 0.5 : Dimensions.get('window').height * 0.60
   },
@@ -621,10 +617,6 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginTop: 3.5,
   },
-  modalBody: {
-    paddingVertical: '30%',
-    paddingHorizontal: 10
-  },
   backButtonModalContainer: {
     justifyContent: 'center',
     alignItems: 'center',
@@ -637,6 +629,13 @@ const styles = StyleSheet.create({
     margin: 20,
     display: 'flex',
 
+  },
+  modalOverlay: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
   },
   modalOverlay: {
     position: 'absolute',
