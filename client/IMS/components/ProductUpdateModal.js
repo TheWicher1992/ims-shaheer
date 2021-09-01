@@ -4,6 +4,8 @@ import { Picker } from '@react-native-picker/picker';
 import { uri } from '../api.json'
 import axios from "axios"
 import ShowAlert from '../components/ShowAlert';
+import { FontAwesome } from '@expo/vector-icons';
+
 
 const ProductUpdateModal = props => {
   const [isModalVisible, setModalVisible] = useState(false);
@@ -208,6 +210,7 @@ const ProductUpdateModal = props => {
   return (
     <KeyboardAvoidingView>
       <ShowAlert state={alertState} handleClose={show} alertTitle={alertTitle} alertMsg={alertMsg} style={styles.buttonModalContainer} />
+      <View style = {styles.centeredView}>
       <Modal
         onSwipeComplete={() => props.handleClose()}
         animationType="slide"
@@ -219,10 +222,25 @@ const ProductUpdateModal = props => {
             <View style={styles.modalOverlay} />
           </TouchableWithoutFeedback>
         <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', }}>
-          <ScrollView>
+          {/* <ScrollView> */}
             <View style={styles.modalStyle}>
               <View style={{ justifyContent: 'center', alignItems: 'center', }}>
-                <Text style={styles.modalTitle}>Update Product</Text>
+                <View style = {{flexDirection: 'row'}}>
+                    <View style = {{ right: Dimensions.get('window').height > 900 ? Dimensions.get('window').width * 0.16 : Dimensions.get('window').width * 0.05, top: Dimensions.get('window').height > 900 ? 26 :28}}>
+                      <TouchableOpacity onPress = {() => props.handleClose()}>
+                        <FontAwesome
+                          name = {"arrow-left"}
+                          size = {Dimensions.get('window').height > 900 ? 36:25}
+                          color = {"#008394"}
+                        />
+                      </TouchableOpacity>
+                      
+                    </View>
+                    
+                    <Text style={styles.modalTitle}>Update Product</Text>
+
+                    
+                  </View>
                 <View style={{ marginTop: 50 }}>
                   <TextInput onChangeText={onChangeSerialNo} style={styles.input} placeholder="Serial" value={serialNo} autoCorrect={false} />
                   <TextInput onChangeText={onChangeProductName} style={styles.input} placeholder="Product" value={productName} autoCorrect={false} />
@@ -313,12 +331,13 @@ const ProductUpdateModal = props => {
                 </View>
               </View>
             </View>
-          </ScrollView>
+          {/* </ScrollView> */}
         </View>
       </Modal>
 
       {/* modal for adding brand*/}
-      <View>
+
+      <View style = {{justifyContent: 'center'}}> 
         <Modal
           onSwipeComplete={() => setAddBrandModal(false)}
           swipeDirection="left"
@@ -327,9 +346,23 @@ const ProductUpdateModal = props => {
           visible={addBrandModal}
           transparent
         >
+            <TouchableWithoutFeedback onPress={() => setAddBrandModal(false)}>
+              <View style={styles.modalOverlay} />
+            </TouchableWithoutFeedback>
           <View styles={styles.centeredView}>
             <View style={styles.modalView}>
-              <Text style={styles.modalTitle}>Add a Brand</Text>
+                <View style = {{flexDirection: 'row'}}>
+                  <View style = {{ right: Dimensions.get('window').height > 900 ? Dimensions.get('window').width * 0.10 : Dimensions.get('window').width * 0.08, top: 28}}>
+                    <TouchableOpacity onPress = {() => setAddBrandModal(false)}>
+                      <FontAwesome
+                        name = {"arrow-left"}
+                        size = {Dimensions.get('window').height > 900 ? 30:25}
+                        color = {"#008394"}
+                      />
+                    </TouchableOpacity>
+                  </View>
+                  <Text style={styles.modalTitle}>Add a Brand</Text>
+                </View>              
               <View style={styles.modalBody}>
                 <TextInput onChangeText={onChangeNewBrand} placeholder="Add a Brand" style={styles.input} />
               </View>
@@ -361,12 +394,26 @@ const ProductUpdateModal = props => {
           visible={addColorModal}
           transparent
         >
+          <TouchableWithoutFeedback onPress={() => setAddColorModal(false)}>
+              <View style={styles.modalOverlay} />
+            </TouchableWithoutFeedback>
           <View styles={styles.centeredView}>
             <View style={styles.modalView}>
-              <Text style={styles.modalTitle}>Add a Color</Text>
-              <View style={styles.modalBody}>
-                <TextInput onChangeText={onChangeNewColor} placeholder="Add a Color" style={styles.input} />
+              <View style = {{flexDirection: 'row'}}>
+                <View style = {{ right: Dimensions.get('window').height > 900 ? Dimensions.get('window').width * 0.10 : Dimensions.get('window').width * 0.08, top: 28}}>
+                  <TouchableOpacity onPress = {() => setAddColorModal(false)}>
+                    <FontAwesome
+                      name = {"arrow-left"}
+                      size = {Dimensions.get('window').height > 900 ? 30:25}
+                      color = {"#008394"}
+                    />
+                  </TouchableOpacity>
+                </View>
+                <Text style={styles.modalTitle}>Add a Color</Text>
               </View>
+            <View style={styles.modalBody}>
+              <TextInput onChangeText={onChangeNewColor} placeholder="Add a Color" style={styles.input} />
+            </View>
               <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center' }}>
                 <TouchableOpacity onPress={() => colorModal()}>
                   <View style={styles.buttonModalContainer}>
@@ -385,7 +432,7 @@ const ProductUpdateModal = props => {
         </Modal>
       </View>
 
-
+      </View>
     </KeyboardAvoidingView >
   );
 };
@@ -409,13 +456,15 @@ const styles = StyleSheet.create({
   },
   modalStyle: {
     backgroundColor: "#fff",
+
     width: Dimensions.get('window').height > 900 ? Dimensions.get('window').width * 0.80 : Dimensions.get('window').width * 0.80,
-    height: Dimensions.get('window').height > 900 ? Dimensions.get('window').height * 0.65 : Dimensions.get('window').height * 0.90,
+    height: Dimensions.get('window').height > 900 ? Dimensions.get('window').height * 0.55 : Dimensions.get('window').height * 0.80,
+
     borderWidth: 2,
     borderRadius: 20,
-    //marginBottom: 20,
+    marginBottom: 20,
     borderColor: "#008394",
-    marginTop: Dimensions.get('window').height > 750 ? Dimensions.get('window').height * 0.25 : 0
+    marginTop: Dimensions.get('window').height > 750 ? Dimensions.get('window').height * 0.1 : 0
   },
   subtitle: {
     color: '#008394',
@@ -573,14 +622,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   modalView: {
+    alignSelf: 'center',
     margin: 20,
     backgroundColor: "white",
     borderRadius: 20,
     padding: 35,
     alignItems: "center",
-    marginTop: Dimensions.get('window').height > 900 ? Dimensions.get('window').height * 0.282 : Dimensions.get('window').height * 0.2,
+    borderColor: "#008394",
+    borderWidth: 2,
     width: Dimensions.get('window').height > 900 ? Dimensions.get('window').width * 0.7 : Dimensions.get('window').width * 0.80,
-    height: Dimensions.get('window').height > 900 ? Dimensions.get('window').height * 0.5 : Dimensions.get('window').height * 0.60
+    height: Dimensions.get('window').height > 900 ? Dimensions.get('window').height * 0.5 : Dimensions.get('window').height * 0.40,
+    marginTop: Dimensions.get('window').height > 900 ? Dimensions.get('window').height * 0.282 : Dimensions.get('window').height * 0.2,
   },
   addButton: {
     borderRadius: 40,
@@ -603,9 +655,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#008394',
     paddingVertical: 8,
     paddingHorizontal: 24,
-    top: Dimensions.get('window').height > 900 ? (Dimensions.get('window').width > 480 ? 35 : null) : null,
     margin: 20,
-    display: 'flex',
+    display: 'flex'
 
   },
   modalOverlay: {
