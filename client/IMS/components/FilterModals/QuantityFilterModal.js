@@ -148,7 +148,7 @@ const QuantityFilterModal = props => {
                             
                         <View style={styles.topTextBox}>
                             <View style= {{flexDirection: 'row', justifyContent: 'space-between', alignContent: 'center',  marginTop: Dimensions.get('window').height * 0.03,}}>
-                                <TouchableOpacity onPress = {() => props.handleClose()} style = {{ paddingLeft: '5%', marginTop: 5}}>
+                                <TouchableOpacity onPress = {() => props.handleClose()} style = {{ paddingLeft: '5%', marginTop: Dimensions.get('window').height>900 ? 10:5}}>
                                     <FontAwesome
                                     name = {"arrow-left"}
                                     size = {Dimensions.get('window').height > 900 ? 40:25}
@@ -280,7 +280,7 @@ const styles = StyleSheet.create({
         borderWidth: 2,
         borderRadius: 20,
         borderColor: "#008394",
-        marginTop: Dimensions.get('window').height > 900 ? 30: 0,
+        marginTop: Dimensions.get('window').height > 900 ? 10: 0,
         // left: Dimensions.get('window').width * 0.4,
 
     },
