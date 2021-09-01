@@ -108,7 +108,13 @@ const Clients = props => {
 
 
   const addClient = () => {
-    const data = {
+    if(name === `` || phoneNumber === ``){
+      setAlertTitle('Warning')
+      setAlertMsg('Input fields may be empty. Request could not be processed.')
+      show()
+    }
+    else {
+      const data = {
       userName: name,
       phone: phoneNumber
     }
@@ -129,8 +135,9 @@ const Clients = props => {
         setError()
       })
 
-    setModalVisible(false); //closing modal on done for now
+    setModalVisible(false); //closing modal on done for now}
   }
+}
 
 
   const [isTableDetailModalVisible, setTableDetailModalVisible] = React.useState(false);

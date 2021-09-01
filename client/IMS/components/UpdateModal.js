@@ -117,7 +117,7 @@ const UpdateModal = props => {
                     setSelectedWarehouse(itemValue)
                   } >
                     {warehouses.map((warehouse, i) => (
-                      <Picker.Item key = {warehouse._id} label={warehouses === [] ? null : warehouse.name} value={warehouse._id} key={selectedWarehouse} />
+                      <Picker.Item key = {warehouse._id} label={warehouses === [] ? null : warehouse.name} value={warehouse._id}/>
                     ))}
                   </Picker>
                 </View>
