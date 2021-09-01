@@ -119,7 +119,7 @@ const EmployeeChangePasswordModal = props => {
                     <Text style={styles.bodyText}>Username:</Text>
                     <TextInput placeholder="Username" onChangeText= {onChangeEmployeeName} style={styles.input} value = {employeeName}/>
                     <Text style={styles.bodyText}>Password:</Text>
-                    <TextInput placeholder="New Password" onChangeText= {onChangePassword}  style={styles.input}/>
+                    <TextInput placeholder="New Password" onChangeText= {onChangePassword}  style={styles.input} secureTextEntry={true}/>
                 </View>
                 <View style={{flexDirection: 'row', justifyContent: 'space-evenly', alignItems : 'center'}}>
                     <TouchableOpacity onPress={() => props.handleClose()}>
