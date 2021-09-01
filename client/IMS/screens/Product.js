@@ -232,14 +232,20 @@ const Product = props => {
       show()
     }
     else {
-      axios.post(`${uri}/api/product/brand`, {
+     
+      console.log("whyyyyyyy")
+      axios.post(`${uri}/api/product/brand`, 
+      {
         brand: addBrand
-      }, {
+      }, 
+      {
         headers: {
           "Content-Type": 'application/json'
         }
       }).then(res => {
+        console.log('inside')
         setAlertTitle('Success')
+        getBrandColours()
         setAlertMsg('Request has been processed, Brand added.')
         show()
       })
@@ -249,7 +255,7 @@ const Product = props => {
           show()
         })
 
-      getBrandColours().then(() => setAddBrandModal(false))
+       getBrandColours().then(() => setAddBrandModal(false))
 
     }
 
@@ -284,6 +290,7 @@ const Product = props => {
         }
       }).then(res => {
         setAlertTitle('Success')
+        getBrandColours()
         setAlertMsg('Request has been processed, Color added.')
         show()
       })

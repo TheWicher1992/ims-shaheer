@@ -694,6 +694,7 @@ router.post('/colour', async (req, res) => {
 
             await productColour.save()
         }
+        res.end()
     }
     catch (err) {
         console.log(err)
@@ -715,6 +716,7 @@ router.post('/brand', async (req, res) => {
             })
             await brandC.save()
         }
+        res.end()
     }
     catch (err) {
         console.log(err)
