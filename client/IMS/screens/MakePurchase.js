@@ -17,7 +17,7 @@ import ExportButton from '../components/ExportAsExcel'
 
 
 const optionsPerPage = [2, 3, 4];
-const MakePurchase = props => {
+const MakePurchase = (props) => {
 
   const [page, setPage] = React.useState(0); //for pages of table
   const [itemsPerPage, setItemsPerPage] = React.useState(optionsPerPage[0]); //for items per page on table
@@ -49,7 +49,7 @@ const MakePurchase = props => {
         `/${props.filters.date}` +
         `/${props.filters.maxQuantity}` +
         `/${props.filters.maxTotal}`
-      console.log("Filters --->\n", getURI)
+      console.log("Filters --->\n", props.filters)
 
       const res = await axios.get(getURI)
       res.data.purchases.length === 0 ? searchWarning() : null
@@ -83,11 +83,12 @@ const MakePurchase = props => {
 
 
   useEffect(() => {
-    props.navigation.addListener('didFocus', () => {
-      getPurchases()
+    const unsubscribe = props.navigation.addListener('didFocus', async () => {
+      await getPurchases()
+      console.log('Init Props--->\n\n', props.filters)
       getPreFormValues()
     })
-
+    return unsubscribe.remove
   }, [])
 
   useEffect(() => {
@@ -102,9 +103,8 @@ const MakePurchase = props => {
   const [search, setSearch] = React.useState(`*`) //for keeping track of search
   const onChangeSearch = (searchVal) => { //function to keep track of search as the user types
     let q = searchVal.trim()
-
+    console.log(props.filters)
     setSearch(q === '' ? '*' : q);
-    console.log(search);
   }
 
   const searchFunc = () => {

@@ -43,11 +43,11 @@ const Product = props => {
 
   const [query, setQuery] = useState('*')
 
-  const getProducts = async () => {
+  const getProducts = () => {
     setLoading(true)
     try {
 
-      const res = await axios.get(
+      axios.get(
         `${uri}/api/product` +
         `/${props.filters.page}` +
         `/${query}` +
@@ -58,8 +58,11 @@ const Product = props => {
         `/${props.filters.price}/${props.filters.sort}` +
         `/${props.filters.sortBy}`
       )
-      res.data.products.length === 0 ? searchWarning() : null
-      setProducts(res.data.products.reverse())
+        .then(res => {
+          console.log("filters --->>>>> \n\n", props.filters)
+          res.data.products.length === 0 ? searchWarning() : null
+          setProducts(res.data.products.reverse())
+        })
 
 
     }
@@ -98,6 +101,10 @@ const Product = props => {
       getProducts()
     })
   }, [])
+
+  useEffect(() => {
+    getProducts()
+  }, [props.filters])
 
 
   const [page, setPage] = React.useState(0); //for pages of table
@@ -301,8 +308,9 @@ const Product = props => {
 
   const showAddProductForm = () => {
     getBrandColours().then(() => {
-      setModalVisible(true)})
-    
+      setModalVisible(true)
+    })
+
   }
 
   const [alertState, setAlertState] = useState(false)
@@ -321,7 +329,7 @@ const Product = props => {
     setAlertTitle('Attention')
     setAlertMsg('Something went wrong. Please restart')
   }
-  
+
   const getWarehouses = async () => {
     try {
       const res = await axios.get(
@@ -340,38 +348,38 @@ const Product = props => {
   return (
     <ScrollView>
       <ShowAlert state={alertState} handleClose={show} alertTitle={alertTitle} alertMsg={alertMsg} style={styles.buttonModalContainer} />
-      <View style = {styles.centeredView}>
-      <Modal
-        onSwipeComplete={() => setModalVisible(false)}
-        animationType="slide"
-        transparent={true}
-        swipeDirection="left"
-        transparent
-        visible={isModalVisible}>
-        <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
-          <View style={styles.modalOverlay} />
-        </TouchableWithoutFeedback>
-        <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', }}>
-          {/* <ScrollView> */}
+      <View style={styles.centeredView}>
+        <Modal
+          onSwipeComplete={() => setModalVisible(false)}
+          animationType="slide"
+          transparent={true}
+          swipeDirection="left"
+          transparent
+          visible={isModalVisible}>
+          <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
+            <View style={styles.modalOverlay} />
+          </TouchableWithoutFeedback>
+          <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', }}>
+            {/* <ScrollView> */}
             <View style={styles.modalStyle}>
               <View style={{ justifyContent: 'center', alignItems: 'center', }}>
 
-                <View style = {{flexDirection: 'row'}}>
-                    <View style = {{ right: Dimensions.get('window').height > 900 ? Dimensions.get('window').width * 0.16 : Dimensions.get('window').width * 0.05, top: Dimensions.get('window').height > 900 ? 26 :28}}>
-                      <TouchableOpacity onPress = {() => setModalVisible(false)}>
-                        <FontAwesome
-                          name = {"arrow-left"}
-                          size = {Dimensions.get('window').height > 900 ? 36:25}
-                          color = {"#008394"}
-                        />
-                      </TouchableOpacity>
-                      
-                    </View>
-                    
-                    <Text style={styles.modalTitle}>Add a Product</Text>
-                    
+                <View style={{ flexDirection: 'row' }}>
+                  <View style={{ right: Dimensions.get('window').height > 900 ? Dimensions.get('window').width * 0.16 : Dimensions.get('window').width * 0.05, top: Dimensions.get('window').height > 900 ? 26 : 28 }}>
+                    <TouchableOpacity onPress={() => setModalVisible(false)}>
+                      <FontAwesome
+                        name={"arrow-left"}
+                        size={Dimensions.get('window').height > 900 ? 36 : 25}
+                        color={"#008394"}
+                      />
+                    </TouchableOpacity>
+
                   </View>
-                
+
+                  <Text style={styles.modalTitle}>Add a Product</Text>
+
+                </View>
+
                 <View style={{ marginTop: 50 }}>
                   <TextInput onChangeText={onChangeSerialNo} style={styles.input} placeholder="Serial" autoCorrect={false} />
                   <TextInput onChangeText={onChangeProductName} style={styles.input} placeholder="Product" autoCorrect={false} />
@@ -435,7 +443,7 @@ const Product = props => {
                   <View style={{ borderWidth: 2, borderRadius: 40, borderColor: "#008394", width: Dimensions.get('window').width * 0.65, marginTop: 15, height: 40, fontSize: 8, }}>
                     <Picker
                       style={{ top: 6, color: 'grey', fontFamily: 'Roboto' }}
-                      
+
                       itemStyle={{ fontWeight: '100' }}
 
                       selectedValue={brand}
@@ -490,104 +498,104 @@ const Product = props => {
                 </View>
               </View>
             </View>
-          {/* </ScrollView> */}
-        </View>
+            {/* </ScrollView> */}
+          </View>
 
-      </Modal>
+        </Modal>
 
-      {/* modal for adding brand*/}
-      <View style = {{justifyContent: 'center'}}> 
-        <Modal
-          onSwipeComplete={() => setAddBrandModal(false)}
-          animationType="slide"
-          transparent={true}
-          swipeDirection="left"
-          visible={addBrandModal}
-        >
-          <TouchableWithoutFeedback onPress={() => setAddBrandModal(false)}>
-            <View style={styles.modalOverlay} />
-          </TouchableWithoutFeedback>
-          <View styles={styles.centeredView}>
-            <View style={styles.modalView}>
-              <View style = {{flexDirection: 'row'}}>
-                  <View style = {{ right: Dimensions.get('window').height > 900 ? Dimensions.get('window').width * 0.10 : Dimensions.get('window').width * 0.08, top: 28}}>
-                    <TouchableOpacity onPress = {() => setAddBrandModal(false)}>
+        {/* modal for adding brand*/}
+        <View style={{ justifyContent: 'center' }}>
+          <Modal
+            onSwipeComplete={() => setAddBrandModal(false)}
+            animationType="slide"
+            transparent={true}
+            swipeDirection="left"
+            visible={addBrandModal}
+          >
+            <TouchableWithoutFeedback onPress={() => setAddBrandModal(false)}>
+              <View style={styles.modalOverlay} />
+            </TouchableWithoutFeedback>
+            <View styles={styles.centeredView}>
+              <View style={styles.modalView}>
+                <View style={{ flexDirection: 'row' }}>
+                  <View style={{ right: Dimensions.get('window').height > 900 ? Dimensions.get('window').width * 0.10 : Dimensions.get('window').width * 0.08, top: 28 }}>
+                    <TouchableOpacity onPress={() => setAddBrandModal(false)}>
                       <FontAwesome
-                        name = {"arrow-left"}
-                        size = {Dimensions.get('window').height > 900 ? 30:25}
-                        color = {"#008394"}
+                        name={"arrow-left"}
+                        size={Dimensions.get('window').height > 900 ? 30 : 25}
+                        color={"#008394"}
                       />
                     </TouchableOpacity>
                   </View>
                   <Text style={styles.modalTitle}>Add a Brand</Text>
                 </View>
-              <View style={styles.modalBody}>
-                <TextInput onChangeText={onChangeNewBrand} placeholder="Add a Brand" style={styles.input} />
-              </View>
-              <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center' }}>
-                <TouchableOpacity onPress={() => brandModal()}>
-                  <View style={styles.buttonModalContainer}>
-                    <Text style={styles.buttonModalText}>Back</Text>
-                  </View>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => addNewBrand()}>
-                  <View style={styles.backButtonModalContainer}>
-                    <Text style={styles.buttonModalText}>Done</Text>
-                  </View>
-                </TouchableOpacity>
+                <View style={styles.modalBody}>
+                  <TextInput onChangeText={onChangeNewBrand} placeholder="Add a Brand" style={styles.input} />
+                </View>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center' }}>
+                  <TouchableOpacity onPress={() => brandModal()}>
+                    <View style={styles.buttonModalContainer}>
+                      <Text style={styles.buttonModalText}>Back</Text>
+                    </View>
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={() => addNewBrand()}>
+                    <View style={styles.backButtonModalContainer}>
+                      <Text style={styles.buttonModalText}>Done</Text>
+                    </View>
+                  </TouchableOpacity>
 
+                </View>
               </View>
             </View>
-          </View>
-        </Modal>
-      </View>
+          </Modal>
+        </View>
 
-      {/* modal for adding color */}
-      <View>
-        <Modal
-          onSwipeComplete={() => setAddColorModal(false)}
-          animationType="slide"
-          transparent={true}
-          swipeDirection="left"
-          visible={addColorModal}
-        >
-          <TouchableWithoutFeedback onPress={() => setAddColorModal(false)}>
-            <View style={styles.modalOverlay} />
-          </TouchableWithoutFeedback>
-          <View styles={styles.centeredView}>
-            <View style={styles.modalView}>
-                <View style = {{flexDirection: 'row'}}>
-                  <View style = {{ right: Dimensions.get('window').height > 900 ? Dimensions.get('window').width * 0.10 : Dimensions.get('window').width * 0.08, top: 28}}>
-                    <TouchableOpacity onPress = {() => setAddColorModal(false)}>
+        {/* modal for adding color */}
+        <View>
+          <Modal
+            onSwipeComplete={() => setAddColorModal(false)}
+            animationType="slide"
+            transparent={true}
+            swipeDirection="left"
+            visible={addColorModal}
+          >
+            <TouchableWithoutFeedback onPress={() => setAddColorModal(false)}>
+              <View style={styles.modalOverlay} />
+            </TouchableWithoutFeedback>
+            <View styles={styles.centeredView}>
+              <View style={styles.modalView}>
+                <View style={{ flexDirection: 'row' }}>
+                  <View style={{ right: Dimensions.get('window').height > 900 ? Dimensions.get('window').width * 0.10 : Dimensions.get('window').width * 0.08, top: 28 }}>
+                    <TouchableOpacity onPress={() => setAddColorModal(false)}>
                       <FontAwesome
-                        name = {"arrow-left"}
-                        size = {Dimensions.get('window').height > 900 ? 30:25}
-                        color = {"#008394"}
+                        name={"arrow-left"}
+                        size={Dimensions.get('window').height > 900 ? 30 : 25}
+                        color={"#008394"}
                       />
                     </TouchableOpacity>
                   </View>
                   <Text style={styles.modalTitle}>Add a Color</Text>
                 </View>
-                      
-              <View style={styles.modalBody}>
-                <TextInput onChangeText={onChangeNewColor} placeholder="Add a Color" style={styles.input} />
-              </View>
-              <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center' }}>
-                <TouchableOpacity onPress={() => colorModal()}>
-                  <View style={styles.buttonModalContainer}>
-                    <Text style={styles.buttonModalText}>Back</Text>
-                  </View>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => addNewColor()}>
-                  <View style={styles.backButtonModalContainer}>
-                    <Text style={styles.buttonModalText}>Done</Text>
-                  </View>
-                </TouchableOpacity>
 
+                <View style={styles.modalBody}>
+                  <TextInput onChangeText={onChangeNewColor} placeholder="Add a Color" style={styles.input} />
+                </View>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center' }}>
+                  <TouchableOpacity onPress={() => colorModal()}>
+                    <View style={styles.buttonModalContainer}>
+                      <Text style={styles.buttonModalText}>Back</Text>
+                    </View>
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={() => addNewColor()}>
+                    <View style={styles.backButtonModalContainer}>
+                      <Text style={styles.buttonModalText}>Done</Text>
+                    </View>
+                  </TouchableOpacity>
+
+                </View>
               </View>
             </View>
-          </View>
-        </Modal>
+          </Modal>
         </View>
       </View>
 
@@ -627,7 +635,7 @@ const Product = props => {
       </View>
       <View style={{ flexDirection: 'row', justifyContent: 'center', paddingRight: 60 }}>
         <View>
-          <FilterButton getProducts={getProducts} page="product" />
+          <FilterButton getProducts={() => { }} page="product" />
         </View>
         <View style={{ marginTop: 25 }}>
           <ExportButton data={products} title={'products.xlsx'} />
@@ -764,7 +772,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#00E0C7',
     paddingVertical: 8,
     paddingHorizontal: 24,
-    
+
     margin: 20,
     display: 'flex'
   },
@@ -776,7 +784,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#ff0000',
     paddingVertical: 8,
     paddingHorizontal: 24,
-    
+
     margin: 20,
     display: 'flex'
   },
