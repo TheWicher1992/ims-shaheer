@@ -22,7 +22,9 @@ router.post('/', async (req, res) => {
             newColour,
             isNewBrand,
             newBrand,
-            price
+            price,
+            warehouse,
+            stock
         } = req.body
 
         const exists = await Product.exists({
@@ -85,6 +87,22 @@ router.post('/', async (req, res) => {
             description,
             price
         })
+
+        if (warehouse !== "*") {
+            const ware = await Warehouse.findOne({
+                _id: warehouse
+            })
+
+            await new Stock({
+                product: product._id,
+                warehouse,
+                stock
+            }).save()
+            ware.totalProducts += 1
+            ware.totalStock += stock
+            await ware.save()
+            product.totalStock = stock
+        }
 
         await product.save()
 
