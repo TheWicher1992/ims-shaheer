@@ -33,7 +33,7 @@ const MakeSale = props => {
       setProductName(res.data.products[0]._id)
       setClients(res.data.clients)
       setClientName(res.data.clients[0]._id)
-      console.log("client data",res.data)
+      
     } catch (err) {
       catchWarning()
     }
@@ -196,6 +196,8 @@ const MakeSale = props => {
         note: notes
       }
 
+      console.log(body)
+
 
       let totalQuant = 0
       if (body.isWarehouse) {
@@ -206,15 +208,15 @@ const MakeSale = props => {
           show()
           return
         }
-        else if (body.total <= body.received && body.payment === "Partial") {
+        else if (Number.parseInt(totalAmount, 10) <= Number.parseInt(amountReceived, 10) && body.payment === "Partial") {
           setAlertTitle('Warning')
           setAlertMsg('Payment type partial but amount greater then total. Request could not be processed.')
           show()
           return
         }
-        else if (body.total != body.received && body.payment === "Full") {
+        else if (Number.parseInt(amountReceived, 10) != 0 && body.payment === "Full") {
           setAlertTitle('Warning')
-          setAlertMsg('Payment type partial but amount greater then total. Request could not be processed.')
+          setAlertMsg('Payment type FULL but amount recieved is not ZERO. Request could not be processed.')
           show()
           return
         }
@@ -237,6 +239,7 @@ const MakeSale = props => {
         .then(res => {
           setAlertTitle('Success')
           setAlertMsg('Request has been processed, Sale added.')
+          getSales()
           show()
           setModalVisible(false)
         })
@@ -270,7 +273,6 @@ const MakeSale = props => {
 
   const onPressModal = (prod) => {
     setTableDetailModalVisible(true),
-      console.log(prod),
       setTouchedSale(prod)
   }
 
@@ -337,7 +339,7 @@ const MakeSale = props => {
 
 
   const setQuantityWarehouses = (q, s, e) => {
-    console.log(q, s, e)
+   // console.log(q, s, e)
     if (e < s) {
       warehouseIdTicksQuant["quant"][q] = e
     }
@@ -767,7 +769,7 @@ const MakeSale = props => {
                   <DataTable.Row>
                     <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{sale.product === null ? '--' : sale.product.title}</Text></DataTable.Cell>
                     <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{sale.quantity === undefined ? '--' : sale.quantity}</Text></DataTable.Cell>
-                    <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>69000</Text></DataTable.Cell>
+                    <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{sale.total === undefined ? '--' : sale.total}</Text></DataTable.Cell>
                     <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{sale.client === null ? '--' : sale.client.userName}</Text></DataTable.Cell>
                   </DataTable.Row>
                 </TouchableOpacity>
