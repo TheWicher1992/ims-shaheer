@@ -227,29 +227,7 @@ const ProductUpdateModal = props => {
                   <TextInput onChangeText={onChangeSerialNo} style={styles.input} placeholder="Serial" value={serialNo} autoCorrect={false} />
                   <TextInput onChangeText={onChangeProductName} style={styles.input} placeholder="Product" value={productName} autoCorrect={false} />
                   <TextInput onChangeText={onChangeAmount} style={styles.input} placeholder="Amount" value={amountVal === undefined ? '0' : amountVal.toString()} autoCorrect={false} />
-                  <TextInput onChangeText={onChangeStock} style={styles.input} placeholder="Stock" autoCorrect={false} />
                   <TextInput multiline={true} numberOfLines={5} onChangeText={onChangeDescription} value={description} style={styles.input} placeholder="Description" autoCorrect={false} />
-                  <View style={{ borderWidth: 2, marginBottom: 20, borderRadius: 40, borderColor: "#008394", width: Dimensions.get('window').width * 0.65, height: 40, fontSize: 8, justifyContent: 'space-between' }}>
-                    <Picker
-                      style={{ top: 6, color: 'grey', fontFamily: 'Roboto' }}
-                      itemStyle={{ fontWeight: '100' }}
-                      placeholder="Select a Warehouse"
-                      selectedValue={selectedWarehouse}
-                      onValueChange={(itemValue, itemIndex) =>
-                        setSelectedWarehouse(itemValue)
-                      }
-                    >
-
-                      {
-                        warehouses.map((w => (
-                          <Picker.Item key={w._id} label={w.title} value={w._id} />
-                        )))
-                      }
-
-                    </Picker>
-
-                  </View>
-
                   <View style={{ borderWidth: 2, borderRadius: 40, borderColor: "#008394", width: Dimensions.get('window').width * 0.65, height: 40, fontSize: 8, justifyContent: 'space-between' }}>
                     <Picker
                       style={{ top: 6, color: 'grey', fontFamily: 'Roboto' }}
