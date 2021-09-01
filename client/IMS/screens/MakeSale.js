@@ -14,6 +14,7 @@ import axios from "axios"
 import Spinner from '../components/Spinner';
 import ExportButton from '../components/ExportAsExcel'
 import ShowAlert from '../components/ShowAlert';
+import AddClientModal from '../components/AddClientModal';
 
 
 const optionsPerPage = [2, 3, 4];
@@ -389,6 +390,11 @@ const MakeSale = props => {
     setAlertState(!alertState)
   }
 
+  const [addClientModal, setAddClientModal] = useState(false);
+  const closeClientModal = () => {
+    setAddClientModal(false)
+  }
+
   return (
     
   
@@ -618,9 +624,20 @@ const MakeSale = props => {
                   </Picker>
                   </View>
                 </View>
+                <View>
+                  <TouchableOpacity style={{ bottom: 20 }} onPress = {() => setAddClientModal(true)} >
+                    <View style={styles.addButton}>
+                      <View style={{ justifyContent: 'center', alignContent: 'center', alignItems: 'center', }}>
+                        <Text style={styles.modalbuttonText}>
+                          + Add
+                        </Text>
+                      </View>
+                    </View>
+                  </TouchableOpacity>
+                </View>
 
       
-                <View style={{ }}>
+                <View style={{}}>
                   <TextInput onChangeText={onChangeQuantity} style={styles.input} placeholder="Quantity" autoCorrect={false} />
                   <TextInput onChangeText={onChangeTotalAmount} style={styles.input} placeholder="Total Amount" autoCorrect={false} />
                   <TextInput onChangeText={onChangeAmountReceived} style={styles.input} placeholder="Amount Received" autoCorrect={false} />
@@ -707,6 +724,7 @@ const MakeSale = props => {
 
       </Modal>
       </View>
+      <AddClientModal state = {addClientModal} handleClose = {closeClientModal} />
       <SaleDetailModal state={isTableDetailModalVisible} handleClose={handleClose} title="Sale Information" object={touchedSale} occupation="Admin" />
       <View style={styles.screen}>
         <View>
@@ -1041,5 +1059,17 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
+  },
+  addButton: {
+    borderRadius: 40,
+    backgroundColor: '#00E0C7',
+    height: 24,
+    width: 80,
+  },
+  modalbuttonText: {
+    fontWeight: 'bold',
+    color: 'white',
+    fontSize: 12,
+    marginTop: 3.5,
   },
 })
