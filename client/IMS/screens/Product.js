@@ -22,7 +22,8 @@ const Product = props => {
 
   const [products, setProducts] = useState([])
   const [loading, setLoading] = useState(true)
-  const [stock, setStock] = useState(``)
+  const [warehouseCheck, setWarehouseCheck] = useState('*')
+  const [stock, setStock] = useState('0')
   const [brandsAndColours, setBrandAndColours] = useState({
     brands: [],
     colours: []
@@ -87,7 +88,6 @@ const Product = props => {
       catchWarning()
     }
 
-    //console.log(res.data)
 
 
   }
@@ -122,7 +122,6 @@ const Product = props => {
     let q = searchVal.trim()
     setQuery(q === '' ? '*' : q)
     // setFilters({ ...filters, query: searchVal })
-    // console.log(search);
   }
 
   const searchFunc = () => {
@@ -140,7 +139,6 @@ const Product = props => {
   const [description, setDescription] = React.useState(``)
   const addProduct = () => {
     // setModalVisible(false); //closing modal on done for now
-    // // console.log(color, brand)
     if (serialNo === '' || productName === '' || amountVal === '' || description === '') {
       setAlertTitle('Warning')
       setAlertMsg('Input fields may be empty. Request could not be processed.')
@@ -153,7 +151,9 @@ const Product = props => {
         brandID: brand,
         colourID: color,
         description,
-        price: amountVal
+        price: amountVal,
+        stock: stock,
+        warehouse: warehouseCheck === '*' ? warehouseCheck : selectedWarehouse
       }
 
       axios.post(`${uri}/api/product`, body, {
@@ -233,7 +233,6 @@ const Product = props => {
     }
     else {
      
-      console.log("whyyyyyyy")
       axios.post(`${uri}/api/product/brand`, 
       {
         brand: addBrand
@@ -243,7 +242,6 @@ const Product = props => {
           "Content-Type": 'application/json'
         }
       }).then(res => {
-        console.log('inside')
         setAlertTitle('Success')
         getBrandColours()
         setAlertMsg('Request has been processed, Brand added.')
@@ -307,6 +305,7 @@ const Product = props => {
   }
 
   const showAddProductForm = () => {
+    getWarehouses()
     getBrandColours().then(() => {
       setModalVisible(true)})
     
@@ -393,13 +392,16 @@ const Product = props => {
                       placeholder="Select a Warehouse"
                       selectedValue={selectedWarehouse}
                       onValueChange={(itemValue, itemIndex) =>
-                        setSelectedWarehouse(itemValue)
+                        {
+                          setSelectedWarehouse(itemValue)
+                          setWarehouseCheck(itemValue)
+                        }
                       }
                     >
 
                       {
                         warehouses.map((w => (
-                          <Picker.Item key={w._id} label={w.title} value={w._id} />
+                          <Picker.Item key={w._id} label={w.name} value={w._id} />
                         )))
                       }
 
