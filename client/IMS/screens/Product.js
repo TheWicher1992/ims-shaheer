@@ -46,7 +46,7 @@ const Product = props => {
   const getProducts = () => {
     setLoading(true)
     try {
-      console.log('')
+      console.log('a')
       axios.get(
         `${uri}/api/product` +
         `/${props.filters.page}` +
