@@ -14,7 +14,7 @@ import { connect } from 'react-redux'
 import Spinner from '../components/Spinner';
 import ShowAlert from '../components/ShowAlert';
 import ExportButton from '../components/ExportAsExcel'
-
+import { clearProductFilters } from "../actions/productFilters"
 const optionsPerPage = [2, 3, 4];
 
 const Product = props => {
@@ -98,6 +98,7 @@ const Product = props => {
 
   useEffect(() => {
     props.navigation.addListener('didFocus', () => {
+      props.clearProductFilters()
       getProducts()
     })
   }, [])
@@ -713,7 +714,7 @@ const mapStateToProps = (state) => (
   }
 )
 
-export default connect(mapStateToProps)(Product)
+export default connect(mapStateToProps, { clearProductFilters })(Product)
 
 
 const styles = StyleSheet.create({

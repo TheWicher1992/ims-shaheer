@@ -14,7 +14,7 @@ import axios from "axios"
 import Spinner from '../components/Spinner';
 import ExportButton from '../components/ExportAsExcel'
 import ShowAlert from '../components/ShowAlert';
-
+import { clearSaleFilters } from '../actions/saleFilters'
 
 const optionsPerPage = [2, 3, 4];
 
@@ -75,6 +75,7 @@ const MakeSale = props => {
 
   useEffect(() => {
     props.navigation.addListener('didFocus', () => {
+      props.clearSaleFilters()
       getSales()
       getPreFormValues()
     })
@@ -817,7 +818,7 @@ const mapStateToProps = (state) => (
   }
 )
 
-export default connect(mapStateToProps)(MakeSale)
+export default connect(mapStateToProps, { clearSaleFilters })(MakeSale)
 
 
 const styles = StyleSheet.create({

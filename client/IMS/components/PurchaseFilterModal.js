@@ -52,22 +52,22 @@ const PurchaseFilterModal = props => {
     const [filters, setFilters] = useState([])
 
     const getFilters = async () => {
-        try{
+        try {
             const res = await axios.get(
                 `${uri}/api/purchase/filters`
             )
             setFilters(res.data.filters);
-    
+
             const productMap = {}
             res.data.filters.products.forEach(p => {
                 productMap[p._id] = p.title
             })
-    
+
             const clientMap = {}
             res.data.filters.clients.forEach(c => {
                 clientMap[c._id] = c.userName
             })
-    
+
             setFilterMap({
                 clients: {
                     ...clientMap
@@ -76,16 +76,16 @@ const PurchaseFilterModal = props => {
                     ...productMap
                 }
             })
-            console.log(clientMap, productMap)
+            // console.log(clientMap, productMap)
         }
-        catch(err){
+        catch (err) {
             catchWarning()
         }
-        
+
     }
 
     const catchWarning = () => {
-        setAlertState(!alertState) 
+        setAlertState(!alertState)
         setAlertTitle('Attention')
         setAlertMsg('Something went wrong. Please restart')
     }
@@ -104,9 +104,9 @@ const PurchaseFilterModal = props => {
                 presentationStyle="overFullScreen"
                 transparent
                 visible={modalVisible}>
-                    <TouchableWithoutFeedback onPress={() => { props.handleClose(); props.getPurchases() }}>
-                        <View style={styles.modalOverlay} />
-                    </TouchableWithoutFeedback>
+                <TouchableWithoutFeedback onPress={() => { props.handleClose(); props.getPurchases() }}>
+                    <View style={styles.modalOverlay} />
+                </TouchableWithoutFeedback>
                 <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
                     <View style={styles.modalStyle}>
 
@@ -144,9 +144,9 @@ const PurchaseFilterModal = props => {
                                         <Text style={styles.sideText}>
                                             {props.filters.product.length === 1 && 'All'}
                                             {
-                                                props.filters.product.length !== 1 && 
-                                                <Text style = {styles.sideText}>
-                                                {`(${props.filters.product.length -1}) Item(s)`}
+                                                props.filters.product.length !== 1 &&
+                                                <Text style={styles.sideText}>
+                                                    {`(${props.filters.product.length - 1}) Item(s)`}
                                                 </Text>
                                             }
                                         </Text>
@@ -171,8 +171,8 @@ const PurchaseFilterModal = props => {
                                             {props.filters.client.length === 1 && 'All'}
                                             {
                                                 props.filters.client.length !== 1 &&
-                                                <Text style = {styles.sideText}>
-                                                {`(${props.filters.client.length -1}) Item(s)`}
+                                                <Text style={styles.sideText}>
+                                                    {`(${props.filters.client.length - 1}) Item(s)`}
                                                 </Text>
                                             }
                                         </Text>
@@ -236,7 +236,7 @@ const PurchaseFilterModal = props => {
                         </TouchableOpacity>
 
                         <TouchableOpacity style={styles.TextBox} onPress={() => setPriceFilterModal(true)}>
-                            <View style={{ marginTop: Dimensions.get('window').height * 0.05,paddingLeft: '5%' }}>
+                            <View style={{ marginTop: Dimensions.get('window').height * 0.05, paddingLeft: '5%' }}>
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                     <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-start' }}>
                                         <Text style={styles.normalText}>
@@ -274,7 +274,7 @@ const PurchaseFilterModal = props => {
             <ProductNameFilterModal state={productNameFilterModal} handleClose={closeProductNameFilterModal} object={filters.products} title="purchase" />
             <QuantityFilterModal state={quantityFilterModal} handleClose={closeQuantityFilterModal} title="purchase" maxStock={filters.maxQuantity} />
             <PriceFilterModal state={priceFilterModal} handleClose={closePriceFilterModal} title="purchase" maxPrice={filters.maxTotal} />
-            <PaymentTypeFilterModal state={paymentTypeFilterModal} handleClose={closePaymentTypeFilterModal} title = "purchase" />
+            <PaymentTypeFilterModal state={paymentTypeFilterModal} handleClose={closePaymentTypeFilterModal} title="purchase" />
         </View>
     );
 };

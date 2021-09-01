@@ -14,7 +14,7 @@ import { connect } from 'react-redux'
 import Spinner from '../components/Spinner';
 import ShowAlert from '../components/ShowAlert';
 import ExportButton from '../components/ExportAsExcel'
-
+import { clearPurchaseFilters } from "../actions/purchaseFilters"
 
 const optionsPerPage = [2, 3, 4];
 const MakePurchase = (props) => {
@@ -84,6 +84,7 @@ const MakePurchase = (props) => {
 
   useEffect(() => {
     const unsubscribe = props.navigation.addListener('didFocus', async () => {
+      props.clearPurchaseFilters()
       await getPurchases()
       console.log('Init Props--->\n\n', props.filters)
       getPreFormValues()
@@ -511,13 +512,14 @@ MakePurchase.navigationOptions = navigationData => {
 };
 
 
-const mapStateToProps = (state) => (
-  {
+const mapStateToProps = (state) => {
+  console.log('State Passed to Purchase is ------', state.purchaseFilters)
+  return {
     filters: state.purchaseFilters
   }
-)
+}
 
-export default connect(mapStateToProps)(MakePurchase)
+export default connect(mapStateToProps, { clearPurchaseFilters })(MakePurchase)
 
 
 const styles = StyleSheet.create({

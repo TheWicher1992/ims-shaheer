@@ -58,7 +58,7 @@ const dash = createStackNavigator({
     screen: ClientSaleDetail
   },
 
-}, {initialRouteName: 'Dashboard'});
+}, { initialRouteName: 'Dashboard' });
 
 const employeeDash = createStackNavigator({
   EmployeeDashboard: {
@@ -76,7 +76,7 @@ const employeeDash = createStackNavigator({
   EmployeeStocks: {
     screen: EmployeeStocks
   }
-}, {initialRouteName: 'EmployeeDashboard'});
+}, { initialRouteName: 'EmployeeDashboard' });
 
 // Drawer Navigator
 const AdminSide = createDrawerNavigator({
@@ -130,7 +130,7 @@ const AdminSide = createDrawerNavigator({
   },
   Clients: {
     screen: Clients,
-    navigationOptions: ({ navigation }) => ({ 
+    navigationOptions: ({ navigation }) => ({
       drawerLabel: 'Clients',
     })
   },
@@ -139,14 +139,14 @@ const AdminSide = createDrawerNavigator({
     navigationOptions: ({ navigation }) => ({
       drawerLabel: 'Employees',
     })
-  }, 
-
   },
+
+},
   {
     contentOptions: {
       activeTintColor: 'none',
-      activeBackgroundColor :'none',
-      
+      activeBackgroundColor: 'none',
+
       headerTitleStyle: {
         color: 'white'
       },
@@ -154,14 +154,14 @@ const AdminSide = createDrawerNavigator({
         backgroundColor: '#006270'
       },
       itemsContainerStyle: {
-        paddingVertical: Dimensions.get('window').height < 900 ? 95 : 120, 
+        paddingVertical: Dimensions.get('window').height < 900 ? 95 : 120,
       },
       labelStyle: {
         color: 'white',
-        fontSize: Dimensions.get('window').height > 900 ? 20: 15,
-        marginTop: Dimensions.get('window').height > 900 ? "16%": "8%",
+        fontSize: Dimensions.get('window').height > 900 ? 20 : 15,
+        marginTop: Dimensions.get('window').height > 900 ? "16%" : "8%",
       },
-      
+
 
 
     },
@@ -182,9 +182,9 @@ const EmployeeSide = createDrawerNavigator({
     navigationOptions: ({ navigation }) => ({
       drawerLabel: 'Dashboard',
     })
-  }, 
+  },
   EmployeeProducts: {
-    screen: EmployeeProducts, 
+    screen: EmployeeProducts,
     navigationOptions: ({ navigation }) => ({
       drawerLabel: 'Products',
     })
@@ -192,7 +192,7 @@ const EmployeeSide = createDrawerNavigator({
   EmployeeWarehouses: {
     screen: EmployeeWarehouses,
     navigationOptions: ({ navigation }) => ({
-      drawerLabel: 'Warehouses', 
+      drawerLabel: 'Warehouses',
     })
   },
   EmployeeOrders: {
@@ -207,12 +207,12 @@ const EmployeeSide = createDrawerNavigator({
       drawerLabel: 'Stocks',
     })
   },
-  },
+},
   {
     contentOptions: {
       activeTintColor: 'none',
-      activeBackgroundColor :'none',
-      
+      activeBackgroundColor: 'none',
+
       headerTitleStyle: {
         color: 'white'
       },
@@ -220,14 +220,14 @@ const EmployeeSide = createDrawerNavigator({
         backgroundColor: '#006270'
       },
       itemsContainerStyle: {
-        paddingVertical: Dimensions.get('window').height < 900 ? 95 : 120, 
+        paddingVertical: Dimensions.get('window').height < 900 ? 95 : 120,
       },
       labelStyle: {
         color: 'white',
-        fontSize: Dimensions.get('window').height > 900 ? 20: 15,
-        marginTop: Dimensions.get('window').height > 900 ? "16%": "8%",
+        fontSize: Dimensions.get('window').height > 900 ? 20 : 15,
+        marginTop: Dimensions.get('window').height > 900 ? "16%" : "8%",
       },
-      
+
 
 
     },
@@ -242,16 +242,16 @@ const AppNavigation = createStackNavigator({
   Login: {
     screen: AdminLogin,
   },
-  employeeLogin : {
+  employeeLogin: {
     screen: EmployeeLogin,
   },
   adminSide: {
     screen: AdminSide,
   },
   employeeSide: {
-    screen: EmployeeSide 
+    screen: EmployeeSide
   }
-}, { headerMode: 'none' } );
+}, { headerMode: 'none' });
 
 
 export default createAppContainer(AppNavigation)
