@@ -11,11 +11,12 @@ import { Card, ListItem, Button, Icon } from 'react-native-elements'
 
 const Ledger = props => {
     const [ledgerData, setLedgerData] = useState([])
+    const [balance, setBalance] = useState(0)
     const getClientDetail = async () => {
         try{
             const res = await axios.get(`${uri}/api/client/ledger/${props.navigation.getParam('clientID')}`)
             console.log('overhere', res.data.ledger)
-            setLedgerData(res.data.ledger)
+            setLedgerData(res.data.ledger.reverse())
         }
         catch(err){
             console.log(err)
@@ -36,7 +37,7 @@ const Ledger = props => {
             <Text style={styles.title}>Ledger</Text>
             </View>
             
-            {
+            {/* {
                 ledgerData.map( l=> (
                     <Card containerStyle={{width: '95%'}}>
                         <Card.Title>{l.type === 'Payed' || l.type === 'Received' ? `Payment ${l.type}` : l.type}</Card.Title>
@@ -47,9 +48,9 @@ const Ledger = props => {
                     </Card>
                 ))
 
-            }
+            } */}
             
-            {/* <DataTable style={{ marginTop: 10 }}>
+            <DataTable style={{ marginTop: 10 }}>
         <DataTable.Header>
           <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Date</Text></DataTable.Title>
           <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Description</Text></DataTable.Title>
@@ -63,29 +64,79 @@ const Ledger = props => {
           <View>
             {
               ledgerData.map(l => (
-                  
-                      l.type === 'Sale' && <DataTable.Row>
-                      <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.date}</Text></DataTable.Cell>
-                      <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.description}</Text></DataTable.Cell>
-                      
-                      {l.payment === 'Partial' ? (<View>
-                          <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.received}</Text></DataTable.Cell>
-                          <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.total}</Text></DataTable.Cell>
-                          </View>) : (<View>
-                          <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.total}</Text></DataTable.Cell>
-                          <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.total}</Text></DataTable.Cell>
-                          </View>)}
-                        <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>1000</Text></DataTable.Cell>
-                    </DataTable.Row>
-                  
-                  
 
+                        (l.type === 'Purchase' && 
+                        <View>
+                          <DataTable.Row>
+                            <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.date.toLocaleString().split('T')[0]}</Text></DataTable.Cell>
+                            <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{`${l.type} - ${l.payment}`}</Text></DataTable.Cell>
+                            <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
+                            <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.total}</Text></DataTable.Cell>
+                            <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
+                          </DataTable.Row>
+                          <DataTable.Row>
+                            <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
+                            <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
+                            <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.payment === 'Partial' ? l.received : l.total}</Text></DataTable.Cell>
+                            <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
+                            <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.type === 'Partial' ? (balance - parseInt(l.total) - parseInt(l.received)): balance}</Text></DataTable.Cell>
+                          </DataTable.Row>
+                      </View>)
+                      ||
+                        (l.type === 'Sale' && 
+                        <View>
+                          <DataTable.Row>
+                            <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.date.toLocaleString().split('T')[0]}</Text></DataTable.Cell>
+                            <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{`${l.type} - ${l.payment}`}</Text></DataTable.Cell>
+                            <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.total}</Text></DataTable.Cell>
+                            <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
+                            <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
+                          </DataTable.Row>
+                          <DataTable.Row>
+                            <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
+                            <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
+                            <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
+                            <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.payment === 'Partial' ? l.received : l.total}</Text></DataTable.Cell>
+                            <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.type === 'Partial' ? 10 : balance}</Text></DataTable.Cell>
+                          </DataTable.Row>
+                        </View>
+                      )
+                      || 
+                      (l.type === 'Payed' && 
+                        <View>
+                          <DataTable.Row>
+                            <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.date.toLocaleString().split('T')[0]}</Text></DataTable.Cell>
+                            <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>Payment Paid</Text></DataTable.Cell>
+                            <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.cash}</Text></DataTable.Cell>
+                            <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
+                            <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
+                          </DataTable.Row>
+                          
+                        </View>
+
+                      )
+                    ||
+                    (l.type === 'Received' &&
+                      <View>
+                        <DataTable.Row>
+                          <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.date.toLocaleString().split('T')[0]}</Text></DataTable.Cell>
+                          <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>Payment Received</Text></DataTable.Cell>
+                          <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
+                          <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.cash}</Text></DataTable.Cell>
+                          <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
+                        </DataTable.Row>
+                      </View>
+
+                    )
+
+                     
+  
               ))
             }
           </View>
         </ScrollView>
       </DataTable>
-             */}
+            
         </View>
         </ScrollView>
     )

@@ -24,7 +24,7 @@ router.get('/ledger/:id', async (req, res) => {
         const ledger = [
             ...purchases.map(p => ({ ...JSON.parse(JSON.stringify(p)), type: "Purchase" })),
             ...sales.map(s => ({ ...JSON.parse(JSON.stringify(s)), type: "Sale" })),
-            ...payments.map(p => ({ ...JSON.parse(JSON.stringify(p)), type: "Payment" }))
+            ...payments.map(p => ({ ...JSON.parse(JSON.stringify(p)), transaction: "Payment" }))
         ]
 
         ledger.sort((a, b) => new Date(a.date) - new Date(b.date))
