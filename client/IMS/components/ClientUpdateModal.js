@@ -25,7 +25,14 @@ const ClientUpdateModal = props => {
   }
 
   const updateClient = () => {
-      const body = {
+    if(clientName === `` || balance === `` || phoneNumber === ``){
+      setAlertTitle('Warning')
+      setAlertMsg('Input fields may be empty. Request could not be processed.')
+      show()
+    }
+    else
+      {
+        const body = {
         userName: clientName,
         balance: balance,
         phone: phoneNumber,
@@ -48,6 +55,7 @@ const ClientUpdateModal = props => {
       .finally(() => {
         props.handleClose()
         props.initialModalClose()})
+      }
   }
   
   useEffect(() => {
