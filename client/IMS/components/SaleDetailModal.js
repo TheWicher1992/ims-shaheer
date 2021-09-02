@@ -3,7 +3,7 @@ import { Alert, Modal, StyleSheet, Text, View, TouchableOpacity, Dimensions, Key
 import { uri } from '../api.json'
 import axios from "axios"
 import ShowAlert from '../components/ShowAlert';
-
+import { FontAwesome } from "@expo/vector-icons";
 const SaleDetailModal= props => {
   const [modalVisible, setModalVisible] = useState(false);
   const [isUpdateModalVisible, setUpdateModalVisible] = React.useState(false);
@@ -64,7 +64,19 @@ const SaleDetailModal= props => {
           </TouchableWithoutFeedback>
             <View style={styles.centeredView}>
                      <View style={styles.modalView}>
+                     <View style = {{flexDirection: 'row'}}>
+                    <View style = {{ right: Dimensions.get('window').height > 900 ? Dimensions.get('window').width * 0.1 : Dimensions.get('window').width * 0.04, top: 18}}>
+                      <TouchableOpacity onPress = {() => props.handleClose()}>
+                        <FontAwesome
+                          name = {"arrow-left"}
+                          size = {Dimensions.get('window').height > 900 ? 30:25}
+                          color = {"#008394"}
+                        />
+                      </TouchableOpacity>
+                      
+                    </View>
                     <Text style={styles.modalTitle}>{props.title}</Text>
+                  </View> 
                     <ScrollView>
                     <View>
                     <View style={styles.modalBody}>

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Modal, StyleSheet, Text, View, TouchableOpacity, Dimensions, ScrollView, TouchableWithoutFeedback } from "react-native";
 import ClientUpdateModal from "./ClientUpdateModal";
 import ClientPaymentModal from "./ClientPaymentModal"
+import { FontAwesome } from "@expo/vector-icons";
 
 
 const ClientDetailModal = props => {
@@ -50,7 +51,19 @@ const ClientDetailModal = props => {
           </TouchableWithoutFeedback>
             <View style={styles.centeredView}>
             <View style={styles.modalView}>
-              <Text style={styles.modalTitle}>{props.title}</Text>
+              <View style = {{flexDirection: 'row'}}>
+                    <View style = {{ right: Dimensions.get('window').height > 900 ? Dimensions.get('window').width * 0.1 : Dimensions.get('window').width * 0.04, top: 18}}>
+                      <TouchableOpacity onPress = {() => props.handleClose()}>
+                        <FontAwesome
+                          name = {"arrow-left"}
+                          size = {Dimensions.get('window').height > 900 ? 30:25}
+                          color = {"#008394"}
+                        />
+                      </TouchableOpacity>
+                      
+                    </View>
+                    <Text style={styles.modalTitle}>{props.title}</Text>
+              </View> 
               <ScrollView>
                 <View style={styles.modalBody}>
                   {props.object !== [] && (<View><Text style={styles.bodyText}>Client Name: {props.object.userName}</Text>

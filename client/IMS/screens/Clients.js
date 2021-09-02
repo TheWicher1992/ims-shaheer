@@ -172,7 +172,18 @@ const Clients = props => {
         <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
           <View style={styles.modalStyle}>
             <View style={{ justifyContent: 'center', alignItems: 'center', }}>
-              <Text style={styles.modalTitle}>Add Supplier</Text>
+              <View style = {{flexDirection: 'row'}}>
+                  <View style = {{ right: Dimensions.get('window').height > 900 ? Dimensions.get('window').width * 0.16 : Dimensions.get('window').width * 0.1, top: Dimensions.get('window').height > 900 ? 26 :28}}>
+                    <TouchableOpacity onPress = {() => setModalVisible(false)}>
+                      <FontAwesome
+                        name = {"arrow-left"}
+                        size = {Dimensions.get('window').height > 900 ? 36:25}
+                        color = {"#008394"}
+                      />
+                    </TouchableOpacity>
+                  </View>
+                  <Text style={styles.modalTitle}>Add Client</Text>
+                </View>
               <View>
                 <TextInput onChangeText={onChangeName} style={styles.input} placeholder="Name" autoCorrect={false} />
                 <TextInput onChangeText={onChangePhoneNumber} style={styles.input} placeholder="Phone Number" autoCorrect={false} />

@@ -238,7 +238,19 @@ const DeliveryOrders = props => {
         <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
           <View style={styles.modalStyle}>
             <View style={{ justifyContent: 'center', alignItems: 'center', }}>
-              <Text style={styles.modalTitle}>Add Order</Text>
+              <View style = {{flexDirection: 'row'}}>
+                  <View style = {{ right: Dimensions.get('window').height > 900 ? Dimensions.get('window').width * 0.16 : Dimensions.get('window').width * 0.1, top: Dimensions.get('window').height > 900 ? 26 :28}}>
+                    <TouchableOpacity onPress = {() => setModalVisible(false)}>
+                      <FontAwesome
+                        name = {"arrow-left"}
+                        size = {Dimensions.get('window').height > 900 ? 36:25}
+                        color = {"#008394"}
+                      />
+                    </TouchableOpacity>
+                    
+                  </View>
+                    <Text style={styles.modalTitle}>Add Order</Text> 
+                </View>
               <View>
                 <View style={{ marginTop: 40, borderWidth: 2, borderRadius: 40, borderColor: "#008394", width: Dimensions.get('window').width * 0.65, height: 40, fontSize: 8, justifyContent: 'space-between' }}>
 
