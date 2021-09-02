@@ -278,6 +278,9 @@ const MakeSale = props => {
           setAlertMsg('Request could not be processed.')
           show()
         })
+        .finally(() => {
+          getSales()
+        })
     }
 
 
