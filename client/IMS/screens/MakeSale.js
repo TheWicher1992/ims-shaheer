@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Button, Switch, Dimensions, TextInput, TouchableOpacity, KeyboardAvoidingView, ScrollView, TouchableWithoutFeedback, Modal } from 'react-native';
+import { StyleSheet, Text, View, Button, Switch, Dimensions, TextInput, TouchableOpacity, KeyboardAvoidingView, ScrollView, TouchableWithoutFeedback, Modal, Touchable } from 'react-native';
 import HeaderButton from '../components/HeaderButton';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { FontAwesome } from '@expo/vector-icons';
@@ -15,6 +15,8 @@ import Spinner from '../components/Spinner';
 import ExportButton from '../components/ExportAsExcel'
 import ShowAlert from '../components/ShowAlert';
 import AddClientModal from '../components/AddClientModal';
+import SearchableDropdown from 'react-native-searchable-dropdown';
+
 
 
 const optionsPerPage = [2, 3, 4];
@@ -34,10 +36,36 @@ const MakeSale = props => {
       setProductName(res.data.products[0]._id)
       setClients(res.data.clients)
       setClientName(res.data.clients[0]._id)
+      let arr = []
+      res.data.products.forEach(e => {
+        let obj = {
+          "id": e._id,
+          "name": e.title
+        }
+
+        arr.push(obj)
+      })
+
+      let clientArr = []
+      res.data.clients.forEach(e => {
+        let obj = {
+          "id": e._id,
+          "name": e.userName
+        }
+
+        clientArr.push(obj)
+      })
+
+      setProductList(arr)
+      setClientList(clientArr)
+      
+
       
     } catch (err) {
       catchWarning()
     }
+
+    
   }
 
 
@@ -396,12 +424,197 @@ const MakeSale = props => {
     setAddClientModal(false)
   }
 
+  const [productListModal, setProductListModal] = useState(false)
+  const [productList, setProductList] = useState([])
+  const [prod, setProd] = useState(``)
+
+  const [clientListModal, setClientListModal] = useState(false)
+  const [clientList, setClientList] = useState([])
+  const [selectedClientName, setSelectedClientName] = useState(``)
+  
+
+
+
   return (
     
   
-    <ScrollView>
+    <ScrollView keyboardShouldPersistTaps = 'always'>
       <ShowAlert state={alertState} handleClose={show} alertTitle={alertTitle} alertMsg={alertMsg} style={styles.buttonModalContainer} />
       <View style = {styles.centeredView}>
+
+        {/* modal for productlist show */}
+        <Modal
+          onSwipeComplete= {() => setProductListModal(false)}
+          animationType = "slide"
+          transparent = {true}
+          swipeDirection = "left"
+          visible = {productListModal}
+          >
+            <TouchableWithoutFeedback onPress={() => setProductListModal(false)}>
+              <View style={styles.modalOverlay} />
+            </TouchableWithoutFeedback>
+
+            <View style = {styles.centeredView}>
+              <View style = {styles.modalView}>
+                <View style = {{flexDirection: 'row'}}>
+                    <View style = {{ right: Dimensions.get('window').height > 900 ? Dimensions.get('window').width * 0.1 : Dimensions.get('window').width * 0.04, top: 7}}>
+                      <TouchableOpacity onPress = {() => setProductListModal(false)}>
+                        <FontAwesome
+                          name = {"arrow-left"}
+                          size = {Dimensions.get('window').height > 900 ? 30:25}
+                          color = {"#008394"}
+                        />
+                      </TouchableOpacity>
+                      
+                    </View>
+                    
+                    <Text style={styles.modalTitleNew}>Select Product</Text>
+
+                    
+                </View>
+                <View style = {styles.modalBody}>
+                  <SearchableDropdown
+                    onTextChange={(text) => {
+                      console.log(text)
+                    }}
+                    //On text change listner on the searchable input
+                    onItemSelect={(item) => {
+                      console.log(item)
+                      setProd(item.name)
+                      setProductName(item.id)
+                    }}
+                    //onItemSelect called after the selection from the dropdown
+                    containerStyle={{ padding: 5, width: Dimensions.get('window').height > 900 ? Dimensions.get('window').width * 0.6 : Dimensions.get('window').width * 0.70,}}
+                    //suggestion container style
+                    textInputStyle={{
+                      //inserted text style
+                      padding: 12,
+                      borderWidth: 1,
+                      borderColor: "#008394",
+                      backgroundColor: '#FAF7F6',
+                    }}
+                    itemStyle={{
+                      //single dropdown item style
+                      padding: 10,
+                      marginTop: 2,
+                      backgroundColor: '#FAF9F8',
+                      borderColor: "#008394",
+                      borderWidth: 1,
+                    }}
+                    itemTextStyle={{
+                      //text style of a single dropdown item
+                      color: '#222',
+                    }}
+                    itemsContainerStyle={{
+                      //items container style you can pass maxHeight
+                      //to restrict the items dropdown hieght
+                      maxHeight: '80%',
+                    }}
+                    items={productList}
+                    //mapping of item array
+                    defaultIndex={0}
+                    //default selected item index
+                    placeholder={prod === `` ? "Type here.." : prod}
+                    //place holder for the search input
+                    resetValue={false}
+                    //reset textInput Value with true and false state
+                    underlineColorAndroid="transparent"
+                    //To remove the underline from the android input
+                  />
+              </View>
+            </View>
+          </View>
+        </Modal>
+        {/* modal for product ends here  */}
+
+
+        {/* modal for client selection dropdown starts here */}
+        <Modal
+          onSwipeComplete= {() => setClientListModal(false)}
+          animationType = "slide"
+          transparent = {true}
+          swipeDirection = "left"
+          visible = {clientListModal}
+          >
+            <TouchableWithoutFeedback onPress={() => setClientListModal(false)}>
+              <View style={styles.modalOverlay} />
+            </TouchableWithoutFeedback>
+
+            <View style = {styles.centeredView}>
+              <View style = {styles.modalView}>
+                <View style = {{flexDirection: 'row'}}>
+                    <View style = {{ right: Dimensions.get('window').height > 900 ? Dimensions.get('window').width * 0.1 : Dimensions.get('window').width * 0.04, top: 7}}>
+                      <TouchableOpacity onPress = {() => setClientListModal(false)}>
+                        <FontAwesome
+                          name = {"arrow-left"}
+                          size = {Dimensions.get('window').height > 900 ? 30:25}
+                          color = {"#008394"}
+                        />
+                      </TouchableOpacity>
+                      
+                    </View>
+                    
+                    <Text style={styles.modalTitleNew}>Select Client</Text>
+
+                    
+                </View>
+                <View style = {styles.modalBody}>
+                  <SearchableDropdown
+                    onTextChange={(text) => {
+                      console.log(text)
+                    }}
+                    //On text change listner on the searchable input
+                    onItemSelect={(item) => {
+                      console.log(item)
+                      setSelectedClientName(item.name)
+                      setClientName(item.id)
+                    }}
+                    //onItemSelect called after the selection from the dropdown
+                    containerStyle={{ padding: 5, width: Dimensions.get('window').height > 900 ? Dimensions.get('window').width * 0.6 : Dimensions.get('window').width * 0.70,}}
+                    //suggestion container style
+                    textInputStyle={{
+                      //inserted text style
+                      padding: 12,
+                      borderWidth: 1,
+                      borderColor: "#008394",
+                      backgroundColor: '#FAF7F6',
+                    }}
+                    itemStyle={{
+                      //single dropdown item style
+                      padding: 10,
+                      marginTop: 2,
+                      backgroundColor: '#FAF9F8',
+                      borderColor: "#008394",
+                      borderWidth: 1,
+                    }}
+                    itemTextStyle={{
+                      //text style of a single dropdown item
+                      color: '#222',
+                    }}
+                    itemsContainerStyle={{
+                      //items container style you can pass maxHeight
+                      //to restrict the items dropdown hieght
+                      maxHeight: '80%',
+                    }}
+                    items={clientList}
+                    //mapping of item array
+                    defaultIndex={0}
+                    //default selected item index
+                    placeholder={selectedClientName === `` ? "Type here.." : selectedClientName}
+                    //place holder for the search input
+                    resetValue={false}
+                    //reset textInput Value with true and false state
+                    underlineColorAndroid="transparent"
+                    //To remove the underline from the android input
+                  />
+              </View>
+            </View>
+          </View>
+        </Modal>
+        {/* modal for client selection dropdown ends here */}
+
+
+
       <Modal
         onSwipeComplete={() => setWarehouseModal(false)}
         animationType="slide"
@@ -509,6 +722,7 @@ const MakeSale = props => {
           
               <Text style={styles.modalTitleNew}>Select Order</Text>              
             </View>
+          
             
             <ScrollView style={styles.modalWarehouse}>
               {
@@ -586,45 +800,22 @@ const MakeSale = props => {
                 </View>
                 
                 <View style = {styles.modalBody}>
-                  <View style={styles.input}>
-                    <View style = {{bottom: 10}}>
-                      <Picker
-                        style={{ top: 6, color: 'grey', fontFamily: 'Roboto' }}
-                        itemStyle={{ fontWeight: '100' }}
-                        placeholder="Select a Product"
-                        selectedValue={productName}
-                        onValueChange={(itemValue, itemIndex) =>
-                          setProductAndStock(itemValue)
-                          // setProductName(itemValue)
-                        }
-                      >
-                        {
-                          products.map((product, i) => (
+                  <TouchableOpacity onPress = {() => setProductListModal(true)}>
+                    <View style={styles.input}>
+                      <Text>
+                        {prod === '' ? "Click to select a product" : `${prod} selected`}
+                      </Text>
+                    </View>
+                  </TouchableOpacity>
+                  
+                  <TouchableOpacity onPress = {() => setClientListModal(true)}>
+                    <View style={styles.input}>
+                      <Text>
+                        {selectedClientName === '' ? "Click to select a Client" : `${selectedClientName} selected`}
+                      </Text>
+                    </View>
+                  </TouchableOpacity>
 
-                            <Picker.Item label={product.title === undefined ? 0 : product.title} value={product._id === undefined ? 0 : product._id} key={i} />
-
-                          ))}
-                      </Picker>
-                      </View>
-                  </View>
-                <View style={styles.input}>
-                <View style = {{bottom: 10}}>
-                  <Picker
-                    style={{ top: 6, color: 'grey', fontFamily: 'Roboto' }}
-                    itemStyle={{ fontWeight: '100' }}
-                    placeholder="Select a Client"
-                    selectedValue={clientName}
-                    onValueChange={(itemValue, itemIndex) =>
-                      setClientName(itemValue)
-                    }
-                  >
-                    {
-                      clients.map((client, i) => (
-                        <Picker.Item key={i} label={client.userName === undefined ? 0 : client.userName} value={client._id === undefined ? 0 : client._id} />
-                      ))}
-                  </Picker>
-                  </View>
-                </View>
                 <View>
                   <TouchableOpacity style={{ bottom: 20 }} onPress = {() => setAddClientModal(true)} >
                     <View style={styles.addButton}>
@@ -641,7 +832,7 @@ const MakeSale = props => {
                 <View style={{}}>
                   <TextInput onChangeText={onChangeQuantity} style={styles.input} placeholder="Quantity" autoCorrect={false} />
                   <TextInput onChangeText={onChangeTotalAmount} style={styles.input} placeholder="Total Amount" autoCorrect={false} />
-                  <TextInput onChangeText={onChangeAmountReceived} style={styles.input} placeholder="Amount Received" autoCorrect={false} />
+                  {paymentType === 'Partial' && <TextInput onChangeText={onChangeAmountReceived} style={styles.input} placeholder="Amount Received" autoCorrect={false} />}
                   <TextInput multiline={true} numberOfLines={5} onChangeText={onChangeNotes} style={styles.input} placeholder="Notes" autoCorrect={false} />
 
                   <View style={styles.input}>
@@ -1037,7 +1228,9 @@ const styles = StyleSheet.create({
   modalView: {
     margin: 20,
     backgroundColor: "white",
+    borderWidth: 2,
     borderRadius: 20,
+    borderColor: "#008394",
     padding: 35,
     alignItems: "center",
     width: Dimensions.get('window').height > 900 ? Dimensions.get('window').width * 0.7 : Dimensions.get('window').width * 0.80,
