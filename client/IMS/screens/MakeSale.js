@@ -874,7 +874,7 @@ const MakeSale = props => {
 
                   {
                     isWarehouse ?
-                      <View>
+                      <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginRight: 35}}>
                         <TouchableOpacity style={styles.buttonModalContainer} onPress={() => openModals("Warehouse")}>
                           <Text style={styles.buttonModalText}>Select Warehouse</Text>
                         </TouchableOpacity>
@@ -882,7 +882,7 @@ const MakeSale = props => {
 
                       :
 
-                      <View>
+                      <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginRight: 35}}>
                         <TouchableOpacity style={styles.buttonModalContainer} onPress={() => openModals("D-Order")} >
                           <Text style={styles.buttonModalText}>Select D-Order</Text>
                         </TouchableOpacity>
@@ -903,7 +903,7 @@ const MakeSale = props => {
                     </View>
                   </TouchableOpacity>
                   <TouchableOpacity onPress={() => { addSale() }}>
-                    <View>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginRight: 35}}>
                       <View style={styles.buttonModalContainer}>
                         <View>
                           <Text style={styles.buttonModalText}>Done</Text>
