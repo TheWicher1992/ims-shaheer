@@ -209,7 +209,7 @@ const Ledger = props => {
         <ScrollView>
         <View style={styles.screen}>
             <View>
-            <Text style={styles.title}>Ledger</Text>
+            <Text style = {styles.title}>{props.navigation.getParam('clientName')}</Text>
             </View>  
             <DataTable style={{ marginTop: 10 }}>
         <DataTable.Header>
