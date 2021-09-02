@@ -12,6 +12,7 @@ import { DataTable } from 'react-native-paper';
 const Ledger = props => {
     const [ledgerData, setLedgerData] = useState([])
     const [balance, setBalance] = useState(0)
+    let prevBalance = 0
     const getClientDetail = async () => {
         try{
             const res = await axios.get(`${uri}/api/client/ledger/${props.navigation.getParam('clientID')}`)
@@ -22,6 +23,180 @@ const Ledger = props => {
             console.log(err)
         }
 
+    }
+
+    const purchaseRender = (l) => {
+      if(l.payment === 'Partial'){
+        prevBalance = prevBalance - l.received + l.total
+
+        return (
+          <View>
+            <DataTable.Row>
+              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.date.toLocaleString().split('T')[0]}</Text></DataTable.Cell>
+              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.note}</Text></DataTable.Cell>
+              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
+              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.total}</Text></DataTable.Cell>
+              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
+            </DataTable.Row>
+            <DataTable.Row>
+              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
+              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
+              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.received}</Text></DataTable.Cell>
+              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
+              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{prevBalance > 0 ? `${prevBalance} Cr` : `${Math.abs(prevBalance)} Dr`}</Text></DataTable.Cell>
+            </DataTable.Row>
+          </View> 
+        )
+      }
+      else if(l.payment === 'Credit'){
+        prevBalance = prevBalance + l.total
+
+        return (
+          <View>
+            <DataTable.Row>
+              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.date.toLocaleString().split('T')[0]}</Text></DataTable.Cell>
+              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.note}</Text></DataTable.Cell>
+              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
+              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.total}</Text></DataTable.Cell>
+              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
+            </DataTable.Row>
+            <DataTable.Row>
+              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
+              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
+              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>0</Text></DataTable.Cell>
+              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
+              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{prevBalance > 0 ? `${prevBalance} Cr` : `${Math.abs(prevBalance)} Dr`}</Text></DataTable.Cell>
+            </DataTable.Row>
+          </View> 
+        )
+      }
+      else if(l.payment === 'Full'){
+        return (
+          <View>
+            <DataTable.Row>
+              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.date.toLocaleString().split('T')[0]}</Text></DataTable.Cell>
+              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.note}</Text></DataTable.Cell>
+              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
+              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.total}</Text></DataTable.Cell>
+              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
+            </DataTable.Row>
+            <DataTable.Row>
+              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
+              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
+              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.total}</Text></DataTable.Cell>
+              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
+              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{prevBalance > 0 ? `${prevBalance} Cr` : `${Math.abs(prevBalance)} Dr`}</Text></DataTable.Cell>
+            </DataTable.Row>
+          </View> 
+        )
+      }
+      
+    }
+
+
+    const saleRender = (l) => {
+      
+      if(l.payment === 'Partial'){
+        prevBalance = prevBalance - l.total + l.received
+
+        return (
+          <View>
+            <DataTable.Row>
+              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.date.toLocaleString().split('T')[0]}</Text></DataTable.Cell>
+              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.note}</Text></DataTable.Cell>
+              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.total}</Text></DataTable.Cell>
+              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
+              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
+            </DataTable.Row>
+            <DataTable.Row>
+              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
+              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
+              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
+              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.received}</Text></DataTable.Cell>
+              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{prevBalance > 0 ? `${prevBalance} Cr` : `${Math.abs(prevBalance)} Dr`}</Text></DataTable.Cell>
+            </DataTable.Row>
+        </View>
+        )
+        
+
+      }
+      else if(l.payment === 'Full'){
+        return(
+          <View>
+            <DataTable.Row>
+              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.date.toLocaleString().split('T')[0]}</Text></DataTable.Cell>
+              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.note}</Text></DataTable.Cell>
+              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.total}</Text></DataTable.Cell>
+              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
+              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
+            </DataTable.Row>
+            <DataTable.Row>
+              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
+              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
+              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
+              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.total}</Text></DataTable.Cell>
+              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{prevBalance > 0 ? `${prevBalance} Cr` : `${Math.abs(prevBalance)} Dr`}</Text></DataTable.Cell>
+            </DataTable.Row>
+          </View>
+        )
+        
+
+
+      }
+      else if(l.payment === 'Credit'){
+        prevBalance = prevBalance - l.total
+
+        return (
+          <View>
+            <DataTable.Row>
+              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.date.toLocaleString().split('T')[0]}</Text></DataTable.Cell>
+              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.note}</Text></DataTable.Cell>
+              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.total}</Text></DataTable.Cell>
+              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
+              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
+            </DataTable.Row>
+            <DataTable.Row>
+              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
+              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
+              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
+              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>0</Text></DataTable.Cell>
+              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{prevBalance > 0 ? `${prevBalance} Cr` : `${Math.abs(prevBalance)} Dr`}</Text></DataTable.Cell>
+            </DataTable.Row>
+        </View>
+        )
+
+      }
+    }
+
+    const renderPaid = (l) => {
+      prevBalance = prevBalance - l.cash
+      return (
+        <View>
+          <DataTable.Row>
+            <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.date.toLocaleString().split('T')[0]}</Text></DataTable.Cell>
+            <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>Payment Sent</Text></DataTable.Cell>
+            <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.cash}</Text></DataTable.Cell>
+            <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
+            <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{prevBalance > 0 ? `${prevBalance} Cr` : `${Math.abs(prevBalance)} Dr`}</Text></DataTable.Cell>
+          </DataTable.Row>
+          
+        </View>
+      )
+    }
+
+    const renderReceived = (l) => {
+      prevBalance = prevBalance + l.cash
+      return (
+        <View>
+          <DataTable.Row>
+            <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.date.toLocaleString().split('T')[0]}</Text></DataTable.Cell>
+            <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>Payment Received</Text></DataTable.Cell>
+            <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
+            <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.cash}</Text></DataTable.Cell>
+            <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{prevBalance > 0 ? `${prevBalance} Cr` : `${Math.abs(prevBalance)} Dr`}</Text></DataTable.Cell>
+          </DataTable.Row>
+        </View>
+      )
     }
 
     useEffect(()=> {
@@ -49,83 +224,31 @@ const Ledger = props => {
         <ScrollView >
           <View>
             {
+              
+              
               ledgerData.map((l,i) => (
                       <View key={i}>
 
-                        {l.type === 'Purchase' && 
-                        <View>
-                          <DataTable.Row>
-                            <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.date.toLocaleString().split('T')[0]}</Text></DataTable.Cell>
-                            <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{`${l.type} - ${l.payment}`}</Text></DataTable.Cell>
-                            <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
-                            <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.total}</Text></DataTable.Cell>
-                            <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
-                          </DataTable.Row>
-                          <DataTable.Row>
-                            <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
-                            <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
-                            {l.payment === 'Partial' &&
-                              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.received}</Text></DataTable.Cell>
-                            }
-                            {l.payment === 'Full' && 
-                              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.total}</Text></DataTable.Cell>
-                            }
-                            {l.payment === 'Credit' && 
-                              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>0</Text></DataTable.Cell>
-                            }                            
-                            <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
-                            <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{balance}</Text></DataTable.Cell>
-                          </DataTable.Row>
-                      </View>}
-                      
-                        {l.type === 'Sale' && 
-                        <View>
-                          <DataTable.Row>
-                            <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.date.toLocaleString().split('T')[0]}</Text></DataTable.Cell>
-                            <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{`${l.type} - ${l.payment}`}</Text></DataTable.Cell>
-                            <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.total}</Text></DataTable.Cell>
-                            <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
-                            <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
-                          </DataTable.Row>
-                          <DataTable.Row>
-                            <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
-                            <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
-                            <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
-                            {l.payment === 'Partial' && <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.received}</Text></DataTable.Cell>}
-                            {l.payment === 'Full' && <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.total}</Text></DataTable.Cell>}
-                            {l.payment === 'Credit' && <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>0</Text></DataTable.Cell>}
-
-                            <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{balance}</Text></DataTable.Cell>
-                          </DataTable.Row>
-                        </View>
-                      }
+                        {
+                          l.type === 'Purchase' && 
+                            purchaseRender(l)
+                        }
                        
-                      {l.type === 'Payed' && 
-                        <View>
-                          <DataTable.Row>
-                            <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.date.toLocaleString().split('T')[0]}</Text></DataTable.Cell>
-                            <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>Payment Sent</Text></DataTable.Cell>
-                            <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.cash}</Text></DataTable.Cell>
-                            <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
-                            <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{balance}</Text></DataTable.Cell>
-                          </DataTable.Row>
-                          
-                        </View>
-
-                    }
-                    
-                    {l.type === 'Received' &&
-                      <View>
-                        <DataTable.Row>
-                          <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.date.toLocaleString().split('T')[0]}</Text></DataTable.Cell>
-                          <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>Payment Received</Text></DataTable.Cell>
-                          <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
-                          <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.cash}</Text></DataTable.Cell>
-                          <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{balance}</Text></DataTable.Cell>
-                        </DataTable.Row>
-                      </View>
-
-                  }
+                        {
+                          l.type === 'Sale' && 
+                            saleRender(l)
+                        
+                        }
+                       
+                        {
+                          l.type === 'Payed' &&
+                          renderPaid(l)
+                        } 
+                      
+                        {
+                          l.type === 'Received' &&
+                          renderReceived(l)
+                        }
                   </View>
 
                      
