@@ -74,7 +74,7 @@ const SaleDetailModal= props => {
                           <Text style={styles.bodyText}>Total: {props.object.total}</Text>
                             <Text style={styles.bodyText}>Delivery Status: {props.object.deliveryStatus}</Text>
                             <Text style={styles.bodyText}>payment: {props.object.payment}</Text>
-                            <Text style={styles.bodyText}>discount: {props.object.discount}</Text>
+                      
                             <Text style={styles.bodyText}>Client: {props.object.client === undefined ? '--' : props.object.client.userName}</Text>
                             <Text style={styles.bodyText}>note: {props.object.note}</Text>
                             <Text style={styles.bodyText}>date: {props.object.date}</Text>
