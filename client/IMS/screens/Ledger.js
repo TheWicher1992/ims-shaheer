@@ -16,7 +16,7 @@ const Ledger = props => {
         try{
             const res = await axios.get(`${uri}/api/client/ledger/${props.navigation.getParam('clientID')}`)
             console.log('overhere', res.data.ledger)
-            setLedgerData(res.data.ledger.reverse())
+            setLedgerData(res.data.ledger)
         }
         catch(err){
             console.log(err)
@@ -49,9 +49,10 @@ const Ledger = props => {
         <ScrollView >
           <View>
             {
-              ledgerData.map(l => (
+              ledgerData.map((l,i) => (
+                      <View key={i}>
 
-                        (l.type === 'Purchase' && 
+                        {l.type === 'Purchase' && 
                         <View>
                           <DataTable.Row>
                             <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.date.toLocaleString().split('T')[0]}</Text></DataTable.Cell>
@@ -75,9 +76,9 @@ const Ledger = props => {
                             <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
                             <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{balance}</Text></DataTable.Cell>
                           </DataTable.Row>
-                      </View>)
-                      ||
-                        (l.type === 'Sale' && 
+                      </View>}
+                      
+                        {l.type === 'Sale' && 
                         <View>
                           <DataTable.Row>
                             <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.date.toLocaleString().split('T')[0]}</Text></DataTable.Cell>
@@ -97,9 +98,9 @@ const Ledger = props => {
                             <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{balance}</Text></DataTable.Cell>
                           </DataTable.Row>
                         </View>
-                      )
-                      || 
-                      (l.type === 'Payed' && 
+                      }
+                       
+                      {l.type === 'Payed' && 
                         <View>
                           <DataTable.Row>
                             <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.date.toLocaleString().split('T')[0]}</Text></DataTable.Cell>
@@ -111,9 +112,9 @@ const Ledger = props => {
                           
                         </View>
 
-                      )
-                    ||
-                    (l.type === 'Received' &&
+                    }
+                    
+                    {l.type === 'Received' &&
                       <View>
                         <DataTable.Row>
                           <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.date.toLocaleString().split('T')[0]}</Text></DataTable.Cell>
@@ -124,7 +125,8 @@ const Ledger = props => {
                         </DataTable.Row>
                       </View>
 
-                    )
+                  }
+                  </View>
 
                      
   
