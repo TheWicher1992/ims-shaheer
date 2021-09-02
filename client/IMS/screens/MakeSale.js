@@ -802,7 +802,7 @@ const MakeSale = props => {
                   
                 </View>
                 {Dimensions.get('window').height < 900 ? (<ScrollView>
-                  <View style={{alignItems:'center'}}>
+                  <View style={{alignItems:'center', marginTop: 20}}>
                 <View style = {styles.modalBody}>
                   <TouchableOpacity onPress = {() => setProductListModal(true)}>
                     <View style={styles.input}>
@@ -1232,7 +1232,7 @@ const styles = StyleSheet.create({
   },
   buttonModalText: {
     color: '#ffffff',
-    fontSize: 16,
+    fontSize: Dimensions.get('window').height > 900 ? 16 : 12,
     fontFamily: 'Roboto',
   },
   buttonText: {
