@@ -358,12 +358,12 @@ const Product = props => {
           <View style={styles.modalOverlay} />
         </TouchableWithoutFeedback>
         <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', }}>
-          {/* <ScrollView> */}
+          
             <View style={styles.modalStyle}>
               <View style={{ justifyContent: 'center', alignItems: 'center', }}>
 
                 <View style = {{flexDirection: 'row'}}>
-                    <View style = {{ right: Dimensions.get('window').height > 900 ? Dimensions.get('window').width * 0.16 : Dimensions.get('window').width * 0.05, top: Dimensions.get('window').height > 900 ? 26 :28}}>
+                    <View style = {{ right: Dimensions.get('window').height > 900 ? Dimensions.get('window').width * 0.16 : Dimensions.get('window').width * 0.05, top: Dimensions.get('window').height > 900 ? 26 : 35}}>
                       <TouchableOpacity onPress = {() => setModalVisible(false)}>
                         <FontAwesome
                           name = {"arrow-left"}
@@ -377,8 +377,8 @@ const Product = props => {
                     <Text style={styles.modalTitle}>Add a Product</Text>
                     
                   </View>
-                
-                <View style={{ marginTop: 50 }}>
+                  {Dimensions.get('window').height < 900 ? (<ScrollView >
+                <View style={{ marginTop: 50, height: 500, alignItems: 'center' }}>
                   <TextInput onChangeText={onChangeSerialNo} style={styles.input} placeholder="Serial" autoCorrect={false} />
                   <TextInput onChangeText={onChangeProductName} style={styles.input} placeholder="Product" autoCorrect={false} />
                   <TextInput onChangeText={onChangeAmount} style={styles.input} placeholder="Amount" autoCorrect={false} />
@@ -497,9 +497,135 @@ const Product = props => {
                     </View>
                   </TouchableOpacity>
                 </View>
+                </ScrollView>) 
+                : 
+                ( <View style={{alignItems: 'center',}}>
+                  <View style={{ marginTop: 50}}>
+                    <TextInput onChangeText={onChangeSerialNo} style={styles.input} placeholder="Serial" autoCorrect={false} />
+                    <TextInput onChangeText={onChangeProductName} style={styles.input} placeholder="Product" autoCorrect={false} />
+                    <TextInput onChangeText={onChangeAmount} style={styles.input} placeholder="Amount" autoCorrect={false} />
+                    <TextInput onChangeText={onChangeStock} style={styles.input} placeholder="Stock" autoCorrect={false} />
+                    <TextInput multiline={true} numberOfLines={5} onChangeText={onChangeDescription} style={styles.input} placeholder="Description" autoCorrect={false} />
+  
+                    <View style={{ borderWidth: 2, marginBottom: 20, borderRadius: 40, borderColor: "#008394", width: Dimensions.get('window').width * 0.65, height: 40, fontSize: 8, justifyContent: 'space-between' }}>
+                      <Picker
+                        style={{ top: 6, color: 'grey', fontFamily: 'Roboto' }}
+                        itemStyle={{ fontWeight: '100' }}
+                        placeholder="Select a Warehouse"
+                        selectedValue={selectedWarehouse}
+                        onValueChange={(itemValue, itemIndex) =>
+                          {
+                            setSelectedWarehouse(itemValue)
+                            setWarehouseCheck(itemValue)
+                          }
+                        }
+                      >
+  
+                        {
+                          warehouses.map((w => (
+                            <Picker.Item key={w._id} label={w.name} value={w._id} />
+                          )))
+                        }
+  
+                      </Picker>
+  
+                    </View>
+  
+                    <View style={{ borderWidth: 2, borderRadius: 40, borderColor: "#008394", width: Dimensions.get('window').width * 0.65, height: 40, fontSize: 8, justifyContent: 'space-between' }}>
+                      <Picker
+                        style={{ top: 6, color: 'grey', fontFamily: 'Roboto' }}
+                        itemStyle={{ fontWeight: '100' }}
+                        placeholder="Select a brand"
+                        selectedValue={color}
+                        onValueChange={(itemValue, itemIndex) =>
+                          setColor(itemValue)
+                        }
+                      >
+  
+                        {
+                          brandsAndColours.colours.map((c => (
+                            <Picker.Item key={c._id} label={c.title} value={c._id} />
+                          )))
+                        }
+  
+                      </Picker>
+  
+                    </View>
+                    <View>
+                      <TouchableOpacity style={{ marginTop: 10 }} onPress={() => { setAddColorModal(true) }}>
+                        <View style={styles.addButton}>
+                          <View style={{ justifyContent: 'center', alignContent: 'center', alignItems: 'center', }}>
+                            <Text style={styles.modalbuttonText}>
+                              + Add
+                            </Text>
+                          </View>
+                        </View>
+                      </TouchableOpacity>
+                    </View>
+  
+                    <View style={{ borderWidth: 2, borderRadius: 40, borderColor: "#008394", width: Dimensions.get('window').width * 0.65, marginTop: 15, height: 40, fontSize: 8, }}>
+                      <Picker
+                        style={{ top: 6, color: 'grey', fontFamily: 'Roboto' }}
+                        
+                        itemStyle={{ fontWeight: '100' }}
+  
+                        selectedValue={brand}
+                        onValueChange={(itemValue, itemIndex) =>
+                          setBrand(itemValue)
+                        }
+                      >
+                        {
+                          brandsAndColours.brands.map((b => (
+                            <Picker.Item key={b._id} label={b.title} value={b._id} />
+                          )))
+                        }
+  
+                      </Picker>
+  
+  
+                    </View>
+                    <View>
+                      <TouchableOpacity style={{ marginTop: 10 }} onPress={() => { setAddBrandModal(true) }}>
+                        <View style={styles.addButton}>
+                          <View style={{ justifyContent: 'center', alignContent: 'center', alignItems: 'center' }}>
+                            <Text style={styles.modalbuttonText}>
+                              + Add
+                            </Text>
+                          </View>
+                        </View>
+                      </TouchableOpacity>
+                    </View>
+  
+  
+                  </View>
+  
+                  <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10, }}>
+                    <TouchableOpacity style={{ alignSelf: 'flex-start' }} onPress={() => { setModalVisible(false) }}>
+                      <View>
+                        <View style={styles.buttonModalContainerCross}>
+                          <View>
+                            <Text style={styles.buttonModalText}>Cancel</Text>
+                          </View>
+                        </View>
+                      </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => { addProduct() }}>
+                      <View>
+                        <View style={styles.buttonModalContainer}>
+                          <View>
+                            <Text style={styles.buttonModalText}>Done</Text>
+                          </View>
+                        </View>
+                      </View>
+                    </TouchableOpacity>
+                  </View>
+                  </View>
+                  )}
+                  
               </View>
+              
             </View>
-          {/* </ScrollView> */}
+          
         </View>
 
       </Modal>
@@ -735,10 +861,9 @@ const styles = StyleSheet.create({
   },
   modalStyle: {
     backgroundColor: "#fff",
-
     width: Dimensions.get('window').height > 900 ? Dimensions.get('window').width * 0.80 : Dimensions.get('window').width * 0.80,
-    height: Dimensions.get('window').height > 900 ? Dimensions.get('window').height * 0.65 : Dimensions.get('window').height * 0.90,
-
+    height: Dimensions.get('window').height > 900 ? Dimensions.get('window').height * 0.65 : Dimensions.get('window').height * 0.85,
+    alignItems: 'center',
     borderWidth: 2,
     borderRadius: 20,
     marginBottom: 20,

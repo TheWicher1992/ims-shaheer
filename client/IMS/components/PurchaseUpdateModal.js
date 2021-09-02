@@ -4,6 +4,7 @@ import { Picker } from '@react-native-picker/picker';
 import { uri } from '../api.json'
 import axios from "axios"
 import ShowAlert from '../components/ShowAlert';
+import { FontAwesome } from '@expo/vector-icons';
 
 const PurchaseUpdateModal = props => {
   const [isModalVisible, setModalVisible] = useState(false);
@@ -138,11 +139,27 @@ const PurchaseUpdateModal = props => {
             <View style={styles.modalOverlay} />
           </TouchableWithoutFeedback>
         <View style={styles.centeredView}>
-        <ScrollView style={{paddingVertical: 10}} showsVerticalScrollIndicator={false}>
+        {/* <ScrollView style={{paddingVertical: 10}} showsVerticalScrollIndicator={false}> */}
           <View style={styles.modalView}>
             <View style={{ justifyContent: 'center', alignItems: 'center', }}>
-              <Text style={styles.modalTitle}>Update Purchase</Text>
-              <View>
+            <View style = {{flexDirection: 'row'}}>
+                <View style = {{ right: Dimensions.get('window').height > 900 ? Dimensions.get('window').width * 0.12 : Dimensions.get('window').width * 0.05, top: Dimensions.get('window').height > 900 ? 32 : 30}}>
+                    <TouchableOpacity onPress = {() => props.handleClose()}>
+                      <FontAwesome
+                        name = {"arrow-left"}
+                        size = {Dimensions.get('window').height > 900 ? 30:25}
+                        color = {"#008394"}
+                      />
+                    </TouchableOpacity>
+                    
+                  </View>
+                  
+                  <Text style={styles.modalTitle}>Make a Purchase</Text>
+
+                  
+                </View>
+              {Dimensions.get('window').height < 900 ? (<ScrollView>
+              <View style={{alignItems: 'center'}}>
 
                 <View style={{ borderWidth: 2, borderRadius: 40, borderColor: "#008394", width: Dimensions.get('window').width * 0.65, top: 50, height: 40, fontSize: 8, }}>
                   <Picker
@@ -270,9 +287,142 @@ const PurchaseUpdateModal = props => {
                   </View>
                 </TouchableOpacity>
               </View>
+              </ScrollView>) 
+              : 
+              (<View style={{alignItems: 'center'}}>
+                <View>
+  
+                  <View style={{ borderWidth: 2, borderRadius: 40, borderColor: "#008394", width: Dimensions.get('window').width * 0.65, top: 50, height: 40, fontSize: 8, }}>
+                    <Picker
+                      style={{ top: 6, color: 'grey', fontFamily: 'Roboto' }}
+                      itemStyle={{ fontWeight: '100' }}
+                      selectedValue={productName}
+                      onValueChange={(itemValue, itemIndex) =>
+                        setProductName(itemValue)
+                      }
+                    >
+                      {
+                        props.formInputs.products.map(p => (
+                          <Picker.Item key={p._id} label={p.title} value={p._id} />
+  
+                        ))
+                      }
+  
+                    </Picker>
+                  </View>
+                  <View style={{ marginTop: 10 }}>
+                    <TextInput onChangeText={onChangeQuantity} style={styles.input} placeholder="Quantity" autoCorrect={false} value={props.obj.quantity === undefined ? '0' : quantityVal.toString()} />
+                    {paymentType === 'Partial' && <TextInput onChangeText={onChangeAmountReceived} style={styles.input} placeholder="Amount Received" value={props.obj.received === undefined ? '0' : amountRecieved.toString()} autoCorrect={false} />
+                    }
+                    <TextInput onChangeText={onChangeTotalAmount} style={styles.input} placeholder="Total Amount" value={props.obj.total === undefined ? '0' : totalAmount.toString()} autoCorrect={false} />
+                    <TextInput onChangeText={onChangeNotes} style={styles.input} placeholder="Notes" value={props.obj.note === undefined ? '0' : notes} autoCorrect={false} />
+                  </View>
+  
+                  <View style={{ borderWidth: 2, borderRadius: 40, borderColor: "#008394", width: Dimensions.get('window').width * 0.65, top: 60, height: 40, fontSize: 8, }}>
+                    <Picker
+                      style={{ top: 6, color: 'grey', fontFamily: 'Roboto' }}
+                      itemStyle={{ fontWeight: '100' }}
+                      placeholder="Select a Payment Type"
+                      selectedValue={paymentType}
+                      onValueChange={(itemValue, itemIndex) =>
+                        setPaymentType(itemValue)
+                      }
+                    >
+                      <Picker.Item label="Partial" value="Partial" />
+                      <Picker.Item label="Credit" value="Credit" />
+                      <Picker.Item label="Full" value="Full" />
+                    </Picker>
+                  </View>
+  
+                  <View style={{ borderWidth: 2, borderRadius: 40, borderColor: "#008394", width: Dimensions.get('window').width * 0.65, top: 80, height: 40, fontSize: 8, }}>
+                    <Picker
+                      style={{ top: 6, color: 'grey', fontFamily: 'Roboto' }}
+                      itemStyle={{ fontWeight: '100' }}
+                      selectedValue={clientName}
+                      onValueChange={(itemValue, itemIndex) =>
+                        setClientName(itemValue)
+                      }
+                    >
+                      {
+                        props.formInputs.clients.map(c => (
+                          <Picker.Item key={c._id} label={c.userName} value={c._id} />
+  
+                        ))
+                      }
+                    </Picker>
+                  </View>
+  
+  
+                  <View style={{ marginTop: 90, }}>
+                    <View style={styles.label}>
+                      <Text style={styles.switch}>D/O</Text>
+                      <Switch
+                        trackColor={{ false: "#00E0C7", true: "#006270" }}
+                        thumbColor={isEnabled ? "white" : "#006270"}
+                        onValueChange={toggleSwitch}
+                        value={isWarehouse}
+                      />
+                      <Text style={styles.switch}>W</Text>
+                    </View>
+                  </View>
+  
+                  {/* DELIVERY ORDER LOCATION OR  */}
+                  <View>
+                    {/* this is for either warehouse selection  */}
+                    {isWarehouse ?
+                      <View style={{ borderWidth: 2, borderRadius: 40, borderColor: "#008394", width: Dimensions.get('window').width * 0.65, height: 40, fontSize: 8, marginBottom: 20 }}>
+                        <Picker
+                          style={{ top: 6, color: 'grey', fontFamily: 'Roboto' }}
+                          itemStyle={{ fontWeight: '100' }}
+                          selectedValue={warehouse}
+                          onValueChange={(itemValue, itemIndex) =>
+                            setWarehouse(itemValue)
+                          }
+                        >
+  
+                          {
+                            props.formInputs.warehouses.map(w => (
+                              <Picker.Item key={w._id} label={w.name} value={w._id} />
+                            ))
+                          }
+                          {/* <Picker.Item label="W1" value="W1" />
+                          <Picker.Item label="W2" value="W2" />
+                          <Picker.Item label="W3" value="W3" /> */}
+  
+                        </Picker>
+                      </View>
+  
+                      :
+                      <TextInput onChangeText={onChangeLocation} style={styles.inputLast} placeholder="Location" autoCorrect={false} />
+                    }</View>
+  
+  
+                </View>
+                <View style={{ flexDirection: 'row', alignItems: 'center', bottom: Dimensions.get('window').height < 700 ? 25 : 15, }}>
+                  <TouchableOpacity style={{ alignSelf: 'flex-start' }} onPress={() => { props.handleClose() }}>
+                    <View>
+                      <View style={styles.buttonModalContainerCross}>
+                        <View>
+                          <Text style={styles.buttonModalText}>Cancel</Text>
+                        </View>
+                      </View>
+                    </View>
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={() => { pressDone() }}>
+                    <View>
+                      <View style={styles.buttonModalContainer}>
+                        <View>
+                          <Text style={styles.buttonModalText}>Done</Text>
+                        </View>
+                      </View>
+                    </View>
+                  </TouchableOpacity>
+                </View>
+                </View>)}
+              
             </View>
           </View>
-          </ScrollView>
+          {/* </ScrollView> */}
         </View>
       </Modal>
 
@@ -301,8 +451,8 @@ const styles = StyleSheet.create({
   },
   modalStyle: {
     backgroundColor: "#fff",
-    width: Dimensions.get('window').height > 900 ? 600 : 320,
-    height: Dimensions.get('window').height > 900 ? 680 : 600,
+    width: Dimensions.get('window').height > 900 ? Dimensions.get('window').width * 0.80 : Dimensions.get('window').width * 0.80,
+    height: Dimensions.get('window').height > 900 ? Dimensions.get('window').height * 0.60 : Dimensions.get('window').height,
     borderWidth: 2,
     borderRadius: 20,
     //marginBottom: 20,
