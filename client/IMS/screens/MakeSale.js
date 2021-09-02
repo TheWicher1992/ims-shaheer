@@ -798,7 +798,8 @@ const MakeSale = props => {
                   <Text style={styles.modalTitle}>Make a Sale</Text>
                   
                 </View>
-                
+                {Dimensions.get('window').height < 900 ? (<ScrollView>
+                  <View style={{alignItems:'center'}}>
                 <View style = {styles.modalBody}>
                   <TouchableOpacity onPress = {() => setProductListModal(true)}>
                     <View style={styles.input}>
@@ -909,6 +910,122 @@ const MakeSale = props => {
                   </TouchableOpacity>
                 </View>
                 </View>
+                </View>
+                </ScrollView>) 
+                : 
+                (<View style={{alignItems:'center'}}>
+                  <View style = {styles.modalBody}>
+                    <TouchableOpacity onPress = {() => setProductListModal(true)}>
+                      <View style={styles.input}>
+                        <Text>
+                          {prod === '' ? "Click to select a product" : `${prod} selected`}
+                        </Text>
+                      </View>
+                    </TouchableOpacity>
+                    
+                    <TouchableOpacity onPress = {() => setClientListModal(true)}>
+                      <View style={styles.input}>
+                        <Text>
+                          {selectedClientName === '' ? "Click to select a Client" : `${selectedClientName} selected`}
+                        </Text>
+                      </View>
+                    </TouchableOpacity>
+  
+                  <View>
+                    <TouchableOpacity style={{ bottom: 20 }} onPress = {() => setAddClientModal(true)} >
+                      <View style={styles.addButton}>
+                        <View style={{ justifyContent: 'center', alignContent: 'center', alignItems: 'center', }}>
+                          <Text style={styles.modalbuttonText}>
+                            + Add
+                          </Text>
+                        </View>
+                      </View>
+                    </TouchableOpacity>
+                  </View>
+  
+        
+                  <View style={{}}>
+                    <TextInput onChangeText={onChangeQuantity} style={styles.input} placeholder="Quantity" autoCorrect={false} />
+                    <TextInput onChangeText={onChangeTotalAmount} style={styles.input} placeholder="Total Amount" autoCorrect={false} />
+                    {paymentType === 'Partial' && <TextInput onChangeText={onChangeAmountReceived} style={styles.input} placeholder="Amount Received" autoCorrect={false} />}
+                    <TextInput multiline={true} numberOfLines={5} onChangeText={onChangeNotes} style={styles.input} placeholder="Notes" autoCorrect={false} />
+  
+                    <View style={styles.input}>
+                    <View style = {{bottom: 10}}>
+  
+                      <Picker
+                        style={{ top: 6, color: 'grey', fontFamily: 'Roboto' }}
+                        itemStyle={{ fontWeight: '100' }}
+                        placeholder="Select a Payment Type"
+                        selectedValue={paymentType}
+                        onValueChange={(itemValue, itemIndex) =>
+                          setPaymentType(itemValue)
+                        }
+                      >
+                        <Picker.Item label="Partial" value="Partial" />
+                        <Picker.Item label="Credit" value="Credit" />
+                        <Picker.Item label="Full" value="Full" />
+                      </Picker>
+                      </View>
+  
+                    </View>
+  
+                    <View>
+                      <View style={styles.label}>
+                        <Text style={styles.switch}>D/O</Text>
+                        <Switch
+                          trackColor={{ false: "#00E0C7", true: "#006270" }}
+                          thumbColor={isEnabled ? "white" : "#006270"}
+                          onValueChange={toggleSwitch}
+                          value={isWarehouse}
+                        />
+                        <Text style={styles.switch}>W</Text>
+                      </View>
+                    </View>
+  
+                    {
+                      isWarehouse ?
+                        <View>
+                          <TouchableOpacity style={styles.buttonModalContainer} onPress={() => openModals("Warehouse")}>
+                            <Text style={styles.buttonModalText}>Select Warehouse</Text>
+                          </TouchableOpacity>
+                        </View>
+  
+                        :
+  
+                        <View>
+                          <TouchableOpacity style={styles.buttonModalContainer} onPress={() => openModals("D-Order")} >
+                            <Text style={styles.buttonModalText}>Select D-Order</Text>
+                          </TouchableOpacity>
+                        </View>
+                    }
+  
+                  </View>
+  
+  
+                  <View style={{ flexDirection: 'row', alignItems: 'center',justifyContent: 'center', bottom: Dimensions.get('window').height < 700 ? 25 : 15, }}>
+                    <TouchableOpacity style={{ alignSelf: 'flex-start' }} onPress={() => { setModalVisible(false) }}>
+                      <View>
+                        <View style={styles.buttonModalContainerCross}>
+                          <View>
+                            <Text style={styles.buttonModalText}>Cancel</Text>
+                          </View>
+                        </View>
+                      </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => { addSale() }}>
+                      <View>
+                        <View style={styles.buttonModalContainer}>
+                          <View>
+                            <Text style={styles.buttonModalText}>Done</Text>
+                          </View>
+                        </View>
+                      </View>
+                    </TouchableOpacity>
+                  </View>
+                  </View>
+                  </View>)}
+                
               </View>
             </View>
           {/* </ScrollView> */}
@@ -1058,10 +1175,11 @@ const styles = StyleSheet.create({
     padding: 35,
     backgroundColor: "#fff",
     width: Dimensions.get('window').height > 900 ? Dimensions.get('window').width * 0.80 : Dimensions.get('window').width * 0.80,
-    height: Dimensions.get('window').height > 900 ? Dimensions.get('window').height * 0.60 : Dimensions.get('window').height * 0.85,
+    height: Dimensions.get('window').height > 900 ? Dimensions.get('window').height * 0.60 : Dimensions.get('window').height * 0.86,
     borderWidth: 2,
     borderRadius: 20,
     borderColor: "#008394",
+    alignItems: 'center'
   },
   subtitle: {
     color: '#008394',
@@ -1130,7 +1248,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
   },
   input: {
-    width: Dimensions.get('window').width * 0.65,
+    width: Dimensions.get('window').height > 900 ? Dimensions.get('window').width * 0.65 : Dimensions.get('window').width * 0.55,
     borderColor: 'gray',
     borderWidth: 2,
     borderRadius: 40,
