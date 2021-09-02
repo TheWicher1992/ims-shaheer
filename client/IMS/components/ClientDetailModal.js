@@ -101,7 +101,7 @@ const ClientDetailModal = props => {
                                 <Text style={styles.buttonModalText}>Update</Text>
                             </View>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress = {() => {props.handleClose(), props.navigator.navigate({routeName: 'ClientLedger', params: { clientID: props.object._id }})}}>
+                        <TouchableOpacity onPress = {() => {props.handleClose(), props.navigator.navigate({routeName: 'ClientLedger', params: { clientID: props.object._id, clientName: props.object.userName }})}}>
                             <View style={styles.backButtonModalContainer}>
                                 <Text style={styles.buttonModalText}>Ledger</Text>
                             </View>
