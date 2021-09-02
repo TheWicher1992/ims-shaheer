@@ -6,7 +6,7 @@ import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { uri } from '../api.json'
 import axios from "axios"
 import { DataTable } from 'react-native-paper';
-import { Card, ListItem, Button, Icon } from 'react-native-elements'
+
 
 
 const Ledger = props => {
@@ -35,21 +35,7 @@ const Ledger = props => {
         <View style={styles.screen}>
             <View>
             <Text style={styles.title}>Ledger</Text>
-            </View>
-            
-            {/* {
-                ledgerData.map( l=> (
-                    <Card containerStyle={{width: '95%'}}>
-                        <Card.Title>{l.type === 'Payed' || l.type === 'Received' ? `Payment ${l.type}` : l.type}</Card.Title>
-                        <Card.Divider />
-                        <View>
-                            <Text>Date: {l.date}</Text>
-                        </View>
-                    </Card>
-                ))
-
-            } */}
-            
+            </View>  
             <DataTable style={{ marginTop: 10 }}>
         <DataTable.Header>
           <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Date</Text></DataTable.Title>
@@ -77,9 +63,17 @@ const Ledger = props => {
                           <DataTable.Row>
                             <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
                             <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
-                            <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.payment === 'Partial' ? l.received : l.total}</Text></DataTable.Cell>
+                            {l.payment === 'Partial' &&
+                              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.received}</Text></DataTable.Cell>
+                            }
+                            {l.payment === 'Full' && 
+                              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.total}</Text></DataTable.Cell>
+                            }
+                            {l.payment === 'Credit' && 
+                              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>0</Text></DataTable.Cell>
+                            }                            
                             <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
-                            <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.type === 'Partial' ? (balance - parseInt(l.total) - parseInt(l.received)): balance}</Text></DataTable.Cell>
+                            <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{balance}</Text></DataTable.Cell>
                           </DataTable.Row>
                       </View>)
                       ||
@@ -96,8 +90,11 @@ const Ledger = props => {
                             <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
                             <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
                             <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
-                            <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.payment === 'Partial' ? l.received : l.total}</Text></DataTable.Cell>
-                            <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.type === 'Partial' ? 10 : balance}</Text></DataTable.Cell>
+                            {l.payment === 'Partial' && <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.received}</Text></DataTable.Cell>}
+                            {l.payment === 'Full' && <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.total}</Text></DataTable.Cell>}
+                            {l.payment === 'Credit' && <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>0</Text></DataTable.Cell>}
+
+                            <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{balance}</Text></DataTable.Cell>
                           </DataTable.Row>
                         </View>
                       )
@@ -106,10 +103,10 @@ const Ledger = props => {
                         <View>
                           <DataTable.Row>
                             <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.date.toLocaleString().split('T')[0]}</Text></DataTable.Cell>
-                            <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>Payment Paid</Text></DataTable.Cell>
+                            <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>Payment Sent</Text></DataTable.Cell>
                             <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.cash}</Text></DataTable.Cell>
                             <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
-                            <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
+                            <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{balance}</Text></DataTable.Cell>
                           </DataTable.Row>
                           
                         </View>
@@ -123,7 +120,7 @@ const Ledger = props => {
                           <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>Payment Received</Text></DataTable.Cell>
                           <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
                           <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.cash}</Text></DataTable.Cell>
-                          <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
+                          <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{balance}</Text></DataTable.Cell>
                         </DataTable.Row>
                       </View>
 
@@ -171,7 +168,8 @@ const styles = StyleSheet.create({
         fontFamily: 'Roboto',
         fontWeight: 'bold',
         fontSize: Dimensions.get('window').height > 900 ? 36 : 28,
-        bottom: 35
+        bottom: 35,
+        marginTop: 60,
       },
       screen: {
         flex: 1,
