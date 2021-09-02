@@ -41,7 +41,9 @@ const AddClientModal = props => {
             }
           }
         ).then(res => {
+
           setAlertTitle('Success');
+          props.getPreFormValues()
           setAlertMsg('Client added successfully!');
           show()
         })

@@ -41,6 +41,7 @@ const MakeSale = props => {
   }
 
 
+  
 
   const getSales = async () => {
     setLoading(true)
@@ -724,7 +725,7 @@ const MakeSale = props => {
 
       </Modal>
       </View>
-      <AddClientModal state = {addClientModal} handleClose = {closeClientModal} />
+      <AddClientModal state = {addClientModal} handleClose = {closeClientModal}  getPreFormValues = {getPreFormValues} />
       <SaleDetailModal state={isTableDetailModalVisible} handleClose={handleClose} title="Sale Information" object={touchedSale} occupation="Admin" />
       <View style={styles.screen}>
         <View>
