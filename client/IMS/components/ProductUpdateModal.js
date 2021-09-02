@@ -241,6 +241,96 @@ const ProductUpdateModal = props => {
 
                     
                   </View>
+                  {Dimensions.get('window').height < 900 ? (<ScrollView>
+                <View style={{ marginTop: 50, height: 400, alignItems: 'center' }}>
+                  <TextInput onChangeText={onChangeSerialNo} style={styles.input} placeholder="Serial" value={serialNo} autoCorrect={false} />
+                  <TextInput onChangeText={onChangeProductName} style={styles.input} placeholder="Product" value={productName} autoCorrect={false} />
+                  <TextInput onChangeText={onChangeAmount} style={styles.input} placeholder="Amount" value={amountVal === undefined ? '0' : amountVal.toString()} autoCorrect={false} />
+                  <TextInput multiline={true} numberOfLines={5} onChangeText={onChangeDescription} value={description} style={styles.input} placeholder="Description" autoCorrect={false} />
+                  <View style={{ borderWidth: 2, borderRadius: 40, borderColor: "#008394", width: Dimensions.get('window').width * 0.65, height: 40, fontSize: 8, justifyContent: 'space-between' }}>
+                    <Picker
+                      style={{ top: 6, color: 'grey', fontFamily: 'Roboto' }}
+                      itemStyle={{ fontWeight: '100' }}
+                      placeholder="Select a brand"
+                      selectedValue={color}
+                      onValueChange={(itemValue, itemIndex) =>
+                        setColor(itemValue)
+                      }
+                    >
+
+                      <Picker.Item label={props.obj.colour === undefined ? "" : props.obj.colour.title} value={props.obj.colour === undefined ? "" : props.obj.colour._id} />
+
+                      {
+                        brandsAndColours.colours.map((c => (
+                          c.title !== (props.obj.colour === undefined ? "" : props.obj.colour.title) && <Picker.Item key={c._id} label={c.title} value={c._id} />
+                        )))
+                      }
+                    </Picker>
+                  </View>
+                    <View>
+                      <TouchableOpacity style={{ marginTop: 10 }} onPress={() => { setAddColorModal(true) }}>
+                        <View style={styles.addButton}>
+                          <View style={{ justifyContent: 'center', alignContent: 'center', alignItems: 'center', }}>
+                            <Text style={styles.modalbuttonText}>
+                              + Add
+                            </Text>
+                          </View>
+                        </View>
+                      </TouchableOpacity>
+                    </View>
+                 
+                  <View style={{ borderWidth: 2, borderRadius: 40, borderColor: "#008394", width: Dimensions.get('window').width * 0.65, marginTop: 15, height: 40, fontSize: 8, }}>
+                    <Picker
+                      style={{ top: 6, color: 'grey', fontFamily: 'Roboto' }}
+                      itemStyle={{ fontWeight: '100' }}
+
+                      selectedValue={brand}
+                      onValueChange={(itemValue, itemIndex) =>
+                        setBrand(itemValue)
+                      }
+                    >
+                      <Picker.Item label={props.obj.brand === undefined ? "" : props.obj.brand.title} value={props.obj.brand === undefined ? "" : props.obj.brand._id} />
+
+                      {
+                        brandsAndColours.brands.map((b => (
+                          b.title !== (props.obj.brand === undefined ? "" : props.obj.brand.title) && <Picker.Item key={b._id} label={b.title} value={b._id} />
+                        )))
+                      }
+                    </Picker>
+                    </View>
+                    <View>
+                    <TouchableOpacity style={{ marginTop: 15 }} onPress={() => { setAddBrandModal(true) }}>
+                      <View style={styles.addButton}>
+                        <View style={{ justifyContent: 'center', alignContent: 'center', alignItems: 'center' }}>
+                          <Text style={styles.modalbuttonText}>
+                            + Add
+                          </Text>
+                        </View>
+                      </View>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+                <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10, }}>
+                  <TouchableOpacity style={{ alignSelf: 'flex-start' }} onPress={() => { props.handleClose() }}>
+                    <View>
+                      <View style={styles.buttonModalContainerCross}>
+                        <View>
+                          <Text style={styles.buttonModalText}>Cancel</Text>
+                        </View>
+                      </View>
+                    </View>
+                  </TouchableOpacity>
+                  <TouchableOpacity onPress={() => { updateProduct() }}>
+                    <View>
+                      <View style={styles.buttonModalContainer}>
+                        <View>
+                          <Text style={styles.buttonModalText}>Done</Text>
+                        </View>
+                      </View>
+                    </View>
+                  </TouchableOpacity>
+                </View>
+                </ScrollView>) : (<View style={{alignItems: 'center',}}>
                 <View style={{ marginTop: 50 }}>
                   <TextInput onChangeText={onChangeSerialNo} style={styles.input} placeholder="Serial" value={serialNo} autoCorrect={false} />
                   <TextInput onChangeText={onChangeProductName} style={styles.input} placeholder="Product" value={productName} autoCorrect={false} />
@@ -329,6 +419,8 @@ const ProductUpdateModal = props => {
                     </View>
                   </TouchableOpacity>
                 </View>
+                </View>)}
+                  
               </View>
             </View>
           {/* </ScrollView> */}
@@ -456,10 +548,9 @@ const styles = StyleSheet.create({
   },
   modalStyle: {
     backgroundColor: "#fff",
-
     width: Dimensions.get('window').height > 900 ? Dimensions.get('window').width * 0.80 : Dimensions.get('window').width * 0.80,
-    height: Dimensions.get('window').height > 900 ? Dimensions.get('window').height * 0.55 : Dimensions.get('window').height * 0.80,
-
+    height: Dimensions.get('window').height > 900 ? Dimensions.get('window').height * 0.55 : Dimensions.get('window').height * 0.85,
+    alignItems: 'center',
     borderWidth: 2,
     borderRadius: 20,
     marginBottom: 20,
