@@ -3,7 +3,7 @@ import { Modal, StyleSheet, Text, View, TouchableOpacity, Dimensions, TextInput,
 import { uri } from '../api.json'
 import axios from "axios"
 import ShowAlert from '../components/ShowAlert';
-
+import { FontAwesome } from "@expo/vector-icons";
 
 const ClientUpdateModal = props => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -101,7 +101,20 @@ const ClientUpdateModal = props => {
           </TouchableWithoutFeedback>
             <View style={styles.centeredView}>
                 <View style={styles.modalView}>
-                <Text style={styles.modalTitle}>{props.title}</Text>
+                  <View style = {{flexDirection: 'row'}}>
+                    <View style = {{ right: Dimensions.get('window').height > 900 ? Dimensions.get('window').width * 0.05 : Dimensions.get('window').width * 0.02, top: 18}}>
+                      <TouchableOpacity onPress = {() => props.handleClose()}>
+                        <FontAwesome
+                          name = {"arrow-left"}
+                          size = {Dimensions.get('window').height > 900 ? 30:25}
+                          color = {"#008394"}
+                        />
+                      </TouchableOpacity>
+                      
+                    </View>
+                    <Text style={styles.modalTitle}>{props.title}</Text>
+                </View> 
+                
                 <View style={styles.modalBody}>
                     <TextInput placeholder="Username" onChangeText= {onChangeClientName} style={styles.input} value = {clientName}/>
                     <TextInput placeholder="PhoneNumber" onChangeText= {onChangePhoneNumber}  style={styles.input} value = {phoneNumber}/>
