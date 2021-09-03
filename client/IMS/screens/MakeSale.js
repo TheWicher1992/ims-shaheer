@@ -139,7 +139,7 @@ const MakeSale = props => {
   const [search, setSearch] = React.useState(`*`) //for keeping track of search
   const onChangeSearch = (searchVal) => { //function to keep track of search as the user types
     setSearch(searchVal);
-    console.log(search);
+    // console.log(search);
   }
 
   const searchFunc = () => {
@@ -226,7 +226,7 @@ const MakeSale = props => {
         note: notes
       }
 
-      console.log(body)
+      // console.log(body)
 
 
       let totalQuant = 0
@@ -477,12 +477,10 @@ const MakeSale = props => {
                 </View>
                 <View style = {styles.modalBody}>
                   <SearchableDropdown
-                    onTextChange={(text) => {
-                      console.log(text)
-                    }}
+                    
                     //On text change listner on the searchable input
                     onItemSelect={(item) => {
-                      console.log(item)
+                      // console.log(item)
                       setProd(item.name)
                       setProductName(item.id)
                     }}
@@ -563,12 +561,10 @@ const MakeSale = props => {
                 </View>
                 <View style = {styles.modalBody}>
                   <SearchableDropdown
-                    onTextChange={(text) => {
-                      console.log(text)
-                    }}
+                    
                     //On text change listner on the searchable input
                     onItemSelect={(item) => {
-                      console.log(item)
+                      // console.log(item)
                       setSelectedClientName(item.name)
                       setClientName(item.id)
                     }}
@@ -806,7 +802,7 @@ const MakeSale = props => {
                 <View style = {styles.modalBody}>
                   <TouchableOpacity onPress = {() => setProductListModal(true)}>
                     <View style={styles.input}>
-                      <Text>
+                      <Text style = {{fontSize: 15, color: 'grey'}}>
                         {prod === '' ? "Click to select a product" : `${prod} selected`}
                       </Text>
                     </View>
@@ -814,7 +810,7 @@ const MakeSale = props => {
                   
                   <TouchableOpacity onPress = {() => setClientListModal(true)}>
                     <View style={styles.input}>
-                      <Text>
+                      <Text style = {{fontSize: 15, color: 'grey'}}>
                         {selectedClientName === '' ? "Click to select a Client" : `${selectedClientName} selected`}
                       </Text>
                     </View>
@@ -920,7 +916,7 @@ const MakeSale = props => {
                   <View style = {styles.modalBody}>
                     <TouchableOpacity onPress = {() => setProductListModal(true)}>
                       <View style={styles.input}>
-                        <Text>
+                        <Text style = {{fontSize: 15, color: 'grey'}}>
                           {prod === '' ? "Click to select a product" : `${prod} selected`}
                         </Text>
                       </View>
@@ -928,7 +924,7 @@ const MakeSale = props => {
                     
                     <TouchableOpacity onPress = {() => setClientListModal(true)}>
                       <View style={styles.input}>
-                        <Text>
+                        <Text style = {{fontSize: 15, color: 'grey'}}>
                           {selectedClientName === '' ? "Click to select a Client" : `${selectedClientName} selected`}
                         </Text>
                       </View>
