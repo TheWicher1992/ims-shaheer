@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react'
-import { StyleSheet, Text, View, Button, Dimensions, TextInput, TouchableOpacity, KeyboardAvoidingView, ScrollView, Modal, TouchableWithoutFeedback } from 'react-native';
+import { StyleSheet, Text, View, Button, Dimensions, TextInput, TouchableOpacity, KeyboardAvoidingView, ScrollView, Modal, TouchableWithoutFeedback, Switch } from 'react-native';
 import HeaderButton from '../components/HeaderButton';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { FontAwesome } from '@expo/vector-icons';
@@ -23,7 +23,7 @@ const Product = props => {
   const [products, setProducts] = useState([])
   const [loading, setLoading] = useState(true)
   const [warehouseCheck, setWarehouseCheck] = useState('*')
-  const [stock, setStock] = useState('0')
+  const [stock, setStock] = useState(0)
   const [brandsAndColours, setBrandAndColours] = useState({
     brands: [],
     colours: []
@@ -153,7 +153,7 @@ const Product = props => {
         description,
         price: amountVal,
         stock: stock,
-        warehouse: warehouseCheck === '*' ? warehouseCheck : selectedWarehouse
+        warehouse: isWarehouse ? selectedWarehouse : '*'
       }
 
       axios.post(`${uri}/api/product`, body, {
@@ -310,10 +310,15 @@ const Product = props => {
       setModalVisible(true)})
     
   }
-
+  const toggleSwitch = () => {
+    setIsWarehouse(!isWarehouse);
+    // console.log(`switched`);
+  };
+  const [isWarehouse, setIsWarehouse] = useState(false)
   const [alertState, setAlertState] = useState(false)
   const [alertTitle, setAlertTitle] = useState(``)
   const [alertMsg, setAlertMsg] = useState(``)
+  const [isEnabled, setIsEnabled] = useState(false)
   const show = () => {
     setAlertState(!alertState)
   }
@@ -382,10 +387,23 @@ const Product = props => {
                   <TextInput onChangeText={onChangeSerialNo} style={styles.input} placeholder="Serial" autoCorrect={false} />
                   <TextInput onChangeText={onChangeProductName} style={styles.input} placeholder="Product" autoCorrect={false} />
                   <TextInput onChangeText={onChangeAmount} style={styles.input} placeholder="Amount" autoCorrect={false} />
-                  <TextInput onChangeText={onChangeStock} style={styles.input} placeholder="Stock" autoCorrect={false} />
+                  <View>
+                    <View style={styles.label}>
+                      <Text style={styles.switch}>NW</Text>
+                      <Switch
+                        trackColor={{ false: "#00E0C7", true: "#006270" }}
+                        thumbColor={isEnabled ? "white" : "#006270"}
+                        onValueChange={toggleSwitch}
+                        value={isWarehouse}
+                      />
+                      <Text style={styles.switch}>W</Text>
+                    </View>
+                  </View>
+                  {isWarehouse ? <TextInput onChangeText={onChangeStock} style={styles.input} placeholder="Stock" autoCorrect={false} /> : null}
+                  
                   <TextInput multiline={true} numberOfLines={5} onChangeText={onChangeDescription} style={styles.input} placeholder="Description" autoCorrect={false} />
 
-                  <View style={{ borderWidth: 2, marginBottom: 20, borderRadius: 40, borderColor: "#008394", width: Dimensions.get('window').width * 0.65, height: 40, fontSize: 8, justifyContent: 'space-between' }}>
+                  {isWarehouse ? <View style={{ borderWidth: 2, marginBottom: 20, borderRadius: 40, borderColor: "#008394", width: Dimensions.get('window').width * 0.65, height: 40, fontSize: 8, justifyContent: 'space-between' }}>
                     <Picker
                       style={{ top: 6, color: 'grey', fontFamily: 'Roboto' }}
                       itemStyle={{ fontWeight: '100' }}
@@ -394,7 +412,6 @@ const Product = props => {
                       onValueChange={(itemValue, itemIndex) =>
                         {
                           setSelectedWarehouse(itemValue)
-                          setWarehouseCheck(itemValue)
                         }
                       }
                     >
@@ -407,7 +424,7 @@ const Product = props => {
 
                     </Picker>
 
-                  </View>
+                  </View> : null}
 
                   <View style={{ borderWidth: 2, borderRadius: 40, borderColor: "#008394", width: Dimensions.get('window').width * 0.65, height: 40, fontSize: 8, justifyContent: 'space-between' }}>
                     <Picker
@@ -480,7 +497,7 @@ const Product = props => {
                 <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10, }}>
                   <TouchableOpacity style={{ alignSelf: 'flex-start' }} onPress={() => { setModalVisible(false) }}>
                     <View>
-                      <View style={styles.buttonModalContainerCross}>
+                      <View style={isWarehouse ? [styles.buttonModalContainerCross, {marginTop: 80}] : styles.buttonModalContainerCross}>
                         <View>
                           <Text style={styles.buttonModalText}>Cancel</Text>
                         </View>
@@ -489,7 +506,7 @@ const Product = props => {
                   </TouchableOpacity>
                   <TouchableOpacity onPress={() => { addProduct() }}>
                     <View>
-                      <View style={styles.buttonModalContainer}>
+                      <View style={isWarehouse ? [styles.buttonModalContainer, {marginTop: 80}] : styles.buttonModalContainer}>
                         <View>
                           <Text style={styles.buttonModalText}>Done</Text>
                         </View>
@@ -503,33 +520,44 @@ const Product = props => {
                   <View style={{ marginTop: 50}}>
                     <TextInput onChangeText={onChangeSerialNo} style={styles.input} placeholder="Serial" autoCorrect={false} />
                     <TextInput onChangeText={onChangeProductName} style={styles.input} placeholder="Product" autoCorrect={false} />
-                    <TextInput onChangeText={onChangeAmount} style={styles.input} placeholder="Amount" autoCorrect={false} />
-                    <TextInput onChangeText={onChangeStock} style={styles.input} placeholder="Stock" autoCorrect={false} />
-                    <TextInput multiline={true} numberOfLines={5} onChangeText={onChangeDescription} style={styles.input} placeholder="Description" autoCorrect={false} />
-  
-                    <View style={{ borderWidth: 2, marginBottom: 20, borderRadius: 40, borderColor: "#008394", width: Dimensions.get('window').width * 0.65, height: 40, fontSize: 8, justifyContent: 'space-between' }}>
-                      <Picker
-                        style={{ top: 6, color: 'grey', fontFamily: 'Roboto' }}
-                        itemStyle={{ fontWeight: '100' }}
-                        placeholder="Select a Warehouse"
-                        selectedValue={selectedWarehouse}
-                        onValueChange={(itemValue, itemIndex) =>
-                          {
-                            setSelectedWarehouse(itemValue)
-                            setWarehouseCheck(itemValue)
-                          }
-                        }
-                      >
-  
-                        {
-                          warehouses.map((w => (
-                            <Picker.Item key={w._id} label={w.name} value={w._id} />
-                          )))
-                        }
-  
-                      </Picker>
-  
+                    <View>
+                    <View style={styles.label}>
+                      <Text style={styles.switch}>NW</Text>
+                      <Switch
+                        trackColor={{ false: "#00E0C7", true: "#006270" }}
+                        thumbColor={isEnabled ? "white" : "#006270"}
+                        onValueChange={toggleSwitch}
+                        value={isWarehouse}
+                      />
+                      <Text style={styles.switch}>W</Text>
                     </View>
+                  </View>
+                  {isWarehouse ? <TextInput onChangeText={onChangeStock} style={styles.input} placeholder="Stock" autoCorrect={false} /> : null}
+                  
+                  <TextInput multiline={true} numberOfLines={5} onChangeText={onChangeDescription} style={styles.input} placeholder="Description" autoCorrect={false} />
+
+                  {isWarehouse ? <View style={{ borderWidth: 2, marginBottom: 20, borderRadius: 40, borderColor: "#008394", width: Dimensions.get('window').width * 0.65, height: 40, fontSize: 8, justifyContent: 'space-between' }}>
+                    <Picker
+                      style={{ top: 6, color: 'grey', fontFamily: 'Roboto' }}
+                      itemStyle={{ fontWeight: '100' }}
+                      placeholder="Select a Warehouse"
+                      selectedValue={selectedWarehouse}
+                      onValueChange={(itemValue, itemIndex) =>
+                        {
+                          setSelectedWarehouse(itemValue)
+                        }
+                      }
+                    >
+
+                      {
+                        warehouses.map((w => (
+                          <Picker.Item key={w._id} label={w.name} value={w._id} />
+                        )))
+                      }
+
+                    </Picker>
+
+                  </View> : null}
   
                     <View style={{ borderWidth: 2, borderRadius: 40, borderColor: "#008394", width: Dimensions.get('window').width * 0.65, height: 40, fontSize: 8, justifyContent: 'space-between' }}>
                       <Picker
@@ -602,7 +630,7 @@ const Product = props => {
                   <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10, }}>
                     <TouchableOpacity style={{ alignSelf: 'flex-start' }} onPress={() => { setModalVisible(false) }}>
                       <View>
-                        <View style={styles.buttonModalContainerCross}>
+                        <View style={isWarehouse ? [styles.buttonModalContainerCross, {marginTop: 60}] : styles.buttonModalContainerCross}>
                           <View>
                             <Text style={styles.buttonModalText}>Cancel</Text>
                           </View>
@@ -611,7 +639,7 @@ const Product = props => {
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => { addProduct() }}>
                       <View>
-                        <View style={styles.buttonModalContainer}>
+                        <View style={isWarehouse ? [styles.buttonModalContainer, {marginTop: 60}] : styles.buttonModalContainer}>
                           <View>
                             <Text style={styles.buttonModalText}>Done</Text>
                           </View>
@@ -1041,6 +1069,17 @@ const styles = StyleSheet.create({
     backgroundColor: '#00E0C7',
     height: 24,
     width: 80,
+  },
+  switch: {
+    color: '#008394',
+    fontSize: Dimensions.get('window').height > 900 ? 18 : 16,
+    fontFamily: 'Roboto',
+  },
+  label: {
+    alignSelf: 'center',
+    flexDirection: 'row',
+    fontWeight: 'bold',
+    marginRight: Dimensions.get('window').width * 0.80 / 2
   },
   modalbuttonText: {
     fontWeight: 'bold',
