@@ -58,7 +58,7 @@ const EmployeeDetailModal = props => {
                 <View style={styles.modalBody}>
                   {props.object !== [] && (<View><Text style={styles.bodyText}>Username: {props.object.userName}</Text>
                     <Text style={styles.bodyText}>Occupation: {props.occupation === 'Admin' ? 'Admin' : 'Employee'}</Text>
-                    <Text style={styles.bodyText}>Date Added: {props.object.date}</Text>
+                    <Text style={styles.bodyText}>Date: {props.object.date === undefined ? '---' : `${props.object.date.toLocaleString().split('T')[0]} - ${props.object.date.toLocaleString().split('T')[1].slice(0,8)}` }</Text>
                     </View>)}
                 </View>
               </ScrollView>

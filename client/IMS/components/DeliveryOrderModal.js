@@ -54,7 +54,7 @@ const DeliveryOrderModal = props => {
               {
                 props.object !== [] ? (
                   <View>
-                    <Text style={styles.bodyText}>Date: {props.object.date}</Text>
+                    <Text style={styles.bodyText}>Date: {props.object.date === undefined ? '---' : `${props.object.date.toLocaleString().split('T')[0]} - ${props.object.date.toLocaleString().split('T')[1].slice(0,8)}` }</Text>
                     <Text style={styles.bodyText}>Product: {props.object.product === undefined ? '--' : props.object.product.title}</Text>
                     <Text style={styles.bodyText}>Client: {props.object.client === undefined ? '--' : props.object.client.userName}</Text>
                     <Text style={styles.bodyText}>Quantity: {props.object.quantity}</Text>
