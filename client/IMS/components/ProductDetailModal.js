@@ -88,7 +88,7 @@ const ProductDetailModal = props => {
                     <Text style={styles.bodyText}>Brand: {props.object.brand === undefined ? '--' : props.object.brand.title}</Text>
                     {props.occupation === 'Admin' ? <Text style={styles.bodyText}>Price: {props.object.price}</Text> : null}
                     <Text style={styles.bodyText}>Stock: {props.object.totalStock}</Text>
-                    <Text style={styles.bodyText}>Date Added: {props.object.date}</Text>
+                    <Text style={styles.bodyText}>Date: {props.object.date === undefined ? '---' : `${props.object.date.toLocaleString().split('T')[0]} - ${props.object.date.toLocaleString().split('T')[1].slice(0,8)}` }</Text>
                     <Text style={styles.bodyText}>Description: {props.object.description}</Text></View>)}
                 </View>
               </ScrollView>
