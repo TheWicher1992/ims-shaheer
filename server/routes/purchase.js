@@ -51,7 +51,7 @@ router.post('/', async (req, res) => {
                 note
             })
             await deliveryOrder.save()
-            purchase.deliveryOrder = deliverOrder._id
+            purchase.deliveryOrder = deliveryOrder._id
             purchase.typeOfPurchase = 'DeliveryOrder'
         }
         //if physical stock
