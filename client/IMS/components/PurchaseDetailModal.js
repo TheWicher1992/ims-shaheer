@@ -99,9 +99,9 @@ const PurchaseDetailModal = props => {
                 <Text style={styles.bodyText}>Client Name: {props.object.client === undefined ? "---" : props.object.client.userName}  </Text>
                 <Text style={styles.bodyText}>Payment Type: {props.object.payment} </Text>
                 <Text style={styles.bodyText}>Total Amount: {props.object.total} </Text>
-                <Text style={styles.bodyText}>Amount Received: {props.object.received}  </Text>
+                <Text style={styles.bodyText}>Amount Sent: {props.object.received}  </Text>
                 <Text style={styles.bodyText}>Notes:  {props.object.note} </Text>
-                <Text style={styles.bodyText}>Date:  {props.object.date === undefined ? '---' : `${props.object.date.toLocaleString().split('T')[0]} - ${props.object.date.toLocaleString().split('T')[1].slice(0,8)}` } </Text>
+                <Text style={styles.bodyText}>Date: {props.object.date === undefined ? '---' : `${props.object.date.toLocaleString().split('T')[0]} - ${props.object.date.toLocaleString().split('T')[1].slice(0,8)}` }   </Text>
                 <Text style={styles.bodyText}>Type:  {props.object.typeOfPurchase === undefined ? (null) : props.object.typeOfPurchase} </Text>
                 {props.object.typeOfPurchase === undefined ? (null) :(props.object.typeOfPurchase === 'Warehouse' ? (<Text style={styles.bodyText}>No Location</Text>) : (<Text style={styles.bodyText}>Location: {props.object.deliveryOrder.location === undefined ? '' :props.object.deliveryOrder.location }</Text>))}
 
