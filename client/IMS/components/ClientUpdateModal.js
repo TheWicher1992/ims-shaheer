@@ -34,7 +34,7 @@ const ClientUpdateModal = props => {
       {
         const body = {
         userName: clientName,
-        balance: balance,
+        balance: Number.parseInt(balance, 10),
         phone: phoneNumber,
       }
       const config = {

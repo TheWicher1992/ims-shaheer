@@ -169,11 +169,11 @@ const MakePurchase = props => {
     else {
       const body = {
         product: productName,
-        quantity: quantityVal,
+        quantity: Number.parseInt(quantityVal,10),
         client: clientName,
         payment: paymentType,
-        total: totalAmount,
-        received: amountReceived,
+        total: Number.parseInt(totalAmount,10),
+        received: Number.parseInt(amountReceived, 10),
         note: notes,
         isDeliveryOrder: !isWarehouse,
         location,

@@ -85,11 +85,11 @@ const PurchaseUpdateModal = props => {
     else{
     const body = {
       product : productName,
-      quantity: quantityVal,
+      quantity: Number.parseInt(quantityVal,10),
       client : clientName,
       payment : paymentType,
-      total: totalAmount,
-      received : amountRecieved,
+      total: Number.parseInt(totalAmount, 10),
+      received : Number.parseInt(amountRecieved, 10),
       note : notes,
       isDeliveryOrder : !isWarehouse,
       location : location,

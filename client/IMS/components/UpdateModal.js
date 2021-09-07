@@ -62,7 +62,7 @@ const UpdateModal = props => {
       sourceID: props.id,
       destID: selectedWarehouse,
       productID: props.prodID,
-      quantity: props.quantity,
+      quantity: Number.parseInt(props.quantity, 10),
       type: 'delivery'
     }
 

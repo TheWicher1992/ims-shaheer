@@ -183,7 +183,7 @@ const DeliveryOrders = props => {
     else {
       const body = {
         productID: productName,
-        quantity: quantityVal,
+        quantity: Number.parseInt(quantityVal,10),
         location: location,
         clientID: clientName,
         note: notes
@@ -368,7 +368,7 @@ const DeliveryOrders = props => {
           <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Client</Text></DataTable.Title>
           <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Quantity</Text></DataTable.Title>
           <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Location</Text></DataTable.Title>
-          <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Status</Text></DataTable.Title>
+          {/* <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Status</Text></DataTable.Title> */}
         </DataTable.Header>
         {!loading && <ScrollView>
           <View>
@@ -380,7 +380,7 @@ const DeliveryOrders = props => {
                     <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{order.client.userName === undefined ? '--' : order.client.userName}</Text></DataTable.Cell>
                     <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{order.quantity === undefined ? '--' : order.quantity}</Text></DataTable.Cell>
                     <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{order.location === undefined ? '--' : order.location}</Text></DataTable.Cell>
-                    {order.status === true ? <DataTable.Cell style={styles.cells}><Ionicons name={'checkmark'} size={25} color={'#006270'} /></DataTable.Cell> : <DataTable.Cell style={styles.cells}><Entypo name={'cross'} size={25} color={'red'} /></DataTable.Cell>}
+                    {/* {order.status === true ? <DataTable.Cell style={styles.cells}><Ionicons name={'checkmark'} size={25} color={'#006270'} /></DataTable.Cell> : <DataTable.Cell style={styles.cells}><Entypo name={'cross'} size={25} color={'red'} /></DataTable.Cell>} */}
                   </DataTable.Row>
                 </TouchableOpacity>
               ))

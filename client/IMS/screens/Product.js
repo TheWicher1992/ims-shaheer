@@ -151,8 +151,8 @@ const Product = props => {
         brandID: brand,
         colourID: color,
         description,
-        price: amountVal,
-        stock: stock,
+        price: Number.parseInt(amountVal, 10),
+        stock: Number.parseInt(stock, 10),
         warehouse: isWarehouse ? selectedWarehouse : '*'
       }
 
@@ -520,6 +520,7 @@ const Product = props => {
                   <View style={{ marginTop: 50}}>
                     <TextInput onChangeText={onChangeSerialNo} style={styles.input} placeholder="Serial" autoCorrect={false} />
                     <TextInput onChangeText={onChangeProductName} style={styles.input} placeholder="Product" autoCorrect={false} />
+                    <TextInput onChangeText={onChangeAmount} style={styles.input} placeholder="Amount" autoCorrect={false} />
                     <View>
                     <View style={styles.label}>
                       <Text style={styles.switch}>NW</Text>
@@ -805,7 +806,7 @@ const Product = props => {
           <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Brand</Text></DataTable.Title>
           <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Color</Text></DataTable.Title>
           {/* <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Quantity</Text></DataTable.Title> */}
-          <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Amount</Text></DataTable.Title>
+          <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Price</Text></DataTable.Title>
           {/* <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Warehouse</Text></DataTable.Title> */}
 
         </DataTable.Header>
