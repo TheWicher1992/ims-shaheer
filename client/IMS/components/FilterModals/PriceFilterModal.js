@@ -72,11 +72,11 @@ const PriceFilterModal = props => {
                     </Text>
 
                     <View style = {{marginTop: 20}}>
-                        <TextInput onChangeText = {onChangeValueProduct} placeholder = "quantity" style = {styles.input}></TextInput>
+                        <TextInput keyboardType = 'numeric' onChangeText = {onChangeValueProduct} placeholder = "price" style = {styles.input}></TextInput>
                     </View> 
 
                     <View style = {{justifyContent: 'center', alignContent:'center'}}>
-                        <TouchableOpacity onPress = {() => setQuantity()}>
+                        <TouchableOpacity onPress = {() => setPrice()}>
                             <View style = {styles.clearButton}>
                                 <Text style = {styles.clearButtonText}>
                                     Apply
@@ -95,7 +95,7 @@ const PriceFilterModal = props => {
                         Value applied is : {props.pricePurchaseFilter}
                     </Text>
                     <View style = {{marginTop: 20}}>
-                        <TextInput onChangeText = {onChangeValuePurchases} placeholder = "quantity" style = {styles.input}></TextInput>
+                        <TextInput keyboardType = 'numeric' onChangeText = {onChangeValuePurchases} placeholder = "price" style = {styles.input}></TextInput>
                     </View> 
 
                     <View style = {{justifyContent: 'center', alignContent:'center'}}>
@@ -119,7 +119,7 @@ const PriceFilterModal = props => {
                     </Text>
 
                     <View style = {{marginTop: 20}}>
-                        <TextInput onChangeText = {onChangeValueSales} placeholder = "quantity" style = {styles.input}></TextInput>
+                        <TextInput keyboardType = 'numeric' onChangeText = {onChangeValueSales} placeholder = "price" style = {styles.input}></TextInput>
                     </View> 
 
                     <View style = {{justifyContent: 'center', alignContent:'center'}}>
