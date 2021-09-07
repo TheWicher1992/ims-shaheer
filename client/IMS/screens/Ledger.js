@@ -6,12 +6,12 @@ import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { uri } from '../api.json'
 import axios from "axios"
 import { DataTable } from 'react-native-paper';
-
-
+import ExportButton from '../components/ExportAsExcel'
 
 const Ledger = props => {
     const [ledgerData, setLedgerData] = useState([])
-    const [balance, setBalance] = useState(0)
+    let exportData = []
+
     let prevBalance = 0
     const getClientDetail = async () => {
         try{
@@ -28,6 +28,25 @@ const Ledger = props => {
     const purchaseRender = (l) => {
       if(l.payment === 'Partial'){
         prevBalance = prevBalance - l.received + l.total
+
+        const body1 = {
+          date: l.date.toLocaleString().split('T')[0],
+          description: l.note,
+          debit: '',
+          credit: l.total,
+          balance: ''
+        }
+        exportData.push(body1)
+        
+        const body2 = {
+          date: '',
+          description: '',
+          debit: l.received,
+          credit: '',
+          balance: prevBalance > 0 ? `${prevBalance} Cr` : `${Math.abs(prevBalance)} Dr`
+        }
+        exportData.push(body2)
+        
 
         return (
           <View>
@@ -51,6 +70,24 @@ const Ledger = props => {
       else if(l.payment === 'Credit'){
         prevBalance = prevBalance + l.total
 
+        const body1 = {
+          date: l.date.toLocaleString().split('T')[0],
+          description: l.note,
+          debit: '',
+          credit: l.total,
+          balance: ''
+        }
+        exportData.push(body1)
+        
+        const body2 = {
+          date: '',
+          description: '',
+          debit: 0,
+          credit: '',
+          balance: prevBalance > 0 ? `${prevBalance} Cr` : `${Math.abs(prevBalance)} Dr`
+        }
+        exportData.push(body2)
+
         return (
           <View>
             <DataTable.Row>
@@ -71,6 +108,23 @@ const Ledger = props => {
         )
       }
       else if(l.payment === 'Full'){
+        const body1 = {
+          date: l.date.toLocaleString().split('T')[0],
+          description: l.note,
+          debit: '',
+          credit: l.total,
+          balance: ''
+        }
+        exportData.push(body1)
+        
+        const body2 = {
+          date: '',
+          description: '',
+          debit: l.total,
+          credit: '',
+          balance: prevBalance > 0 ? `${prevBalance} Cr` : `${Math.abs(prevBalance)} Dr`
+        }
+        exportData.push(body2)
         return (
           <View>
             <DataTable.Row>
@@ -99,6 +153,24 @@ const Ledger = props => {
       if(l.payment === 'Partial'){
         prevBalance = prevBalance - l.total + l.received
 
+        const body1 = {
+          date: l.date.toLocaleString().split('T')[0],
+          description: l.note,
+          debit: l.total,
+          credit: '',
+          balance: ''
+        }
+        exportData.push(body1)
+        
+        const body2 = {
+          date: '',
+          description: '',
+          debit: '',
+          credit: l.received,
+          balance: prevBalance > 0 ? `${prevBalance} Cr` : `${Math.abs(prevBalance)} Dr`
+        }
+        exportData.push(body2)
+
         return (
           <View>
             <DataTable.Row>
@@ -121,6 +193,23 @@ const Ledger = props => {
 
       }
       else if(l.payment === 'Full'){
+        const body1 = {
+          date: l.date.toLocaleString().split('T')[0],
+          description: l.note,
+          debit: l.total,
+          credit: '',
+          balance: ''
+        }
+        exportData.push(body1)
+        
+        const body2 = {
+          date: '',
+          description: '',
+          debit: '',
+          credit: l.total,
+          balance: prevBalance > 0 ? `${prevBalance} Cr` : `${Math.abs(prevBalance)} Dr`
+        }
+        exportData.push(body2)
         return(
           <View>
             <DataTable.Row>
@@ -146,6 +235,24 @@ const Ledger = props => {
       else if(l.payment === 'Credit'){
         prevBalance = prevBalance - l.total
 
+        const body1 = {
+          date: l.date.toLocaleString().split('T')[0],
+          description: l.note,
+          debit: l.total,
+          credit: '',
+          balance: ''
+        }
+        exportData.push(body1)
+        
+        const body2 = {
+          date: '',
+          description: '',
+          debit: '',
+          credit: 0,
+          balance: prevBalance > 0 ? `${prevBalance} Cr` : `${Math.abs(prevBalance)} Dr`
+        }
+        exportData.push(body2)
+
         return (
           <View>
             <DataTable.Row>
@@ -170,6 +277,16 @@ const Ledger = props => {
 
     const renderPaid = (l) => {
       prevBalance = prevBalance - l.cash
+
+      const body1 = {
+        date: l.date.toLocaleString().split('T')[0],
+        description: 'Payment Sent',
+        debit: l.cash,
+        credit: '',
+        balance: prevBalance > 0 ? `${prevBalance} Cr` : `${Math.abs(prevBalance)} Dr`
+      }
+      exportData.push(body1)
+      
       return (
         <View>
           <DataTable.Row>
@@ -186,6 +303,15 @@ const Ledger = props => {
 
     const renderReceived = (l) => {
       prevBalance = prevBalance + l.cash
+      const body1 = {
+        date: l.date.toLocaleString().split('T')[0],
+        description: 'Payment Received',
+        debit: '',
+        credit: l.cash,
+        balance: prevBalance > 0 ? `${prevBalance} Cr` : `${Math.abs(prevBalance)} Dr`
+      }
+      exportData.push(body1)
+
       return (
         <View>
           <DataTable.Row>
@@ -210,6 +336,9 @@ const Ledger = props => {
         <View style={styles.screen}>
             <View>
             <Text style = {styles.title}>{props.navigation.getParam('clientName')}</Text>
+            </View>
+            <View>
+              <ExportButton data={exportData} title={'ledger.xlsx'} />
             </View>  
             <DataTable style={{ marginTop: 10 }}>
         <DataTable.Header>
