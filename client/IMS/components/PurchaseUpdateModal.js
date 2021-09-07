@@ -181,7 +181,7 @@ const PurchaseUpdateModal = props => {
                 </View>
                 <View style={{ marginTop: 10 }}>
                   <TextInput onChangeText={onChangeQuantity} style={styles.input} placeholder="Quantity" autoCorrect={false} value={props.obj.quantity === undefined ? '0' : quantityVal.toString()} />
-                  {paymentType === 'Partial' && <TextInput onChangeText={onChangeAmountReceived} style={styles.input} placeholder="Amount Received" value={props.obj.received === undefined ? '0' : amountRecieved.toString()} autoCorrect={false} />
+                  {paymentType === 'Partial' && <TextInput onChangeText={onChangeAmountReceived} style={styles.input} placeholder="Amount Sent" value={props.obj.received === undefined ? '0' : amountRecieved.toString()} autoCorrect={false} />
                   }
                   <TextInput onChangeText={onChangeTotalAmount} style={styles.input} placeholder="Total Amount" value={props.obj.total === undefined ? '0' : totalAmount.toString()} autoCorrect={false} />
                   <TextInput onChangeText={onChangeNotes} style={styles.input} placeholder="Notes" value={props.obj.note === undefined ? '0' : notes} autoCorrect={false} />
@@ -312,7 +312,7 @@ const PurchaseUpdateModal = props => {
                   </View>
                   <View style={{ marginTop: 10 }}>
                     <TextInput onChangeText={onChangeQuantity} style={styles.input} placeholder="Quantity" autoCorrect={false} value={props.obj.quantity === undefined ? '0' : quantityVal.toString()} />
-                    {paymentType === 'Partial' && <TextInput onChangeText={onChangeAmountReceived} style={styles.input} placeholder="Amount Received" value={props.obj.received === undefined ? '0' : amountRecieved.toString()} autoCorrect={false} />
+                    {paymentType === 'Partial' && <TextInput onChangeText={onChangeAmountReceived} style={styles.input} placeholder="Amount Sent" value={props.obj.received === undefined ? '0' : amountRecieved.toString()} autoCorrect={false} />
                     }
                     <TextInput onChangeText={onChangeTotalAmount} style={styles.input} placeholder="Total Amount" value={props.obj.total === undefined ? '0' : totalAmount.toString()} autoCorrect={false} />
                     <TextInput onChangeText={onChangeNotes} style={styles.input} placeholder="Notes" value={props.obj.note === undefined ? '0' : notes} autoCorrect={false} />
