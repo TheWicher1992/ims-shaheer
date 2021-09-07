@@ -477,6 +477,7 @@ const MakeSale = props => {
                 </View>
                 <View style = {styles.modalBody}>
                   <SearchableDropdown
+                    onTextChange={(text) => console.log(text)}
                     
                     //On text change listner on the searchable input
                     onItemSelect={(item) => {
@@ -561,6 +562,7 @@ const MakeSale = props => {
                 </View>
                 <View style = {styles.modalBody}>
                   <SearchableDropdown
+                    onTextChange={(text) => console.log(text)}
                     
                     //On text change listner on the searchable input
                     onItemSelect={(item) => {
