@@ -803,7 +803,7 @@ const MakeSale = props => {
                   <TouchableOpacity onPress = {() => setProductListModal(true)}>
                     <View style={styles.input}>
                       <Text style = {{fontSize: 15, color: 'grey'}}>
-                        {prod === '' ? "Click to select a product" : `${prod} selected`}
+                        {prod === '' ? "Click to select a product" : `${prod}`}
                       </Text>
                     </View>
                   </TouchableOpacity>
@@ -811,7 +811,7 @@ const MakeSale = props => {
                   <TouchableOpacity onPress = {() => setClientListModal(true)}>
                     <View style={styles.input}>
                       <Text style = {{fontSize: 15, color: 'grey'}}>
-                        {selectedClientName === '' ? "Click to select a Client" : `${selectedClientName} selected`}
+                        {selectedClientName === '' ? "Click to select a Client" : `${selectedClientName}`}
                       </Text>
                     </View>
                   </TouchableOpacity>
@@ -917,7 +917,7 @@ const MakeSale = props => {
                     <TouchableOpacity onPress = {() => setProductListModal(true)}>
                       <View style={styles.input}>
                         <Text style = {{fontSize: 15, color: 'grey'}}>
-                          {prod === '' ? "Click to select a product" : `${prod} selected`}
+                          {prod === '' ? "Click to select a product" : `${prod}`}
                         </Text>
                       </View>
                     </TouchableOpacity>
@@ -925,7 +925,7 @@ const MakeSale = props => {
                     <TouchableOpacity onPress = {() => setClientListModal(true)}>
                       <View style={styles.input}>
                         <Text style = {{fontSize: 15, color: 'grey'}}>
-                          {selectedClientName === '' ? "Click to select a Client" : `${selectedClientName} selected`}
+                          {selectedClientName === '' ? "Click to select a Client" : `${selectedClientName}`}
                         </Text>
                       </View>
                     </TouchableOpacity>
