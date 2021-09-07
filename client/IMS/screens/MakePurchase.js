@@ -478,7 +478,7 @@ const MakePurchase = props => {
                       <TouchableOpacity style = {{marginTop: 60}} onPress = {() => setProductListModal(true)}>
                         <View style={styles.input2}>
                           <Text style = {{fontSize: 15, color: 'grey'}}>
-                            {prod === '' ? "Click to select a Product" : `${prod} selected`}
+                            {prod === '' ? "Click to select a Product" : `${prod}`}
                           </Text>
                         </View>
                       </TouchableOpacity>
@@ -489,7 +489,7 @@ const MakePurchase = props => {
                       <TouchableOpacity style = {{}} onPress = {() => setClientListModal(true)}>
                         <View style={styles.input2}>
                           <Text style = {{fontSize: 15, color: 'grey'}}>
-                            {selectedClientName === '' ? "Click to select a Client" : `${selectedClientName} selected`}
+                            {selectedClientName === '' ? "Click to select a Client" : `${selectedClientName}`}
                           </Text>
                         </View>
                       </TouchableOpacity>
@@ -596,7 +596,7 @@ const MakePurchase = props => {
                           <TouchableOpacity style = {{marginTop: 60}} onPress = {() => setProductListModal(true)}>
                             <View style={styles.input2}>
                               <Text style = {{fontSize: 15, color: 'grey'}}>
-                                {prod === '' ? "Click to select a Product" : `${prod} selected`}
+                                {prod === '' ? "Click to select a Product" : `${prod}`}
                               </Text>
                             </View>
                           </TouchableOpacity>
@@ -607,7 +607,7 @@ const MakePurchase = props => {
                           <TouchableOpacity style = {{}} onPress = {() => setClientListModal(true)}>
                             <View style={styles.input2}>
                               <Text style = {{fontSize: 15, color: 'grey'}}>
-                                {selectedClientName === '' ? "Click to select a Client" : `${selectedClientName} selected`}
+                                {selectedClientName === '' ? "Click to select a Client" : `${selectedClientName}`}
                               </Text>
                             </View>
                           </TouchableOpacity>
