@@ -67,7 +67,7 @@ const QuantityFilterModal = props => {
                     Value applied is : {props.quantFilter}
                     </Text>
                     <View style = {{marginTop: 20}}>
-                        <TextInput onChangeText = {onChangeValueProduct} placeholder = "quantity" style = {styles.input}></TextInput>
+                        <TextInput keyboardType = 'numeric' onChangeText = {onChangeValueProduct} placeholder = "quantity" style = {styles.input}></TextInput>
                     </View> 
 
                     <View style = {{justifyContent: 'center', alignContent:'center'}}>
@@ -90,7 +90,7 @@ const QuantityFilterModal = props => {
                 </Text>
 
                 <View style = {{marginTop: 20}}>
-                        <TextInput onChangeText = {onChangeValuePurchases} placeholder = "quantity" style = {styles.input}></TextInput>
+                        <TextInput keyboardType = 'numeric' onChangeText = {onChangeValuePurchases} placeholder = "quantity" style = {styles.input}></TextInput>
                     </View> 
 
                     <View style = {{justifyContent: 'center', alignContent:'center'}}>
@@ -112,7 +112,7 @@ const QuantityFilterModal = props => {
                     Value applied is : {props.quantSaleFilter}
                     </Text>
                     <View style = {{marginTop: 20}}>
-                        <TextInput onChangeText = {onChangeValueSales} placeholder = "quantity" style = {styles.input}></TextInput>
+                        <TextInput keyboardType = 'numeric' onChangeText = {onChangeValueSales} placeholder = "quantity" style = {styles.input}></TextInput>
                     </View> 
 
                     <View style = {{justifyContent: 'center', alignContent:'center'}}>
