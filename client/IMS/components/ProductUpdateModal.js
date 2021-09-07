@@ -39,7 +39,7 @@ const ProductUpdateModal = props => {
         brandID: brand,
         colourID: color,
         description,
-        price: amountVal
+        price: Number.parseInt(amountVal, 10)
       }
   
       const config = {

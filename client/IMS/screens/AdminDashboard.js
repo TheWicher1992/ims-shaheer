@@ -78,11 +78,11 @@ const AdminDashboard = props => {
           <Text style={styles.containerText}>Today's Revenue {todayRevenue}</Text>
         </View>
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => props.navigation.navigate({ routeName: 'Delivery' })}>
+      {/* <TouchableOpacity onPress={() => props.navigation.navigate({ routeName: 'Delivery' })}>
         <View style={styles.containers}>
           <Text style={styles.containerText}>Pending Deliveries {pendingDeliveries}</Text>
         </View>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
       <View style={styles.buttonContainer}>
         <TouchableOpacity onPress={() => props.navigation.navigate({ routeName: 'Sales' })}>
           <View elevation={5} style={styles.buttons}>

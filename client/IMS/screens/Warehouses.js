@@ -113,7 +113,7 @@ const Warehouse = props => {
   const addWarehouse = async () => {
     const body = {
       name: warehouseName,
-      totalProducts: totalProducts,
+      totalProducts: Number.parseInt(totalProducts, 10),
       totalStock: stock
     }
 

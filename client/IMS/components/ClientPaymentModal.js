@@ -35,7 +35,7 @@ const ClientPaymentModal = props => {
   const makePaymentOrTakePayment = () => {
     const body = {
       clientId: id,
-      cash: isEnabled ? amount : amountGiven,
+      cash: isEnabled ? Number.parseInt(amount, 10) : Number.parseInt(amountGiven, 10),
       type: isEnabled ? 'Received' : 'Payed',
     }
     const config = {

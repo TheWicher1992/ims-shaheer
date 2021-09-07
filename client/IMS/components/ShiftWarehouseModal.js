@@ -57,7 +57,7 @@ const ShiftWarehouseModal = props => {
       sourceID: props.obj.warehouse === undefined ? null : props.obj.warehouse._id,
       destID: selectedWarehouse,
       productID: props.obj.product === undefined ? null : props.obj.product._id,
-      quantity: props.obj.stock,
+      quantity: Number.parseInt(props.obj.stock, 10),
       type: 'warehouse'
     }
 

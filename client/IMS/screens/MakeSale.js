@@ -213,13 +213,13 @@ const MakeSale = props => {
       // setModalVisible(false); //closing modal on done for now
       const body = {
         productID: productName,
-        quantity: quantityVal,
-        total: totalAmount,
+        quantity: Number.parseInt(quantityVal, 10),
+        total: Number.parseInt(totalAmount, 10),
         payment: paymentType,
         clientID: clientName,
 
         note: notes,
-        received: amountReceived,
+        received: Number.parseInt(amountReceived, 10),
         isWarehouse: isWarehouse,
         deliveryOrder: selectedDOrder,
         warehouses: warehouseIdTicksQuant,
