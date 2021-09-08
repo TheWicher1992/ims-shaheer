@@ -34,6 +34,7 @@ router.get('/form-inputs', async (req, res) => {
 router.post('/', async (req, res) => {
     try {
         var {
+            products,
             productID,
             quantity,
             totalWithOutDiscount,
@@ -50,35 +51,38 @@ router.post('/', async (req, res) => {
             isWarehouse
         } = req.body
 
-        console.log(req.body)
+        //update client balance
+        var neg = parseInt(total) - parseInt(received)
+        const clientPrev = await Client.findById(clientID)
+
+        if (payment === 'Partial') {
+            let prev = clientPrev.balance
+            let newBal = prev - neg
+            clientPrev.balance = newBal
+            await clientPrev.save()
+        }
+        else if (payment === 'Credit') {
+            let prev = clientPrev.balance
+            let newBal = prev - total
+            clientPrev.balance = newBal
+            await clientPrev.save()
+        }
+
+        for (const product of products) {
+            if (product.typeOfSale === 'DeliveryOrder') {
+                //cater deliver order
+            }
+            else {
+
+            }
+        }
+
+
 
         typeOfSale = 'DeliveryOrder'
 
         if (isWarehouse === true) {
             typeOfSale = 'Warehouse'
-        }
-
-        var neg = total - received
-
-        if (payment === 'Partial') {
-
-            const clientPrev = await Client.findById(clientID)
-            let prev = clientPrev.balance
-
-            let newBal = prev - neg
-
-            let client = await Client.findOneAndUpdate({ _id: clientID }, { balance: newBal })
-
-        }
-        else if (payment === 'Credit') {
-            const clientPrev = await Client.findById(clientID)
-            let prev = clientPrev.balance
-
-            let newBal = prev - total
-
-            let client = await Client.findOneAndUpdate({ _id: clientID }, { balance: newBal })
-
-
         }
 
 
@@ -95,37 +99,37 @@ router.post('/', async (req, res) => {
                     const stock = await Stock.find({ product: productID, warehouse: id })
                     console.log(stock)
 
-                    stock.map(async (stock)=>{
-
-                   
-                    prevStock = stock.stock
-
-                    if (warehouses['quant'][id] < prevStock) {
-
-                        console.log('inside')
-
-                        newStock = prevStock - warehouses['quant'][id]
-
-                        await Stock.findOneAndUpdate({ _id: stock._id }, { stock: newStock })
-
-                        const ware  = await Warehouse.findById(id)
-
-                        let prevWarehouse = ware.totalStock
-                      let newWareStock = prevWarehouse - warehouses['quant'][id]
-
-                       await Warehouse.findOneAndUpdate({ _id: id }, { totalStock: newWareStock })
-
-                       const prod  = await Product.findById(productID)
-
-                       let prev = prod.totalStock
-                       let newProdStock = prev - warehouses['quant'][id]
-
-                       Product.findOneAndUpdate({ _id: productID }, { totalStock: newProdStock })
+                    stock.map(async (stock) => {
 
 
-                    }
+                        prevStock = stock.stock
 
-                })
+                        if (warehouses['quant'][id] < prevStock) {
+
+                            console.log('inside')
+
+                            newStock = prevStock - warehouses['quant'][id]
+
+                            await Stock.findOneAndUpdate({ _id: stock._id }, { stock: newStock })
+
+                            const ware = await Warehouse.findById(id)
+
+                            let prevWarehouse = ware.totalStock
+                            let newWareStock = prevWarehouse - warehouses['quant'][id]
+
+                            await Warehouse.findOneAndUpdate({ _id: id }, { totalStock: newWareStock })
+
+                            const prod = await Product.findById(productID)
+
+                            let prev = prod.totalStock
+                            let newProdStock = prev - warehouses['quant'][id]
+
+                            Product.findOneAndUpdate({ _id: productID }, { totalStock: newProdStock })
+
+
+                        }
+
+                    })
                     // console.log('inside')
                     // Stock.find({ product: productID, warehouse: id }).then(res => {
                     //     res.map((stock) => {
