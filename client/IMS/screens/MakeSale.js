@@ -1076,7 +1076,7 @@ const MakeSale = props => {
           <FilterButton page="sale" getSales={getSales} />
         </View>
         <View style={{ marginTop: 25 }}>
-          <ExportButton data={sales} title={'sales.xlsx'} />
+          <ExportButton data={sales} title={'sales.xlsx'} screenName='sales'/>
         </View>
       </View>
       <Spinner loading={loading} />

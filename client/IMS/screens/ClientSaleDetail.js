@@ -115,7 +115,7 @@ const MakeSale = props => {
         </View>
 
       </View>
-      <ExportButton data={sales} title={`Sale.xlsx`}/>
+      <ExportButton data={sales} title={props.navigation.getParam('clientName')+`Sales.xlsx`} screenName='sales'/>
       <Spinner loading={loading} />
       {!loading && <ScrollView>
 
@@ -129,7 +129,7 @@ const MakeSale = props => {
 
           {
             sales.map((sale, i) => (
-              <TouchableOpacity onPress={() => setTableDetailModalVisible(true)}>
+              <TouchableOpacity onPress={() => setTableDetailModalVisible(true)} key={sale._id}>
                 <DataTable.Row>
                   <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{sale.product === undefined ? '--' : sale.product.title}</Text></DataTable.Cell>
                   <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{sale.quantity === undefined ? '--' : sale.quantity}</Text></DataTable.Cell>

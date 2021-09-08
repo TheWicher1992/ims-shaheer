@@ -240,7 +240,7 @@ const Warehouse = props => {
 
       </View>
       <View style={{ marginTop: 20 }} >
-        <ExportButton data={warehouses} title={'warehouses.xlsx'} />
+        <ExportButton data={warehouses} title={'warehouses.xlsx'} screen='warehouses'/>
       </View>
       <Spinner loading={loading} />
 

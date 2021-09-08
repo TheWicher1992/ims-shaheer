@@ -355,7 +355,7 @@ const DeliveryOrders = props => {
 
       </View>
       <View >
-        <ExportButton data={orders} title={'DeliveryOrder.xlsx'} />
+        <ExportButton data={orders} title={'DeliveryOrder.xlsx'} screenName='deliveryOrders'/>
       </View>
 
 

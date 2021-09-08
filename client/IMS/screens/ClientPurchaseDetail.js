@@ -149,7 +149,7 @@ const ClientPurchaseDetail = props => {
         </View>
 
       </View>
-      <ExportButton data={purchases} title={`Purchases.xlsx`}/>
+      <ExportButton data={purchases} title={props.navigation.getParam('clientName')+`Purchases.xlsx`} screenName='purchases'/>
 
       <View style={{marginTop: 20}}/>
       <Spinner loading={loading} />
@@ -165,7 +165,7 @@ const ClientPurchaseDetail = props => {
 
           {
             purchases.map(p => (
-              <TouchableOpacity onPress={() => selectedPurchaseRecord(p)}>
+              <TouchableOpacity onPress={() => selectedPurchaseRecord(p)} key={p._id}>
                 <DataTable.Row>
                   <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{p.product.title}</Text></DataTable.Cell>
                   <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{p.quantity}</Text></DataTable.Cell>

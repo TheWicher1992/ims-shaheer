@@ -338,7 +338,7 @@ const Ledger = props => {
             <Text style = {styles.title}>{props.navigation.getParam('clientName')}</Text>
             </View>
             <View>
-              <ExportButton data={exportData} title={'ledger.xlsx'} />
+              <ExportButton data={exportData} title={props.navigation.getParam('clientName')+'ledger.xlsx'} screenName='ledger'/>
             </View>  
             <DataTable style={{ marginTop: 10 }}>
         <DataTable.Header>
