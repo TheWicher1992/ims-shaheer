@@ -88,44 +88,78 @@ router.post('/', async (req, res) => {
 
 
 
-            warehouses.ids.map((id, i) => {
+            warehouses.ids.map(async (id, i) => {
 
                 if (warehouses['ticks'][id] === true) {
 
-                    console.log('inside')
-                    Stock.find({ product: productID, warehouse: id }).then(res => {
-                        res.map((stock) => {
+                    const stock = await Stock.find({ product: productID, warehouse: id })
+                    console.log(stock)
 
-                            prevStock = stock.stock
-                            if (warehouses['quant'][id] < prevStock) {
-                                newStock = prevStock - warehouses['quant'][id]
+                    stock.map(async (stock)=>{
 
-                                Stock.findOneAndUpdate({ _id: stock._id }, { stock: newStock }).then(res => {
+                   
+                    prevStock = stock.stock
 
-                                    Warehouse.findById(id).then(res => {
-                                        let prevWarehouse = res.totalStock
-                                        let newWareStock = prevWarehouse - warehouses['quant'][id]
+                    if (warehouses['quant'][id] < prevStock) {
 
-                                        Warehouse.findOneAndUpdate({ _id: id }, { totalStock: newWareStock }).then(res => {
-                                            Product.findById(productID).then(res => {
-                                                let prev = res.totalStock
-                                                let newProdStock = prev - warehouses['quant'][id]
+                        console.log('inside')
 
-                                                Product.findOneAndUpdate({ _id: productID }, { totalStock: newProdStock }).then(res => {
-                                                    console.log('success')
-                                                })
-                                            })
+                        newStock = prevStock - warehouses['quant'][id]
 
-                                        })
+                        await Stock.findOneAndUpdate({ _id: stock._id }, { stock: newStock })
+
+                        const ware  = await Warehouse.findById(id)
+
+                        let prevWarehouse = ware.totalStock
+                      let newWareStock = prevWarehouse - warehouses['quant'][id]
+
+                       await Warehouse.findOneAndUpdate({ _id: id }, { totalStock: newWareStock })
+
+                       const prod  = await Product.findById(productID)
+
+                       let prev = prod.totalStock
+                       let newProdStock = prev - warehouses['quant'][id]
+
+                       Product.findOneAndUpdate({ _id: productID }, { totalStock: newProdStock })
+
+
+                    }
+
+                })
+                    // console.log('inside')
+                    // Stock.find({ product: productID, warehouse: id }).then(res => {
+                    //     res.map((stock) => {
+
+                    //         prevStock = stock.stock
+                    //         if (warehouses['quant'][id] < prevStock) {
+                    //             newStock = prevStock - warehouses['quant'][id]
+
+                    //             Stock.findOneAndUpdate({ _id: stock._id }, { stock: newStock }).then(res => {
+
+                    //                 Warehouse.findById(id).then(res => {
+                    //                     let prevWarehouse = res.totalStock
+                    //                     let newWareStock = prevWarehouse - warehouses['quant'][id]
+
+                    //                     Warehouse.findOneAndUpdate({ _id: id }, { totalStock: newWareStock }).then(res => {
+                    //                         Product.findById(productID).then(res => {
+                    //                             let prev = res.totalStock
+                    //                             let newProdStock = prev - warehouses['quant'][id]
+
+                    //                             Product.findOneAndUpdate({ _id: productID }, { totalStock: newProdStock }).then(res => {
+                    //                                 console.log('success')
+                    //                             })
+                    //                         })
+
+                    //                     })
 
 
 
-                                    })
-                                })
-                            }
-                        })
+                    //                 })
+                    //             })
+                    //         }
+                    //     })
 
-                    })
+                    // })
                 }
 
 
