@@ -154,7 +154,7 @@ const PurchaseUpdateModal = props => {
                     
                   </View>
                   
-                  <Text style={styles.modalTitle}>Make a Purchase</Text>
+                  <Text style={styles.modalTitle}>Update Purchase</Text>
 
                   
                 </View>
@@ -452,7 +452,7 @@ const styles = StyleSheet.create({
   modalStyle: {
     backgroundColor: "#fff",
     width: Dimensions.get('window').height > 900 ? Dimensions.get('window').width * 0.80 : Dimensions.get('window').width * 0.80,
-    height: Dimensions.get('window').height > 900 ? Dimensions.get('window').height * 0.60 : Dimensions.get('window').height,
+    height: Dimensions.get('window').height > 900 ? Dimensions.get('window').height * 0.70 : Dimensions.get('window').height,
     borderWidth: 2,
     borderRadius: 20,
     //marginBottom: 20,
@@ -623,7 +623,7 @@ const styles = StyleSheet.create({
     // padding: 35,
     alignItems: "center",
     width: Dimensions.get('window').height > 900 ? Dimensions.get('window').width * 0.7 : Dimensions.get('window').width * 0.80,
-    height: Dimensions.get('window').height > 900 ? Dimensions.get('window').height * 0.5 : Dimensions.get('window').height * 0.85,
+    height: Dimensions.get('window').height > 900 ? Dimensions.get('window').height * 0.56 : Dimensions.get('window').height * 0.85,
     borderColor: "#008394",
 
   },
