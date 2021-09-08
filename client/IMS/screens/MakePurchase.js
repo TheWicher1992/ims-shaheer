@@ -751,7 +751,7 @@ const MakePurchase = props => {
           <FilterButton getPurchases={getPurchases} page="purchase" />
         </View>
         <View style={{ marginTop: 25 }}>
-          <ExportButton data={purchases} title={'purchases.xlsx'} />
+          <ExportButton data={purchases} title={'purchases.xlsx'} screenName='purchases'/>
         </View>
       </View>
       <Spinner loading={loading} />

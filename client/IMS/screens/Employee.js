@@ -264,7 +264,7 @@ const Employee = props => {
           </View>
         </TouchableOpacity>
       </View>
-      <ExportButton data={employees} title="Employee.xlxs" />
+      <ExportButton data={employees} title="Employee.xlsx" screenName='employees'/>
       <Spinner loading={loading} />
       <View>
         <DataTable style={{ top: 10 }}>

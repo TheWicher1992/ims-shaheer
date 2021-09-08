@@ -245,7 +245,7 @@ const Clients = props => {
 
       </View>
       <View style={{ marginTop: 20 }}>
-        <ExportButton data={clients} title={'clients.xlsx'} />
+        <ExportButton data={clients} title={'clients.xlsx'} screenName='clients'/>
       </View>
 
       <Spinner loading={loading} />

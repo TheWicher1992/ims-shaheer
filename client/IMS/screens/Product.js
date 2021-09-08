@@ -794,7 +794,7 @@ const Product = props => {
           <FilterButton getProducts={getProducts} page="product" />
         </View>
         <View style={{ marginTop: 25 }}>
-          <ExportButton data={products} title={'products.xlsx'} />
+          <ExportButton data={products} title={'products.xlsx'} screenName='products'/>
         </View>
       </View>
       <Spinner loading={loading} />
