@@ -670,7 +670,7 @@ const MakeSale = props => {
                       </TouchableOpacity>
                       <View>
                         {warehouseIdTicksQuant["ticks"][record.warehouse._id] === true ? (
-                          <TextInput onChangeText={(e) => setQuantityWarehouses(record.warehouse._id, record.stock, e)} style={styles.inputWarehouse} placeholder="Quantity" autoCorrect={false} />
+                          <TextInput keyboardType = 'numeric' onChangeText={(e) => setQuantityWarehouses(record.warehouse._id, record.stock, e)} style={styles.inputWarehouse} placeholder="Quantity" autoCorrect={false} />
                         ) : (null)}
                       </View>
 
@@ -832,9 +832,9 @@ const MakeSale = props => {
 
       
                 <View style={{}}>
-                  <TextInput onChangeText={onChangeQuantity} style={styles.input} placeholder="Quantity" autoCorrect={false} />
-                  <TextInput onChangeText={onChangeTotalAmount} style={styles.input} placeholder="Total Amount" autoCorrect={false} />
-                  {paymentType === 'Partial' && <TextInput onChangeText={onChangeAmountReceived} style={styles.input} placeholder="Amount Received" autoCorrect={false} />}
+                  <TextInput keyboardType = 'numeric' onChangeText={onChangeQuantity} style={styles.input} placeholder="Quantity" autoCorrect={false} />
+                  <TextInput keyboardType = 'numeric' onChangeText={onChangeTotalAmount} style={styles.input} placeholder="Total Amount" autoCorrect={false} />
+                  {paymentType === 'Partial' && <TextInput keyboardType = 'numeric' onChangeText={onChangeAmountReceived} style={styles.input} placeholder="Amount Received" autoCorrect={false} />}
                   <TextInput multiline={true} numberOfLines={5} onChangeText={onChangeNotes} style={styles.input} placeholder="Notes" autoCorrect={false} />
 
                   <View style={styles.input}>

@@ -180,8 +180,8 @@ const Warehouse = props => {
               <Text style={styles.modalTitle}>Add Warehouse</Text>
               <View>
                 <TextInput onChangeText={onChangeWarehouseName} style={styles.input} placeholder="Name" autoCorrect={false} />
-                <TextInput onChangeText={onChangeTotalProducts} style={styles.input} placeholder="Total Products" autoCorrect={false} />
-                <TextInput onChangeText={onChangeStock} style={styles.input} placeholder="Total Stocks" autoCorrect={false} />
+                <TextInput keyboardType = 'numeric' onChangeText={onChangeTotalProducts} style={styles.input} placeholder="Total Products" autoCorrect={false} />
+                <TextInput keyboardType = 'numeric' onChangeText={onChangeStock} style={styles.input} placeholder="Total Stocks" autoCorrect={false} />
               </View>
               <View style={{ flexDirection: 'row', alignItems: 'center', top: 45 }}>
                 <TouchableOpacity style={{ alignSelf: 'flex-start' }} onPress={() => { setModalVisible(false) }}>
@@ -320,8 +320,8 @@ const styles = StyleSheet.create({
   },
   modalStyle: {
     backgroundColor: "#fff",
-    width: Dimensions.get('window').height > 900 ? 600 : 320,
-    height: Dimensions.get('window').height > 900 ? "35%" : "60%",
+    width: Dimensions.get('window').height > 900 ? Dimensions.get('window').width * 0.7 : Dimensions.get('window').width * 0.80,
+    height: Dimensions.get('window').height > 900 ? Dimensions.get('window').height * 0.32 : Dimensions.get('window').height * 0.55,
     borderWidth: 2,
     borderRadius: 20,
     marginBottom: 20,
