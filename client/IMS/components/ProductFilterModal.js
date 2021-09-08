@@ -26,6 +26,7 @@ const ProductFilterModal = props => {
     const [dateFilterModal, setDateFilterModal] = useState(false);
     const [quantityFilterModal, setQuantityFilterModal] = useState(false);
     const [priceFilterModal, setPriceFilterModal] = useState(false);
+    const [alertState, setAlertState] = useState(false);
     useEffect(() => {
         setModalVisible(props.state);
 
