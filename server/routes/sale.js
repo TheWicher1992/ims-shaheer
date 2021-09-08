@@ -73,7 +73,9 @@ router.post('/', async (req, res) => {
                 //cater deliver order
             }
             else {
-
+                for (const warehouse of product.warehouses) {
+                    //cater for a specific warehouse
+                }
             }
         }
 
