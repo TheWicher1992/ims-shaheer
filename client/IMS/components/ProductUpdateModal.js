@@ -245,7 +245,7 @@ const ProductUpdateModal = props => {
                 <View style={{ marginTop: 50, height: 400, alignItems: 'center' }}>
                   <TextInput onChangeText={onChangeSerialNo} style={styles.input} placeholder="Serial" value={serialNo} autoCorrect={false} />
                   <TextInput onChangeText={onChangeProductName} style={styles.input} placeholder="Product" value={productName} autoCorrect={false} />
-                  <TextInput onChangeText={onChangeAmount} style={styles.input} placeholder="Amount" value={amountVal === undefined ? '0' : amountVal.toString()} autoCorrect={false} />
+                  <TextInput keyboardType = 'numeric' onChangeText={onChangeAmount} style={styles.input} placeholder="Amount" value={amountVal === undefined ? '0' : amountVal.toString()} autoCorrect={false} />
                   <TextInput multiline={true} numberOfLines={5} onChangeText={onChangeDescription} value={description} style={styles.input} placeholder="Description" autoCorrect={false} />
                   <View style={{ borderWidth: 2, borderRadius: 40, borderColor: "#008394", width: Dimensions.get('window').width * 0.65, height: 40, fontSize: 8, justifyContent: 'space-between' }}>
                     <Picker
@@ -334,7 +334,7 @@ const ProductUpdateModal = props => {
                 <View style={{ marginTop: 50 }}>
                   <TextInput onChangeText={onChangeSerialNo} style={styles.input} placeholder="Serial" value={serialNo} autoCorrect={false} />
                   <TextInput onChangeText={onChangeProductName} style={styles.input} placeholder="Product" value={productName} autoCorrect={false} />
-                  <TextInput onChangeText={onChangeAmount} style={styles.input} placeholder="Amount" value={amountVal === undefined ? '0' : amountVal.toString()} autoCorrect={false} />
+                  <TextInput onChangeText={onChangeAmount} keyboardType = 'numeric' style={styles.input} placeholder="Amount" value={amountVal === undefined ? '0' : amountVal.toString()} autoCorrect={false} />
                   <TextInput multiline={true} numberOfLines={5} onChangeText={onChangeDescription} value={description} style={styles.input} placeholder="Description" autoCorrect={false} />
                   <View style={{ borderWidth: 2, borderRadius: 40, borderColor: "#008394", width: Dimensions.get('window').width * 0.65, height: 40, fontSize: 8, justifyContent: 'space-between' }}>
                     <Picker

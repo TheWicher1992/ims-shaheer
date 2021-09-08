@@ -102,7 +102,7 @@ const AddClientModal = props => {
                     </View>
                 <View>
                     <TextInput onChangeText={onChangeName} style={styles.input} placeholder="Name" autoCorrect={false} />
-                    <TextInput onChangeText={onChangePhoneNumber} style={styles.input} placeholder="Phone Number" autoCorrect={false} />
+                    <TextInput keyboardType = 'numeric' onChangeText={onChangePhoneNumber} style={styles.input} placeholder="Phone Number" autoCorrect={false} />
                 </View>
                 <View style={{ flexDirection: 'row', alignItems: 'center', top: 45 }}>
                     <TouchableOpacity style={{ alignSelf: 'flex-start' }} onPress={() => { props.handleClose() }}>

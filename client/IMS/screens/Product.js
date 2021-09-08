@@ -386,7 +386,7 @@ const Product = props => {
                 <View style={{ marginTop: 50, height: 500, alignItems: 'center' }}>
                   <TextInput onChangeText={onChangeSerialNo} style={styles.input} placeholder="Serial" autoCorrect={false} />
                   <TextInput onChangeText={onChangeProductName} style={styles.input} placeholder="Product" autoCorrect={false} />
-                  <TextInput onChangeText={onChangeAmount} style={styles.input} placeholder="Amount" autoCorrect={false} />
+                  <TextInput keyboardType = 'numeric' onChangeText={onChangeAmount} style={styles.input} placeholder="Amount" autoCorrect={false} />
                   <View>
                     <View style={styles.label}>
                       <Text style={styles.switch}>NW</Text>
@@ -399,7 +399,7 @@ const Product = props => {
                       <Text style={styles.switch}>W</Text>
                     </View>
                   </View>
-                  {isWarehouse ? <TextInput onChangeText={onChangeStock} style={styles.input} placeholder="Stock" autoCorrect={false} /> : null}
+                  {isWarehouse ? <TextInput keyboardType = 'numeric' onChangeText={onChangeStock} style={styles.input} placeholder="Stock" autoCorrect={false} /> : null}
                   
                   <TextInput multiline={true} numberOfLines={5} onChangeText={onChangeDescription} style={styles.input} placeholder="Description" autoCorrect={false} />
 
@@ -520,7 +520,7 @@ const Product = props => {
                   <View style={{ marginTop: 50}}>
                     <TextInput onChangeText={onChangeSerialNo} style={styles.input} placeholder="Serial" autoCorrect={false} />
                     <TextInput onChangeText={onChangeProductName} style={styles.input} placeholder="Product" autoCorrect={false} />
-                    <TextInput onChangeText={onChangeAmount} style={styles.input} placeholder="Amount" autoCorrect={false} />
+                    <TextInput keyboardType = 'numeric' onChangeText={onChangeAmount} style={styles.input} placeholder="Amount" autoCorrect={false} />
                     <View>
                     <View style={styles.label}>
                       <Text style={styles.switch}>NW</Text>
@@ -533,7 +533,7 @@ const Product = props => {
                       <Text style={styles.switch}>W</Text>
                     </View>
                   </View>
-                  {isWarehouse ? <TextInput onChangeText={onChangeStock} style={styles.input} placeholder="Stock" autoCorrect={false} /> : null}
+                  {isWarehouse ? <TextInput keyboardType = 'numeric' onChangeText={onChangeStock} style={styles.input} placeholder="Stock" autoCorrect={false} /> : null}
                   
                   <TextInput multiline={true} numberOfLines={5} onChangeText={onChangeDescription} style={styles.input} placeholder="Description" autoCorrect={false} />
 

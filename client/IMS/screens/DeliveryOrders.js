@@ -273,7 +273,7 @@ const DeliveryOrders = props => {
 
                 </View>
                 <View style={{ bottom: 40 }}>
-                  <TextInput onChangeText={onChangeQuantity} style={styles.input} placeholder="Quantity" autoCorrect={false} />
+                  <TextInput keyboardType = 'numeric' onChangeText={onChangeQuantity} style={styles.input} placeholder="Quantity" autoCorrect={false} />
                   <TextInput onChangeText={onChangeLocation} style={styles.input} placeholder="Location" autoCorrect={false} />
                   <TextInput multiline={true} numberOfLines={5} onChangeText={onChangeNotes} style={styles.input} placeholder="Notes" autoCorrect={false} />
                 </View>
