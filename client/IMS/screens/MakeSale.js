@@ -720,8 +720,8 @@ const MakeSale = props => {
                     />
                     {
                       multipleProducts.length === 0 &&
-                      <View>
-                        <Text style = {styles.modalTitle}>
+                      <View style = {{justifyContent: 'center', alignItems: 'center', alignContent: 'center'}}>
+                        <Text style = {styles.modalTitleNewMultiple}>
                           no products selected
                         </Text>
                       </View>
@@ -811,8 +811,8 @@ const MakeSale = props => {
                     />
                     {
                       multipleProducts.length === 0 &&
-                      <View>
-                        <Text style = {styles.modalTitle}>
+                      <View style = {{justifyContent: 'center', alignItems: 'center', alignContent: 'center'}}>
+                        <Text style = {styles.modalTitleNewMultiple}>
                           no products selected
                         </Text>
                       </View>
@@ -856,7 +856,7 @@ const MakeSale = props => {
                   <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
                     <View style={styles.buttonModalContainer}>
                       <View>
-                        <Text style={styles.buttonModalText}>Done</Text>
+                        <Text style={styles.buttonModalText}>Back</Text>
                       </View>
                     </View>
                   </View>
@@ -1490,6 +1490,15 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: Dimensions.get('window').height > 900 ? 36 : 28,
     top: 0,
+    textAlign: 'center'
+  },
+  modalTitleNewMultiple: {
+    color: '#006270',
+    fontSize: 30,
+    fontFamily: 'Roboto',
+    fontWeight: 'bold',
+    fontSize: Dimensions.get('window').height > 900 ? 36 : 24,
+    top: 20,
     textAlign: 'center'
   },
   modalStyle: {
