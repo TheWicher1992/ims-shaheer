@@ -83,6 +83,9 @@ const PurchaseFilterModal = props => {
         }
         
     }
+    const [alertState, setAlertState] = useState(false)
+    const [alertTitle, setAlertTitle] = useState(``)
+    const [alertMsg, setAlertMsg] = useState(``)
 
     const catchWarning = () => {
         setAlertState(!alertState) 
