@@ -7,6 +7,7 @@ const Client = require('../models/Client')
 const Product = require('../models/Product')
 const Stock = require('../models/Stock')
 const Warehouse = require('../models/Warehouse')
+const DeliveryOrder = require('../models/DeliveryOrder')
 
 
 router.get('/form-inputs', async (req, res) => {
@@ -147,14 +148,16 @@ router.post('/', async (req, res) => {
         // })
 
 
-        const productsInSale = products.map(p => {
+        const productsInSale = await Promise.all(products.map(async p => {
             return {
                 product: p.id,
                 typeOfSale: p.typeOfSale,
                 deliveryOrder: p.typeOfSale === 'DeliveryOrder' ? p.deliveryOrderId : null,
-                quantity: p.warehouses.reduce((acc, w) => acc + w.quantity, 0)
+                quantity: p.typeOfSale === 'DeliveryOrder' ?
+                    (await DeliveryOrder.findById(p.deliveryOrderId)).quantity :
+                    p.warehouses.reduce((acc, w) => acc + w.quantity, 0)
             }
-        })
+        }))
 
 
 
@@ -228,7 +231,7 @@ router.get('/:page/:query/:products/:clients/:payment/:date/:quantity/:amount', 
     }
     const filters = {}
 
-    if (products !== '*') filters['product'] = {
+    if (products !== '*') filters['products.product'] = {
         $in: products.split(',').slice(1, products.length)
     }
     if (clients !== '*') filters['client'] = {
@@ -285,7 +288,7 @@ router.get('/:page/:query/:products/:clients/:payment/:date/:quantity/:amount', 
             }
         },
         {
-            product: {
+            "products.product": {
                 $in: productIDs.map(p => p._id)
             }
         }
@@ -293,11 +296,11 @@ router.get('/:page/:query/:products/:clients/:payment/:date/:quantity/:amount', 
     const itemsPerPage = config.get('rows-per-page')
     const sales = await Sale
         .find(filters)
-        .populate(['product', 'client'])
+        .populate(['products.product', 'client'])
         .sort(sortOptions)
     // .skip(itemsPerPage * page)
     // .limit(itemsPerPage)
-
+    console.log(filters, sales)
 
     return res.json({
         sales
