@@ -235,12 +235,6 @@ const MakeSale = props => {
           show()
           return
         }
-        else if(body.total != body.received && body.payment ==="Full"){
-          setAlertTitle('Warning')
-          setAlertMsg('Payment type partial but amount greater then total. Request could not be processed.')
-          show()
-          return
-        }
       }
       else{
         if (quantityVal !== selectDOrderQuantity)
@@ -362,7 +356,7 @@ const MakeSale = props => {
 
   const setQuantityWarehouses = (q,s,e) =>{
     console.log(q,s,e)
-    if(e<s)
+    if(e<=s)
     {
     warehouseIdTicksQuant["quant"][q] = e
     }
