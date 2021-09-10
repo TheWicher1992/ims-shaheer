@@ -149,7 +149,7 @@ const ClientPurchaseDetail = props => {
         </View>
 
       </View>
-      <ExportButton data={purchases} title={`Purchases.xlsx`}/>
+      <ExportButton data={purchases} title={props.navigation.getParam('clientName')+`Purchases.xlsx`} screenName='purchases'/>
 
       <View style={{marginTop: 20}}/>
       <Spinner loading={loading} />
@@ -165,7 +165,7 @@ const ClientPurchaseDetail = props => {
 
           {
             purchases.map(p => (
-              <TouchableOpacity onPress={() => selectedPurchaseRecord(p)}>
+              <TouchableOpacity onPress={() => selectedPurchaseRecord(p)} key={p._id}>
                 <DataTable.Row>
                   <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{p.product.title}</Text></DataTable.Cell>
                   <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{p.quantity}</Text></DataTable.Cell>
@@ -218,14 +218,14 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontFamily: 'Roboto',
     fontWeight: 'bold',
-    fontSize: Dimensions.get('window').height === 1232 ? 36 : 28,
+    fontSize: Dimensions.get('window').height > 900 ? 36 : 28,
   },
   modalTitle: {
     color: '#006270',
     fontSize: 30,
     fontFamily: 'Roboto',
     fontWeight: 'bold',
-    fontSize: Dimensions.get('window').height === 1232 ? 36 : 28,
+    fontSize: Dimensions.get('window').height > 900 ? 36 : 28,
     top: 30,
   },
   modalStyle: {
@@ -414,7 +414,7 @@ const styles = StyleSheet.create({
   },
   switch: {
     color: '#008394',
-    fontSize: Dimensions.get('window').height === 1232 ? 18 : 16,
+    fontSize: Dimensions.get('window').height > 900 ? 18 : 16,
     fontFamily: 'Roboto',
   },
   label: {

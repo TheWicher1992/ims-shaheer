@@ -9,9 +9,9 @@ import ShowAlert from '../components/ShowAlert';
 import Spinner from '../components/Spinner'
 
 const AdminLogin = props => {
-    useEffect(() => {
-        props.loadUser(props.navigation)
-    }, [])
+    // useEffect(() => {
+    //     props.loadUser(props.navigation)
+    // }, [])
     const [isEnabled, setIsEnabled] = useState(false);
     const [loading, setLoading] = useState(false)
     const [userName, setUserName] = useState(``)
@@ -129,7 +129,7 @@ const AdminLogin = props => {
 
                 </View>
                 <View style={styles.container}>
-                    {Dimensions.get('window').height === 1232 ? <Text style={styles.footer}>Zaki Sons</Text> : console.log(Dimensions.get('window').height)}
+                    {Dimensions.get('window').height > 900 ? <Text style={styles.footer}>Zaki Sons</Text> : console.log(Dimensions.get('window').height)}
                 </View>
             </View>
         </>

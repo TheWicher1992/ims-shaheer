@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Modal, StyleSheet, Text, View, TouchableOpacity, Dimensions, TextInput, Button, ScrollView } from "react-native";
+import { Modal, StyleSheet, Text, View, TouchableOpacity, Dimensions, TextInput, TouchableWithoutFeedback, ScrollView } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
-import { connect } from 'react-redux'
+import { connect, useSelector, useDispatch } from 'react-redux'
 import { setPurchaseProduct, resetPurchaseProduct, removePurchaseProduct } from '../../actions/purchaseFilters'
 import { setSaleProduct, resetSaleProduct, removeSaleProduct } from "../../actions/saleFilters";
 const ProductNameFilterModal = props => {
@@ -14,31 +14,31 @@ const ProductNameFilterModal = props => {
     }, [props.state]);
 
     const setProductFilter = (record, i) => {
-        if(props.title === "purchase"){
+        if (props.title === "purchase") {
             if (props.productFilter.indexOf(record._id) === -1) {
                 props.setPurchaseProduct(record._id)
             }
             else {
                 props.removePurchaseProduct(record._id)
-                
+
             }
         }
-        else if(props.title === "sale"){
+        else if (props.title === "sale") {
             if (props.saleFilter.indexOf(record._id) === -1) {
                 props.setSaleProduct(record._id)
             }
             else {
                 props.removeSaleProduct(record._id)
-                
+
             }
         }
-        
+
     }
     const clearProductFilters = () => {
-        if(props.title === "purchase"){
+        if (props.title === "purchase") {
             props.resetPurchaseProduct()
         }
-        else if(props.title === "sale"){
+        else if (props.title === "sale") {
             props.resetSaleProduct()
         }
     }
@@ -47,43 +47,43 @@ const ProductNameFilterModal = props => {
             return (
                 <View>
                     {props.object.map((record, i) => (
-                        <ScrollView nestedScrollEnabled = {true} style = {{}}>
+                        <ScrollView key={i} nestedScrollEnabled={true} style={{}}>
 
-                       
-                        <View style = {{height: '100%', flexGrow: 1}}>
 
-                            <TouchableOpacity style={styles.TextBox} onPress={() => setProductFilter(record, i)}>
-                                <View style={{ paddingLeft: '5%' }}>
-                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                                        <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-start' }}>
-                                            <Text style={styles.normalText}>
-                                                {record.title}
-                                            </Text>
-                                        </View>
-                                        <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-end', paddingRight: '8%' }}>
-                                            <View style={styles.sideText}>
-                                                {props.title === "purchase" && props.productFilter.indexOf(record._id) !== -1 ? (<FontAwesome
-                                                    name={"check"}
-                                                    size={Dimensions.get('window').height > 900 ? 40 : 25}
-                                                    color={"#008394"}
-                                                />
-                                                ) : (null)}
-                                                {props.title === "sale" && props.saleFilter.indexOf(record._id) !== -1 ? (<FontAwesome
-                                                    name={"check"}
-                                                    size={Dimensions.get('window').height > 900 ? 40 : 25}
-                                                    color={"#008394"}
-                                                />
-                                                ) : (null)}
+                            <View style={{ height: '100%', flexGrow: 1 }}>
 
+                                <TouchableOpacity style={styles.TextBox} onPress={() => setProductFilter(record, i)}>
+                                    <View style={{ paddingLeft: '5%' }}>
+                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                                            <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-start' }}>
+                                                <Text style={styles.normalText}>
+                                                    {record.title}
+                                                </Text>
+                                            </View>
+                                            <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-end', paddingRight: '8%' }}>
+                                                <View style={styles.sideText}>
+                                                    {props.title === "purchase" && props.productFilter.indexOf(record._id) !== -1 ? (<FontAwesome
+                                                        name={"check"}
+                                                        size={Dimensions.get('window').height > 900 ? 40 : 25}
+                                                        color={"#008394"}
+                                                    />
+                                                    ) : (null)}
+                                                    {props.title === "sale" && props.saleFilter.indexOf(record._id) !== -1 ? (<FontAwesome
+                                                        name={"check"}
+                                                        size={Dimensions.get('window').height > 900 ? 40 : 25}
+                                                        color={"#008394"}
+                                                    />
+                                                    ) : (null)}
+
+                                                </View>
                                             </View>
                                         </View>
                                     </View>
-                                </View>
-                            </TouchableOpacity>
+                                </TouchableOpacity>
 
 
 
-                        </View>
+                            </View>
                         </ScrollView>
                     ))}
                 </View>
@@ -102,12 +102,15 @@ const ProductNameFilterModal = props => {
                 presentationStyle="overFullScreen"
                 transparent
                 visible={modalVisible}>
+                <TouchableWithoutFeedback onPress={() => props.handleClose()}>
+                    <View style={styles.modalOverlay} />
+                </TouchableWithoutFeedback>
                 <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
                     <View style={styles.modalStyle}>
 
                         <View style={styles.topTextBox}>
-                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignContent: 'center' }}>
-                                <TouchableOpacity onPress={() => props.handleClose()} style={{ marginTop: Dimensions.get('window').height > 900 ? '7%' : '7%', paddingLeft: '5%' }}>
+                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignContent: 'center', marginTop: Dimensions.get('window').height * 0.03, }}>
+                                <TouchableOpacity onPress={() => props.handleClose()} style={{ paddingLeft: '5%', marginTop: Dimensions.get('window').height > 900 ? 10 : 5 }}>
                                     <FontAwesome
                                         name={"arrow-left"}
                                         size={Dimensions.get('window').height > 900 ? 40 : 25}
@@ -115,7 +118,7 @@ const ProductNameFilterModal = props => {
                                     />
                                 </TouchableOpacity>
 
-                                <View style={{ justifyContent: 'center', alignItems: 'flex-start', marginTop: '6.25%', }}>
+                                <View style={{ justifyContent: 'center', alignItems: 'flex-start', }}>
 
                                     <Text style={styles.topText}>
                                         Products
@@ -136,10 +139,10 @@ const ProductNameFilterModal = props => {
                         </View>
 
                         <ScrollView>
-                            <View> 
-                        {
-                            showProducts()
-                        }
+                            <View>
+                                {
+                                    showProducts()
+                                }
                             </View>
                         </ScrollView>
 
@@ -242,7 +245,7 @@ const styles = StyleSheet.create({
         borderWidth: 2,
         borderRadius: 20,
         borderColor: "#008394",
-        marginTop: Dimensions.get('window').height > 900 ? 30 : 0,
+        marginTop: Dimensions.get('window').height > 900 ? 10 : 0,
         // left: Dimensions.get('window').width * 0.4,
 
     },
@@ -257,7 +260,14 @@ const styles = StyleSheet.create({
         backgroundColor: '#119EC2',
         // width: {(amountVal/50) * 300},
         height: 30,
-    }
+    },
+    modalOverlay: {
+        position: 'absolute',
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right: 0,
+    },
 
 });
 

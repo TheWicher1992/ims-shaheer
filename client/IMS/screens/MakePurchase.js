@@ -1,13 +1,11 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Button, Dimensions, TextInput, TouchableOpacity, KeyboardAvoidingView, ScrollView, Switch } from 'react-native';
+import { StyleSheet, Text, View, Button, Dimensions, TextInput, TouchableOpacity, KeyboardAvoidingView, ScrollView, Switch, TouchableWithoutFeedback, Modal } from 'react-native';
 import HeaderButton from '../components/HeaderButton';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { FontAwesome } from '@expo/vector-icons';
 import { DataTable } from 'react-native-paper';
-import Modal from 'react-native-modal';
 import { Picker } from '@react-native-picker/picker';
-import TableDetailModal from '../components/TableDetailModal';
 import PurchaseDetailModal from '../components/PurchaseDetailModal';
 import FilterButton from '../components/FilterButton';
 import axios from 'axios'
@@ -16,6 +14,7 @@ import { connect } from 'react-redux'
 import Spinner from '../components/Spinner';
 import ShowAlert from '../components/ShowAlert';
 import ExportButton from '../components/ExportAsExcel'
+import SearchableDropdown from 'react-native-searchable-dropdown';
 
 
 const optionsPerPage = [2, 3, 4];
@@ -54,7 +53,7 @@ const MakePurchase = props => {
         `/${props.filters.maxTotal}`
 
       const res = await axios.get(getURI)
-      res.data.purchases.length === 0 ? searchWarning(): null
+      res.data.purchases.length === 0 ? searchWarning() : null
       setPurchases(res.data.purchases)
     }
     catch (err) {
@@ -63,30 +62,58 @@ const MakePurchase = props => {
     setLoading(false)
   }
   const catchWarning = () => {
-    setAlertState(!alertState) 
+    setAlertState(!alertState)
     setAlertTitle('Attention')
     setAlertMsg('Something went wrong. Please restart')
   }
-  
-  const getPreFormValues = async () => {
-    try{
 
-    
-    const res = await axios.get(`${uri}/api/purchase/form-inputs`)
-    setFormInputs(res.data)
-    setProductName(res.data.products[0]._id)
-    setWarehouse(res.data.warehouses[0]._id)
-    setClientName(res.data.clients[0]._id)
+  const getPreFormValues = async () => {
+    try {
+
+
+      const res = await axios.get(`${uri}/api/purchase/form-inputs`)
+      setFormInputs(res.data)
+      setProductName(res.data.products[0]._id)
+      setWarehouse(res.data.warehouses[0]._id)
+      setClientName(res.data.clients[0]._id)
+
+      let arr = []
+      res.data.products.forEach(e => {
+        let obj = {
+          "id": e._id,
+          "name": e.title
+        }
+
+        arr.push(obj)
+      })
+
+      let clientArr = []
+      res.data.clients.forEach(e => {
+        let obj = {
+          "id": e._id,
+          "name": e.userName
+        }
+
+        clientArr.push(obj)
+      })
+
+      setProductList(arr)
+      setClientList(clientArr)
+
+
     }
-    catch(err){
+    catch (err) {
       catchWarning()
     }
   }
 
 
   useEffect(() => {
-    getPurchases()
-    getPreFormValues()
+    props.navigation.addListener('didFocus', () => {
+      getPurchases()
+      getPreFormValues()
+    })
+
   }, [])
 
 
@@ -109,7 +136,7 @@ const MakePurchase = props => {
   }
 
   const searchWarning = () => {
-    setAlertState(!alertState) 
+    setAlertState(!alertState)
     setAlertTitle('Attention')
     setAlertMsg('No Purchases found!')
   }
@@ -142,16 +169,17 @@ const MakePurchase = props => {
     else {
       const body = {
         product: productName,
-        quantity: quantityVal,
+        quantity: Number.parseInt(quantityVal,10),
         client: clientName,
         payment: paymentType,
-        total: totalAmount,
-        received: amountReceived,
+        total: Number.parseInt(totalAmount,10),
+        received: Number.parseInt(amountReceived, 10),
         note: notes,
         isDeliveryOrder: !isWarehouse,
         location,
         warehouseID: warehouse
       }
+      // console.log(body)
       const config = {
         headers: {
           "Content-Type": "application/json"
@@ -226,158 +254,467 @@ const MakePurchase = props => {
     setAlertState(!alertState)
   }
 
+  const [productListModal, setProductListModal] = useState(false)
+  const [productList, setProductList] = useState([])
+  const [prod, setProd] = useState(``)
+
+  const [clientListModal, setClientListModal] = useState(false)
+  const [clientList, setClientList] = useState([])
+  const [selectedClientName, setSelectedClientName] = useState(``)
+
 
 
   return (
     // <KeyboardAvoidingView style = {styles.containerView} behavior = "padding">
 
-    <ScrollView>
+    <ScrollView keyboardShouldPersistTaps = 'always'>
       <ShowAlert state={alertState} handleClose={show} alertTitle={alertTitle} alertMsg={alertMsg} style={styles.buttonModalContainer} />
       <KeyboardAvoidingView>
+
+        {/* modal for productlist show */}
         <Modal
-          onSwipeComplete={() => setModalVisible(false)}
-          swipeDirection="left"
-          presentationStyle="overFullScreen"
-          transparent
-          visible={isModalVisible}>
-          <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-            <View style={styles.modalStyle}>
-              <View style={{ justifyContent: 'center', alignItems: 'center', }}>
-                <Text style={styles.modalTitle}>Make a Purchase</Text>
-                <View>
+          onSwipeComplete= {() => setProductListModal(false)}
+          animationType = "slide"
+          transparent = {true}
+          swipeDirection = "left"
+          visible = {productListModal}
+          >
+            <TouchableWithoutFeedback onPress={() => setProductListModal(false)}>
+              <View style={styles.modalOverlay} />
+            </TouchableWithoutFeedback>
 
-                  <View style={{ borderWidth: 2, borderRadius: 40, borderColor: "#008394", width: Dimensions.get('window').width * 0.65, top: 50, height: 40, fontSize: 8, }}>
-                    <Picker
-                      style={{ top: 6, color: 'grey', fontFamily: 'Roboto' }}
-                      itemStyle={{ fontWeight: '100' }}
-                      selectedValue={productName}
-                      onValueChange={(itemValue, itemIndex) =>
-                        setProductName(itemValue)
-                      }
-                    >
-                      {
-                        formInputs.products.map(p => (
-                          <Picker.Item key={p._id} label={p.title} value={p._id} />
-
-                        ))
-                      }
-
-                    </Picker>
-                  </View>
-                  <View style={{ marginTop: 10 }}>
-                    <TextInput onChangeText={onChangeQuantity} style={styles.input} placeholder="Quantity" autoCorrect={false} />
-                    {paymentType === 'Partial' && <TextInput onChangeText={onChangeAmountReceived} style={styles.input} placeholder="Amount Received" autoCorrect={false} />
-                    }
-                    <TextInput onChangeText={onChangeTotalAmount} style={styles.input} placeholder="Total Amount" autoCorrect={false} />
-                    <TextInput onChangeText={onChangeNotes} style={styles.input} placeholder="Notes" autoCorrect={false} />
-                  </View>
-
-                  <View style={{ borderWidth: 2, borderRadius: 40, borderColor: "#008394", width: Dimensions.get('window').width * 0.65, top: 60, height: 40, fontSize: 8, }}>
-                    <Picker
-                      style={{ top: 6, color: 'grey', fontFamily: 'Roboto' }}
-                      itemStyle={{ fontWeight: '100' }}
-                      placeholder="Select a Payment Type"
-                      selectedValue={paymentType}
-                      onValueChange={(itemValue, itemIndex) =>
-                        setPaymentType(itemValue)
-                      }
-                    >
-                      <Picker.Item label="Partial" value="Partial" />
-                      <Picker.Item label="Credit" value="Credit" />
-                      <Picker.Item label="Full" value="Full" />
-                    </Picker>
-                  </View>
-
-                  <View style={{ borderWidth: 2, borderRadius: 40, borderColor: "#008394", width: Dimensions.get('window').width * 0.65, top: 80, height: 40, fontSize: 8, }}>
-                    <Picker
-                      style={{ top: 6, color: 'grey', fontFamily: 'Roboto' }}
-                      itemStyle={{ fontWeight: '100' }}
-                      selectedValue={clientName}
-                      onValueChange={(itemValue, itemIndex) =>
-                        setClientName(itemValue)
-                      }
-                    >
-                      {
-                        formInputs.clients.map(c => (
-                          <Picker.Item key={c._id} label={c.userName} value={c._id} />
-
-                        ))
-                      }
-                    </Picker>
-                  </View>
-
-
-                  <View style={{ marginTop: 90, }}>
-                    <View style={styles.label}>
-                      <Text style={styles.switch}>D/O</Text>
-                      <Switch
-                        trackColor={{ false: "#00E0C7", true: "#006270" }}
-                        thumbColor={isEnabled ? "white" : "#006270"}
-                        onValueChange={toggleSwitch}
-                        value={isWarehouse}
-                      />
-                      <Text style={styles.switch}>W</Text>
+            <View style = {styles.centeredView}>
+              <View style = {styles.modalView}>
+                <View style = {{flexDirection: 'row'}}>
+                    <View style = {{ right: Dimensions.get('window').height > 900 ? Dimensions.get('window').width * 0.1 : Dimensions.get('window').width * 0.04, top: 7}}>
+                      <TouchableOpacity onPress = {() => setProductListModal(false)}>
+                        <FontAwesome
+                          name = {"arrow-left"}
+                          size = {Dimensions.get('window').height > 900 ? 30:25}
+                          color = {"#008394"}
+                        />
+                      </TouchableOpacity>
+                      
                     </View>
-                  </View>
+                    
+                    <Text style={styles.modalTitleNew}>Select Product</Text>
 
-                  {/* DELIVERY ORDER LOCATION OR  */}
-                  <View>
-                    {/* this is for either warehouse selection  */}
-                    {isWarehouse ?
-                      <View style={{ borderWidth: 2, borderRadius: 40, borderColor: "#008394", width: Dimensions.get('window').width * 0.65, height: 40, fontSize: 8, marginBottom: 20 }}>
-                        <Picker
-                          style={{ top: 6, color: 'grey', fontFamily: 'Roboto' }}
-                          itemStyle={{ fontWeight: '100' }}
-                          selectedValue={warehouse}
-                          onValueChange={(itemValue, itemIndex) =>
-                            setWarehouse(itemValue)
-                          }
-                        >
-
-                          {
-                            formInputs.warehouses.map(w => (
-                              <Picker.Item key={w._id} label={w.name} value={w._id} />
-                            ))
-                          }
-                          {/* <Picker.Item label="W1" value="W1" />
-                        <Picker.Item label="W2" value="W2" />
-                        <Picker.Item label="W3" value="W3" /> */}
-
-                        </Picker>
-                      </View>
-
-                      :
-                      <TextInput onChangeText={onChangeLocation} style={styles.inputLast} placeholder="Location" autoCorrect={false} />
-                    }</View>
-
-
+                    
                 </View>
-                <View style={{ flexDirection: 'row', alignItems: 'center', bottom: Dimensions.get('window').height < 700 ? 25 : 15, }}>
-                  <TouchableOpacity style={{ alignSelf: 'flex-start' }} onPress={() => { setModalVisible(false) }}>
-                    <View>
-                      <View style={styles.buttonModalContainerCross}>
-                        <View>
-                          <Text style={styles.buttonModalText}>Cancel</Text>
-                        </View>
-                      </View>
-                    </View>
-                  </TouchableOpacity>
-                  <TouchableOpacity onPress={() => { addPurchase() }}>
-                    <View>
-                      <View style={styles.buttonModalContainer}>
-                        <View>
-                          <Text style={styles.buttonModalText}>Done</Text>
-                        </View>
-                      </View>
-                    </View>
-                  </TouchableOpacity>
-                </View>
+                <View style = {styles.modalBody}>
+                  <SearchableDropdown
+                    onTextChange={(text) => console.log(text)}
+                    
+                    //On text change listner on the searchable input
+                    onItemSelect={(item) => {
+                      // console.log(item)
+                      setProd(item.name)
+                      setProductName(item.id)
+                    }}
+                    //onItemSelect called after the selection from the dropdown
+                    containerStyle={{ padding: 5, width: Dimensions.get('window').height > 900 ? Dimensions.get('window').width * 0.6 : Dimensions.get('window').width * 0.70,}}
+                    //suggestion container style
+                    textInputStyle={{
+                      //inserted text style
+                      padding: 12,
+                      borderWidth: 1,
+                      borderColor: "#008394",
+                      backgroundColor: '#FAF7F6',
+                    }}
+                    itemStyle={{
+                      //single dropdown item style
+                      padding: 10,
+                      marginTop: 2,
+                      backgroundColor: '#FAF9F8',
+                      borderColor: "#008394",
+                      borderWidth: 1,
+                    }}
+                    itemTextStyle={{
+                      //text style of a single dropdown item
+                      color: '#222',
+                    }}
+                    itemsContainerStyle={{
+                      //items container style you can pass maxHeight
+                      //to restrict the items dropdown hieght
+                      maxHeight: '80%',
+                    }}
+                    items={productList}
+                    //mapping of item array
+                    defaultIndex={0}
+                    //default selected item index
+                    placeholder={prod === `` ? "Type here.." : prod}
+                    //place holder for the search input
+                    resetValue={false}
+                    //reset textInput Value with true and false state
+                    underlineColorAndroid="transparent"
+                    //To remove the underline from the android input
+                  />
               </View>
             </View>
           </View>
         </Modal>
+        {/* modal for product ends here  */}
+
+
+        {/* modal for client selection dropdown starts here */}
+        <Modal
+          onSwipeComplete= {() => setClientListModal(false)}
+          animationType = "slide"
+          transparent = {true}
+          swipeDirection = "left"
+          visible = {clientListModal}
+          >
+            <TouchableWithoutFeedback onPress={() => setClientListModal(false)}>
+              <View style={styles.modalOverlay} />
+            </TouchableWithoutFeedback>
+
+            <View style = {styles.centeredView}>
+              <View style = {styles.modalView}>
+                <View style = {{flexDirection: 'row'}}>
+                    <View style = {{ right: Dimensions.get('window').height > 900 ? Dimensions.get('window').width * 0.1 : Dimensions.get('window').width * 0.04, top: 7}}>
+                      <TouchableOpacity onPress = {() => setClientListModal(false)}>
+                        <FontAwesome
+                          name = {"arrow-left"}
+                          size = {Dimensions.get('window').height > 900 ? 30:25}
+                          color = {"#008394"}
+                        />
+                      </TouchableOpacity>
+                      
+                    </View>
+                    
+                    <Text style={styles.modalTitleNew}>Select Client</Text>
+
+                    
+                </View>
+                <View style = {styles.modalBody}>
+                  <SearchableDropdown
+                    onTextChange={(text) => console.log(text)}
+                    //On text change listner on the searchable input
+                    onItemSelect={(item) => {
+                      // console.log(item)
+                      setSelectedClientName(item.name)
+                      setClientName(item.id)
+                    }}
+                    //onItemSelect called after the selection from the dropdown
+                    containerStyle={{ padding: 5, width: Dimensions.get('window').height > 900 ? Dimensions.get('window').width * 0.6 : Dimensions.get('window').width * 0.70,}}
+                    //suggestion container style
+                    textInputStyle={{
+                      //inserted text style
+                      padding: 12,
+                      borderWidth: 1,
+                      borderColor: "#008394",
+                      backgroundColor: '#FAF7F6',
+                    }}
+                    itemStyle={{
+                      //single dropdown item style
+                      padding: 10,
+                      marginTop: 2,
+                      backgroundColor: '#FAF9F8',
+                      borderColor: "#008394",
+                      borderWidth: 1,
+                    }}
+                    itemTextStyle={{
+                      //text style of a single dropdown item
+                      color: '#222',
+                    }}
+                    itemsContainerStyle={{
+                      //items container style you can pass maxHeight
+                      //to restrict the items dropdown hieght
+                      maxHeight: '80%',
+                    }}
+                    items={clientList}
+                    //mapping of item array
+                    defaultIndex={0}
+                    //default selected item index
+                    placeholder={selectedClientName === `` ? "Type here.." : selectedClientName}
+                    //place holder for the search input
+                    resetValue={false}
+                    //reset textInput Value with true and false state
+                    underlineColorAndroid="transparent"
+                    //To remove the underline from the android input
+                  />
+              </View>
+            </View>
+          </View>
+        </Modal>
+        {/* modal for client selection dropdown ends here */}
+
+        
+
+
+
+        <Modal
+          onSwipeComplete={() => setModalVisible(false)}
+          animationType="slide"
+          transparent={true}
+          swipeDirection="left"
+          visible={isModalVisible}>
+          <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
+            <View style={styles.modalOverlay} />
+          </TouchableWithoutFeedback>
+          <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+            {/* <ScrollView style={{ paddingVertical: 10 }} showsVerticalScrollIndicator={false}> */}
+              <View style={styles.modalStyle}>
+                <View style={{ justifyContent: 'center', alignItems: 'center', }}>
+                  
+
+                <View style = {{flexDirection: 'row'}}>
+                <View style = {{ right: Dimensions.get('window').height > 900 ? Dimensions.get('window').width * 0.16 : Dimensions.get('window').width * 0.05, top: Dimensions.get('window').height > 900 ? 38 : 35}}>
+                    <TouchableOpacity onPress = {() => setModalVisible(false)}>
+                      <FontAwesome
+                        name = {"arrow-left"}
+                        size = {Dimensions.get('window').height > 900 ? 30:25}
+                        color = {"#008394"}
+                      />
+                    </TouchableOpacity>
+                    
+                  </View>
+                  
+                  <Text style={styles.modalTitle}>Make a Purchase</Text>
+
+                  
+                </View>
+                {Dimensions.get('window').height < 900 ? (<ScrollView>
+                  <View style={{alignItems:'center'}}>
+                    <View>
+                      <TouchableOpacity style = {{marginTop: 60}} onPress = {() => setProductListModal(true)}>
+                        <View style={styles.input2}>
+                          <Text style = {{fontSize: 15, color: 'grey'}}>
+                            {prod === '' ? "Click to select a Product" : `${prod}`}
+                          </Text>
+                        </View>
+                      </TouchableOpacity>
+                    </View>
+
+                    
+                    <View >
+                      <TouchableOpacity style = {{}} onPress = {() => setClientListModal(true)}>
+                        <View style={styles.input2}>
+                          <Text style = {{fontSize: 15, color: 'grey'}}>
+                            {selectedClientName === '' ? "Click to select a Client" : `${selectedClientName}`}
+                          </Text>
+                        </View>
+                      </TouchableOpacity>
+                    </View>
+
+
+                    <View style={{ }}>
+                      <TextInput keyboardType = 'numeric' onChangeText={onChangeQuantity} style={styles.input} placeholder="Quantity" autoCorrect={false} />
+                      {paymentType === 'Partial' && <TextInput keyboardType = 'numeric' onChangeText={onChangeAmountReceived} style={styles.input} placeholder="Amount Sent" autoCorrect={false} />
+                      }
+                      <TextInput keyboardType = 'numeric' onChangeText={onChangeTotalAmount} style={styles.input} placeholder="Total Amount" autoCorrect={false} />
+                      <TextInput onChangeText={onChangeNotes} style={styles.input} placeholder="Notes" autoCorrect={false} />
+                    </View>
+
+                    <View style={{ borderWidth: 2, borderRadius: 40, borderColor: "#008394", width: Dimensions.get('window').width * 0.65, height: 40, fontSize: 8, }}>
+                      <Picker
+                        style={{ top: 6, color: 'grey', fontFamily: 'Roboto' }}
+                        itemStyle={{ fontWeight: '100' }}
+                        placeholder="Select a Payment Type"
+                        selectedValue={paymentType}
+                        onValueChange={(itemValue, itemIndex) =>
+                          setPaymentType(itemValue)
+                        }
+                      >
+                        <Picker.Item label="Partial" value="Partial" />
+                        <Picker.Item label="Credit" value="Credit" />
+                        <Picker.Item label="Full" value="Full" />
+                      </Picker>
+                    </View>
+
+                  
+                    <View style={{ marginTop: 20 }}>
+                      <View style={styles.label}>
+                        <Text style={styles.switch}>D/O</Text>
+                        <Switch
+                          trackColor={{ false: "#00E0C7", true: "#006270" }}
+                          thumbColor={isEnabled ? "white" : "#006270"}
+                          onValueChange={toggleSwitch}
+                          value={isWarehouse}
+                        />
+                        <Text style={styles.switch}>W</Text>
+                      </View>
+                    </View>
+
+                    {/* DELIVERY ORDER LOCATION OR  */}
+                    <View>
+                      {/* this is for either warehouse selection  */}
+                      {isWarehouse ?
+                        <View style={{ borderWidth: 2, borderRadius: 40, borderColor: "#008394", width: Dimensions.get('window').width * 0.65, height: 40, fontSize: 8, marginBottom: 20 }}>
+                          <Picker
+                            style={{ top: 6, color: 'grey', fontFamily: 'Roboto' }}
+                            itemStyle={{ fontWeight: '100' }}
+                            selectedValue={warehouse}
+                            onValueChange={(itemValue, itemIndex) =>
+                              setWarehouse(itemValue)
+                            }
+                          >
+
+                            {
+                              formInputs.warehouses.map(w => (
+                                <Picker.Item key={w._id} label={w.name} value={w._id} />
+                              ))
+                            }
+                            {/* <Picker.Item label="W1" value="W1" />
+                        <Picker.Item label="W2" value="W2" />
+                        <Picker.Item label="W3" value="W3" /> */}
+
+                          </Picker>
+                        </View>
+
+                        :
+                        <TextInput onChangeText={onChangeLocation} style={styles.inputLast} placeholder="Location" autoCorrect={false} />
+                      }</View>
+
+
+                  </View>
+                  
+
+                    <View style={{ flexDirection: 'row', alignItems: 'center',justifyContent: 'center', bottom: Dimensions.get('window').height < 700 ? 25 : 15, }}>
+                      <TouchableOpacity style={{ alignSelf: 'flex-start' }} onPress={() => { setModalVisible(false) }}>
+                        <View>
+                          <View style={styles.buttonModalContainerCross}>
+                            <View>
+                              <Text style={styles.buttonModalText}>Cancel</Text>
+                            </View>
+                          </View>
+                        </View>
+                      </TouchableOpacity>
+                      <TouchableOpacity onPress={() => { addPurchase() }}>
+                        <View>
+                          <View style={styles.buttonModalContainer}>
+                            <View>
+                              <Text style={styles.buttonModalText}>Done</Text>
+                            </View>
+                          </View>
+                        </View>
+                      </TouchableOpacity>
+                    </View>
+                    </ScrollView>) 
+                    : 
+                    (<View style={{alignItems:'center'}}>
+                      <View>
+                        <View>
+                          <TouchableOpacity style = {{marginTop: 60}} onPress = {() => setProductListModal(true)}>
+                            <View style={styles.input2}>
+                              <Text style = {{fontSize: 15, color: 'grey'}}>
+                                {prod === '' ? "Click to select a Product" : `${prod}`}
+                              </Text>
+                            </View>
+                          </TouchableOpacity>
+                        </View>
+
+                    
+                        <View >
+                          <TouchableOpacity style = {{}} onPress = {() => setClientListModal(true)}>
+                            <View style={styles.input2}>
+                              <Text style = {{fontSize: 15, color: 'grey'}}>
+                                {selectedClientName === '' ? "Click to select a Client" : `${selectedClientName}`}
+                              </Text>
+                            </View>
+                          </TouchableOpacity>
+                        </View>
+                        <View style={{  }}>
+                          <TextInput keyboardType = 'numeric' onChangeText={onChangeQuantity} style={styles.input} placeholder="Quantity" autoCorrect={false} />
+                          {paymentType === 'Partial' && <TextInput keyboardType = 'numeric' onChangeText={onChangeAmountReceived} style={styles.input} placeholder="Amount Sent" autoCorrect={false} />
+                          }
+                          <TextInput keyboardType = 'numeric' onChangeText={onChangeTotalAmount} style={styles.input} placeholder="Total Amount" autoCorrect={false} />
+                          <TextInput onChangeText={onChangeNotes} style={styles.input} placeholder="Notes" autoCorrect={false} />
+                        </View>
+    
+                        <View style={{ borderWidth: 2, borderRadius: 40, borderColor: "#008394", width: Dimensions.get('window').width * 0.65, height: 40, fontSize: 8, }}>
+                          <Picker
+                            style={{ top: 6, color: 'grey', fontFamily: 'Roboto' }}
+                            itemStyle={{ fontWeight: '100' }}
+                            placeholder="Select a Payment Type"
+                            selectedValue={paymentType}
+                            onValueChange={(itemValue, itemIndex) =>
+                              setPaymentType(itemValue)
+                            }
+                          >
+                            <Picker.Item label="Partial" value="Partial" />
+                            <Picker.Item label="Credit" value="Credit" />
+                            <Picker.Item label="Full" value="Full" />
+                          </Picker>
+                        </View>
+    
+  
+                        <View style={{ marginTop: 20, }}>
+                          <View style={styles.label}>
+                            <Text style={styles.switch}>D/O</Text>
+                            <Switch
+                              trackColor={{ false: "#00E0C7", true: "#006270" }}
+                              thumbColor={isEnabled ? "white" : "#006270"}
+                              onValueChange={toggleSwitch}
+                              value={isWarehouse}
+                            />
+                            <Text style={styles.switch}>W</Text>
+                          </View>
+                        </View>
+    
+                        {/* DELIVERY ORDER LOCATION OR  */}
+                        <View>
+                          {/* this is for either warehouse selection  */}
+                          {isWarehouse ?
+                            <View style={{ borderWidth: 2, borderRadius: 40, borderColor: "#008394", width: Dimensions.get('window').width * 0.65, height: 40, fontSize: 8, marginBottom: 20 }}>
+                              <Picker
+                                style={{ top: 6, color: 'grey', fontFamily: 'Roboto' }}
+                                itemStyle={{ fontWeight: '100' }}
+                                selectedValue={warehouse}
+                                onValueChange={(itemValue, itemIndex) =>
+                                  setWarehouse(itemValue)
+                                }
+                              >
+    
+                                {
+                                  formInputs.warehouses.map(w => (
+                                    <Picker.Item key={w._id} label={w.name} value={w._id} />
+                                  ))
+                                }
+                                {/* <Picker.Item label="W1" value="W1" />
+                            <Picker.Item label="W2" value="W2" />
+                            <Picker.Item label="W3" value="W3" /> */}
+    
+                              </Picker>
+                            </View>
+    
+                            :
+                            <TextInput onChangeText={onChangeLocation} style={styles.inputLast} placeholder="Location" autoCorrect={false} />
+                          }</View>
+    
+    
+                      </View>
+                      
+    
+                        <View style={{ flexDirection: 'row', alignItems: 'center',justifyContent: 'center', bottom: Dimensions.get('window').height < 700 ? 25 : 15, }}>
+                          <TouchableOpacity style={{ alignSelf: 'flex-start' }} onPress={() => { setModalVisible(false) }}>
+                            <View>
+                              <View style={styles.buttonModalContainerCross}>
+                                <View>
+                                  <Text style={styles.buttonModalText}>Cancel</Text>
+                                </View>
+                              </View>
+                            </View>
+                          </TouchableOpacity>
+                          <TouchableOpacity onPress={() => { addPurchase() }}>
+                            <View>
+                              <View style={styles.buttonModalContainer}>
+                                <View>
+                                  <Text style={styles.buttonModalText}>Done</Text>
+                                </View>
+                              </View>
+                            </View>
+                          </TouchableOpacity>
+                        </View>
+                        </View>)}
+                  
+                </View>
+              </View>
+            {/* </ScrollView> */}
+          </View>
+        </Modal>
       </KeyboardAvoidingView>
-      <PurchaseDetailModal state={isTableDetailModalVisible} handleClose={handleClose} title='Purchase Detail' object={touchedPurchase} getPurchase={getPurchases}/>
+      <PurchaseDetailModal state={isTableDetailModalVisible} handleClose={handleClose} title='Purchase Detail' object={touchedPurchase} getPurchase={getPurchases} />
       <View style={styles.screen}>
         <View>
           <Text style={styles.title}>Purchases</Text>
@@ -414,7 +751,7 @@ const MakePurchase = props => {
           <FilterButton getPurchases={getPurchases} page="purchase" />
         </View>
         <View style={{ marginTop: 25 }}>
-          <ExportButton data={purchases} title={'purchases.xlsx'} />
+          <ExportButton data={purchases} title={'purchases.xlsx'} screenName='purchases'/>
         </View>
       </View>
       <Spinner loading={loading} />
@@ -432,8 +769,8 @@ const MakePurchase = props => {
             <View>
 
 
-              {purchases.map(p => (
-                <TouchableOpacity onPress={() => selectedPurchaseRecord(p)}>
+              {purchases.map((p, i) => (
+                <TouchableOpacity key={i} onPress={() => selectedPurchaseRecord(p)}>
                   <DataTable.Row>
                     <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{p.product.title}</Text></DataTable.Cell>
                     <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{p.quantity}</Text></DataTable.Cell>
@@ -496,23 +833,24 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontFamily: 'Roboto',
     fontWeight: 'bold',
-    fontSize: Dimensions.get('window').height === 1232 ? 36 : 28,
+    fontSize: Dimensions.get('window').height > 900 ? 36 : 28,
   },
   modalTitle: {
     color: '#006270',
     fontSize: 30,
     fontFamily: 'Roboto',
     fontWeight: 'bold',
-    fontSize: Dimensions.get('window').height === 1232 ? 36 : 28,
+    fontSize: Dimensions.get('window').height > 900 ? 36 : 28,
     top: 30,
   },
   modalStyle: {
     backgroundColor: "#fff",
-    width: Dimensions.get('window').height > 900 ? 600 : 320,
-    height: Dimensions.get('window').height > 900 ? 720 : 640,
+    width: Dimensions.get('window').height > 900 ? Dimensions.get('window').width * 0.80 : Dimensions.get('window').width * 0.80,
+    height: Dimensions.get('window').height > 900 ? Dimensions.get('window').height * 0.60 : Dimensions.get('window').height* 0.86,
     borderWidth: 2,
     borderRadius: 20,
     marginBottom: 20,
+    alignItems: 'center',
     borderColor: "#008394",
   },
   subtitle: {
@@ -589,10 +927,22 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     fontSize: 15,
     borderColor: "#008394",
-    top: 60,
+    // top: 60,
     height: 40,
     padding: 10,
   },
+  input2: {
+    width: Dimensions.get('window').width * 0.65,
+    borderColor: 'gray',
+    borderWidth: 2,
+    borderRadius: 40,
+    marginBottom: 20,
+    fontSize: 15,
+    borderColor: "#008394",
+    height: 40,
+    padding: 10,
+  },
+
   inputLast: {
     width: Dimensions.get('window').width * 0.65,
     borderColor: 'gray',
@@ -622,6 +972,14 @@ const styles = StyleSheet.create({
     bottom: 30,
     left: Dimensions.get('window').height > 900 ? Dimensions.get('window').width / 11 : 0,
 
+  },
+  modalTitleNew: {
+    color: '#006270',
+    fontSize: 30,
+    fontFamily: 'Roboto',
+    fontWeight: 'bold',
+    fontSize: Dimensions.get('window').height > 900 ? 36 : 28,
+    top: 0,
   },
   searchButton: {
     flexDirection: 'row',
@@ -696,5 +1054,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     fontWeight: 'bold',
     marginRight: Dimensions.get('window').width * 0.80 / 2
+  },
+  modalOverlay: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
   },
 })

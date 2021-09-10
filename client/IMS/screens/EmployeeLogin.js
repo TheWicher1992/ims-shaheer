@@ -7,10 +7,10 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import ShowAlert from '../components/ShowAlert';
 import Spinner from '../components/Spinner';
 const EmployeeLogin = props => {
-    useEffect(() => {
-        props.loadUser(props.navigation)
-        AsyncStorage.getItem('token').then(token => console.log("token--->", token))
-    }, [])
+    // useEffect(() => {
+    //     props.loadUser(props.navigation)
+    //     AsyncStorage.getItem('token').then(token => console.log("token--->", token))
+    // }, [])
     const [isEnabled, setIsEnabled] = useState(false);
     const toggleSwitch = () => {
         AsyncStorage.removeItem('token').then(() => props.navigation.navigate({ routeName: 'Login', params: { switchVal: false } })
@@ -123,7 +123,7 @@ const EmployeeLogin = props => {
 
             </View>
             <View style={styles.container}>
-                {Dimensions.get('window').height === 1232 ? <Text style={styles.footer}>Zaki Sons</Text> : console.log(Dimensions.get('window').height)}
+                {Dimensions.get('window').height > 900 ? <Text style={styles.footer}>Zaki Sons</Text> : console.log(Dimensions.get('window').height)}
             </View>
         </View>
 

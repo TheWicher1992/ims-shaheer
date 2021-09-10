@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Modal, StyleSheet, Text, View, TouchableOpacity, Dimensions, TextInput, Button } from "react-native";
+import { Modal, StyleSheet, Text, View, TouchableOpacity, Dimensions, TouchableWithoutFeedback } from "react-native";
 import DateFilterModal from "./FilterModals/DateFilterModal";
 import ClientFilterModal from "./FilterModals/ClientFilterModal";
 import ProductNameFilterModal from "./FilterModals/ProductNameFilterModal";
@@ -10,6 +10,8 @@ import { uri } from '../api.json'
 import axios from "axios"
 import { connect } from 'react-redux'
 import { clearSaleFilters } from "../actions/saleFilters";
+import { FontAwesome } from "@expo/vector-icons";
+
 
 
 const SaleFilterModal = props => {
@@ -21,6 +23,12 @@ const SaleFilterModal = props => {
     const [quantityFilterModal, setQuantityFilterModal] = useState(false);
     const [priceFilterModal, setPriceFilterModal] = useState(false);
     const [paymentTypeFilterModal, setPaymentTypeFilterModal] = useState(false);
+    const [alertState, setAlertState] = useState(false)
+    const [alertTitle, setAlertTitle] = useState(``)
+    const [alertMsg, setAlertMsg] = useState(``)
+    const show = () => {
+        setAlertState(!alertState)
+    }
     useEffect(() => {
         setModalVisible(props.state);
     }, [props.state]);
@@ -106,12 +114,16 @@ const SaleFilterModal = props => {
                 presentationStyle="overFullScreen"
                 transparent
                 visible={modalVisible}>
+                    <TouchableWithoutFeedback onPress={() => {props.handleClose(); props.getSales()}}>
+                        <View style={styles.modalOverlay} />
+                    </TouchableWithoutFeedback>
                 <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
                     <View style={styles.modalStyle}>
 
                         <View style={styles.topTextBox}>
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                                <View style={{ justifyContent: 'center', alignItems: 'flex-start', marginTop: '6.25%', paddingLeft: '5%' }}>
+                            
+                                <View style={{ justifyContent: 'center', alignItems: 'flex-start', marginTop: Dimensions.get('window').height * 0.03, paddingLeft: '5%' }}>
                                     <Text style={styles.topText}>
                                         Filter
                                     </Text>
@@ -132,7 +144,7 @@ const SaleFilterModal = props => {
 
 
                         <TouchableOpacity style={styles.TextBox} onPress={() => setProductNameFilterModal(true)}>
-                            <View style={{ marginTop: '9.5%', paddingLeft: '5%' }}>
+                            <View style={{ marginTop: Dimensions.get('window').height * 0.05, paddingLeft: '5%' }}>
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                     <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-start' }}>
                                         <Text style={styles.normalText}>
@@ -158,7 +170,7 @@ const SaleFilterModal = props => {
 
 
                         <TouchableOpacity style={styles.TextBox} onPress={() => setClientFilterModal(true)}>
-                            <View style={{ marginTop: '9.5%', paddingLeft: '5%' }}>
+                            <View style={{ marginTop: Dimensions.get('window').height * 0.05, paddingLeft: '5%' }}>
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                     <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-start' }}>
                                         <Text style={styles.normalText}>
@@ -182,7 +194,7 @@ const SaleFilterModal = props => {
 
 
                         <TouchableOpacity style={styles.TextBox} onPress={() => setPaymentTypeFilterModal(true)}>
-                            <View style={{ marginTop: '9.5%', paddingLeft: '5%' }}>
+                            <View style={{ marginTop: Dimensions.get('window').height * 0.05, paddingLeft: '5%' }}>
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                     <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-start' }}>
                                         <Text style={styles.normalText}>
@@ -199,7 +211,7 @@ const SaleFilterModal = props => {
                         </TouchableOpacity>
 
                         <TouchableOpacity style={styles.TextBox} onPress={() => setDateFilterModal(true)}>
-                            <View style={{ marginTop: '9.5%', paddingLeft: '5%' }}>
+                            <View style={{ marginTop: Dimensions.get('window').height * 0.05, paddingLeft: '5%' }}>
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                     <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-start' }}>
                                         <Text style={styles.normalText}>
@@ -217,7 +229,7 @@ const SaleFilterModal = props => {
                         </TouchableOpacity>
 
                         <TouchableOpacity style={styles.TextBox} onPress={() => setQuantityFilterModal(true)}>
-                            <View style={{ marginTop: '9.5%', paddingLeft: '5%' }}>
+                            <View style={{ marginTop: Dimensions.get('window').height * 0.05, paddingLeft: '5%' }}>
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                     <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-start' }}>
                                         <Text style={styles.normalText}>
@@ -235,7 +247,7 @@ const SaleFilterModal = props => {
                         </TouchableOpacity>
 
                         <TouchableOpacity style={styles.TextBox} onPress={() => setPriceFilterModal(true)}>
-                            <View style={{ marginTop: '9.5%', paddingLeft: '5%' }}>
+                            <View style={{ marginTop: Dimensions.get('window').height * 0.05, paddingLeft: '5%' }}>
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                     <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-start' }}>
                                         <Text style={styles.normalText}>
@@ -372,7 +384,14 @@ const styles = StyleSheet.create({
         marginTop: Dimensions.get('window').height > 900 ? 30 : 0,
         // left: Dimensions.get('window').width * 0.4,
 
-    }
+    },
+    modalOverlay: {
+        position: 'absolute',
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right: 0,
+    },
 
 });
 

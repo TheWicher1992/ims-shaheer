@@ -1,5 +1,8 @@
 {
 
-    "uri":"http://ec2-3-134-104-111.us-east-2.compute.amazonaws.com:5000"
+
+    "uri":"http://192.168.1.14:5000"
+
+
 
 }

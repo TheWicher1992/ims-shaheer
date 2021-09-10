@@ -6,8 +6,39 @@ import * as FileSystem from 'expo-file-system';
 import * as Sharing from 'expo-sharing';
 
 const ExportButton = (props) => {
+  const [exportData, setExportData] = useState([])
+  useEffect(() =>{
+    if(props.screenName === 'employees' || props.screenName === 'clients' || props.screenName === 'warehouses'){
+      props.data.map(d => {
+      exportData.push({...d, date: d.date.toLocaleString().split('T')[0]})
+    })
+    }
+    else if(props.screenName === 'deliveryOrders' || props.screenName === 'purchases' || props.screenName === 'sales'){
+      props.data.map(d => {
+        exportData.push({...d, client: d.client.userName, product: d.product.title, date: d.date.toLocaleString().split('T')[0]})
+      })
+    }
+    else if(props.screenName === 'stocks'){
+      props.data.map(d => {
+        exportData.push({...d, product: d.product.title, warehouse: d.warehouse === undefined ? 'No Name' : d.warehouse.name})
+      })
+    }
+    else if(props.screenName === 'products'){
+      props.data.map(d => {
+        exportData.push({...d, brand: d.brand.title, colour: d.colour.title, date: d.date.toLocaleString().split('T')[0]})
+      })
+    }
+    else if(props.screenName === 'ledger'){
+      setExportData(props.data)
+    }
+    
+    // console.log(exportData)
+
+
+  }, [props.data])
+
   const excelTest = async () => {
-  var ws = XLSX.utils.json_to_sheet(props.data);
+  var ws = XLSX.utils.json_to_sheet(exportData);
   var wb = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(wb, ws, props.title);
   const wbout = XLSX.write(wb, {

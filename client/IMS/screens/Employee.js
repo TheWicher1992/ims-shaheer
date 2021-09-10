@@ -68,7 +68,7 @@ const Employee = props => {
     setAlertState(!alertState)
   }
   const catchWarning = () => {
-    setAlertState(!alertState) 
+    setAlertState(!alertState)
     setAlertTitle('Attention')
     setAlertMsg('Something went wrong. Please restart')
   }
@@ -144,20 +144,22 @@ const Employee = props => {
 
   const getEmployees = async () => {
     setLoading(true)
-    try{
+    try {
       const res = await axios.get(`${uri}/api/auth/all`)
-    setEmployees(res.data.employees)
-    setAdmins(res.data.admins)
+      setEmployees(res.data.employees)
+      setAdmins(res.data.admins)
     }
-    catch(err){
+    catch (err) {
       catchWarning()
     }
-    
+
     setLoading(false)
   }
 
   useEffect(() => {
-    getEmployees()
+    props.navigation.addListener('didFocus', () => {
+      getEmployees()
+    })
   }, [])
 
 
@@ -178,9 +180,9 @@ const Employee = props => {
         presentationStyle="overFullScreen"
         transparent
         visible={isModalVisible}>
-          <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
-            <View style={styles.modalOverlay} />
-          </TouchableWithoutFeedback>
+        <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
+          <View style={styles.modalOverlay} />
+        </TouchableWithoutFeedback>
 
         <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
           <View style={styles.modalStyle}>
@@ -262,7 +264,7 @@ const Employee = props => {
           </View>
         </TouchableOpacity>
       </View>
-      <ExportButton data = {employees} title = "Employee.xlxs" />
+      <ExportButton data={employees} title="Employee.xlsx" screenName='employees'/>
       <Spinner loading={loading} />
       <View>
         <DataTable style={{ top: 10 }}>
@@ -273,29 +275,29 @@ const Employee = props => {
           </DataTable.Header>
           {!loading && <ScrollView>
             <View>
-          {
-            employees.map((employee, i) => (
-              <TouchableOpacity key={i} onPress={() => onPressModal(employee)}>
-                <DataTable.Row>
-                  <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{employees === undefined ? 'Empty' : employee.userName}</Text></DataTable.Cell>
-                  <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>Employee</Text></DataTable.Cell>
-                </DataTable.Row>
-              </TouchableOpacity>
+              {
+                employees.map((employee, i) => (
+                  <TouchableOpacity key={i} onPress={() => onPressModal(employee)}>
+                    <DataTable.Row>
+                      <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{employees === undefined ? 'Empty' : employee.userName}</Text></DataTable.Cell>
+                      <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>Employee</Text></DataTable.Cell>
+                    </DataTable.Row>
+                  </TouchableOpacity>
 
-            ))
-          }
-          {
-            admins === undefined ? (null) : (admins.map((admin, i) => (
-              <TouchableOpacity key={i} onPress={() => onPressModalAdmin(admin)}>
-                <DataTable.Row>
-                  <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{admin.userName === undefined ? 'Empty' : admin.userName}</Text></DataTable.Cell>
-                  <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>Admin</Text></DataTable.Cell>
-                </DataTable.Row>
-              </TouchableOpacity>
+                ))
+              }
+              {
+                admins === undefined ? (null) : (admins.map((admin, i) => (
+                  <TouchableOpacity key={i} onPress={() => onPressModalAdmin(admin)}>
+                    <DataTable.Row>
+                      <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{admin.userName === undefined ? 'Empty' : admin.userName}</Text></DataTable.Cell>
+                      <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>Admin</Text></DataTable.Cell>
+                    </DataTable.Row>
+                  </TouchableOpacity>
 
-            )))
-          }
-          </View>
+                )))
+              }
+            </View>
           </ScrollView>}
         </DataTable>
 
@@ -342,14 +344,14 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontFamily: 'Roboto',
     fontWeight: 'bold',
-    fontSize: Dimensions.get('window').height === 1232 ? 36 : 28,
+    fontSize: Dimensions.get('window').height > 900 ? 36 : 28,
   },
   modalTitle: {
     color: '#006270',
     fontSize: 30,
     fontFamily: 'Roboto',
     fontWeight: 'bold',
-    fontSize: Dimensions.get('window').height === 1232 ? 36 : 28,
+    fontSize: Dimensions.get('window').height > 900 ? 36 : 28,
     top: 20,
   },
   modalStyle: {

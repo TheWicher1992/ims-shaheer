@@ -3,6 +3,7 @@ import { Modal, StyleSheet, Text, View, TouchableOpacity, Dimensions, TextInput,
 import { uri } from '../api.json'
 import axios from "axios"
 import ShowAlert from '../components/ShowAlert';
+import { FontAwesome } from "@expo/vector-icons";
 
 const ClientPaymentModal = props => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -34,7 +35,7 @@ const ClientPaymentModal = props => {
   const makePaymentOrTakePayment = () => {
     const body = {
       clientId: id,
-      cash: isEnabled ? amount : amountGiven,
+      cash: isEnabled ? Number.parseInt(amount, 10) : Number.parseInt(amountGiven, 10),
       type: isEnabled ? 'Received' : 'Payed',
     }
     const config = {
@@ -85,7 +86,20 @@ const ClientPaymentModal = props => {
        
             <View style={styles.centeredView}>
                 <View style={styles.modalView}>
-                <Text style={styles.modalTitle}>{props.title}</Text>
+                  <View style = {{flexDirection: 'row'}}>
+                    <View style = {{ right: Dimensions.get('window').height > 900 ? Dimensions.get('window').width * 0.1 : Dimensions.get('window').width * 0.04, top: 18}}>
+                      <TouchableOpacity onPress = {() => props.handleClose()}>
+                        <FontAwesome
+                          name = {"arrow-left"}
+                          size = {Dimensions.get('window').height > 900 ? 30:25}
+                          color = {"#008394"}
+                        />
+                      </TouchableOpacity>
+                      
+                    </View>
+                    <Text style={styles.modalTitle}>{props.title}</Text>
+                </View> 
+                
                 <View style={styles.modalBody}>
                   <View style={styles.label}>
                     <Text style={styles.switch}>Make Payment</Text>
@@ -262,7 +276,7 @@ const styles = StyleSheet.create({
 },
 switch: {
     color: '#008394',
-    fontSize: Dimensions.get('window').height === 1232 ? 18 : 16,
+    fontSize: Dimensions.get('window').height > 900 ? 18 : 16,
     fontFamily: 'Roboto',
   },
 label: {

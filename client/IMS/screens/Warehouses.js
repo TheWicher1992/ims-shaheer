@@ -31,13 +31,13 @@ const Warehouse = props => {
       const res = await axios.get(
         `${uri}/api/warehouse/${filters.page}/${filters.query}/${filters.sort}/${filters.sortBy}`
       )
-      res.data.warehouse.length === 0 ? searchWarning(): null
+      res.data.warehouse.length === 0 ? searchWarning() : null
       setWarehouses(res.data.warehouse.reverse())
     }
-    catch(err){
+    catch (err) {
       catchWarning()
     }
-    
+
     setLoading(false)
   }
   const [alertState, setAlertState] = useState(false)
@@ -54,7 +54,9 @@ const Warehouse = props => {
   }
 
   useEffect(() => {
-    getWarehouses()
+    props.navigation.addListener('didFocus', () => {
+      getWarehouses()
+    })
   }, [])
 
 
@@ -111,7 +113,7 @@ const Warehouse = props => {
   const addWarehouse = async () => {
     const body = {
       name: warehouseName,
-      totalProducts: totalProducts,
+      totalProducts: Number.parseInt(totalProducts, 10),
       totalStock: stock
     }
 
@@ -124,9 +126,10 @@ const Warehouse = props => {
 
     )
       .then(() => {
-      setAlertTitle('Success');
-      setAlertMsg('Warehouses Added Successfully');
-      show()})
+        setAlertTitle('Success');
+        setAlertMsg('Warehouses Added Successfully');
+        show()
+      })
       .catch(err => setError())
 
     getWarehouses()
@@ -148,7 +151,7 @@ const Warehouse = props => {
   }
 
   const catchWarning = () => {
-    setAlertState(!alertState) 
+    setAlertState(!alertState)
     setAlertTitle('Attention')
     setAlertMsg('Something went wrong. Please restart')
   }
@@ -168,17 +171,17 @@ const Warehouse = props => {
         transparent
         animationType="slide"
         visible={isModalVisible}>
-           <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
-            <View style={styles.modalOverlay} />
-          </TouchableWithoutFeedback>
+        <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
+          <View style={styles.modalOverlay} />
+        </TouchableWithoutFeedback>
         <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
           <View style={styles.modalStyle}>
             <View style={{ justifyContent: 'center', alignItems: 'center', }}>
               <Text style={styles.modalTitle}>Add Warehouse</Text>
               <View>
                 <TextInput onChangeText={onChangeWarehouseName} style={styles.input} placeholder="Name" autoCorrect={false} />
-                <TextInput onChangeText={onChangeTotalProducts} style={styles.input} placeholder="Total Products" autoCorrect={false} />
-                <TextInput onChangeText={onChangeStock} style={styles.input} placeholder="Total Stocks" autoCorrect={false} />
+                <TextInput keyboardType = 'numeric' onChangeText={onChangeTotalProducts} style={styles.input} placeholder="Total Products" autoCorrect={false} />
+                <TextInput keyboardType = 'numeric' onChangeText={onChangeStock} style={styles.input} placeholder="Total Stocks" autoCorrect={false} />
               </View>
               <View style={{ flexDirection: 'row', alignItems: 'center', top: 45 }}>
                 <TouchableOpacity style={{ alignSelf: 'flex-start' }} onPress={() => { setModalVisible(false) }}>
@@ -236,36 +239,36 @@ const Warehouse = props => {
         </View>
 
       </View>
-      <View style = {{marginTop: 20}} >
-        <ExportButton data={warehouses} title={'warehouses.xlsx'}/>
+      <View style={{ marginTop: 20 }} >
+        <ExportButton data={warehouses} title={'warehouses.xlsx'} screen='warehouses'/>
       </View>
       <Spinner loading={loading} />
-      
-        <DataTable style={{marginTop: 15}}>
-          <DataTable.Header>
-            <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Name</Text></DataTable.Title>
-            <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Total Products</Text></DataTable.Title>
-            <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Stock</Text></DataTable.Title>
 
-          </DataTable.Header>
-          {!loading && <ScrollView>
-            <View>
-          {
-            warehouses.map((warehouse, i) => (
-              <TouchableOpacity key={i} onPress={() => onPressModal(warehouse)}>
-                <DataTable.Row>
-                  <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{warehouse.name}</Text></DataTable.Cell>
-                  <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{warehouse.totalProducts}</Text></DataTable.Cell>
-                  <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{warehouse.totalStock}</Text></DataTable.Cell>
-                </DataTable.Row>
-              </TouchableOpacity>
-            ))
-          }
+      <DataTable style={{ marginTop: 15 }}>
+        <DataTable.Header>
+          <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Name</Text></DataTable.Title>
+          <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Total Products</Text></DataTable.Title>
+          <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Stock</Text></DataTable.Title>
+
+        </DataTable.Header>
+        {!loading && <ScrollView>
+          <View>
+            {
+              warehouses.map((warehouse, i) => (
+                <TouchableOpacity key={i} onPress={() => onPressModal(warehouse)}>
+                  <DataTable.Row>
+                    <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{warehouse.name}</Text></DataTable.Cell>
+                    <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{warehouse.totalProducts}</Text></DataTable.Cell>
+                    <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{warehouse.totalStock}</Text></DataTable.Cell>
+                  </DataTable.Row>
+                </TouchableOpacity>
+              ))
+            }
           </View>
         </ScrollView>}
-        </DataTable>
+      </DataTable>
 
-      
+
     </ScrollView>
     // </KeyboardAvoidingView>
 
@@ -305,20 +308,20 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontFamily: 'Roboto',
     fontWeight: 'bold',
-    fontSize: Dimensions.get('window').height === 1232 ? 36 : 28,
+    fontSize: Dimensions.get('window').height > 900 ? 36 : 28,
   },
   modalTitle: {
     color: '#006270',
     fontSize: 30,
     fontFamily: 'Roboto',
     fontWeight: 'bold',
-    fontSize: Dimensions.get('window').height === 1232 ? 36 : 28,
+    fontSize: Dimensions.get('window').height > 900 ? 36 : 28,
     top: 20,
   },
   modalStyle: {
     backgroundColor: "#fff",
-    width: Dimensions.get('window').height > 900 ? 600 : 320,
-    height: Dimensions.get('window').height > 900 ? "35%" : "60%",
+    width: Dimensions.get('window').height > 900 ? Dimensions.get('window').width * 0.7 : Dimensions.get('window').width * 0.80,
+    height: Dimensions.get('window').height > 900 ? Dimensions.get('window').height * 0.32 : Dimensions.get('window').height * 0.55,
     borderWidth: 2,
     borderRadius: 20,
     marginBottom: 20,

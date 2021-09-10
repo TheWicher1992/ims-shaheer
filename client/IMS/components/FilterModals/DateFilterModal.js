@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Modal, StyleSheet, Text, View, TouchableOpacity, Dimensions, TextInput, Button, ScrollView } from "react-native";
+import { Modal, StyleSheet, Text, View, TouchableOpacity, Dimensions, TextInput, TouchableWithoutFeedback, ScrollView } from "react-native";
 import CalendarPicker from 'react-native-calendar-picker';
 import { connect } from 'react-redux'
 import { setProdDate,resetProdDate } from '../../actions/productFilters'
@@ -53,12 +53,15 @@ const DateFilterModal = props => {
                 presentationStyle="overFullScreen"
                 transparent
                 visible={modalVisible}>
+                    <TouchableWithoutFeedback onPress={() => props.handleClose()}>
+                        <View style={styles.modalOverlay} />
+                    </TouchableWithoutFeedback>
                 <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
                     <View style={styles.modalStyle}>
                             
                         <View style={styles.topTextBox}>
-                            <View style= {{flexDirection: 'row', justifyContent: 'space-between', alignContent: 'center'}}>
-                                <TouchableOpacity onPress = {() => props.handleClose()} style = {{marginTop: Dimensions.get('window').height > 900 ? '7%':'7%', paddingLeft: '5%'}}>
+                            <View style= {{flexDirection: 'row', justifyContent: 'space-between', alignContent: 'center', marginTop: Dimensions.get('window').height * 0.03,}}>
+                                <TouchableOpacity onPress = {() => props.handleClose()} style = {{paddingLeft: '5%', marginTop: Dimensions.get('window').height>900 ? 10:5}}>
                                     <FontAwesome
                                     name = {"arrow-left"}
                                     size = {Dimensions.get('window').height > 900 ? 40:25}
@@ -66,7 +69,7 @@ const DateFilterModal = props => {
                                     />
                                 </TouchableOpacity>
                                 
-                                <View style={{ justifyContent: 'center', alignItems: 'flex-start', marginTop: '6.25%',}}>
+                                <View style={{ justifyContent: 'center', alignItems: 'flex-start'}}>
                                 
                                     <Text style={styles.topText}>
                                         Date
@@ -89,6 +92,7 @@ const DateFilterModal = props => {
                         <View style = {{marginTop: 20}}>
                             <CalendarPicker
                                 width = {Dimensions.get('window').width *0.75}
+                                height = {Dimensions.get('window').height * 0.6}
                                 onDateChange = { (date) => onDateChange(date)}
                             />
                         </View>
@@ -210,7 +214,7 @@ const styles = StyleSheet.create({
         borderWidth: 2,
         borderRadius: 20,
         borderColor: "#008394",
-        marginTop: Dimensions.get('window').height > 900 ? 30: 0,
+        marginTop: Dimensions.get('window').height > 900 ? 10: 0,
         // left: Dimensions.get('window').width * 0.4,
 
     },
@@ -225,7 +229,14 @@ const styles = StyleSheet.create({
         backgroundColor: '#119EC2',
         // width: {(amountVal/50) * 300},
         height:30,
-    }
+    },
+    modalOverlay: {
+        position: 'absolute',
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right: 0,
+    },
 
 });
 

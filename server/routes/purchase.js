@@ -51,7 +51,7 @@ router.post('/', async (req, res) => {
                 note
             })
             await deliveryOrder.save()
-            purchase.deliveryOrder = deliverOrder._id
+            purchase.deliveryOrder = deliveryOrder._id
             purchase.typeOfPurchase = 'DeliveryOrder'
         }
         //if physical stock
@@ -240,12 +240,8 @@ router.get('/:page/:query/:products/:clients/:payment/:date/:quantity/:amount', 
         }
     }
 
-    if (amount !== '*') filters['total'] = {
-        $lte: amount
-    }
-    if (quantity !== '*') filters['quantity'] = {
-        $lte: quantity
-    }
+    if (amount !== '*') filters['total'] = amount
+    if (quantity !== '*') filters['quantity'] = quantity
     if (payment !== '*') filters['payment'] = payment
 
     const productIDs = await Product.find({
@@ -337,7 +333,7 @@ router.put('/:id', async (req, res) => {
 
         //if DeliveryOrder
         if (isDeliveryOrder) {
-            console.log("called") 
+            console.log("called")
             const deliveryOrder = new DeliveryOrder({
                 client,
                 product,
@@ -347,9 +343,9 @@ router.put('/:id', async (req, res) => {
             })
             await deliveryOrder.save()
             purchase.typeOfPurchase = 'DeliveryOrder'
-            purchase.deliveryOrder = deliveryOrder._id 
+            purchase.deliveryOrder = deliveryOrder._id
 
-            
+
         }
         else {
             console.log("notCalled")
@@ -409,7 +405,7 @@ router.put('/:id', async (req, res) => {
 
     }
     catch (err) {
-        console.log('1',err)
+        console.log('1', err)
         return res.status(500).json({
             error: errors.SERVER_ERROR
         })

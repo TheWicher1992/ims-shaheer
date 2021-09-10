@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Modal, StyleSheet, Text, View, TouchableOpacity, Dimensions, TextInput, Button, ScrollView } from "react-native";
+import { Modal, StyleSheet, Text, View, TouchableOpacity, Dimensions, TextInput, TouchableWithoutFeedback, ScrollView } from "react-native";
 import { FontAwesome } from "@expo/vector-icons";
 import Slider from '@react-native-community/slider';
 import { connect } from 'react-redux'
@@ -11,6 +11,19 @@ const PriceFilterModal = props => {
 
     const [modalVisible, setModalVisible] = useState(false);
     const [sliderValue, setSliderValue] = useState(0);
+    const [valueSales,setValueSales] = useState(0)
+    const [valuePurchases,setValuePurchases] = useState(0)
+    const [valueProducts,setValueProducts] = useState(0)
+
+    const onChangeValueSales = (val) => {
+        setValueSales(val)
+    }
+    const onChangeValueProduct = (val) => {
+        setValueProducts(val)
+    }
+    const onChangeValuePurchases = (val) => {
+        setValuePurchases(val)
+    }
 
     useEffect(() => {
         setModalVisible(props.state);
@@ -20,27 +33,30 @@ const PriceFilterModal = props => {
         setModalVisible(false);
     }
 
-    const setPrice = (sliderValue) => {
-        if(props.title === "product"){
-            props.setProdPrice(sliderValue);
+    const setPrice = () => {
+        if(props.title === "product" && valueProducts !== 0){
+            props.setProdPrice(valueProducts);
         }
-        else if(props.title === "purchase"){
-            props.setPurchaseMaxTotal(sliderValue);
+        else if(props.title === "purchase" && valuePurchases !== 0){
+            props.setPurchaseMaxTotal(valuePurchases);
         }
-        else if(props.title === "sale"){
-            props.setSaleMaxTotal(sliderValue);
+        else if(props.title === "sale" && valueSales !== 0){
+            props.setSaleMaxTotal(valueSales);
         }
     }
 
     const clearPrice = () => {
         if(props.title === "product"){
             props.resetProdPrice()
+            setValueProducts(0)
         }
         else if(props.title === "purchase"){
             props.resetPurchaseMaxTotal()
+            setValuePurchases(0)
         }
         else if(props.title === "sale"){
             props.resetPurchaseMaxTotal()
+            setValueSales(0)
         }
 
 
@@ -52,21 +68,22 @@ const PriceFilterModal = props => {
                 <View style={styles.container}>
                     {/*Text to show slider value*/}
                     <Text style={styles.normalText}>
-                        Value of slider is : {props.priceFilter}
+                        Value applied is : {props.priceFilter}
                     </Text>
 
-                    {/*Slider with max, min, step and initial value*/}
-                    <Slider
-                        maximumValue={props.maxPrice}
-                        minimumValue={0}
-                        minimumTrackTintColor="#008394"
-                        maximumTrackTintColor="#008394"
-                        step={props.maxPrice / 100}
-                        value={props.priceFilter}
-                        onValueChange={
-                            (sliderValue) => setPrice(sliderValue)
-                        }
-                    />
+                    <View style = {{marginTop: 20}}>
+                        <TextInput keyboardType = 'numeric' onChangeText = {onChangeValueProduct} placeholder = "price" style = {styles.input}></TextInput>
+                    </View> 
+
+                    <View style = {{justifyContent: 'center', alignContent:'center'}}>
+                        <TouchableOpacity onPress = {() => setPrice()}>
+                            <View style = {styles.clearButton}>
+                                <Text style = {styles.clearButtonText}>
+                                    Apply
+                                </Text>
+                            </View>
+                        </TouchableOpacity>
+                    </View>
                 </View>
             )
         }
@@ -75,21 +92,21 @@ const PriceFilterModal = props => {
                 <View style={styles.container}>
                     {/*Text to show slider value*/}
                     <Text style={styles.normalText}>
-                        Value of slider is : {props.pricePurchaseFilter}
+                        Value applied is : {props.pricePurchaseFilter}
                     </Text>
+                    <View style = {{marginTop: 20}}>
+                        <TextInput keyboardType = 'numeric' onChangeText = {onChangeValuePurchases} placeholder = "price" style = {styles.input}></TextInput>
+                    </View> 
 
-                    {/*Slider with max, min, step and initial value*/}
-                    <Slider
-                        maximumValue={props.maxPrice}
-                        minimumValue={0}
-                        minimumTrackTintColor="#008394"
-                        maximumTrackTintColor="#008394"
-                        step={props.maxPrice / 100}
-                        value={props.pricePurchaseFilter === "*" ? 0 : props.pricePurchaseFilter}
-                        onValueChange={
-                            (sliderValue) => setPrice(sliderValue)
-                        }
-                    />
+                    <View style = {{justifyContent: 'center', alignContent:'center'}}>
+                        <TouchableOpacity onPress = {() => setPrice()}>
+                            <View style = {styles.clearButton}>
+                                <Text style = {styles.clearButtonText}>
+                                    Apply
+                                </Text>
+                            </View>
+                        </TouchableOpacity>
+                    </View>
                 </View>
             )
         }
@@ -98,21 +115,22 @@ const PriceFilterModal = props => {
                 <View style={styles.container}>
                     {/*Text to show slider value*/}
                     <Text style={styles.normalText}>
-                        Value of slider is : {props.priceSaleFilter}
+                        Value applied is : {props.priceSaleFilter}
                     </Text>
 
-                    {/*Slider with max, min, step and initial value*/}
-                    <Slider
-                        maximumValue={props.maxPrice}
-                        minimumValue={0}
-                        minimumTrackTintColor="#008394"
-                        maximumTrackTintColor="#008394"
-                        step={props.maxPrice / 100}
-                        value={props.priceSaleFilter === "*" ? 0 : props.priceSaleFilter}
-                        onValueChange={
-                            (sliderValue) => setPrice(sliderValue)
-                        }
-                    />
+                    <View style = {{marginTop: 20}}>
+                        <TextInput keyboardType = 'numeric' onChangeText = {onChangeValueSales} placeholder = "price" style = {styles.input}></TextInput>
+                    </View> 
+
+                    <View style = {{justifyContent: 'center', alignContent:'center'}}>
+                        <TouchableOpacity onPress = {() => setPrice()}>
+                            <View style = {styles.clearButton}>
+                                <Text style = {styles.clearButtonText}>
+                                    Apply
+                                </Text>
+                            </View>
+                        </TouchableOpacity>
+                    </View>
                 </View>
             )
         }
@@ -127,12 +145,15 @@ const PriceFilterModal = props => {
                 presentationStyle="overFullScreen"
                 transparent
                 visible={modalVisible}>
+                    <TouchableWithoutFeedback onPress={() => props.handleClose()}>
+                        <View style={styles.modalOverlay} />
+                    </TouchableWithoutFeedback>
                 <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
                     <View style={styles.modalStyle}>
 
                         <View style={styles.topTextBox}>
-                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignContent: 'center' }}>
-                                <TouchableOpacity onPress={() => props.handleClose()} style={{ marginTop: Dimensions.get('window').height > 900 ? '7%' : '7%', paddingLeft: '5%' }}>
+                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignContent: 'center',  marginTop: Dimensions.get('window').height * 0.03 }}>
+                                <TouchableOpacity onPress={() => props.handleClose()} style={{ marginTop: Dimensions.get('window').height>900 ? 10:5, paddingLeft: '5%' }}>
                                     <FontAwesome
                                         name={"arrow-left"}
                                         size={Dimensions.get('window').height > 900 ? 40 : 25}
@@ -140,7 +161,7 @@ const PriceFilterModal = props => {
                                     />
                                 </TouchableOpacity>
 
-                                <View style={{ justifyContent: 'center', alignItems: 'flex-start', marginTop: '6.25%', }}>
+                                <View style={{ justifyContent: 'center', alignItems: 'flex-start', }}>
 
                                     <Text style={styles.topText}>
                                         Price
@@ -265,7 +286,7 @@ const styles = StyleSheet.create({
         borderWidth: 2,
         borderRadius: 20,
         borderColor: "#008394",
-        marginTop: Dimensions.get('window').height > 900 ? 30 : 0,
+        marginTop: Dimensions.get('window').height > 900 ? 10 : 0,
         // left: Dimensions.get('window').width * 0.4,
 
     },
@@ -275,6 +296,24 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         backgroundColor: '#ecf0f1',
     },
+    modalOverlay: {
+        position: 'absolute',
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right: 0,
+    },
+    input: {
+        width: Dimensions.get('window').width * 0.65,
+        borderColor: 'gray',
+        borderWidth: 2,
+        borderRadius: 40,
+        marginBottom: 20,
+        fontSize: 15,
+        borderColor: "#008394",
+        height: 40,
+        padding: 10,
+      },
 
 });
 

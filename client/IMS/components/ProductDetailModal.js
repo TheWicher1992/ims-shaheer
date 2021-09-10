@@ -4,6 +4,7 @@ import ProductUpdateModal from "./ProductUpdateModal";
 import { uri } from '../api.json'
 import axios from "axios"
 import ShowAlert from '../components/ShowAlert';
+import { FontAwesome } from "@expo/vector-icons";
 
 
 const ProductDetailModal = props => {
@@ -66,7 +67,19 @@ const ProductDetailModal = props => {
           </TouchableWithoutFeedback>
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
-              <Text style={styles.modalTitle}>{props.title}</Text>
+                <View style = {{flexDirection: 'row'}}>
+                    <View style = {{ right: Dimensions.get('window').height > 900 ? Dimensions.get('window').width * 0.1 : Dimensions.get('window').width * 0.04, top: 18}}>
+                      <TouchableOpacity onPress = {() => props.handleClose()}>
+                        <FontAwesome
+                          name = {"arrow-left"}
+                          size = {Dimensions.get('window').height > 900 ? 30:25}
+                          color = {"#008394"}
+                        />
+                      </TouchableOpacity>
+                      
+                    </View>
+                    <Text style={styles.modalTitle}>{props.title}</Text>
+                  </View> 
               <ScrollView>
                 <View style={styles.modalBody}>
                   {props.object !== [] && (<View><Text style={styles.bodyText}>Product Name: {props.object.title}</Text>
@@ -75,7 +88,7 @@ const ProductDetailModal = props => {
                     <Text style={styles.bodyText}>Brand: {props.object.brand === undefined ? '--' : props.object.brand.title}</Text>
                     {props.occupation === 'Admin' ? <Text style={styles.bodyText}>Price: {props.object.price}</Text> : null}
                     <Text style={styles.bodyText}>Stock: {props.object.totalStock}</Text>
-                    <Text style={styles.bodyText}>Date Added: {props.object.date}</Text>
+                    <Text style={styles.bodyText}>Date: {props.object.date === undefined ? '---' : `${props.object.date.toLocaleString().split('T')[0]} - ${props.object.date.toLocaleString().split('T')[1].slice(0,8)}` }</Text>
                     <Text style={styles.bodyText}>Description: {props.object.description}</Text></View>)}
                 </View>
               </ScrollView>

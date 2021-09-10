@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { Modal, StyleSheet, Text, View, TouchableOpacity, Dimensions, ScrollView } from "react-native";
+import { Modal, StyleSheet, Text, View, TouchableOpacity, Dimensions, ScrollView, TouchableWithoutFeedback } from "react-native";
 import PurchaseUpdateModal from "./PurchaseUpdateModal";
 import axios from 'axios'
 import { uri } from '../api.json'
 import ShowAlert from '../components/ShowAlert';
-
+import { FontAwesome } from "@expo/vector-icons";
 const PurchaseDetailModal = props => {
   const [modalVisible, setModalVisible] = useState(false);
   const [isUpdateModalVisible, setUpdateModalVisible] = React.useState(false);
@@ -74,9 +74,24 @@ const PurchaseDetailModal = props => {
           props.handleClose();
         }}
       >
+        <TouchableWithoutFeedback onPress={() => props.handleClose()}>
+            <View style={styles.modalOverlay} />
+          </TouchableWithoutFeedback>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
-            <Text style={styles.modalTitle}>{props.title}</Text>
+              <View style = {{flexDirection: 'row'}}>
+                    <View style = {{ right: Dimensions.get('window').height > 900 ? Dimensions.get('window').width * 0.1 : Dimensions.get('window').width * 0.04, top: 18}}>
+                      <TouchableOpacity onPress = {() => props.handleClose()}>
+                        <FontAwesome
+                          name = {"arrow-left"}
+                          size = {Dimensions.get('window').height > 900 ? 30:25}
+                          color = {"#008394"}
+                        />
+                      </TouchableOpacity>
+                      
+                    </View>
+                    <Text style={styles.modalTitle}>{props.title}</Text>
+                  </View> 
             <ScrollView>
               <View style={styles.modalBody}>
                 <Text style={styles.bodyText}>Product: {props.object.product === undefined ? "---" : props.object.product.title} </Text>
@@ -84,9 +99,9 @@ const PurchaseDetailModal = props => {
                 <Text style={styles.bodyText}>Client Name: {props.object.client === undefined ? "---" : props.object.client.userName}  </Text>
                 <Text style={styles.bodyText}>Payment Type: {props.object.payment} </Text>
                 <Text style={styles.bodyText}>Total Amount: {props.object.total} </Text>
-                <Text style={styles.bodyText}>Amount Received: {props.object.received}  </Text>
+                <Text style={styles.bodyText}>Amount Sent: {props.object.received}  </Text>
                 <Text style={styles.bodyText}>Notes:  {props.object.note} </Text>
-                <Text style={styles.bodyText}>Date:  {props.object.date} </Text>
+                <Text style={styles.bodyText}>Date: {props.object.date === undefined ? '---' : `${props.object.date.toLocaleString().split('T')[0]} - ${props.object.date.toLocaleString().split('T')[1].slice(0,8)}` }   </Text>
                 <Text style={styles.bodyText}>Type:  {props.object.typeOfPurchase === undefined ? (null) : props.object.typeOfPurchase} </Text>
                 {props.object.typeOfPurchase === undefined ? (null) :(props.object.typeOfPurchase === 'Warehouse' ? (<Text style={styles.bodyText}>No Location</Text>) : (<Text style={styles.bodyText}>Location: {props.object.deliveryOrder.location === undefined ? '' :props.object.deliveryOrder.location }</Text>))}
 
@@ -196,6 +211,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: '80%',
     height: Dimensions.get('window').height > 900 ? '65%' : Dimensions.get('window').height * 0.60
+  },
+  modalOverlay: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
   },
 
 });

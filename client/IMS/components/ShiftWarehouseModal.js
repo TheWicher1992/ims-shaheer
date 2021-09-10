@@ -4,6 +4,8 @@ import {Picker} from '@react-native-picker/picker';
 import axios from 'axios'
 import { uri } from '../api.json'
 import ShowAlert from '../components/ShowAlert';
+import { FontAwesome } from "@expo/vector-icons";
+
 const ShiftWarehouseModal = props => {
   const [modalVisible, setModalVisible] = useState(false);
   const [warehouses, setWarehouses] = useState([])
@@ -55,7 +57,7 @@ const ShiftWarehouseModal = props => {
       sourceID: props.obj.warehouse === undefined ? null : props.obj.warehouse._id,
       destID: selectedWarehouse,
       productID: props.obj.product === undefined ? null : props.obj.product._id,
-      quantity: props.obj.stock,
+      quantity: Number.parseInt(props.obj.stock, 10),
       type: 'warehouse'
     }
 
@@ -131,7 +133,19 @@ const ShiftWarehouseModal = props => {
                         
                     </View>
                 </View>) : (<View style={styles.modalView}>
-                    <Text style={styles.modalTitle}>{props.title}</Text>
+                      <View style = {{flexDirection: 'row'}}>
+                        <View style = {{ right: Dimensions.get('window').height > 900 ? Dimensions.get('window').width * 0.1 : Dimensions.get('window').width * 0.04, top: 18}}>
+                          <TouchableOpacity onPress = {() => props.handleClose()}>
+                            <FontAwesome
+                              name = {"arrow-left"}
+                              size = {Dimensions.get('window').height > 900 ? 30:25}
+                              color = {"#008394"}
+                            />
+                          </TouchableOpacity>
+                          
+                        </View>
+                        <Text style={styles.modalTitle}>{props.title}</Text>
+                      </View> 
                     <View style={styles.modalBody}>
                         <TextInput value={props.obj.warehouse === undefined ? null : props.obj.warehouse.name} style={styles.input}/>
                         <TextInput value={props.obj.product === undefined ? null : props.obj.product.title} style={styles.input}/>

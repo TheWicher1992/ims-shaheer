@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Modal, StyleSheet, Text, View, TouchableOpacity, Dimensions, ScrollView, TouchableWithoutFeedback } from "react-native";
 import ClientUpdateModal from "./ClientUpdateModal";
 import ClientPaymentModal from "./ClientPaymentModal"
+import { FontAwesome } from "@expo/vector-icons";
 
 
 const ClientDetailModal = props => {
@@ -50,23 +51,35 @@ const ClientDetailModal = props => {
           </TouchableWithoutFeedback>
             <View style={styles.centeredView}>
             <View style={styles.modalView}>
-              <Text style={styles.modalTitle}>{props.title}</Text>
+              <View style = {{flexDirection: 'row'}}>
+                    <View style = {{ right: Dimensions.get('window').height > 900 ? Dimensions.get('window').width * 0.1 : Dimensions.get('window').width * 0.04, top: 18}}>
+                      <TouchableOpacity onPress = {() => props.handleClose()}>
+                        <FontAwesome
+                          name = {"arrow-left"}
+                          size = {Dimensions.get('window').height > 900 ? 30:25}
+                          color = {"#008394"}
+                        />
+                      </TouchableOpacity>
+                      
+                    </View>
+                    <Text style={styles.modalTitle}>{props.title}</Text>
+              </View> 
               <ScrollView>
                 <View style={styles.modalBody}>
                   {props.object !== [] && (<View><Text style={styles.bodyText}>Client Name: {props.object.userName}</Text>
                     <Text style={styles.bodyText}>Balance: {props.object.balance}</Text>
                     <Text style={styles.bodyText}>Phone Number: {props.object.phone}</Text>
-                    <Text style={styles.bodyText}>Date Added: {props.object.date}</Text>
+                    <Text style={styles.bodyText}>Date: {props.object.date === undefined ? '---' : `${props.object.date.toLocaleString().split('T')[0]} - ${props.object.date.toLocaleString().split('T')[1].slice(0,8)}` }</Text>
                     </View>)}
                 </View>
               </ScrollView>
               <View style={{flexDirection: 'row', justifyContent: 'space-evenly', alignItems : 'center',}}>
-                    <TouchableOpacity onPress = {() => {props.handleClose(), props.navigator.navigate({routeName: 'ClientSaleDetail', params: { clientID: props.object._id }})}}>
+                    <TouchableOpacity onPress = {() => {props.handleClose(), props.navigator.navigate({routeName: 'ClientSaleDetail', params: { clientID: props.object._id, clientName: props.object.userName }})}}>
                             <View style={styles.backButtonModalContainer}>
                                 <Text style={styles.buttonModalText}>Sales</Text>
                             </View>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress = {() => {props.handleClose(), props.navigator.navigate({routeName: 'ClientPurchaseDetail', params: { clientID: props.object._id }})}}>
+                        <TouchableOpacity onPress = {() => {props.handleClose(), props.navigator.navigate({routeName: 'ClientPurchaseDetail', params: { clientID: props.object._id, clientName: props.object.userName }})}}>
                             <View style={styles.backButtonModalContainer}>
                                 <Text style={styles.buttonModalText}>Purchases</Text>
                             </View>
@@ -86,6 +99,11 @@ const ClientDetailModal = props => {
                         <TouchableOpacity onPress = {() => {setUpdateModalVisible(true)}}>
                             <View style={styles.backButtonModalContainer}>
                                 <Text style={styles.buttonModalText}>Update</Text>
+                            </View>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress = {() => {props.handleClose(), props.navigator.navigate({routeName: 'ClientLedger', params: { clientID: props.object._id, clientName: props.object.userName }})}}>
+                            <View style={styles.backButtonModalContainer}>
+                                <Text style={styles.buttonModalText}>Ledger</Text>
                             </View>
                         </TouchableOpacity>
                     </View>
@@ -209,7 +227,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 35,
     alignItems: "center",
-    width: Dimensions.get('window').height > 900 ? '80%' : '95%',
+    width: Dimensions.get('window').height > 900 ? '80%' : '98%',
     height: Dimensions.get('window').height > 900 ? '65%' : Dimensions.get('window').height * 0.60,
     borderColor: "#008394",
     borderWidth: 2,

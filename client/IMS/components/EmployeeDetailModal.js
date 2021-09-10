@@ -35,7 +35,7 @@ const EmployeeDetailModal = props => {
   return (
     <KeyboardAvoidingView>
         <ShowAlert state={alertState} handleClose={show} alertTitle={'Success'} alertMsg={'Employee has been deleted successfully! Press OK to go back.'}/>
-        <EmployeeChangePasswordModal state={isUpdateModalVisible} initialModalClose={props.handleClose} handleClose={handleCloseUpdate} title='Change Details' getClients={props.getClients} object={props.object} />
+        <EmployeeChangePasswordModal state={isUpdateModalVisible} initialModalClose={props.handleClose} handleClose={handleCloseUpdate} title='Change Details' getEmployees={props.getEmployees} object={props.object} occupation={props.occupation} />
       <View style={styles.centeredView}>
         <Modal
           animationType="slide"
@@ -58,7 +58,7 @@ const EmployeeDetailModal = props => {
                 <View style={styles.modalBody}>
                   {props.object !== [] && (<View><Text style={styles.bodyText}>Username: {props.object.userName}</Text>
                     <Text style={styles.bodyText}>Occupation: {props.occupation === 'Admin' ? 'Admin' : 'Employee'}</Text>
-                    <Text style={styles.bodyText}>Date Added: {props.object.date}</Text>
+                    <Text style={styles.bodyText}>Date: {props.object.date === undefined ? '---' : `${props.object.date.toLocaleString().split('T')[0]} - ${props.object.date.toLocaleString().split('T')[1].slice(0,8)}` }</Text>
                     </View>)}
                 </View>
               </ScrollView>

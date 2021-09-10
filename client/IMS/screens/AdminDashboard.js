@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View, TouchableOpacity, Dimensions } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Dimensions, ScrollView } from 'react-native';
 import HeaderButton from '../components/HeaderButton';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import HeaderNavigation from '../components/HeaderNavigation';
@@ -63,6 +63,7 @@ const AdminDashboard = props => {
 
 
   return (
+    <ScrollView>
     <View style={{ marginTop: Dimensions.get('window').height < 900 ? 5 : 60 }}>
       <View style={{ justifyContent: 'center', alignSelf: 'center', }}>
         <Text style={styles.titleText}>Admin Dashboard</Text>
@@ -77,11 +78,11 @@ const AdminDashboard = props => {
           <Text style={styles.containerText}>Today's Revenue {todayRevenue}</Text>
         </View>
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => props.navigation.navigate({ routeName: 'Delivery' })}>
+      {/* <TouchableOpacity onPress={() => props.navigation.navigate({ routeName: 'Delivery' })}>
         <View style={styles.containers}>
           <Text style={styles.containerText}>Pending Deliveries {pendingDeliveries}</Text>
         </View>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
       <View style={styles.buttonContainer}>
         <TouchableOpacity onPress={() => props.navigation.navigate({ routeName: 'Sales' })}>
           <View elevation={5} style={styles.buttons}>
@@ -97,6 +98,7 @@ const AdminDashboard = props => {
         </View>
       </View>
     </View>
+    </ScrollView>
   )
 }
 
@@ -108,7 +110,7 @@ AdminDashboard.navigationOptions = navigationData => {
     headerStyle: {
       backgroundColor: '#008394',
     },
-    headerLeft: (
+    headerLeft: () =>(
       <HeaderButtons HeaderButtonComponent={HeaderButton}>
         <Item
           title="Menu"
@@ -119,7 +121,7 @@ AdminDashboard.navigationOptions = navigationData => {
         />
       </HeaderButtons>
     ),
-    headerRight: (
+    headerRight: () => (
       <HeaderNavigation navigation={navigationData.navigation} />
     )
   };
@@ -130,7 +132,7 @@ const styles = StyleSheet.create({
     color: '#008394',
     fontFamily: 'Roboto',
     fontWeight: 'bold',
-    fontSize: Dimensions.get('window').height === 1232 ? 32 : 24
+    fontSize: Dimensions.get('window').height > 900 ? 32 : 24
 
   },
   containers: {
@@ -142,13 +144,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     alignSelf: 'center',
-    marginTop: Dimensions.get('window').height < 900 ? Dimensions.get('window').height * 0.06 : Dimensions.get('window').height * 0.045,
+    marginTop: Dimensions.get('window').height < 900 ? Dimensions.get('window').height * 0.04 : Dimensions.get('window').height * 0.045,
   },
   containerText: {
     color: '#008394',
     fontFamily: 'Roboto',
     fontWeight: 'bold',
-    fontSize: Dimensions.get('window').height === 1232 ? 26 : 20
+    fontSize: Dimensions.get('window').height > 900 ? 26 : 20
   },
   buttonContainer: {
     flexDirection: 'row',
@@ -180,7 +182,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontFamily: 'Roboto',
     fontWeight: 'bold',
-    fontSize: Dimensions.get('window').height === 1232 ? 26 : 20,
+    fontSize: Dimensions.get('window').height > 900 ? 26 : 20,
     textAlign: 'center'
 
   },

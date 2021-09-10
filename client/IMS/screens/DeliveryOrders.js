@@ -40,40 +40,40 @@ const DeliveryOrders = props => {
   })
 
   const catchWarning = () => {
-    setAlertState(!alertState) 
+    setAlertState(!alertState)
     setAlertTitle('Attention')
     setAlertMsg('Something went wrong. Please restart')
   }
   const getOrders = async () => {
     setLoading(true)
-    try{
+    try {
 
-    
-    const res = await axios.get(
-      `${uri}/api/order/${Pfilters.page}/${query}/${Pfilters.client}/${Pfilters.product}/${Pfilters.sort}/${Pfilters.sortBy}`
-    )
 
-    setOrders(res.data.deliveryOrder)
+      const res = await axios.get(
+        `${uri}/api/order/${Pfilters.page}/${query}/${Pfilters.client}/${Pfilters.product}/${Pfilters.sort}/${Pfilters.sortBy}`
+      )
+
+      setOrders(res.data.deliveryOrder)
     }
-    catch(err){
+    catch (err) {
       catchWarning()
     }
     setLoading(false)
   }
 
   const getProducts = async () => {
-    try{
-
-    
-    const res = await axios.get(
-      `${uri}/api/product/`
-    )
+    try {
 
 
-    setProducts(res.data.products)
-    setProductName(res.data.products[0]._id)
+      const res = await axios.get(
+        `${uri}/api/product/`
+      )
+
+
+      setProducts(res.data.products)
+      setProductName(res.data.products[0]._id)
     }
-    catch(err){
+    catch (err) {
       catchWarning()
     }
 
@@ -83,27 +83,29 @@ const DeliveryOrders = props => {
 
 
   const getClients = async () => {
-    try{
-
-    
-    const res = await axios.get(
-      `${uri}/api/client/*`
-    )
+    try {
 
 
-    setClients(res.data.clients)
-    setClientName(res.data.clients[0]._id)
+      const res = await axios.get(
+        `${uri}/api/client/*`
+      )
+
+
+      setClients(res.data.clients)
+      setClientName(res.data.clients[0]._id)
     }
-    catch(err){
+    catch (err) {
       catchWarning()
     }
 
   }
 
   useEffect(() => {
-    getClients()
-    getProducts()
-    getOrders()
+    props.navigation.addListener('didFocus', () => {
+      getClients()
+      getProducts()
+      getOrders()
+    })
 
   }, [])
 
@@ -173,20 +175,20 @@ const DeliveryOrders = props => {
 
 
   const addDeliveryOrder = () => {
-    if(quantityVal === '' || notes === '' || location === ''){
+    if (quantityVal === '' || notes === '' || location === '') {
       setAlertTitle('Warning')
       setAlertMsg('Input fields may be empty. Request could not be processed.')
       show()
     }
-    else{
+    else {
       const body = {
         productID: productName,
-        quantity: quantityVal,
+        quantity: Number.parseInt(quantityVal,10),
         location: location,
         clientID: clientName,
         note: notes
       }
-  
+
       axios.post(`${uri}/api/order`, body, {
         headers: {
           'Content-Type': 'application/json'
@@ -205,7 +207,7 @@ const DeliveryOrders = props => {
           show()
         })
     }
-    
+
   }
 
 
@@ -230,13 +232,25 @@ const DeliveryOrders = props => {
         transparent
         animationType="slide"
         visible={isModalVisible}>
-           <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
-            <View style={styles.modalOverlay} />
-          </TouchableWithoutFeedback>
+        <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
+          <View style={styles.modalOverlay} />
+        </TouchableWithoutFeedback>
         <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
           <View style={styles.modalStyle}>
             <View style={{ justifyContent: 'center', alignItems: 'center', }}>
-              <Text style={styles.modalTitle}>Add Order</Text>
+              <View style = {{flexDirection: 'row'}}>
+                  <View style = {{ right: Dimensions.get('window').height > 900 ? Dimensions.get('window').width * 0.16 : Dimensions.get('window').width * 0.1, top: Dimensions.get('window').height > 900 ? 26 :28}}>
+                    <TouchableOpacity onPress = {() => setModalVisible(false)}>
+                      <FontAwesome
+                        name = {"arrow-left"}
+                        size = {Dimensions.get('window').height > 900 ? 36:25}
+                        color = {"#008394"}
+                      />
+                    </TouchableOpacity>
+                    
+                  </View>
+                    <Text style={styles.modalTitle}>Add Order</Text> 
+                </View>
               <View>
                 <View style={{ marginTop: 40, borderWidth: 2, borderRadius: 40, borderColor: "#008394", width: Dimensions.get('window').width * 0.65, height: 40, fontSize: 8, justifyContent: 'space-between' }}>
 
@@ -258,8 +272,8 @@ const DeliveryOrders = props => {
                   </Picker>
 
                 </View>
-                <View style = {{bottom: 40}}>
-                  <TextInput onChangeText={onChangeQuantity} style={styles.input} placeholder="Quantity" autoCorrect={false} />
+                <View style={{ bottom: 40 }}>
+                  <TextInput keyboardType = 'numeric' onChangeText={onChangeQuantity} style={styles.input} placeholder="Quantity" autoCorrect={false} />
                   <TextInput onChangeText={onChangeLocation} style={styles.input} placeholder="Location" autoCorrect={false} />
                   <TextInput multiline={true} numberOfLines={5} onChangeText={onChangeNotes} style={styles.input} placeholder="Notes" autoCorrect={false} />
                 </View>
@@ -277,7 +291,7 @@ const DeliveryOrders = props => {
                   >
                     {
                       clients.map((client, i) => (
-                        <Picker.Item label={client.userName === undefined ? 0 : client.userName} value={client._id === undefined ? 0 : client._id} />
+                        <Picker.Item key = {client._id} label={client.userName === undefined ? 0 : client.userName} value={client._id === undefined ? 0 : client._id} />
                       ))}
                   </Picker>
                 </View>
@@ -341,43 +355,43 @@ const DeliveryOrders = props => {
 
       </View>
       <View >
-        <ExportButton data={orders} title={'DeliveryOrder.xlsx'}/>
+        <ExportButton data={orders} title={'DeliveryOrder.xlsx'} screenName='deliveryOrders'/>
       </View>
 
-                      
+
       <Spinner loading={loading} />
-       
 
-        <DataTable style={{marginTop: 15}}>
-          <DataTable.Header>
-            <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Product</Text></DataTable.Title>
-            <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Client</Text></DataTable.Title>
-            <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Quantity</Text></DataTable.Title>
-            <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Location</Text></DataTable.Title>
-            <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Status</Text></DataTable.Title>
-          </DataTable.Header>
-          {!loading &&<ScrollView>
-            <View>
-          {
-            orders.map((order, i) => (
-              <TouchableOpacity key={i} onPress={() => onPressModal(order)}>
-                <DataTable.Row>
-                  <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{order.product.title === null ? '--' : order.product.title}</Text></DataTable.Cell>
-                  <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{order.client.userName === undefined ? '--' : order.client.userName}</Text></DataTable.Cell>
-                  <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{order.quantity === undefined ? '--' : order.quantity}</Text></DataTable.Cell>
-                  <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{order.location === undefined ? '--' : order.location}</Text></DataTable.Cell>
-                  {order.status === true ? <DataTable.Cell style={styles.cells}><Ionicons name={'checkmark'} size={25} color={'#006270'} /></DataTable.Cell> : <DataTable.Cell style={styles.cells}><Entypo name={'cross'} size={25} color={'red'} /></DataTable.Cell>}
-                </DataTable.Row>
-              </TouchableOpacity>
-            ))
 
-          }
+      <DataTable style={{ marginTop: 15 }}>
+        <DataTable.Header>
+          <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Product</Text></DataTable.Title>
+          <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Client</Text></DataTable.Title>
+          <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Quantity</Text></DataTable.Title>
+          <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Location</Text></DataTable.Title>
+          {/* <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Status</Text></DataTable.Title> */}
+        </DataTable.Header>
+        {!loading && <ScrollView>
+          <View>
+            {
+              orders.map((order, i) => (
+                <TouchableOpacity key={i} onPress={() => onPressModal(order)}>
+                  <DataTable.Row>
+                    <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{order.product.title === null ? '--' : order.product.title}</Text></DataTable.Cell>
+                    <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{order.client.userName === undefined ? '--' : order.client.userName}</Text></DataTable.Cell>
+                    <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{order.quantity === undefined ? '--' : order.quantity}</Text></DataTable.Cell>
+                    <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{order.location === undefined ? '--' : order.location}</Text></DataTable.Cell>
+                    {/* {order.status === true ? <DataTable.Cell style={styles.cells}><Ionicons name={'checkmark'} size={25} color={'#006270'} /></DataTable.Cell> : <DataTable.Cell style={styles.cells}><Entypo name={'cross'} size={25} color={'red'} /></DataTable.Cell>} */}
+                  </DataTable.Row>
+                </TouchableOpacity>
+              ))
+
+            }
           </View>
-          </ScrollView>}
-        </DataTable>
+        </ScrollView>}
+      </DataTable>
 
-      
-      
+
+
     </ScrollView>
     // </KeyboardAvoidingView>
 
@@ -417,7 +431,7 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontFamily: 'Roboto',
     fontWeight: 'bold',
-    fontSize: Dimensions.get('window').height === 1232 ? 36 : 28,
+    fontSize: Dimensions.get('window').height > 900 ? 36 : 28,
     bottom: 20,
   },
   modalTitle: {
@@ -425,7 +439,7 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontFamily: 'Roboto',
     fontWeight: 'bold',
-    fontSize: Dimensions.get('window').height === 1232 ? 36 : 28,
+    fontSize: Dimensions.get('window').height > 900 ? 36 : 28,
     top: 20,
   },
   modalStyle: {

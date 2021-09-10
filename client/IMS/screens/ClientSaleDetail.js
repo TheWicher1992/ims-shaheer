@@ -115,7 +115,7 @@ const MakeSale = props => {
         </View>
 
       </View>
-      <ExportButton data={sales} title={`Sale.xlsx`}/>
+      <ExportButton data={sales} title={props.navigation.getParam('clientName')+`Sales.xlsx`} screenName='sales'/>
       <Spinner loading={loading} />
       {!loading && <ScrollView>
 
@@ -129,7 +129,7 @@ const MakeSale = props => {
 
           {
             sales.map((sale, i) => (
-              <TouchableOpacity onPress={() => setTableDetailModalVisible(true)}>
+              <TouchableOpacity onPress={() => setTableDetailModalVisible(true)} key={sale._id}>
                 <DataTable.Row>
                   <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{sale.product === undefined ? '--' : sale.product.title}</Text></DataTable.Cell>
                   <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{sale.quantity === undefined ? '--' : sale.quantity}</Text></DataTable.Cell>
@@ -183,14 +183,14 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontFamily: 'Roboto',
     fontWeight: 'bold',
-    fontSize: Dimensions.get('window').height === 1232 ? 36 : 28,
+    fontSize: Dimensions.get('window').height > 900 ? 36 : 28,
   },
   modalTitle: {
     color: '#006270',
     fontSize: 30,
     fontFamily: 'Roboto',
     fontWeight: 'bold',
-    fontSize: Dimensions.get('window').height === 1232 ? 36 : 28,
+    fontSize: Dimensions.get('window').height > 900 ? 36 : 28,
     top: 20,
   },
   modalStyle: {

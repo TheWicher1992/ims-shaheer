@@ -12,6 +12,8 @@ const EmployeeChangePasswordModal = props => {
   const [alertState, setAlertState] = useState(false)
   const [alertTitle, setAlertTitle] = useState(``)
   const [alertMsg, setAlertMsg] = useState(``)
+  const [id, setID] = useState(``)
+  const [occupation, setOccupation] = useState(``)
 
   const show = () => {
     setAlertState(!alertState)
@@ -22,7 +24,7 @@ const EmployeeChangePasswordModal = props => {
     show()
   }
 
-  const updateEmployee = () => {
+  const updateAdmin = () => {
       const body = {
         userName: employeeName,
         password: password,
@@ -33,11 +35,11 @@ const EmployeeChangePasswordModal = props => {
         }
       }
       
-      axios.put(`${uri}/api/client/${id}`, body, config)
+      axios.put(`${uri}/api/auth/edit-admin/${id}`, body, config)
       .then( res => {
-        props.getClients()
+        props.getEmployees()
         setAlertTitle('Success');
-        setAlertMsg('Employee data updated successfully!');
+        setAlertMsg('Admin data updated successfully!');
         show();})
       .catch(err => {
         console.log(err.response)
@@ -46,10 +48,36 @@ const EmployeeChangePasswordModal = props => {
         props.handleClose()
         props.initialModalClose()})
   }
+  const updateEmployee = () => {
+    const body = {
+      userName: employeeName,
+      password: password,
+    }
+    const config = {
+      headers: {
+        "Content-Type": "application/json"
+      }
+    }
+    
+    axios.put(`${uri}/api/auth/edit-employee/${id}`, body, config)
+    .then( res => {
+      props.getEmployees()
+      setAlertTitle('Success');
+      setAlertMsg('Employee data updated successfully!');
+      show();})
+    .catch(err => {
+      console.log(err.response)
+      setError()})
+    .finally(() => {
+      props.handleClose()
+      props.initialModalClose()})
+}
   
   useEffect(() => {
     setEmployeeName(props.object.userName)
     setPassword(props.object.password)
+    setID(props.object._id)
+    setOccupation(props.occupation)
   }, [props.object])
   
   useEffect(() => {
@@ -91,7 +119,7 @@ const EmployeeChangePasswordModal = props => {
                     <Text style={styles.bodyText}>Username:</Text>
                     <TextInput placeholder="Username" onChangeText= {onChangeEmployeeName} style={styles.input} value = {employeeName}/>
                     <Text style={styles.bodyText}>Password:</Text>
-                    <TextInput placeholder="New Password" onChangeText= {onChangePassword}  style={styles.input}/>
+                    <TextInput placeholder="New Password" onChangeText= {onChangePassword}  style={styles.input} secureTextEntry={true}/>
                 </View>
                 <View style={{flexDirection: 'row', justifyContent: 'space-evenly', alignItems : 'center'}}>
                     <TouchableOpacity onPress={() => props.handleClose()}>
@@ -99,7 +127,7 @@ const EmployeeChangePasswordModal = props => {
                             <Text style={styles.buttonModalText}>Back</Text>
                         </View>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => updateEmployee()}>
+                    <TouchableOpacity onPress={() => occupation === 'Admin' ? updateAdmin() : updateEmployee()}>
                         <View style={styles.backButtonModalContainer}>
                             <Text style={styles.buttonModalText}>Done</Text>
                         </View>

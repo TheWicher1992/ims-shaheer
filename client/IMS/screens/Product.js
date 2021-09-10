@@ -1,11 +1,10 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react'
-import { StyleSheet, Text, View, Button, Dimensions, TextInput, TouchableOpacity, KeyboardAvoidingView, ScrollView, Pressable, Image } from 'react-native';
+import { StyleSheet, Text, View, Button, Dimensions, TextInput, TouchableOpacity, KeyboardAvoidingView, ScrollView, Modal, TouchableWithoutFeedback, Switch } from 'react-native';
 import HeaderButton from '../components/HeaderButton';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { FontAwesome } from '@expo/vector-icons';
 import { DataTable } from 'react-native-paper';
-import Modal from 'react-native-modal';
 import ProductDetailModal from '../components/ProductDetailModal';
 import FilterButton from '../components/FilterButton';
 import { Picker } from '@react-native-picker/picker';
@@ -23,6 +22,8 @@ const Product = props => {
 
   const [products, setProducts] = useState([])
   const [loading, setLoading] = useState(true)
+  const [warehouseCheck, setWarehouseCheck] = useState('*')
+  const [stock, setStock] = useState(0)
   const [brandsAndColours, setBrandAndColours] = useState({
     brands: [],
     colours: []
@@ -58,9 +59,9 @@ const Product = props => {
         `/${props.filters.price}/${props.filters.sort}` +
         `/${props.filters.sortBy}`
       )
-      res.data.products.length === 0 ? searchWarning(): null
+      res.data.products.length === 0 ? searchWarning() : null
       setProducts(res.data.products.reverse())
-      
+
 
     }
     catch (err) {
@@ -87,14 +88,15 @@ const Product = props => {
       catchWarning()
     }
 
-    //console.log(res.data)
 
 
   }
 
 
   useEffect(() => {
-    getProducts()
+    props.navigation.addListener('didFocus', () => {
+      getProducts()
+    })
   }, [])
 
 
@@ -120,7 +122,6 @@ const Product = props => {
     let q = searchVal.trim()
     setQuery(q === '' ? '*' : q)
     // setFilters({ ...filters, query: searchVal })
-    // console.log(search);
   }
 
   const searchFunc = () => {
@@ -138,7 +139,6 @@ const Product = props => {
   const [description, setDescription] = React.useState(``)
   const addProduct = () => {
     // setModalVisible(false); //closing modal on done for now
-    // // console.log(color, brand)
     if (serialNo === '' || productName === '' || amountVal === '' || description === '') {
       setAlertTitle('Warning')
       setAlertMsg('Input fields may be empty. Request could not be processed.')
@@ -151,7 +151,9 @@ const Product = props => {
         brandID: brand,
         colourID: color,
         description,
-        price: amountVal
+        price: Number.parseInt(amountVal, 10),
+        stock: Number.parseInt(stock, 10),
+        warehouse: isWarehouse ? selectedWarehouse : '*'
       }
 
       axios.post(`${uri}/api/product`, body, {
@@ -194,6 +196,10 @@ const Product = props => {
     setDescription(desc);
   }
 
+  const onChangeStock = (stock) => {
+    setStock(stock);
+  }
+
 
 
 
@@ -226,14 +232,18 @@ const Product = props => {
       show()
     }
     else {
-      axios.post(`${uri}/api/product/brand`, {
+     
+      axios.post(`${uri}/api/product/brand`, 
+      {
         brand: addBrand
-      }, {
+      }, 
+      {
         headers: {
           "Content-Type": 'application/json'
         }
       }).then(res => {
         setAlertTitle('Success')
+        getBrandColours()
         setAlertMsg('Request has been processed, Brand added.')
         show()
       })
@@ -243,7 +253,7 @@ const Product = props => {
           show()
         })
 
-      getBrandColours().then(() => setAddBrandModal(false))
+       getBrandColours().then(() => setAddBrandModal(false))
 
     }
 
@@ -253,6 +263,8 @@ const Product = props => {
 
 
   const [addColorModal, setAddColorModal] = useState(false);
+  const [warehouses, setWarehouses] = useState([])
+  const [selectedWarehouse, setSelectedWarehouse] = useState(``)
   const colorModal = () => {
     setAddColorModal(!addColorModal);
   }
@@ -276,6 +288,7 @@ const Product = props => {
         }
       }).then(res => {
         setAlertTitle('Success')
+        getBrandColours()
         setAlertMsg('Request has been processed, Color added.')
         show()
       })
@@ -292,48 +305,126 @@ const Product = props => {
   }
 
   const showAddProductForm = () => {
-
-    getBrandColours().then(() => setModalVisible(true))
+    getWarehouses()
+    getBrandColours().then(() => {
+      setModalVisible(true)})
+    
   }
-
+  const toggleSwitch = () => {
+    setIsWarehouse(!isWarehouse);
+    // console.log(`switched`);
+  };
+  const [isWarehouse, setIsWarehouse] = useState(false)
   const [alertState, setAlertState] = useState(false)
   const [alertTitle, setAlertTitle] = useState(``)
   const [alertMsg, setAlertMsg] = useState(``)
+  const [isEnabled, setIsEnabled] = useState(false)
   const show = () => {
     setAlertState(!alertState)
   }
   const searchWarning = () => {
-    setAlertState(!alertState) 
+    setAlertState(!alertState)
     setAlertTitle('Attention')
     setAlertMsg('No Products found!')
   }
   const catchWarning = () => {
-    setAlertState(!alertState) 
+    setAlertState(!alertState)
     setAlertTitle('Attention')
     setAlertMsg('Something went wrong. Please restart')
+  }
+  
+  const getWarehouses = async () => {
+    try {
+      const res = await axios.get(
+        `${uri}/api/warehouse/${1}/${'*'}/${'*'}/${'*'}`
+      )
+      setWarehouses(res.data.warehouse)
+      setSelectedWarehouse(res.data.warehouse[0]._id)
+    }
+    catch (err) {
+      catchWarning()
+    }
+
   }
 
 
   return (
     <ScrollView>
       <ShowAlert state={alertState} handleClose={show} alertTitle={alertTitle} alertMsg={alertMsg} style={styles.buttonModalContainer} />
+      <View style = {styles.centeredView}>
       <Modal
         onSwipeComplete={() => setModalVisible(false)}
+        animationType="slide"
+        transparent={true}
         swipeDirection="left"
-        presentationStyle="overFullScreen"
         transparent
         visible={isModalVisible}>
-
+        <TouchableWithoutFeedback onPress={() => setModalVisible(false)}>
+          <View style={styles.modalOverlay} />
+        </TouchableWithoutFeedback>
         <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center', }}>
-          <ScrollView>
+          
             <View style={styles.modalStyle}>
               <View style={{ justifyContent: 'center', alignItems: 'center', }}>
-                <Text style={styles.modalTitle}>Add a Product</Text>
-                <View style={{ marginTop: 50 }}>
+
+                <View style = {{flexDirection: 'row'}}>
+                    <View style = {{ right: Dimensions.get('window').height > 900 ? Dimensions.get('window').width * 0.16 : Dimensions.get('window').width * 0.05, top: Dimensions.get('window').height > 900 ? 26 : 35}}>
+                      <TouchableOpacity onPress = {() => setModalVisible(false)}>
+                        <FontAwesome
+                          name = {"arrow-left"}
+                          size = {Dimensions.get('window').height > 900 ? 36:25}
+                          color = {"#008394"}
+                        />
+                      </TouchableOpacity>
+                      
+                    </View>
+                    
+                    <Text style={styles.modalTitle}>Add a Product</Text>
+                    
+                  </View>
+                  {Dimensions.get('window').height < 900 ? (<ScrollView >
+                <View style={{ marginTop: 50, height: 500, alignItems: 'center' }}>
                   <TextInput onChangeText={onChangeSerialNo} style={styles.input} placeholder="Serial" autoCorrect={false} />
                   <TextInput onChangeText={onChangeProductName} style={styles.input} placeholder="Product" autoCorrect={false} />
-                  <TextInput onChangeText={onChangeAmount} style={styles.input} placeholder="Amount" autoCorrect={false} />
+                  <TextInput keyboardType = 'numeric' onChangeText={onChangeAmount} style={styles.input} placeholder="Amount" autoCorrect={false} />
+                  <View>
+                    <View style={styles.label}>
+                      <Text style={styles.switch}>NW</Text>
+                      <Switch
+                        trackColor={{ false: "#00E0C7", true: "#006270" }}
+                        thumbColor={isEnabled ? "white" : "#006270"}
+                        onValueChange={toggleSwitch}
+                        value={isWarehouse}
+                      />
+                      <Text style={styles.switch}>W</Text>
+                    </View>
+                  </View>
+                  {isWarehouse ? <TextInput keyboardType = 'numeric' onChangeText={onChangeStock} style={styles.input} placeholder="Stock" autoCorrect={false} /> : null}
+                  
                   <TextInput multiline={true} numberOfLines={5} onChangeText={onChangeDescription} style={styles.input} placeholder="Description" autoCorrect={false} />
+
+                  {isWarehouse ? <View style={{ borderWidth: 2, marginBottom: 20, borderRadius: 40, borderColor: "#008394", width: Dimensions.get('window').width * 0.65, height: 40, fontSize: 8, justifyContent: 'space-between' }}>
+                    <Picker
+                      style={{ top: 6, color: 'grey', fontFamily: 'Roboto' }}
+                      itemStyle={{ fontWeight: '100' }}
+                      placeholder="Select a Warehouse"
+                      selectedValue={selectedWarehouse}
+                      onValueChange={(itemValue, itemIndex) =>
+                        {
+                          setSelectedWarehouse(itemValue)
+                        }
+                      }
+                    >
+
+                      {
+                        warehouses.map((w => (
+                          <Picker.Item key={w._id} label={w.name} value={w._id} />
+                        )))
+                      }
+
+                    </Picker>
+
+                  </View> : null}
 
                   <View style={{ borderWidth: 2, borderRadius: 40, borderColor: "#008394", width: Dimensions.get('window').width * 0.65, height: 40, fontSize: 8, justifyContent: 'space-between' }}>
                     <Picker
@@ -370,7 +461,7 @@ const Product = props => {
                   <View style={{ borderWidth: 2, borderRadius: 40, borderColor: "#008394", width: Dimensions.get('window').width * 0.65, marginTop: 15, height: 40, fontSize: 8, }}>
                     <Picker
                       style={{ top: 6, color: 'grey', fontFamily: 'Roboto' }}
-                      //itemStyle={{ transform: [{ scaleX: 1.2 }, { scaleY: 1.2 }]}}
+                      
                       itemStyle={{ fontWeight: '100' }}
 
                       selectedValue={brand}
@@ -406,7 +497,7 @@ const Product = props => {
                 <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10, }}>
                   <TouchableOpacity style={{ alignSelf: 'flex-start' }} onPress={() => { setModalVisible(false) }}>
                     <View>
-                      <View style={styles.buttonModalContainerCross}>
+                      <View style={isWarehouse ? [styles.buttonModalContainerCross, {marginTop: 80}] : styles.buttonModalContainerCross}>
                         <View>
                           <Text style={styles.buttonModalText}>Cancel</Text>
                         </View>
@@ -415,7 +506,7 @@ const Product = props => {
                   </TouchableOpacity>
                   <TouchableOpacity onPress={() => { addProduct() }}>
                     <View>
-                      <View style={styles.buttonModalContainer}>
+                      <View style={isWarehouse ? [styles.buttonModalContainer, {marginTop: 80}] : styles.buttonModalContainer}>
                         <View>
                           <Text style={styles.buttonModalText}>Done</Text>
                         </View>
@@ -423,25 +514,177 @@ const Product = props => {
                     </View>
                   </TouchableOpacity>
                 </View>
+                </ScrollView>) 
+                : 
+                ( <View style={{alignItems: 'center',}}>
+                  <View style={{ marginTop: 50}}>
+                    <TextInput onChangeText={onChangeSerialNo} style={styles.input} placeholder="Serial" autoCorrect={false} />
+                    <TextInput onChangeText={onChangeProductName} style={styles.input} placeholder="Product" autoCorrect={false} />
+                    <TextInput keyboardType = 'numeric' onChangeText={onChangeAmount} style={styles.input} placeholder="Amount" autoCorrect={false} />
+                    <View>
+                    <View style={styles.label}>
+                      <Text style={styles.switch}>NW</Text>
+                      <Switch
+                        trackColor={{ false: "#00E0C7", true: "#006270" }}
+                        thumbColor={isEnabled ? "white" : "#006270"}
+                        onValueChange={toggleSwitch}
+                        value={isWarehouse}
+                      />
+                      <Text style={styles.switch}>W</Text>
+                    </View>
+                  </View>
+                  {isWarehouse ? <TextInput keyboardType = 'numeric' onChangeText={onChangeStock} style={styles.input} placeholder="Stock" autoCorrect={false} /> : null}
+                  
+                  <TextInput multiline={true} numberOfLines={5} onChangeText={onChangeDescription} style={styles.input} placeholder="Description" autoCorrect={false} />
+
+                  {isWarehouse ? <View style={{ borderWidth: 2, marginBottom: 20, borderRadius: 40, borderColor: "#008394", width: Dimensions.get('window').width * 0.65, height: 40, fontSize: 8, justifyContent: 'space-between' }}>
+                    <Picker
+                      style={{ top: 6, color: 'grey', fontFamily: 'Roboto' }}
+                      itemStyle={{ fontWeight: '100' }}
+                      placeholder="Select a Warehouse"
+                      selectedValue={selectedWarehouse}
+                      onValueChange={(itemValue, itemIndex) =>
+                        {
+                          setSelectedWarehouse(itemValue)
+                        }
+                      }
+                    >
+
+                      {
+                        warehouses.map((w => (
+                          <Picker.Item key={w._id} label={w.name} value={w._id} />
+                        )))
+                      }
+
+                    </Picker>
+
+                  </View> : null}
+  
+                    <View style={{ borderWidth: 2, borderRadius: 40, borderColor: "#008394", width: Dimensions.get('window').width * 0.65, height: 40, fontSize: 8, justifyContent: 'space-between' }}>
+                      <Picker
+                        style={{ top: 6, color: 'grey', fontFamily: 'Roboto' }}
+                        itemStyle={{ fontWeight: '100' }}
+                        placeholder="Select a brand"
+                        selectedValue={color}
+                        onValueChange={(itemValue, itemIndex) =>
+                          setColor(itemValue)
+                        }
+                      >
+  
+                        {
+                          brandsAndColours.colours.map((c => (
+                            <Picker.Item key={c._id} label={c.title} value={c._id} />
+                          )))
+                        }
+  
+                      </Picker>
+  
+                    </View>
+                    <View>
+                      <TouchableOpacity style={{ marginTop: 10 }} onPress={() => { setAddColorModal(true) }}>
+                        <View style={styles.addButton}>
+                          <View style={{ justifyContent: 'center', alignContent: 'center', alignItems: 'center', }}>
+                            <Text style={styles.modalbuttonText}>
+                              + Add
+                            </Text>
+                          </View>
+                        </View>
+                      </TouchableOpacity>
+                    </View>
+  
+                    <View style={{ borderWidth: 2, borderRadius: 40, borderColor: "#008394", width: Dimensions.get('window').width * 0.65, marginTop: 15, height: 40, fontSize: 8, }}>
+                      <Picker
+                        style={{ top: 6, color: 'grey', fontFamily: 'Roboto' }}
+                        
+                        itemStyle={{ fontWeight: '100' }}
+  
+                        selectedValue={brand}
+                        onValueChange={(itemValue, itemIndex) =>
+                          setBrand(itemValue)
+                        }
+                      >
+                        {
+                          brandsAndColours.brands.map((b => (
+                            <Picker.Item key={b._id} label={b.title} value={b._id} />
+                          )))
+                        }
+  
+                      </Picker>
+  
+  
+                    </View>
+                    <View>
+                      <TouchableOpacity style={{ marginTop: 10 }} onPress={() => { setAddBrandModal(true) }}>
+                        <View style={styles.addButton}>
+                          <View style={{ justifyContent: 'center', alignContent: 'center', alignItems: 'center' }}>
+                            <Text style={styles.modalbuttonText}>
+                              + Add
+                            </Text>
+                          </View>
+                        </View>
+                      </TouchableOpacity>
+                    </View>
+  
+  
+                  </View>
+  
+                  <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10, }}>
+                    <TouchableOpacity style={{ alignSelf: 'flex-start' }} onPress={() => { setModalVisible(false) }}>
+                      <View>
+                        <View style={isWarehouse ? [styles.buttonModalContainerCross, {marginTop: 60}] : styles.buttonModalContainerCross}>
+                          <View>
+                            <Text style={styles.buttonModalText}>Cancel</Text>
+                          </View>
+                        </View>
+                      </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => { addProduct() }}>
+                      <View>
+                        <View style={isWarehouse ? [styles.buttonModalContainer, {marginTop: 60}] : styles.buttonModalContainer}>
+                          <View>
+                            <Text style={styles.buttonModalText}>Done</Text>
+                          </View>
+                        </View>
+                      </View>
+                    </TouchableOpacity>
+                  </View>
+                  </View>
+                  )}
+                  
               </View>
+              
             </View>
-          </ScrollView>
+          
         </View>
 
       </Modal>
 
       {/* modal for adding brand*/}
-      <View>
+      <View style = {{justifyContent: 'center'}}> 
         <Modal
           onSwipeComplete={() => setAddBrandModal(false)}
+          animationType="slide"
+          transparent={true}
           swipeDirection="left"
-          presentationStyle="overFullScreen"
           visible={addBrandModal}
-          transparent
         >
+          <TouchableWithoutFeedback onPress={() => setAddBrandModal(false)}>
+            <View style={styles.modalOverlay} />
+          </TouchableWithoutFeedback>
           <View styles={styles.centeredView}>
             <View style={styles.modalView}>
-              <Text style={styles.modalTitle}>Add a Brand</Text>
+              <View style = {{flexDirection: 'row'}}>
+                  <View style = {{ right: Dimensions.get('window').height > 900 ? Dimensions.get('window').width * 0.10 : Dimensions.get('window').width * 0.08, top: 28}}>
+                    <TouchableOpacity onPress = {() => setAddBrandModal(false)}>
+                      <FontAwesome
+                        name = {"arrow-left"}
+                        size = {Dimensions.get('window').height > 900 ? 30:25}
+                        color = {"#008394"}
+                      />
+                    </TouchableOpacity>
+                  </View>
+                  <Text style={styles.modalTitle}>Add a Brand</Text>
+                </View>
               <View style={styles.modalBody}>
                 <TextInput onChangeText={onChangeNewBrand} placeholder="Add a Brand" style={styles.input} />
               </View>
@@ -467,14 +710,29 @@ const Product = props => {
       <View>
         <Modal
           onSwipeComplete={() => setAddColorModal(false)}
+          animationType="slide"
+          transparent={true}
           swipeDirection="left"
-          presentationStyle="overFullScreen"
           visible={addColorModal}
-          transparent
         >
+          <TouchableWithoutFeedback onPress={() => setAddColorModal(false)}>
+            <View style={styles.modalOverlay} />
+          </TouchableWithoutFeedback>
           <View styles={styles.centeredView}>
             <View style={styles.modalView}>
-              <Text style={styles.modalTitle}>Add a Color</Text>
+                <View style = {{flexDirection: 'row'}}>
+                  <View style = {{ right: Dimensions.get('window').height > 900 ? Dimensions.get('window').width * 0.10 : Dimensions.get('window').width * 0.08, top: 28}}>
+                    <TouchableOpacity onPress = {() => setAddColorModal(false)}>
+                      <FontAwesome
+                        name = {"arrow-left"}
+                        size = {Dimensions.get('window').height > 900 ? 30:25}
+                        color = {"#008394"}
+                      />
+                    </TouchableOpacity>
+                  </View>
+                  <Text style={styles.modalTitle}>Add a Color</Text>
+                </View>
+                      
               <View style={styles.modalBody}>
                 <TextInput onChangeText={onChangeNewColor} placeholder="Add a Color" style={styles.input} />
               </View>
@@ -494,6 +752,7 @@ const Product = props => {
             </View>
           </View>
         </Modal>
+        </View>
       </View>
 
 
@@ -535,7 +794,7 @@ const Product = props => {
           <FilterButton getProducts={getProducts} page="product" />
         </View>
         <View style={{ marginTop: 25 }}>
-          <ExportButton data={products} title={'products.xlsx'} />
+          <ExportButton data={products} title={'products.xlsx'} screenName='products'/>
         </View>
       </View>
       <Spinner loading={loading} />
@@ -547,7 +806,7 @@ const Product = props => {
           <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Brand</Text></DataTable.Title>
           <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Color</Text></DataTable.Title>
           {/* <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Quantity</Text></DataTable.Title> */}
-          <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Amount</Text></DataTable.Title>
+          <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Price</Text></DataTable.Title>
           {/* <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Warehouse</Text></DataTable.Title> */}
 
         </DataTable.Header>
@@ -619,20 +878,21 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontFamily: 'Roboto',
     fontWeight: 'bold',
-    fontSize: Dimensions.get('window').height === 1232 ? 36 : 28,
+    fontSize: Dimensions.get('window').height > 900 ? 36 : 28,
   },
   modalTitle: {
     color: '#006270',
     fontSize: 30,
     fontFamily: 'Roboto',
     fontWeight: 'bold',
-    fontSize: Dimensions.get('window').height === 1232 ? 36 : 28,
+    fontSize: Dimensions.get('window').height > 900 ? 36 : 28,
     top: 20,
   },
   modalStyle: {
     backgroundColor: "#fff",
-    width: Dimensions.get('window').height > 900 ? 600 : 320,
-    height: Dimensions.get('window').height > 900 ? 680 : 600,
+    width: Dimensions.get('window').height > 900 ? Dimensions.get('window').width * 0.80 : Dimensions.get('window').width * 0.80,
+    height: Dimensions.get('window').height > 900 ? Dimensions.get('window').height * 0.65 : Dimensions.get('window').height * 0.85,
+    alignItems: 'center',
     borderWidth: 2,
     borderRadius: 20,
     marginBottom: 20,
@@ -658,8 +918,6 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 32,
     left: 15
-    // right: Dimensions.get('window').width / 5
-    // we can also change the container to center and implement the right styling
   },
   buttonModalContainer: {
     justifyContent: 'center',
@@ -669,7 +927,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#00E0C7',
     paddingVertical: 8,
     paddingHorizontal: 24,
-    //top: 45,
+    
     margin: 20,
     display: 'flex'
   },
@@ -681,7 +939,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#ff0000',
     paddingVertical: 8,
     paddingHorizontal: 24,
-    //top: 45, //here is the problem
+    
     margin: 20,
     display: 'flex'
   },
@@ -791,10 +1049,11 @@ const styles = StyleSheet.create({
     marginTop: 22
   },
   modalBody: {
-    paddingVertical: Dimensions.get('window').height < 900 ? Dimensions.get('window').height * 0.11 : Dimensions.get('window').height * 0.1,
-    paddingHorizontal: 10
+    paddingVertical: Dimensions.get('window').height < 900 ? Dimensions.get('window').height * 0.05 : Dimensions.get('window').height * 0.08,
+    paddingHorizontal: 10,
   },
   modalView: {
+    alignSelf: 'center',
     margin: 20,
     backgroundColor: "white",
     borderRadius: 20,
@@ -803,7 +1062,8 @@ const styles = StyleSheet.create({
     borderColor: "#008394",
     borderWidth: 2,
     width: Dimensions.get('window').height > 900 ? Dimensions.get('window').width * 0.7 : Dimensions.get('window').width * 0.80,
-    height: Dimensions.get('window').height > 900 ? Dimensions.get('window').height * 0.5 : Dimensions.get('window').height * 0.60
+    height: Dimensions.get('window').height > 900 ? Dimensions.get('window').height * 0.5 : Dimensions.get('window').height * 0.40,
+    marginTop: Dimensions.get('window').height > 900 ? Dimensions.get('window').height * 0.282 : Dimensions.get('window').height * 0.2,
   },
   addButton: {
     borderRadius: 40,
@@ -811,15 +1071,22 @@ const styles = StyleSheet.create({
     height: 24,
     width: 80,
   },
+  switch: {
+    color: '#008394',
+    fontSize: Dimensions.get('window').height > 900 ? 18 : 16,
+    fontFamily: 'Roboto',
+  },
+  label: {
+    alignSelf: 'center',
+    flexDirection: 'row',
+    fontWeight: 'bold',
+    marginRight: Dimensions.get('window').width * 0.80 / 2
+  },
   modalbuttonText: {
     fontWeight: 'bold',
     color: 'white',
     fontSize: 12,
     marginTop: 3.5,
-  },
-  modalBody: {
-    paddingVertical: '30%',
-    paddingHorizontal: 10
   },
   backButtonModalContainer: {
     justifyContent: 'center',
@@ -829,9 +1096,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#008394',
     paddingVertical: 8,
     paddingHorizontal: 24,
-    top: Dimensions.get('window').height > 900 ? (Dimensions.get('window').width > 480 ? 35 : null) : null,
     margin: 20,
-    display: 'flex',
-
+    display: 'flex'
+  },
+  modalOverlay: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
   },
 })
