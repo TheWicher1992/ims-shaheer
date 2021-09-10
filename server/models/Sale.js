@@ -2,9 +2,9 @@ const mongoose = require('mongoose')
 
 const Schema = mongoose.Schema
 //         "Time": "Date",
-//         "Product":"Ref Product", 
+//         "Product":"Ref Product",
 //         "Quantity":"Number",
-//         "Amount":"Number", 
+//         "Amount":"Number",
 //         "Client":"Ref Client",
 //         "Payment":["Partial", "Credit","Full"],
 //         "Discount":"Number",
@@ -12,13 +12,25 @@ const Schema = mongoose.Schema
 //         "Note":"String"
 
 const saleSchema = new Schema({
-    product: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Product'
-    },
-    quantity: {
-        type: Number
-    },
+    products: [
+        {
+            product: {
+                type: Schema.Types.ObjectId,
+                ref: 'Product'
+            },
+            typeOfSale: {
+                type: String,
+                enum: ['Warehouse', 'DeliveryOrder',]
+            },
+            deliveryOrder: {
+                type: Schema.Types.ObjectId,
+                ref: 'DeliveryOrder'
+            },
+            quantity: {
+                type: Number
+            }
+        }
+    ],
     totalWithOutDiscount: {
         type: Number
     },
@@ -51,14 +63,6 @@ const saleSchema = new Schema({
     deliveryStatus: {
         type: Boolean,
         default: false
-    },
-    typeOfSale: {
-        type: String,
-        enum: ['Warehouse', 'DeliveryOrder',]
-    },
-    deliveryOrder: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'DeliveryOrder'
     }
 })
 
