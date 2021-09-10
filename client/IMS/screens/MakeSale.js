@@ -229,6 +229,8 @@ const MakeSale = props => {
         received: Number.parseInt(amountReceived, 10),
         note: notes
       }
+
+
       console.log("body", body)
 
 
@@ -335,6 +337,7 @@ const MakeSale = props => {
       }
     })
   }
+
 
 
   const setQuantityWarehouses = (q, s, e) => {
