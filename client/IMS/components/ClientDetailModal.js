@@ -74,7 +74,7 @@ const ClientDetailModal = props => {
                 </View>
               </ScrollView>
               <View style={{flexDirection: 'row', justifyContent: 'space-evenly', alignItems : 'center',}}>
-                    <TouchableOpacity onPress = {() => {props.handleClose(), props.navigator.navigate({routeName: 'ClientSaleDetail', params: { clientID: props.object._id }})}}>
+                    <TouchableOpacity onPress = {() => {props.handleClose(), props.navigator.navigate({routeName: 'ClientSaleDetail', params: { clientID: props.object._id, clientName: props.object.userName }})}}>
                             <View style={styles.backButtonModalContainer}>
                                 <Text style={styles.buttonModalText}>Sales</Text>
                             </View>
