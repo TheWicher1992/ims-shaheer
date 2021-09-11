@@ -5,13 +5,14 @@ import { connect } from 'react-redux'
 import { setProdQuant,resetProdQuant } from '../../actions/productFilters'
 import { setPurchaseEMaxQuant, resetPurchaseMaxQuant } from '../../actions/purchaseFilters'
 import { setSaleMaxQuant, resetSaleMaxQuant } from "../../actions/saleFilters"; 
-import Slider from '@react-native-community/slider';
+import { setSTOCKEMaxQuant, resetSTOCKMaxQuant } from "../../actions/stockFilters";
 const QuantityFilterModal = props => {
 
     const [modalVisible, setModalVisible] = useState(false);
     const [valueSales,setValueSales] = useState(0)
     const [valuePurchases,setValuePurchases] = useState(0)
     const [valueProducts,setValueProducts] = useState(0)
+    const [valueStock, setValueStock] = useState(0)
 
     const onChangeValueSales = (val) => {
         setValueSales(val)
@@ -21,6 +22,9 @@ const QuantityFilterModal = props => {
     }
     const onChangeValuePurchases = (val) => {
         setValuePurchases(val)
+    }
+    const onChangeValueStock = (val) => {
+        setValueStock(val)
     }
 
     useEffect(() => {
@@ -40,6 +44,9 @@ const QuantityFilterModal = props => {
         else if(props.title === "sale" && valueSales !== 0){
             props.setSaleMaxQuant(valueSales);
         }
+        else if(props.title === "stock" && valueStock !== 0){
+            props.setSTOCKEMaxQuant(valueStock)
+        }
         
     }
 
@@ -56,10 +63,15 @@ const QuantityFilterModal = props => {
             props.resetSaleMaxQuant()
             setValueSales(0)
         }
+        else if(props.title === "stock"){
+            props.resetSTOCKMaxQuant()
+            setValueStock(0)
+        }
         
         
     }
     const showQuantity = () => {
+        console.log(props.maxStock)
         if(props.maxStock !== undefined && props.title === "product"){
             return (
                 <View style={styles.container}>
@@ -67,7 +79,7 @@ const QuantityFilterModal = props => {
                     Value applied is : {props.quantFilter}
                     </Text>
                     <View style = {{marginTop: 20}}>
-                        <TextInput keyboardType = 'numeric' onChangeText = {onChangeValueProduct} placeholder = "quantity" style = {styles.input}></TextInput>
+                        <TextInput keyboardType = 'numeric' onChangeText = {onChangeValueProduct} placeholder = "stock" style = {styles.input}></TextInput>
                     </View> 
 
                     <View style = {{justifyContent: 'center', alignContent:'center'}}>
@@ -90,7 +102,7 @@ const QuantityFilterModal = props => {
                 </Text>
 
                 <View style = {{marginTop: 20}}>
-                        <TextInput keyboardType = 'numeric' onChangeText = {onChangeValuePurchases} placeholder = "quantity" style = {styles.input}></TextInput>
+                        <TextInput keyboardType = 'numeric' onChangeText = {onChangeValuePurchases} placeholder = "stock" style = {styles.input}></TextInput>
                     </View> 
 
                     <View style = {{justifyContent: 'center', alignContent:'center'}}>
@@ -105,14 +117,15 @@ const QuantityFilterModal = props => {
             </View>
         )
        }
-       else if(props.maxStock !== undefined && props.title === "sale"){
+       else if(props.title === "sale"){
+           
             return (
                 <View style={styles.container}>
                     <Text style = {styles.normalText}>
                     Value applied is : {props.quantSaleFilter}
                     </Text>
                     <View style = {{marginTop: 20}}>
-                        <TextInput keyboardType = 'numeric' onChangeText = {onChangeValueSales} placeholder = "quantity" style = {styles.input}></TextInput>
+                        <TextInput keyboardType = 'numeric' onChangeText = {onChangeValueSales} placeholder = "stock" style = {styles.input}></TextInput>
                     </View> 
 
                     <View style = {{justifyContent: 'center', alignContent:'center'}}>
@@ -128,7 +141,31 @@ const QuantityFilterModal = props => {
                     
                 </View>
             )
-       }
+        }
+        else if(props.maxStock !== undefined && props.title === "stock"){
+            return (
+                <View style={styles.container}>
+                    <Text style = {styles.normalText}>
+                    Value applied is : {props.quantStockFilter}
+                    </Text>
+                    <View style = {{marginTop: 20}}>
+                        <TextInput keyboardType = 'numeric' onChangeText = {onChangeValueStock} placeholder = "stock" style = {styles.input}></TextInput>
+                    </View> 
+
+                    <View style = {{justifyContent: 'center', alignContent:'center'}}>
+                        <TouchableOpacity onPress = {() => setQuantity()}>
+                            <View style = {styles.clearButton}>
+                                <Text style = {styles.clearButtonText}>
+                                    Apply
+                                </Text>
+                            </View>
+                        </TouchableOpacity>
+                    </View>
+                    
+                    
+                </View>
+            )
+        }
     }
     return (
 
@@ -159,7 +196,7 @@ const QuantityFilterModal = props => {
                                 <View style={{ justifyContent: 'center', alignItems: 'flex-start',}}>
                                 
                                     <Text style={styles.topText}>
-                                        Quantity
+                                        Stock
                                     </Text>
                                 </View>
                                 <View style = {{justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-end', paddingRight: '8%' }}>
@@ -316,8 +353,9 @@ const mapStateToProps = (state) => {
     return {
         quantFilter: state.productFilters.quantity,
         quantPurchaseFilter: state.purchaseFilters.maxQuantity,
-        quantSaleFilter: state.saleFilters.maxQuantity
+        quantSaleFilter: state.saleFilters.maxQuantity,
+        quantStockFilter: state.stockFilters.stock
     }
 }
 
-export default connect(mapStateToProps, { setProdQuant,resetProdQuant, setPurchaseEMaxQuant, resetPurchaseMaxQuant, setSaleMaxQuant, resetSaleMaxQuant, setSaleMaxQuant, resetSaleMaxQuant   })(QuantityFilterModal);
+export default connect(mapStateToProps, { setProdQuant,resetProdQuant, setPurchaseEMaxQuant, resetPurchaseMaxQuant, setSaleMaxQuant, resetSaleMaxQuant, setSaleMaxQuant, resetSaleMaxQuant, setSTOCKEMaxQuant, resetSTOCKMaxQuant    })(QuantityFilterModal);

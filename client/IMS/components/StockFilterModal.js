@@ -1,109 +1,93 @@
 import React, { useState, useEffect } from "react";
-import { Modal, StyleSheet, Text, View, TouchableOpacity, Dimensions, TouchableWithoutFeedback } from "react-native";
-import DateFilterModal from "./FilterModals/DateFilterModal";
-import ClientFilterModal from "./FilterModals/ClientFilterModal";
-import ProductNameFilterModal from "./FilterModals/ProductNameFilterModal";
+import { Modal, StyleSheet, Text, View, TouchableOpacity, Dimensions, TextInput, TouchableWithoutFeedback } from "react-native";
+import WarehouseFilterModal from "./FilterModals/WarehouseFilterModal";
 import QuantityFilterModal from "./FilterModals/QuantityFilterModal";
-import PriceFilterModal from "./FilterModals/PriceFilterModal";
-import PaymentTypeFilterModal from "./FilterModals/PaymentTypeFilterModal";
+import ProductNameFilterModal from "./FilterModals/ProductNameFilterModal";
 import { uri } from '../api.json'
 import axios from "axios"
-import { connect } from 'react-redux'
-import { clearSaleFilters } from "../actions/saleFilters";
-import { FontAwesome } from "@expo/vector-icons";
+import { connect } from "react-redux";
+import { clearSTOCKFilters } from "../actions/stockFilters";
 
 
-
-const SaleFilterModal = props => {
+const StockFilterModal = props => {
 
     const [modalVisible, setModalVisible] = useState(false);
-    const [clientFilterModal, setClientFilterModal] = useState(false);
-    const [dateFilterModal, setDateFilterModal] = useState(false);
     const [productNameFilterModal, setProductNameFilterModal] = useState(false);
+    const [warehouseFilterModal, setWarehouseFilterModal] = useState(false);
     const [quantityFilterModal, setQuantityFilterModal] = useState(false);
-    const [priceFilterModal, setPriceFilterModal] = useState(false);
-    const [paymentTypeFilterModal, setPaymentTypeFilterModal] = useState(false);
-    const [alertState, setAlertState] = useState(false)
-    const [alertTitle, setAlertTitle] = useState(``)
-    const [alertMsg, setAlertMsg] = useState(``)
-    const show = () => {
-        setAlertState(!alertState)
-    }
     useEffect(() => {
         setModalVisible(props.state);
+
     }, [props.state]);
 
     function handleClose() {
         setModalVisible(false);
     }
 
-    const closeClientFilterModal = () => {
-        setClientFilterModal(false);
-    }
-    const closeDateFilterModal = () => {
-        setDateFilterModal(false);
-    }
-    const closeProductNameFilterModal = () => {
-        setProductNameFilterModal(false);
+   
+    const closeWarehouseFilterModal = () => {
+        setWarehouseFilterModal(false);
     }
     const closeQuantityFilterModal = () => {
         setQuantityFilterModal(false);
     }
-    const closePriceFilterModal = () => {
-        setPriceFilterModal(false);
+    const closeProductNameFilterModal = () => {
+        setProductNameFilterModal(false);
     }
-    const closePaymentTypeFilterModal = () => {
-        setPaymentTypeFilterModal(false);
+    const clearAll = () => {
+        props.clearSTOCKFilters()
     }
-    const [filterMap, setFilterMap] = useState({
-        clients: {},
-        products: {}
-    })
-    const [filters, setFilters] = useState([])
 
-    const getFilters = async () => {
+    const [filters, setFilters] = useState([]) // for warehouses and max stock
+
+    const getFilters = async () => { // for warehouses and max stock 
         try{
-
+            const res = await axios.get(
+                `${uri}/api/product/filters`
+            )
+            setFilters(res.data.filters);
+    
+        }
+        catch(err){
+            catchWarning()
+        }
         
+    }
+
+    const [filtersProductName, setFilterProductName] = useState([]) //for product names 
+
+    const getFiltersProductName = async () => { //for product names
+        try{
         const res = await axios.get(
             `${uri}/api/sale/filters`
         )
-        setFilters(res.data.filters);
-
-        const productMap = {}
-        res.data.filters.products.forEach(p => {
-            productMap[p._id] = p.title
-        })
-
-        const clientMap = {}
-        res.data.filters.clients.forEach(c => {
-            clientMap[c._id] = c.userName
-        })
-
-        setFilterMap({
-            clients: {
-                ...clientMap
-            },
-            products: {
-                ...productMap
-            }
-        })
-    } 
-    catch(err) {
-        catchWarning()
-    }
+        setFilterProductName(res.data.filters);
+        } 
+        catch(err) {
+            catchWarning()
+        }
         
     }
+
+
+
+    useEffect(() => {
+        getFilters()
+        getFiltersProductName()
+    }, [])
+
+    const [alertState, setAlertState] = useState(false)
+    const [alertTitle, setAlertTitle] = useState(``)
+    const [alertMsg, setAlertMsg] = useState(``)
+
     const catchWarning = () => {
         setAlertState(!alertState) 
         setAlertTitle('Attention')
         setAlertMsg('Something went wrong. Please restart')
     }
 
+    
 
-    useEffect(() => {
-        getFilters()
-    }, [])
     return (
 
         <View style={styles.centeredView}>
@@ -114,7 +98,7 @@ const SaleFilterModal = props => {
                 presentationStyle="overFullScreen"
                 transparent
                 visible={modalVisible}>
-                    <TouchableWithoutFeedback onPress={() => {props.handleClose(); props.getSales()}}>
+                    <TouchableWithoutFeedback onPress={() => {props.handleClose(); props.getStock()}}>
                         <View style={styles.modalOverlay} />
                     </TouchableWithoutFeedback>
                 <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
@@ -122,14 +106,13 @@ const SaleFilterModal = props => {
 
                         <View style={styles.topTextBox}>
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                            
                                 <View style={{ justifyContent: 'center', alignItems: 'flex-start', marginTop: Dimensions.get('window').height * 0.03, paddingLeft: '5%' }}>
                                     <Text style={styles.topText}>
                                         Filter
                                     </Text>
                                 </View>
                                 <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-end', paddingRight: '8%' }}>
-                                    <TouchableOpacity onPress={props.clearSaleFilters}>
+                                    <TouchableOpacity onPress={() => clearAll()}>
                                         <View style={styles.clearButton}>
                                             <Text style={styles.clearButtonText}>
                                                 Clear
@@ -141,7 +124,6 @@ const SaleFilterModal = props => {
                             </View>
 
                         </View>
-
 
                         <TouchableOpacity style={styles.TextBox} onPress={() => setProductNameFilterModal(true)}>
                             <View style={{ marginTop: Dimensions.get('window').height * 0.05, paddingLeft: '5%' }}>
@@ -167,67 +149,6 @@ const SaleFilterModal = props => {
                         </TouchableOpacity>
 
 
-
-
-                        <TouchableOpacity style={styles.TextBox} onPress={() => setClientFilterModal(true)}>
-                            <View style={{ marginTop: Dimensions.get('window').height * 0.05, paddingLeft: '5%' }}>
-                                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                                    <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-start' }}>
-                                        <Text style={styles.normalText}>
-                                            Clients
-                                        </Text>
-                                    </View>
-                                    <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-end', paddingRight: '8%' }}>
-                                        <Text style={styles.sideText}>
-                                            {props.filters.client.length === 1 && 'All'}
-                                            {
-                                                props.filters.client.length !== 1 && 
-                                                <Text style = {styles.sideText}>
-                                                    {`(${props.filters.client.length -1}) Item(s)`}
-                                                    </Text>
-                                            }
-                                        </Text>
-                                    </View>
-                                </View>
-                            </View>
-                        </TouchableOpacity>
-
-
-                        <TouchableOpacity style={styles.TextBox} onPress={() => setPaymentTypeFilterModal(true)}>
-                            <View style={{ marginTop: Dimensions.get('window').height * 0.05, paddingLeft: '5%' }}>
-                                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                                    <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-start' }}>
-                                        <Text style={styles.normalText}>
-                                            Payment Type
-                                        </Text>
-                                    </View>
-                                    <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-end', paddingRight: '8%' }}>
-                                        <Text style={styles.sideText}>
-                                            {props.filters.payment === '*' ? 'All' : props.filters.payment}
-                                        </Text>
-                                    </View>
-                                </View>
-                            </View>
-                        </TouchableOpacity>
-
-                        <TouchableOpacity style={styles.TextBox} onPress={() => setDateFilterModal(true)}>
-                            <View style={{ marginTop: Dimensions.get('window').height * 0.05, paddingLeft: '5%' }}>
-                                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                                    <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-start' }}>
-                                        <Text style={styles.normalText}>
-                                            Date
-                                        </Text>
-                                    </View>
-                                    <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-end', paddingRight: '8%' }}>
-                                        <Text style={styles.sideText}>
-                                            {props.filters.date === '*' ? 'All' : props.filters.date}
-
-                                        </Text>
-                                    </View>
-                                </View>
-                            </View>
-                        </TouchableOpacity>
-
                         <TouchableOpacity style={styles.TextBox} onPress={() => setQuantityFilterModal(true)}>
                             <View style={{ marginTop: Dimensions.get('window').height * 0.05, paddingLeft: '5%' }}>
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
@@ -238,38 +159,45 @@ const SaleFilterModal = props => {
                                     </View>
                                     <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-end', paddingRight: '8%' }}>
                                         <Text style={styles.sideText}>
-                                            {props.filters.maxQuantity === '*' ? 'All' : props.filters.maxQuantity}
-
+                                            {props.filters.stock === '*' ? 'All' : props.filters.stock}
                                         </Text>
                                     </View>
                                 </View>
                             </View>
                         </TouchableOpacity>
 
-                        <TouchableOpacity style={styles.TextBox} onPress={() => setPriceFilterModal(true)}>
-                            <View style={{ marginTop: Dimensions.get('window').height * 0.05, paddingLeft: '5%' }}>
+                        <TouchableOpacity style={styles.TextBox} onPress={() => setWarehouseFilterModal(true)}>
+                            <View style={ {marginTop: Dimensions.get('window').height * 0.05, paddingLeft: '5%' }}>
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                     <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-start' }}>
                                         <Text style={styles.normalText}>
-                                            Price
+                                            Warehouses
                                         </Text>
                                     </View>
                                     <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-end', paddingRight: '8%' }}>
-                                        <Text style={styles.sideText}>
-                                            {props.filters.maxTotal === '*' ? 'All' : props.filters.maxTotal}
-
-                                        </Text>
+                                        {
+                                            props.filters.ware.length === 1 ? (<Text style={styles.sideText}>
+                                                All
+                                            </Text>)
+                                            : (
+                                                <Text style = {styles.sideText}>
+                                                    {`(${props.filters.ware.length -1}) Item(s)`}
+                                                </Text>
+                                            )
+                                        }
+                                        
+                                       
                                     </View>
                                 </View>
                             </View>
                         </TouchableOpacity>
 
                         <View style={styles.bottomBox}>
-                            <TouchableOpacity onPress={() => { props.handleClose() ; props.getSales() }} style={{ width: '90%', position: "absolute", top: '5%' }}>
+                            <TouchableOpacity onPress={() => { props.handleClose(); props.getStock() }} style={{ width: '90%', position: "absolute", top: '40%' }}>
                                 <View style={styles.bottomButton}>
                                     <View>
                                         <Text style={styles.footerText}>
-                                            View Sales
+                                            View Stock
                                         </Text>
                                     </View>
                                 </View>
@@ -280,12 +208,9 @@ const SaleFilterModal = props => {
                     </View>
                 </View>
             </Modal>
-            <DateFilterModal state={dateFilterModal} handleClose={closeDateFilterModal} title="sale" />
-            <ClientFilterModal state={clientFilterModal} handleClose={closeClientFilterModal} object={filters.clients} title="sale" />
-            <ProductNameFilterModal state={productNameFilterModal} handleClose={closeProductNameFilterModal} object={filters.products} title="sale" />
-            <QuantityFilterModal state={quantityFilterModal} handleClose={closeQuantityFilterModal} title="sale" maxStock={filters.maxQuantity} />
-            <PriceFilterModal state={priceFilterModal} handleClose={closePriceFilterModal} title="sale" maxPrice={filters.maxTotal} />
-            <PaymentTypeFilterModal state={paymentTypeFilterModal} handleClose={closePaymentTypeFilterModal} title = "sale" />
+            <WarehouseFilterModal state={warehouseFilterModal} handleClose={closeWarehouseFilterModal} title="stock" object={filters.warehouses} />
+            <QuantityFilterModal state={quantityFilterModal} handleClose={closeQuantityFilterModal} title="stock" maxStock={filters.maxStock} />
+            <ProductNameFilterModal state={productNameFilterModal} handleClose={closeProductNameFilterModal} object={filtersProductName.products} title="stock" />
         </View>
     );
 };
@@ -395,7 +320,11 @@ const styles = StyleSheet.create({
 
 });
 
-const mapStateToProps = (state) => ({
-    filters: state.saleFilters
-})
-export default connect(mapStateToProps, { clearSaleFilters })(SaleFilterModal);
+const mapStateToProps = (state) => {
+    console.log("stock filterS" , state.stockFilters)
+    return {
+        filters: state.stockFilters
+    }
+}
+
+export default connect(mapStateToProps, { clearSTOCKFilters })(StockFilterModal);

@@ -4,6 +4,7 @@ import { FontAwesome } from "@expo/vector-icons";
 import { connect, useSelector, useDispatch } from 'react-redux'
 import { setPurchaseProduct, resetPurchaseProduct, removePurchaseProduct } from '../../actions/purchaseFilters'
 import { setSaleProduct, resetSaleProduct, removeSaleProduct } from "../../actions/saleFilters";
+import { setSTOCKProduct, resetSTOCKProduct, removeSTOCKProduct } from "../../actions/stockFilters";
 const ProductNameFilterModal = props => {
 
     const [modalVisible, setModalVisible] = useState(false);
@@ -32,6 +33,15 @@ const ProductNameFilterModal = props => {
 
             }
         }
+        else if(props.title === "stock"){
+            if (props.stockFilter.indexOf(record._id) === -1) {
+                props.setSTOCKProduct(record._id)
+            }
+            else {
+                props.removeSTOCKProduct(record._id)
+
+            }
+        }
 
     }
     const clearProductFilters = () => {
@@ -40,6 +50,9 @@ const ProductNameFilterModal = props => {
         }
         else if (props.title === "sale") {
             props.resetSaleProduct()
+        }
+        else if(props.title === "stock"){
+            props.resetSTOCKProduct()
         }
     }
     const showProducts = () => {
@@ -69,6 +82,12 @@ const ProductNameFilterModal = props => {
                                                     />
                                                     ) : (null)}
                                                     {props.title === "sale" && props.saleFilter.indexOf(record._id) !== -1 ? (<FontAwesome
+                                                        name={"check"}
+                                                        size={Dimensions.get('window').height > 900 ? 40 : 25}
+                                                        color={"#008394"}
+                                                    />
+                                                    ) : (null)}
+                                                    {props.title === "stock" && props.stockFilter.indexOf(record._id) !== -1 ? (<FontAwesome
                                                         name={"check"}
                                                         size={Dimensions.get('window').height > 900 ? 40 : 25}
                                                         color={"#008394"}
@@ -273,11 +292,12 @@ const styles = StyleSheet.create({
 
 
 const mapStateToProps = (state) => {
-    console.log(state.purchaseFilters)
     return {
         productFilter: state.purchaseFilters.product,
-        saleFilter: state.saleFilters.product
+        saleFilter: state.saleFilters.product,
+        stockFilter: state.stockFilters.product,
     }
 }
 
-export default connect(mapStateToProps, { setPurchaseProduct, resetPurchaseProduct, removePurchaseProduct, setSaleProduct, resetSaleProduct, removeSaleProduct })(ProductNameFilterModal);
+export default connect(mapStateToProps, { setPurchaseProduct, resetPurchaseProduct, removePurchaseProduct, setSaleProduct,
+     resetSaleProduct, removeSaleProduct, setSTOCKProduct, resetSTOCKProduct, removeSTOCKProduct })(ProductNameFilterModal);
