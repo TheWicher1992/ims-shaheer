@@ -226,7 +226,7 @@ const ProductFilterModal = props => {
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                     <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-start' }}>
                                         <Text style={styles.normalText}>
-                                            Amount
+                                            Price
                                         </Text>
                                     </View>
                                     <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-end', paddingRight: '8%' }}>
@@ -261,7 +261,7 @@ const ProductFilterModal = props => {
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                     <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-start' }}>
                                         <Text style={styles.normalText}>
-                                            Quantity
+                                            Stock
                                         </Text>
                                     </View>
                                     <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-end', paddingRight: '8%' }}>
