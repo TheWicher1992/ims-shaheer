@@ -17,7 +17,7 @@ import { connect } from 'react-redux'
 
 const optionsPerPage = [2, 3, 4];
 
-const Stocks = props => {
+const Stocks = (props) => {
 
 
   const [products, setProducts] = useState([])
@@ -53,7 +53,10 @@ const Stocks = props => {
     setLoading(true)
     try {
       const res = await axios.get(
-        `${uri}/api/product/stock/${filters.page}/${filters.query}/${filters.sort}/${filters.sortBy}`
+        `${uri}/api/product/stock/`
+        + `${filters.page}/${filters.query}/${props.stockFilters.product.join(',')}`
+        + `/${props.stockFilters.ware.join(',')}/`
+        + `${props.stockFilters.stock}/${filters.sort}/${filters.sortBy}`
       )
       res.data.stocks.length === 0 ? searchWarning() : null
       setProducts(res.data.stocks.reverse())
@@ -165,12 +168,12 @@ const Stocks = props => {
 
       </View>
 
-      <View style={{ flexDirection: 'row', justifyContent: 'center', paddingRight: 60, bottom : 60 }}>
+      <View style={{ flexDirection: 'row', justifyContent: 'center', paddingRight: 60, bottom: 60 }}>
         <View>
           <FilterButton page="stock" getStock={getStock} />
         </View>
         <View style={{ marginTop: 25 }}>
-          <ExportButton data={products} title={'stocks.xlsx'} screenName='stocks'/> 
+          <ExportButton data={products} title={'stocks.xlsx'} screenName='stocks' />
         </View>
       </View>
       <Spinner loading={loading} />
