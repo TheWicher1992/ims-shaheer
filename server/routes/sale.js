@@ -255,7 +255,7 @@ router.get('/:page/:query/:products/:clients/:payment/:date/:quantity/:amount', 
 
     if (amount !== '*') filters['total'] = amount
 
-    if (quantity !== '*') filters['quantity'] = quantity
+    if (quantity !== '*') filters['products.quantity'] = quantity
 
     if (payment !== '*') filters['payment'] = payment
 
