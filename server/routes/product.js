@@ -376,7 +376,7 @@ router.get('/stocks', async (req, res) => {
     }
 })
 
-router.get('/stock/:page/:query/:sort/:sortBy', async (req, res) => {
+router.get('/stock/:page/:query/:products/:warehouses/:stock/:sort/:sortBy', async (req, res) => {
 
     try {
 
@@ -384,6 +384,9 @@ router.get('/stock/:page/:query/:sort/:sortBy', async (req, res) => {
         const query = req.params.query === '*' ? ['.*'] : req.params.query.split(" ")
         const sort = req.params.sort === '*' ? 'stock' : req.params.sort
         const sortBy = req.params.sortBy === '*' ? 'desc' : req.params.sortBy
+        const warehouses = req.params.warehouses
+        const products = req.params.products
+        const stock = req.params.stock === '*' ? '*' : parseInt(req.params.stock)
 
         const sortOptions = {
             [sort]: sortBy
@@ -402,6 +405,13 @@ router.get('/stock/:page/:query/:sort/:sortBy', async (req, res) => {
         }).select('_id')
 
         filters = {}
+        if (products !== '*') filters['product'] = {
+            $in: products.split(',').slice(1, products.length)
+        }
+        if (warehouses !== '*') filters['warehouse'] = {
+            $in: warehouses.split(',').slice(1, warehouses.length)
+        }
+        if (stock !== '*') filters['stock'] = stock
 
         filters['$or'] = [
             {
