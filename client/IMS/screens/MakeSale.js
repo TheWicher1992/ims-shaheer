@@ -1418,7 +1418,7 @@ const MakeSale = props => {
               sales.map((sale, i) => (
                 <TouchableOpacity key={i} onPress={() => onPressModal(sale)}>
                   <DataTable.Row>
-                    <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{sale.products === undefined ? '--' : sale.products.map(p => (<Text>{p.quantity} x {p.product.title}</Text>))}</Text></DataTable.Cell>
+                    <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{sale.products === undefined ? '--' : sale.products.map((p,k) => (<Text key = {k}>{p.quantity} x {p.product.title}{"\n"}</Text>))}</Text></DataTable.Cell>
                     {/* <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{sale.quantity === undefined ? '--' : sale.quantity}</Text></DataTable.Cell> */}
                     <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{sale.total === undefined ? '--' : sale.total}</Text></DataTable.Cell>
                     <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{sale.client === null ? '--' : sale.client.userName}</Text></DataTable.Cell>

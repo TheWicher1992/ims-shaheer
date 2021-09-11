@@ -273,7 +273,7 @@ const ProductFilterModal = props => {
                             </View>
                         </TouchableOpacity>
 
-                        <TouchableOpacity style={styles.TextBox} onPress={() => setWarehouseFilterModal(true)}>
+                        {/* <TouchableOpacity style={styles.TextBox} onPress={() => setWarehouseFilterModal(true)}>
                             <View style={ {marginTop: Dimensions.get('window').height * 0.05, paddingLeft: '5%' }}>
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                     <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-start' }}>
@@ -297,10 +297,10 @@ const ProductFilterModal = props => {
                                     </View>
                                 </View>
                             </View>
-                        </TouchableOpacity>
+                        </TouchableOpacity> */}
 
                         <View style={styles.bottomBox}>
-                            <TouchableOpacity onPress={() => { props.handleClose(); props.getProducts() }} style={{ width: '90%', position: "absolute", top: '5%' }}>
+                            <TouchableOpacity onPress={() => { props.handleClose(); props.getProducts() }} style={{ width: '90%', position: "absolute", top: '18%' }}>
                                 <View style={styles.bottomButton}>
                                     <View>
                                         <Text style={styles.footerText}>
@@ -317,7 +317,7 @@ const ProductFilterModal = props => {
             </Modal>
             <ColorFilterModal state={colorFilterModal} handleClose={closeColorFilterModal} title="product" object={filters.colours} />
             <BrandFilterModal state={brandFilterModal} handleClose={closeBrandFilterModal} title="product" object={filters.brands} />
-            <WarehouseFilterModal state={warehouseFilterModal} handleClose={closeWarehouseFilterModal} title="product" object={filters.warehouses} />
+            {/* <WarehouseFilterModal state={warehouseFilterModal} handleClose={closeWarehouseFilterModal} title="product" object={filters.warehouses} /> */}
             <DateFilterModal state={dateFilterModal} handleClose={closeDateFilterModal} title="product" />
             <QuantityFilterModal state={quantityFilterModal} handleClose={closeQuantityFilterModal} title="product" maxStock={filters.maxStock} />
             <PriceFilterModal state={priceFilterModal} handleClose={closePriceFilterModal} title="product" maxPrice={filters.maxPrice} />
