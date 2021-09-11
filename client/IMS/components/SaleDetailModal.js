@@ -82,7 +82,7 @@ const SaleDetailModal = props => {
                 <View>
                   <View style={styles.modalBody}>
                     {props.object !== [] && (<View>
-                      <Text style={styles.bodyText}>Product: {props.object.products === undefined ? '--' : props.object.products.map(p => (<Text>{p.quantity} x {p.product.title}</Text>))}</Text>
+                      <Text style={styles.bodyText}>Product: {props.object.products === undefined ? '--' : props.object.products.map((p,k) => (<Text key = {k}>{p.quantity} x {p.product.title} {props.object.products.length - k - 1 === 0 ? null: "\n" }</Text>))}</Text>
                       {/* <Text style={styles.bodyText}>Quantity: {props.object.quantity}</Text> */}
                       <Text style={styles.bodyText}>Total: {props.object.total}</Text>
                       <Text style={styles.bodyText}>Delivery Status: {props.object.deliveryStatus}</Text>
