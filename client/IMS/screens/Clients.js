@@ -265,7 +265,8 @@ const Clients = props => {
 
                   <DataTable.Row>
                     <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{c.userName}</Text></DataTable.Cell>
-                    <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{c.balance}</Text></DataTable.Cell>
+                    {c.balance < 0 ? 
+                    <DataTable.Cell style={styles.cells}><Text style={styles.tableTextRed}>{c.balance}</Text></DataTable.Cell>:<DataTable.Cell style={styles.cells}><Text style={styles.tableTextGreen}>{c.balance}</Text></DataTable.Cell>}
                     <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{c.phone}</Text></DataTable.Cell>
                   </DataTable.Row>
                 </TouchableOpacity>
@@ -469,6 +470,14 @@ const styles = StyleSheet.create({
   },
   tableText: {
     fontSize: Dimensions.get('window').height > 900 ? 18 : 14,
+  },
+  tableTextGreen: {
+    fontSize: Dimensions.get('window').height > 900 ? 18 : 14,
+    color: 'green'
+  },
+  tableTextRed: {
+    fontSize: Dimensions.get('window').height > 900 ? 18 : 14,
+    color: 'red'
   },
   tableTitleText: {
     fontSize: Dimensions.get('window').height > 900 ? 18 : 14,
