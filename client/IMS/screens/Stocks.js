@@ -12,6 +12,8 @@ import axios from "axios"
 import Spinner from '../components/Spinner';
 import ShowAlert from '../components/ShowAlert'
 import ExportButton from '../components/ExportAsExcel'
+import { connect } from 'react-redux'
+
 
 const optionsPerPage = [2, 3, 4];
 
@@ -162,13 +164,18 @@ const Stocks = props => {
         </View>
 
       </View>
-      <View style={{ bottom: 40 }} >
-        <ExportButton data={products} title={'stocks.xlsx'} screenName='stocks'/>
+
+      <View style={{ flexDirection: 'row', justifyContent: 'center', paddingRight: 60, bottom : 60 }}>
+        <View>
+          <FilterButton page="stock" getStock={getStock} />
+        </View>
+        <View style={{ marginTop: 25 }}>
+          <ExportButton data={products} title={'stocks.xlsx'} screenName='stocks'/> 
+        </View>
       </View>
-      <View />
       <Spinner loading={loading} />
 
-      <DataTable style={{ bottom: 30 }}>
+      <DataTable style={{ bottom: 40 }}>
         <DataTable.Header>
           <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Serial No.</Text></DataTable.Title>
           <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Product</Text></DataTable.Title>
@@ -228,7 +235,15 @@ Stocks.navigationOptions = navigationData => {
   };
 };
 
-export default Stocks
+
+const mapStateToProps = (state) => (
+  {
+    stockFilters: state.stockFilters
+  }
+)
+
+export default connect(mapStateToProps)(Stocks)
+
 
 
 const styles = StyleSheet.create({

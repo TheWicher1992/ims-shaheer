@@ -4,6 +4,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import ProductFilterModal from "./ProductFilterModal";
 import PurchaseFilterModal from "./PurchaseFilterModal";
 import SaleFilterModal from "./SaleFilterModal";
+import StockFilterModal from "./StockFilterModal";
 
 const FilterButton = (props) => {
 
@@ -32,6 +33,9 @@ const FilterButton = (props) => {
     }
     else if(props.page === "sale"){
       return (<SaleFilterModal state = {isFilterModalVisible} handleClose = {closeFilterModal} getSales = {props.getSales}/>)
+    }
+    else if(props.page === "stock"){
+      return (<StockFilterModal state = {isFilterModalVisible} handleClose = {closeFilterModal} getStock = {props.getStock}/>)
     }
   }
 

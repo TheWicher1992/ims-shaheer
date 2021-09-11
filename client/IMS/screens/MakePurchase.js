@@ -761,7 +761,7 @@ const MakePurchase = props => {
           <DataTable.Header>
             <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Product</Text></DataTable.Title>
             <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Quantity</Text></DataTable.Title>
-            <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Amount</Text></DataTable.Title>
+            <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Price</Text></DataTable.Title>
             <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Client</Text></DataTable.Title>
           </DataTable.Header>
 
