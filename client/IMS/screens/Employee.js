@@ -14,10 +14,24 @@ import axios from "axios"
 import Spinner from '../components/Spinner';
 import ShowAlert from '../components/ShowAlert';
 import ExportButton from '../components/ExportAsExcel';
+import * as Print from 'expo-print';
+
 
 const optionsPerPage = [2, 3, 4];
 
 const Employee = props => {
+
+  const print = async () => {
+    let options = {
+      html: html,
+  };
+
+try {
+  file = await Print.printAsync(options);
+}
+catch(error) {console.error(error)}
+
+  }
 
   const [page, setPage] = React.useState(0);
   const [itemsPerPage, setItemsPerPage] = React.useState(optionsPerPage[0]);
@@ -141,6 +155,7 @@ const Employee = props => {
 
   const [employees, setEmployees] = useState([])
   const [admins, setAdmins] = useState([])
+  const [html, setHTML] = useState(``)
 
   const getEmployees = async () => {
     setLoading(true)
@@ -148,6 +163,15 @@ const Employee = props => {
       const res = await axios.get(`${uri}/api/auth/all`)
       setEmployees(res.data.employees)
       setAdmins(res.data.admins)
+      let infoString = ''
+      res.data.employees.map(e => {
+        infoString = infoString + `<tr><td>${e.userName}</td><td>Employee</td></tr>`
+      })
+      res.data.admins.map(a => {
+        infoString = infoString + `<tr><td>${a.userName}</td><td>Admin</td></tr>`
+      })
+    const htmlcontent = `<html><body><table><tr><th>Name</th><th>Occupation</th></tr>${infoString}</table></body></html>`;
+    setHTML(htmlcontent)
     }
     catch (err) {
       catchWarning()

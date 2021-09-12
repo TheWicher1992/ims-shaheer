@@ -4,12 +4,15 @@ import { uri } from '../api.json'
 import axios from "axios"
 import ShowAlert from '../components/ShowAlert';
 import { FontAwesome } from "@expo/vector-icons";
+import * as Print from 'expo-print';
 const SaleDetailModal = props => {
   const [modalVisible, setModalVisible] = useState(false);
   const [isUpdateModalVisible, setUpdateModalVisible] = React.useState(false);
   const [alertState, setAlertState] = useState(false)
   const [alertTitle, setAlertTitle] = useState(``)
   const [alertMsg, setAlertMsg] = useState(``)
+  const [html, setHTML] = useState(``)
+  const [obj, setObj] = useState([])
 
   const show = () => {
     setAlertState(!alertState)
@@ -23,6 +26,24 @@ const SaleDetailModal = props => {
     setModalVisible(props.state);
   }, [props.state]);
 
+  useEffect(() => {
+    let infoString = ''    
+    infoString = infoString + `<tr><td>${props.object.products !== undefined && props.object.products.map((p,k) => `${`${p.quantity}` + 'x' + `${p.product.title}` + `${props.object.products.length - k - 1 === 0 ? ' ': "\n" }`}`)}</td><td>${props.object.total}</td><td>${props.object.deliveryStatus}</td><td>${props.object.payment}</td><td>${props.object.client === undefined ? '--' : props.object.client.userName}</td><td>${props.object.note}</td><td>${props.object.date === undefined ? '---' : `${props.object.date.toLocaleString().split('T')[0]} - ${props.object.date.toLocaleString().split('T')[1].slice(0, 8)}`}</td><td>${props.object.received}</td></tr>`
+    const htmlcontent = `<html><body><h1 style="text-align:center;">Zaki Sons</h1><h1 style="text-align:center;">Sales Receipt</h1><table style="border: 1px solid black;"><tr><th>Product(s)</th><th>Total</th><th>Delivery Status</th><th>Payment</th><th>Client</th><th>Note</th><th>Date</th><th>Received</th></tr>${infoString}</table></body></html>`;
+    setHTML(htmlcontent)
+  }, [props.object]);
+
+  const print = async() => {
+    let options = {
+      html: html,
+  };
+
+try {
+  file = await Print.printAsync(options);
+}
+catch(error) {console.error(error)}
+  }
+
   const handleCloseUpdate = () => {
     setUpdateModalVisible(false)
   }
@@ -31,18 +52,6 @@ const SaleDetailModal = props => {
     setModalVisible(false);
   }
 
-  const deleteWarehouse = (id) => {
-    axios.delete(`${uri}/api/warehouse/${id}`)
-      .then(() => {
-        props.handleClose();
-        setAlertTitle('Success');
-        setAlertMsg('Warehouse deleted successfully');
-        show()
-      })
-      .catch(err => setError())
-      .finally(() => props.getWarehouses())
-
-  }
 
   return (
     <KeyboardAvoidingView>
@@ -86,7 +95,7 @@ const SaleDetailModal = props => {
                       {/* <Text style={styles.bodyText}>Quantity: {props.object.quantity}</Text> */}
                       <Text style={styles.bodyText}>Total: {props.object.total}</Text>
                       <Text style={styles.bodyText}>Delivery Status: {props.object.deliveryStatus}</Text>
-                      <Text style={styles.bodyText}>payment: {props.object.payment}</Text>
+                      <Text style={styles.bodyText}>Payment: {props.object.payment}</Text>
 
                       <Text style={styles.bodyText}>Client: {props.object.client === undefined ? '--' : props.object.client.userName}</Text>
                       <Text style={styles.bodyText}>note: {props.object.note}</Text>
@@ -101,6 +110,11 @@ const SaleDetailModal = props => {
                 <TouchableOpacity onPress={() => props.handleClose()}>
                   <View style={styles.buttonModalContainer}>
                     <Text style={styles.buttonModalText}>Back</Text>
+                  </View>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => print()}>
+                  <View style={styles.buttonModalContainer}>
+                    <Text style={styles.buttonModalText}>Print</Text>
                   </View>
                 </TouchableOpacity>
               </View>
