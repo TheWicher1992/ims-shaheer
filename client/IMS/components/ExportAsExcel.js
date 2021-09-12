@@ -13,7 +13,7 @@ const ExportButton = (props) => {
       exportData.push({...d, date: d.date.toLocaleString().split('T')[0]})
     })
     }
-    else if(props.screenName === 'deliveryOrders' || props.screenName === 'purchases' || props.screenName === 'sales'){
+    else if(props.screenName === 'deliveryOrders' || props.screenName === 'purchases'){
       props.data.map(d => {
         exportData.push({...d, client: d.client.userName, product: d.product.title, date: d.date.toLocaleString().split('T')[0]})
       })
@@ -30,6 +30,14 @@ const ExportButton = (props) => {
     }
     else if(props.screenName === 'ledger'){
       setExportData(props.data)
+    }
+    else if(props.screenName === 'sales'){
+      props.data.map(d => {
+        let str = ''
+        d.products.map((p,i) => 
+          ( str = str + `${p.quantity} x ${p.product.title}` + ' -- '))
+        exportData.push({...d, client: d.client.userName, products: str, date: d.date.toLocaleString().split('T')[0]})
+      })
     }
     
     // console.log(exportData)

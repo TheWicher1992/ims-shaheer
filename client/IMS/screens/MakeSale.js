@@ -93,7 +93,6 @@ const MakeSale = props => {
 
       const res = await axios.get(getURI)
       res.data.sales.length === 0 ? searchWarning() : null
-      console.log(res.data.sales)
       setSales(res.data.sales)
 
     }
@@ -231,7 +230,7 @@ const MakeSale = props => {
       }
 
 
-      console.log("body", body)
+      // console.log("body", body)
 
 
       axios.post(`${uri}/api/sale`, body, {
@@ -1399,7 +1398,7 @@ const MakeSale = props => {
           <FilterButton page="sale" getSales={getSales} />
         </View>
         <View style={{ marginTop: 25 }}>
-          {/* <ExportButton data={sales} title={'sales.xlsx'} screenName='sales' /> */}
+          <ExportButton data={sales} title={'sales.xlsx'} screenName='sales' />
         </View>
       </View>
       <Spinner loading={loading} />
