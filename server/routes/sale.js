@@ -7,6 +7,7 @@ const Client = require('../models/Client')
 const Product = require('../models/Product')
 const Stock = require('../models/Stock')
 const Warehouse = require('../models/Warehouse')
+const DeliveryOrder = require('../models/DeliveryOrder')
 
 
 router.get('/form-inputs', async (req, res) => {
@@ -34,162 +35,143 @@ router.get('/form-inputs', async (req, res) => {
 router.post('/', async (req, res) => {
     try {
         var {
-            productID,
-            quantity,
+            products,
             totalWithOutDiscount,
             clientID,
             payment,
             discount,
             total,
             note,
-            date,
             deliveryStatus,
-            deliveryOrderID,
             received,
-            warehouses,
-            isWarehouse
         } = req.body
 
-        console.log(req.body)
-
-        typeOfSale = 'DeliveryOrder'
-
-        if (isWarehouse === true) {
-            typeOfSale = 'Warehouse'
-        }
-
-        var neg = total - received
+        //update client balance
+        var neg = parseInt(total) - parseInt(received)
+        const clientPrev = await Client.findById(clientID)
 
         if (payment === 'Partial') {
-
-            const clientPrev = await Client.findById(clientID)
             let prev = clientPrev.balance
-
             let newBal = prev - neg
-
-            let client = await Client.findOneAndUpdate({ _id: clientID }, { balance: newBal })
-
+            clientPrev.balance = newBal
+            await clientPrev.save()
         }
         else if (payment === 'Credit') {
-            const clientPrev = await Client.findById(clientID)
             let prev = clientPrev.balance
-
             let newBal = prev - total
-
-            let client = await Client.findOneAndUpdate({ _id: clientID }, { balance: newBal })
-
-
+            clientPrev.balance = newBal
+            await clientPrev.save()
         }
 
+        for (const product of products) {
+            if (product.typeOfSale === 'DeliveryOrder') {
+                //cater deliver order
+            }
+            else {
+                //cater for a specific warehouse
 
+                for (const warehouse of product.warehouses) {
+                    const stock = await Stock.findOne({ product: product.id, warehouse: warehouse.id })
+                    const prevStock = stock.stock
 
-
-        if (isWarehouse === true) {
-
-
-
-            warehouses.ids.map(async (id, i) => {
-
-                if (warehouses['ticks'][id] === true) {
-
-                    const stock = await Stock.find({ product: productID, warehouse: id })
-                    console.log(stock)
-
-                    stock.map(async (stock)=>{
-
-                   
-                    prevStock = stock.stock
-
-                    if (warehouses['quant'][id] < prevStock) {
-
-                        console.log('inside')
-
-                        newStock = prevStock - warehouses['quant'][id]
-
+                    if (stock && warehouse.quantity <= prevStock) {
+                        const newStock = prevStock - warehouse.quantity
                         await Stock.findOneAndUpdate({ _id: stock._id }, { stock: newStock })
-
-                        const ware  = await Warehouse.findById(id)
+                        const ware = await Warehouse.findById(warehouse.id)
 
                         let prevWarehouse = ware.totalStock
-                      let newWareStock = prevWarehouse - warehouses['quant'][id]
+                        let newWareStock = prevWarehouse - warehouse.quantity
 
-                       await Warehouse.findOneAndUpdate({ _id: id }, { totalStock: newWareStock })
+                        await Warehouse.findOneAndUpdate({ _id: warehouse.id }, { totalStock: newWareStock })
 
-                       const prod  = await Product.findById(productID)
+                        const prod = await Product.findById(product.id)
 
-                       let prev = prod.totalStock
-                       let newProdStock = prev - warehouses['quant'][id]
+                        let prev = prod.totalStock
+                        let newProdStock = prev - warehouse.quantity
 
-                       Product.findOneAndUpdate({ _id: productID }, { totalStock: newProdStock })
-
-
+                        await Product.findOneAndUpdate({ _id: product.id }, { totalStock: newProdStock })
                     }
 
-                })
-                    // console.log('inside')
-                    // Stock.find({ product: productID, warehouse: id }).then(res => {
-                    //     res.map((stock) => {
-
-                    //         prevStock = stock.stock
-                    //         if (warehouses['quant'][id] < prevStock) {
-                    //             newStock = prevStock - warehouses['quant'][id]
-
-                    //             Stock.findOneAndUpdate({ _id: stock._id }, { stock: newStock }).then(res => {
-
-                    //                 Warehouse.findById(id).then(res => {
-                    //                     let prevWarehouse = res.totalStock
-                    //                     let newWareStock = prevWarehouse - warehouses['quant'][id]
-
-                    //                     Warehouse.findOneAndUpdate({ _id: id }, { totalStock: newWareStock }).then(res => {
-                    //                         Product.findById(productID).then(res => {
-                    //                             let prev = res.totalStock
-                    //                             let newProdStock = prev - warehouses['quant'][id]
-
-                    //                             Product.findOneAndUpdate({ _id: productID }, { totalStock: newProdStock }).then(res => {
-                    //                                 console.log('success')
-                    //                             })
-                    //                         })
-
-                    //                     })
-
-
-
-                    //                 })
-                    //             })
-                    //         }
-                    //     })
-
-                    // })
                 }
-
-
-
-            })
-
+            }
         }
+
+
+
+
+
+
+
+
+        // warehouses.ids.map(async (id, i) => {
+
+        //     if (warehouses['ticks'][id] === true) {
+
+        //         const stock = await Stock.find({ product: productID, warehouse: id })
+        //         console.log(stock)
+
+        //         stock.map(async (stock) => {
+
+
+        //             prevStock = stock.stock
+
+        //             if (warehouses['quant'][id] < prevStock) {
+
+        //                 console.log('inside')
+
+        //                 newStock = prevStock - warehouses['quant'][id]
+
+        //                 await Stock.findOneAndUpdate({ _id: stock._id }, { stock: newStock })
+
+        //                 const ware = await Warehouse.findById(id)
+
+        //                 let prevWarehouse = ware.totalStock
+        //                 let newWareStock = prevWarehouse - warehouses['quant'][id]
+
+        //                 await Warehouse.findOneAndUpdate({ _id: id }, { totalStock: newWareStock })
+
+        //                 const prod = await Product.findById(productID)
+
+        //                 let prev = prod.totalStock
+        //                 let newProdStock = prev - warehouses['quant'][id]
+
+        //                 Product.findOneAndUpdate({ _id: productID }, { totalStock: newProdStock })
+
+
+        //             }
+
+        //         })
+        //     }
+
+
+
+        // })
+
+
+        const productsInSale = await Promise.all(products.map(async p => {
+            return {
+                product: p.id,
+                typeOfSale: p.typeOfSale,
+                deliveryOrder: p.typeOfSale === 'DeliveryOrder' ? p.deliveryOrderId : null,
+                quantity: p.typeOfSale === 'DeliveryOrder' ?
+                    (await DeliveryOrder.findById(p.deliveryOrderId)).quantity :
+                    p.warehouses.reduce((acc, w) => acc + w.quantity, 0)
+            }
+        }))
 
 
 
         const sale = new Sale({
-            product: productID,
-            quantity,
+            products: productsInSale,
             totalWithOutDiscount,
             client: clientID,
             payment,
             discount,
             total,
             note,
-            date,
             received,
             deliveryStatus,
-            typeOfSale,
-            deliveryOrder: deliveryOrderID
-
         })
-
-
-
-
 
         await sale.save()
 
@@ -249,7 +231,7 @@ router.get('/:page/:query/:products/:clients/:payment/:date/:quantity/:amount', 
     }
     const filters = {}
 
-    if (products !== '*') filters['product'] = {
+    if (products !== '*') filters['products.product'] = {
         $in: products.split(',').slice(1, products.length)
     }
     if (clients !== '*') filters['client'] = {
@@ -273,7 +255,7 @@ router.get('/:page/:query/:products/:clients/:payment/:date/:quantity/:amount', 
 
     if (amount !== '*') filters['total'] = amount
 
-    if (quantity !== '*') filters['quantity'] = quantity
+    if (quantity !== '*') filters['products.quantity'] = quantity
 
     if (payment !== '*') filters['payment'] = payment
 
@@ -306,7 +288,7 @@ router.get('/:page/:query/:products/:clients/:payment/:date/:quantity/:amount', 
             }
         },
         {
-            product: {
+            "products.product": {
                 $in: productIDs.map(p => p._id)
             }
         }
@@ -314,11 +296,11 @@ router.get('/:page/:query/:products/:clients/:payment/:date/:quantity/:amount', 
     const itemsPerPage = config.get('rows-per-page')
     const sales = await Sale
         .find(filters)
-        .populate(['product', 'client'])
+        .populate(['products.product', 'client'])
         .sort(sortOptions)
     // .skip(itemsPerPage * page)
     // .limit(itemsPerPage)
-
+    console.log(filters, sales)
 
     return res.json({
         sales

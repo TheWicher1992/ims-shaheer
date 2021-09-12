@@ -77,7 +77,7 @@ const PurchaseUpdateModal = props => {
   }
 
   const pressDone = () => {
-    if(totalAmount === '' || amountRecieved === '' || location === ''){
+    if(totalAmount === '' || amountRecieved === '' || (isWarehouse === false && location === '') ){
       setAlertTitle('Warning')
       setAlertMsg('Input fields may be empty. Request could not be processed.')
       show()

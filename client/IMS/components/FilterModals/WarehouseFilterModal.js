@@ -3,6 +3,7 @@ import { Modal, StyleSheet, Text, View, TouchableOpacity, Dimensions, TextInput,
 import { FontAwesome } from "@expo/vector-icons";
 import { connect } from 'react-redux'
 import { setProdWare, resetProdWare, removeProdWare } from '../../actions/productFilters'
+import { setSTOCKWare, removeSTOCKWare, resetSTOCKWare} from '../../actions/stockFilters'
 
 const WarehouseFilterModal = props => {
 
@@ -16,18 +17,33 @@ const WarehouseFilterModal = props => {
         setModalVisible(false);
     }
 
-    const setFilterWare = (record, i) => {
-        if (props.wareFilter.indexOf(record._id) === -1) {
-            props.setProdWare(record._id)
+    const setStockWarehouse = (record,i) => {
+        if(props.title === "stock"){
+            if(props.stockWareFilter.indexOf(record.id) === -1){
+                props.setSTOCKWare(record._id)
+            }
+            else{
+                props.removeSTOCKWare(record._id)
+            }
         }
-        else {
-            props.removeProdWare(record._id)
+        else if(props.title === "product"){
+            if (props.wareFilter.indexOf(record._id) === -1) {
+                props.setProdWare(record._id)
+            }
+            else {
+                props.removeProdWare(record._id)
+            }
         }
-
+        
     }
 
     const clearFilterWare = () => {
-        props.resetProdWare()
+        if(props.title === 'product'){
+            props.resetProdWare()
+        }
+        else if(props.title === 'stock'){
+            props.resetSTOCKWare()
+        }
     }
     const getWarehouses = () => {
         if(props.object !== [] && props.object !== undefined){
@@ -38,7 +54,7 @@ const WarehouseFilterModal = props => {
 
                             <ScrollView>
                             <View style = {{}}>
-                            <TouchableOpacity style = {styles.TextBox}  onPress={() => setFilterWare(record, i)}>
+                            <TouchableOpacity style = {styles.TextBox}  onPress={() => setStockWarehouse(record, i)}>
                                 <View style={{ paddingLeft: '5%' }}>
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                         <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-start' }}>
@@ -48,7 +64,13 @@ const WarehouseFilterModal = props => {
                                         </View>
                                         <View style={{ justifyContent: 'space-evenly', flexDirection: 'row', alignSelf: 'flex-end', paddingRight: '8%' }}>
                                             <View style={styles.sideText}>
-                                            {props.wareFilter.indexOf(record._id) !== -1 ? (<FontAwesome
+                                            {props.title === "product" && props.wareFilter.indexOf(record._id) !== -1 ? (<FontAwesome
+                                                    name = {"check"}
+                                                    size = {Dimensions.get('window').height > 900 ? 40:25}
+                                                    color = {"#008394"}
+                                                    />
+                                            ) : (null)}
+                                            {props.title === "stock" && props.stockWareFilter.indexOf(record._id) !== -1 ? (<FontAwesome
                                                     name = {"check"}
                                                     size = {Dimensions.get('window').height > 900 ? 40:25}
                                                     color = {"#008394"}
@@ -64,12 +86,11 @@ const WarehouseFilterModal = props => {
                             </ScrollView>
 
 
-                       
+                    
                         </View>
                     ))}
                 </View>
             )
-
         }
     }
 
@@ -253,8 +274,9 @@ const styles = StyleSheet.create({
 const mapStateToProps = (state) => {
     // console.log(state.productFilters)
     return {
-        wareFilter: state.productFilters.ware
+        wareFilter: state.productFilters.ware,
+        stockWareFilter: state.stockFilters.ware
     }
 }
 
-export default connect(mapStateToProps, { setProdWare, resetProdWare, removeProdWare   })(WarehouseFilterModal);
+export default connect(mapStateToProps, { setProdWare, resetProdWare, removeProdWare, removeSTOCKWare, resetSTOCKWare, setSTOCKWare   })(WarehouseFilterModal);
