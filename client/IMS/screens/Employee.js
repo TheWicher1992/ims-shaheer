@@ -282,7 +282,7 @@ catch(error) {console.error(error)}
         </View>
       </View>
       <View style={styles.containerButton}>
-        <TouchableOpacity onPress={() => { print() }}>
+        <TouchableOpacity onPress={() => { setModalVisible(true) }}>
           <View style={styles.buttonContainer}>
             <Text style={styles.buttonText}>Add Employee</Text>
           </View>
