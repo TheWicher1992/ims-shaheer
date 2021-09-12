@@ -119,7 +119,6 @@ const ProductFilterModal = props => {
         getFilters()
     }, [])
 
-    const [alertState, setAlertState] = useState(false)
     const [alertTitle, setAlertTitle] = useState(``)
     const [alertMsg, setAlertMsg] = useState(``)
 
