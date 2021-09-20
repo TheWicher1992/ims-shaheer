@@ -94,6 +94,7 @@ const MakeSale = props => {
       const res = await axios.get(getURI)
       res.data.sales.length === 0 ? searchWarning() : null
       setSales(res.data.sales)
+      console.log("sales", res.data.sales)
 
     }
     catch (err) {
@@ -213,7 +214,13 @@ const MakeSale = props => {
       show()
       return
     }
-    if (totalAmount === '' || (amountReceived === '' && paymentType === 'Partial') || notes === '') {
+    if(selectedClientName === ''){
+      setAlertTitle('Warning')
+      setAlertMsg('No Client selected.')
+      show()
+      return
+    }
+    if ( (amountReceived === '' && paymentType === 'Partial') || notes === '') {
       setAlertTitle('Warning')
       setAlertMsg('Input fields may be empty. Request could not be processed.')
       show()
@@ -221,16 +228,14 @@ const MakeSale = props => {
     else {
       const body = {
         products: multipleProducts,
-        total: Number.parseInt(totalAmount, 10),
         payment: paymentType,
         clientID: clientName,
         note: notes,
         received: Number.parseInt(amountReceived, 10),
-        note: notes
       }
 
 
-      // console.log("body", body)
+      console.log("body", body)
 
 
       axios.post(`${uri}/api/sale`, body, {
@@ -252,6 +257,9 @@ const MakeSale = props => {
         })
         .finally(() => {
           getSales()
+          setMultipleProducts([])
+          setSelectedClientName('')
+          setProductIdList([])
         })
     }
 
@@ -448,15 +456,23 @@ const MakeSale = props => {
 
   // on selection of single product with warehouse
   const selectionOfProduct = () => {
+    if(priceIndividual === ''){
+      setAlertTitle('Warning')
+      setAlertMsg('Please enter a price for the selected product')
+      show()
+      return
+    }
     setProductIdList([...productIdList, productName])
     if (isWarehouse === true) { //if sale is being done from a warehouse
       //for warehouse
       let wareArray = []
       let count = 0
+      let totalQuantity = 0
       warehouseIdTicksQuant.ids.forEach(e => {
         if (warehouseIdTicksQuant["ticks"][e] === true) {
           //increasing count here because of another check which doesnt work directly
           count = count + 1
+          totalQuantity = totalQuantity + parseInt(warehouseIdTicksQuant["quant"][e])
           if (warehouseIdTicksQuant["quant"][e] === 0) { // empty quantity condition
             setAlertTitle('Warning')
             setAlertMsg('Atleast 1 of the quantities is not filled.')
@@ -481,15 +497,19 @@ const MakeSale = props => {
 
       const body = {
         name: prod,
+        price: priceIndividual,
         id: productName,
         typeOfSale: isWarehouse === true ? 'Warehouse' : 'DeliveryOrder',
         deliveryOrderId: '',
-        warehouses: wareArray
+        warehouses: wareArray,
+        quantity: totalQuantity,
       }
       setMultipleProducts([...multipleProducts, body])
       // console.log(body)
       setWarehouseModal(false)
+      setPriceModal(false)
       setSelectWorDModal(false)
+      setPriceIndividual('')
 
     }
     else {
@@ -503,14 +523,19 @@ const MakeSale = props => {
       }
       const body = {
         name: prod,
+        price: priceIndividual,
         id: productName,
         typeOfSale: isWarehouse === true ? 'Warehouse' : 'DeliveryOrder',
         deliveryOrderId: selectedDOrder,
-        warehouses: []
+        warehouses: [],
+        quantity: selectDOrderQuantity,
       }
       setMultipleProducts([...multipleProducts, body])
       setDOrderModal(false)
       setSelectWorDModal(false)
+      setPriceModal(false)
+      setPriceIndividual('')
+
 
 
 
@@ -525,22 +550,28 @@ const MakeSale = props => {
 
   const printWarehouseDetails = (record) => {
     return (
-      record.warehouses.map((e, i) => (
-        <View key={i}>
-          <Text>
-            Warehouse Name: {warehouses[e.id]}
-          </Text>
-          <Text style={{}}>
-            Quantity: {e.quantity}
-          </Text>
-        </View>
-      ))
+      <View>
+        {record.warehouses.map((e, i) => (
+          <View key={i}>
+            <Text>
+              Warehouse Name: {warehouses[e.id]}
+            </Text>
+            <Text style={{}}>
+              Quantity: {e.quantity}
+            </Text>
+          </View>
+        ))}
+        <Text>
+          Price: {record.price}
+        </Text>
+      </View>
+      
     )
   }
 
+
   const deleteRecord = (record) => {
     let id = ''
-    let list = productIdList
     multipleProducts.map((e, i) => {
       if (e === record) { // delete the index i of multiple products array
         multipleProducts.splice(i, 1)
@@ -567,12 +598,115 @@ const MakeSale = props => {
     }
   }
 
+  const [priceIndividual, setPriceIndividual] = useState('');
+  const [priceModal, setPriceModal] = useState(false);
+  const onChangePriceIndividual = (val) => {
+    setPriceIndividual(val)
+  }
+
+  const checkForSelection = () => {
+    let count = 0
+    if(isWarehouse === true){
+      warehouseIdTicksQuant.ids.forEach(e => {
+        if (warehouseIdTicksQuant["ticks"][e] === true) {
+          //increasing count here because of another check which doesnt work directly
+          count = count + 1
+          if (warehouseIdTicksQuant["quant"][e] === 0) { // empty quantity condition
+            setAlertTitle('Warning')
+            setAlertMsg('Atleast 1 of the quantities is not filled.')
+            show()
+            return
+          }
+        }
+      })
+      if (count === 0) {
+        //empty array nothing selected
+        setAlertTitle('Warning')
+        setAlertMsg('Please select atleast 1 or more warehouses')
+        show()
+        return
+      }
+    }
+
+    
+    if(isWarehouse === false && selectedDOrder === ''){
+      //show alert that you need to select 1 delivery order
+      setAlertTitle('Warning')
+      setAlertMsg('Please select a Delivery Order.')
+      show()
+      return
+    }
+    else{
+      setPriceModal(true);
+    }
+  }
+
+
   return (
 
 
     <ScrollView keyboardShouldPersistTaps='always'>
       <ShowAlert state={alertState} handleClose={show} alertTitle={alertTitle} alertMsg={alertMsg} style={styles.buttonModalContainer} />
       <View style={styles.centeredView}>
+
+        {/* modal for selecting price */}
+        <Modal
+          onSwipeComplete={() => setPriceModal(false)}
+          animationType="slide"
+          transparent={true}
+          swipeDirection="left"
+          visible={priceModal}
+        >
+          <TouchableWithoutFeedback onPress={() => setPriceModal(false)}>
+            <View style={styles.modalOverlay} />
+          </TouchableWithoutFeedback>
+          <View style={styles.centeredView}>
+            <View style={styles.modalViewSelection}>
+              <View style={{ flexDirection: 'row' }}>
+                <View style={{ right: Dimensions.get('window').height > 900 ? Dimensions.get('window').width * 0.02 : Dimensions.get('window').width * 0.02, top: 30 }}>
+                  <TouchableOpacity onPress={() => setPriceModal(false)}>
+                    <FontAwesome
+                      name={"arrow-left"}
+                      size={Dimensions.get('window').height > 900 ? 30 : 25}
+                      color={"#008394"}
+                    />
+                  </TouchableOpacity>
+                </View>
+                <Text style={styles.modalTitle}>
+                  Enter Price
+                </Text>
+              </View>
+              <View style = {styles.modalBody}>
+                <View style = {{marginTop: 20}}>
+                  <TextInput keyboardType='numeric' onChangeText = {setPriceIndividual}  style = {styles.input} placeholder = "Enter Price"></TextInput>
+                  <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginTop:20 }}>
+                    <TouchableOpacity style={{ alignSelf: 'flex-start' }} onPress={() => { setPriceModal(false) }}>
+                      <View>
+                        <View style={styles.buttonModalContainerNew}>
+                          <View>
+                            <Text style={styles.buttonModalText}>Back</Text>
+                          </View>
+                        </View>
+                      </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => { selectionOfProduct() }}>
+                      <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', }}>
+                        <View style={styles.buttonModalContainer}>
+                          <View>
+                            <Text style={styles.buttonModalText}>Done</Text>
+                          </View>
+                        </View>
+                      </View>
+                    </TouchableOpacity>
+                  </View> 
+                </View>
+
+              </View> 
+            </View>
+          </View>
+        </Modal>
+
+
 
         {/* modal for selecting either delivery order or warehouse */}
         <Modal
@@ -743,7 +877,10 @@ const MakeSale = props => {
                                   Type: Delivery Order
                                 </Text>
                                 <Text style={{}}>
-                                  Quantity: {selectDOrderQuantity}
+                                  Quantity: {record.quantity}
+                                </Text>
+                                <Text style= {{}}>
+                                  Price: {record.price}
                                 </Text>
                               </View>
 
@@ -833,8 +970,11 @@ const MakeSale = props => {
                                   <Text>
                                     Type: Delivery Order
                                   </Text>
-                                  <Text style={{ marginTop: 20 }}>
-                                    Quantity: {selectDOrderQuantity}
+                                  <Text style={{}}>
+                                    Quantity: {record.quantity}
+                                  </Text>
+                                  <Text style= {{}}>
+                                    Price: {record.price}
                                   </Text>
 
                                 </View>
@@ -1042,7 +1182,7 @@ const MakeSale = props => {
                       </View>
                     </View>
                   </TouchableOpacity>
-                  <TouchableOpacity onPress={() => { selectionOfProduct() }}>
+                  <TouchableOpacity onPress={() => { checkForSelection() }}>
                     <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
                       <View style={styles.buttonModalContainer}>
                         <View>
@@ -1139,7 +1279,7 @@ const MakeSale = props => {
                       </View>
                     </View>
                   </TouchableOpacity>
-                  <TouchableOpacity onPress={() => { selectionOfProduct() }}>
+                  <TouchableOpacity onPress={() => { checkForSelection() }}>
                     <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', }}>
                       <View style={styles.buttonModalContainer}>
                         <View>
@@ -1217,7 +1357,7 @@ const MakeSale = props => {
 
 
                       <View style={{}}>
-                        <TextInput keyboardType='numeric' onChangeText={onChangeTotalAmount} style={styles.input} placeholder="Total Amount" autoCorrect={false} />
+                        {/* <TextInput keyboardType='numeric' onChangeText={onChangeTotalAmount} style={styles.input} placeholder="Total Amount" autoCorrect={false} /> */}
                         {paymentType === 'Partial' && <TextInput keyboardType='numeric' onChangeText={onChangeAmountReceived} style={styles.input} placeholder="Amount Received" autoCorrect={false} />}
                         <TextInput multiline={true} numberOfLines={5} onChangeText={onChangeNotes} style={styles.input} placeholder="Notes" autoCorrect={false} />
 
@@ -1300,7 +1440,7 @@ const MakeSale = props => {
 
 
                       <View style={{}}>
-                        <TextInput keyboardType='numeric' onChangeText={onChangeTotalAmount} style={styles.input} placeholder="Total Amount" autoCorrect={false} />
+                        {/* <TextInput keyboardType='numeric' onChangeText={onChangeTotalAmount} style={styles.input} placeholder="Total Amount" autoCorrect={false} /> */}
                         {paymentType === 'Partial' && <TextInput keyboardType='numeric' onChangeText={onChangeAmountReceived} style={styles.input} placeholder="Amount Received" autoCorrect={false} />}
                         <TextInput multiline={true} numberOfLines={5} onChangeText={onChangeNotes} style={styles.input} placeholder="Notes" autoCorrect={false} />
 
