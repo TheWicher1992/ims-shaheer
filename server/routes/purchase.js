@@ -61,6 +61,7 @@ router.post('/', async (req, res) => {
             const warehouse = await Warehouse.findOne({
                 _id: warehouseID
             })
+            purchase.warehouse = warehouseID
             const stock = await Stock.findOne({
                 warehouse: warehouseID,
                 product
@@ -75,10 +76,10 @@ router.post('/', async (req, res) => {
                 warehouse.totalProducts += 1
             }
             else {
-                stock.stock += quantity
+                stock.stock += parseInt(quantity)
                 await stock.save()
             }
-            warehouse.totalStock += quantity
+            warehouse.totalStock += parseInt(quantity)
             await warehouse.save()
         }
 
@@ -90,7 +91,7 @@ router.post('/', async (req, res) => {
             _id: product
         })
 
-        prod.totalStock += quantity
+        prod.totalStock += parseInt(quantity)
 
         await prod.save()
         //End update totalstock
@@ -100,7 +101,7 @@ router.post('/', async (req, res) => {
             _id: client
         })
 
-        clientDB.balance += total - received
+        clientDB.balance += parseInt(total) - parseInt(received)
 
         await clientDB.save()
         //  End update client balance
@@ -112,7 +113,7 @@ router.post('/', async (req, res) => {
 
     }
     catch (err) {
-        console.log(err)
+        console.log("///",err)
         return res.status(500).json({
             error: errors.SERVER_ERROR
         })
@@ -318,21 +319,53 @@ router.put('/:id', async (req, res) => {
         if (payment === 'Credit') received = 0
         if (payment === 'Full') received = total
 
-        const purchase = await Purchase.findOneAndUpdate({ _id: id },
+        const purchase = await Purchase.findOne({ _id: id })
+
+
+        if (purchase.typeOfPurchase == 'DeliveryOrder')
+        {
+            await DeliveryOrder.deleteOne({
+                _id : purchase.deliveryOrder
+            })
+        }
+        else
+        {
+            const oldWareHouse = await Warehouse.findOne({
+                _id: purchase.warehouse
+            })
+            const oldStock = await Stock.findOne({
+                warehouse: purchase.warehouse,
+                product: purchase.product
+            })
+
+            oldStock.stock -= purchase.quantity
+            oldWareHouse.totalStock -= purchase.quantity
+            if (oldStock.stock<=0)
             {
-                product,
-                quantity,
-                client,
-                payment,
-                total,
-                received,
-                note,
-            }, { new: true })
+                oldWareHouse.totalProducts -= 1
+            }
+            console.log(oldStock)
+            await oldWareHouse.save()
+            await oldStock.save()
+
+        }
 
 
-
+        
+        purchase.product = product
+        purchase.quantity = quantity
+        purchase.client = client
+        purchase.payment = payment
+        purchase.total = total
+        purchase.received = received
+        purchase.note = note
+        await purchase.save()
+        
         //if DeliveryOrder
         if (isDeliveryOrder) {
+
+
+
             console.log("called")
             const deliveryOrder = new DeliveryOrder({
                 client,

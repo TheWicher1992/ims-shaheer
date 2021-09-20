@@ -40,28 +40,13 @@ router.post('/', async (req, res) => {
             clientID,
             payment,
             discount,
-            total,
             note,
             deliveryStatus,
             received,
         } = req.body
 
-        //update client balance
-        var neg = parseInt(total) - parseInt(received)
-        const clientPrev = await Client.findById(clientID)
 
-        if (payment === 'Partial') {
-            let prev = clientPrev.balance
-            let newBal = prev - neg
-            clientPrev.balance = newBal
-            await clientPrev.save()
-        }
-        else if (payment === 'Credit') {
-            let prev = clientPrev.balance
-            let newBal = prev - total
-            clientPrev.balance = newBal
-            await clientPrev.save()
-        }
+        let total =0
 
         for (const product of products) {
             if (product.typeOfSale === 'DeliveryOrder') {
@@ -69,7 +54,7 @@ router.post('/', async (req, res) => {
             }
             else {
                 //cater for a specific warehouse
-
+                //array dot reduce google
                 for (const warehouse of product.warehouses) {
                     const stock = await Stock.findOne({ product: product.id, warehouse: warehouse.id })
                     const prevStock = stock.stock
@@ -93,12 +78,29 @@ router.post('/', async (req, res) => {
                     }
 
                 }
+                total += product.price
+                
             }
         }
 
 
 
+        //update client balance
+        var neg = parseInt(total) - parseInt(received)
+        const clientPrev = await Client.findById(clientID)
 
+        if (payment === 'Partial') {
+            let prev = clientPrev.balance
+            let newBal = prev - neg
+            clientPrev.balance = newBal
+            await clientPrev.save()
+        }
+        else if (payment === 'Credit') {
+            let prev = clientPrev.balance
+            let newBal = prev - total
+            clientPrev.balance = newBal
+            await clientPrev.save()
+        }
 
 
 
