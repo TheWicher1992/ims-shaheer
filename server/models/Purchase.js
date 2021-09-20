@@ -40,6 +40,10 @@ const purchaseSchema = new Schema({
     deliveryOrder: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'DeliveryOrder'
+    },
+    warehouse: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Warehouse'
     }
 })
 
