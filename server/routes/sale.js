@@ -45,8 +45,29 @@ router.post('/', async (req, res) => {
             received,
         } = req.body
 
+        let total = 0;
 
-        let total =0
+        for (const product of products) {
+            total += product.price
+        }
+
+
+                //update client balance
+                var neg = parseInt(total) - parseInt(received)
+                const clientPrev = await Client.findById(clientID)
+        
+                if (payment === 'Partial') {
+                    let prev = clientPrev.balance
+                    let newBal = prev - neg
+                    clientPrev.balance = newBal
+                    await clientPrev.save()
+                }
+                else if (payment === 'Credit') {
+                    let prev = clientPrev.balance
+                    let newBal = prev - total
+                    clientPrev.balance = newBal
+                    await clientPrev.save()
+                }
 
         for (const product of products) {
             if (product.typeOfSale === 'DeliveryOrder') {
@@ -78,29 +99,13 @@ router.post('/', async (req, res) => {
                     }
 
                 }
-                total += product.price
                 
             }
         }
 
 
 
-        //update client balance
-        var neg = parseInt(total) - parseInt(received)
-        const clientPrev = await Client.findById(clientID)
 
-        if (payment === 'Partial') {
-            let prev = clientPrev.balance
-            let newBal = prev - neg
-            clientPrev.balance = newBal
-            await clientPrev.save()
-        }
-        else if (payment === 'Credit') {
-            let prev = clientPrev.balance
-            let newBal = prev - total
-            clientPrev.balance = newBal
-            await clientPrev.save()
-        }
 
 
 
