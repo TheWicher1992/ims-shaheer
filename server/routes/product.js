@@ -332,7 +332,8 @@ router.get('/stock/:id', async (req, res) => {
 
         const deliverOrderStocks = await DeliveryOrder.find({
             product: productID,
-            quantity: { $gt: 0 }
+            quantity: { $gt: 0 },
+            status: false,
         })
 
 

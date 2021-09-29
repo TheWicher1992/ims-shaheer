@@ -156,12 +156,21 @@ router.post('/', async (req, res) => {
 
 
         const productsInSale = await Promise.all(products.map(async p => {
+
+        let deliveryOrder = null
+        if(p.typeOfSale === 'DeliveryOrder'){
+        deliveryOrder = await DeliveryOrder.findById(
+                p.deliveryOrderId
+        )
+        deliveryOrder.status = true
+        await deliveryOrder.save()}
+
             return {
                 product: p.id,
                 typeOfSale: p.typeOfSale,
                 deliveryOrder: p.typeOfSale === 'DeliveryOrder' ? p.deliveryOrderId : null,
-                quantity: p.typeOfSale === 'DeliveryOrder' ?
-                    (await DeliveryOrder.findById(p.deliveryOrderId)).quantity :
+                quantity: p.typeOfSale === 'DeliveryOrder' ? 
+                    deliveryOrder.quantity :
                     p.warehouses.reduce((acc, w) => acc + w.quantity, 0)
             }
         }))
