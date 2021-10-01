@@ -497,7 +497,7 @@ const MakeSale = props => {
 
       const body = {
         name: prod,
-        price: priceIndividual,
+        price: parseInt(priceIndividual),
         id: productName,
         typeOfSale: isWarehouse === true ? 'Warehouse' : 'DeliveryOrder',
         deliveryOrderId: '',
@@ -523,7 +523,7 @@ const MakeSale = props => {
       }
       const body = {
         name: prod,
-        price: priceIndividual,
+        price: parseInt(priceIndividual),
         id: productName,
         typeOfSale: isWarehouse === true ? 'Warehouse' : 'DeliveryOrder',
         deliveryOrderId: selectedDOrder,
@@ -678,11 +678,11 @@ const MakeSale = props => {
               </View>
               <View style = {styles.modalBody}>
                 <View style = {{marginTop: 20}}>
-                  <TextInput keyboardType='numeric' onChangeText = {setPriceIndividual}  style = {styles.input} placeholder = "Enter Price"></TextInput>
-                  <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginTop:20 }}>
+                  <TextInput keyboardType='numeric' onChangeText = {setPriceIndividual}  style = {styles.input2} placeholder = "Enter Price"></TextInput>
+                  <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginTop:0 }}>
                     <TouchableOpacity style={{ alignSelf: 'flex-start' }} onPress={() => { setPriceModal(false) }}>
                       <View>
-                        <View style={styles.buttonModalContainerNew}>
+                        <View style={styles.buttonModalContainer}>
                           <View>
                             <Text style={styles.buttonModalText}>Back</Text>
                           </View>
@@ -1743,6 +1743,17 @@ const styles = StyleSheet.create({
     borderColor: "#008394",
     height: 40,
     padding: 10,
+  },
+  input2: {
+      width: Dimensions.get('window').height > 900 ? Dimensions.get('window').width * 0.55 : Dimensions.get('window').width * 0.55,
+      borderColor: 'gray',
+      borderWidth: 2,
+      borderRadius: 40,
+      marginBottom: 20,
+      fontSize: 15,
+      borderColor: "#008394",
+      height: 40,
+      padding: 10,
   },
   inputWarehouse: {
     width: Dimensions.get('window').height > 900 ? Dimensions.get('window').width * 0.60 : Dimensions.get('window').width * 0.6,

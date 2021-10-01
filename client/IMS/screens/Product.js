@@ -494,10 +494,10 @@ const Product = props => {
 
                 </View>
 
-                <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 10, }}>
+                <View style={{ flexDirection: 'row', alignItems: 'center', }}>
                   <TouchableOpacity style={{ alignSelf: 'flex-start' }} onPress={() => { setModalVisible(false) }}>
                     <View>
-                      <View style={isWarehouse ? [styles.buttonModalContainerCross, {marginTop: 80}] : styles.buttonModalContainerCross}>
+                      <View style={isWarehouse ? [styles.buttonModalContainerCross, {marginTop: 60}] : styles.buttonModalContainerCross}>
                         <View>
                           <Text style={styles.buttonModalText}>Cancel</Text>
                         </View>
@@ -506,7 +506,7 @@ const Product = props => {
                   </TouchableOpacity>
                   <TouchableOpacity onPress={() => { addProduct() }}>
                     <View>
-                      <View style={isWarehouse ? [styles.buttonModalContainer, {marginTop: 80}] : styles.buttonModalContainer}>
+                      <View style={isWarehouse ? [styles.buttonModalContainer, {marginTop: 60}] : styles.buttonModalContainer}>
                         <View>
                           <Text style={styles.buttonModalText}>Done</Text>
                         </View>

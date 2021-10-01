@@ -27,9 +27,178 @@ const SaleDetailModal = props => {
   }, [props.state]);
 
   useEffect(() => {
-    let infoString = ''    
-    infoString = infoString + `<tr><td>${props.object.products !== undefined && props.object.products.map((p,k) => `${`${p.quantity}` + 'x' + `${p.product.title}` + `${props.object.products.length - k - 1 === 0 ? ' ': "\n" }`}`)}</td><td>${props.object.total}</td><td>${props.object.deliveryStatus}</td><td>${props.object.payment}</td><td>${props.object.client === undefined ? '--' : props.object.client.userName}</td><td>${props.object.note}</td><td>${props.object.date === undefined ? '---' : `${props.object.date.toLocaleString().split('T')[0]} - ${props.object.date.toLocaleString().split('T')[1].slice(0, 8)}`}</td><td>${props.object.received}</td></tr>`
-    const htmlcontent = `<html><body><h1 style="text-align:center;">Zaki Sons</h1><h1 style="text-align:center;">Sales Receipt</h1><table style="border: 1px solid black;"><tr><th>Product(s)</th><th>Total</th><th>Delivery Status</th><th>Payment</th><th>Client</th><th>Note</th><th>Date</th><th>Received</th></tr>${infoString}</table></body></html>`;
+    let infoString = ''
+    props.object.products !== undefined && props.object.products.map((p,k) => {
+      infoString = infoString + `<tr><td>${p.product.title}</td><td>${p.quantity}</td><td>${p.product.price}</td></tr>`
+    })
+    
+    // infoString = infoString + `<tr><td>${props.object.products !== undefined && props.object.products.map((p,k) => `${`${p.quantity}` + 'x' + `${p.product.title}` + `${props.object.products.length - k - 1 === 0 ? ' ': "\n" }`}`)}</td><td>${props.object.total}</td><td>${props.object.payment}</td><td>${props.object.client === undefined ? '--' : props.object.client.userName}</td><td>${props.object.received}</td></tr>`
+    const htmlcontent = `
+    <html>
+      <body>
+        <style>
+          #invoice-POS{
+            box-shadow: 0 0 1in -0.25in rgba(0, 0, 0, 0.5);
+            padding:2mm;
+            margin: 0 auto;
+            width: 57mm;
+            background: #FFF;
+            
+            
+          ::selection {background: #f31544; color: #FFF;}
+          ::moz-selection {background: #f31544; color: #FFF;}
+          h1{
+            font-size: 1.5em;
+            color: #222;
+          }
+          h2{font-size: .5em;}
+          h3{
+            font-size: 1.2em;
+            font-weight: 300;
+            line-height: 2em;
+          }
+          p{
+            font-size: .7em;
+            color: #666;
+            line-height: 1.2em;
+          }
+          
+          #top, #mid,#bot{ /* Targets all id with 'col-' */
+            border-bottom: 1px solid #EEE;
+          }
+          
+          #top{min-height: 100px;}
+          #mid{min-height: 80px;} 
+          #bot{ min-height: 50px;}
+          
+          #top .logo{
+            //float: left;
+            height: 60px;
+            width: 60px;
+            background: url(http://michaeltruong.ca/images/logo1.png) no-repeat;
+            background-size: 60px 60px;
+          }
+          .clientlogo{
+            float: left;
+            height: 60px;
+            width: 60px;
+            background: url(http://michaeltruong.ca/images/client.jpg) no-repeat;
+            background-size: 60px 60px;
+            border-radius: 50px;
+          }
+          .info{
+            display: block;
+            //float:left;
+            margin-left: 0;
+          }
+          .title{
+            float: right;
+          }
+          .title p{text-align: right;} 
+          table{
+            width: 100%;
+            border-collapse: collapse;
+          }
+          td{
+            //padding: 5px 0 5px 15px;
+            //border: 1px solid #EEE
+          }
+          .tabletitle{
+            //padding: 5px;
+            font-size: .3em;
+            background: #EEE;
+          }
+          .service{border-bottom: 1px solid #EEE;}
+          .item{width: 14mm; font-size: .1em;}
+          .itemtext{font-size: .5em;}
+          
+          #legalcopy{
+            margin-top: 5mm;
+          }
+          
+            
+            
+          }
+          </style>
+          <div id="invoice-POS">
+            
+            <center id="top">
+              <div class="info"> 
+                <h2>Zaki Sons</h2>
+              </div><!--End Info-->
+              <div class = "Info">
+                <p>
+                  Client: ${props.object.client === undefined ? '---' : props.object.client.userName}
+                </p>
+                <p>
+                  Date: ${props.object.date === undefined ? '---' : `${props.object.date.toLocaleString().split('T')[0]} - ${props.object.date.toLocaleString().split('T')[1].slice(0, 8)}`}
+                </p>
+              </div>
+            </center><!--End InvoiceTop-->
+            
+            <div id="bot">
+
+                  <div id="table">
+                    <table>
+                      <tr class="tabletitle">
+                        <td class="item"><h2>Product</h2></td>
+                        <td class="Hours"><h2>Qty</h2></td>
+                        <td class="Rate"><h2>Price</h2></td>
+                      </tr>
+
+                      <tr class="service">
+                        <td class="tableitem"><p class="itemtext">Communication</p></td>
+                        <td class="tableitem"><p class="itemtext">5</p></td>
+                        <td class="tableitem"><p class="itemtext">$375.00</p></td>
+                      </tr>
+
+                      <tr class="service">
+                        <td class="tableitem"><p class="itemtext">Asset Gathering</p></td>
+                        <td class="tableitem"><p class="itemtext">3</p></td>
+                        <td class="tableitem"><p class="itemtext">$225.00</p></td>
+                      </tr>
+
+                      <tr class="service">
+                        <td class="tableitem"><p class="itemtext">Design Development</p></td>
+                        <td class="tableitem"><p class="itemtext">5</p></td>
+                        <td class="tableitem"><p class="itemtext">$375.00</p></td>
+                      </tr>
+
+                      <tr class="service">
+                        <td class="tableitem"><p class="itemtext">Animation</p></td>
+                        <td class="tableitem"><p class="itemtext">20</p></td>
+                        <td class="tableitem"><p class="itemtext">$1500.00</p></td>
+                      </tr>
+
+                      <tr class="service">
+                        <td class="tableitem"><p class="itemtext">Animation Revisions</p></td>
+                        <td class="tableitem"><p class="itemtext">10</p></td>
+                        <td class="tableitem"><p class="itemtext">$750.00</p></td>
+                      </tr>
+
+
+                      <tr class="tabletitle">
+                        <td></td>
+                        <td class="Rate"><h2>tax</h2></td>
+                        <td class="payment"><h2>$419.25</h2></td>
+                      </tr>
+
+                      <tr class="tabletitle">
+                        <td></td>
+                        <td class="Rate"><h2>Total</h2></td>
+                        <td class="payment"><h2>$3,644.25</h2></td>
+                      </tr>
+
+                    </table>
+                  </div><!--End Table-->
+
+                </div><!--End InvoiceBot-->
+          </div><!--End Invoice-->
+        </body>
+      </html>`
+    
+
+    // <html><body><h1 style="text-align:center;">Zaki Sons</h1><h1 style="text-align:center;">Sales Receipt</h1><h1 style="text-align:center;">Date: ${props.object.date === undefined ? '---' : `${props.object.date.toLocaleString().split('T')[0]} - ${props.object.date.toLocaleString().split('T')[1].slice(0, 8)}`}</h1><h1 style="text-align:center;">Client: ${props.object.client === undefined ? '---' : props.object.client.userName}</h1><table style="border: 1px solid black;"><tr><th>Product(s)</th><th>Total</th><th>Payment</th></tr>${infoString}</table></body></html>`;
     setHTML(htmlcontent)
   }, [props.object]);
 
@@ -90,17 +259,17 @@ catch(error) {console.error(error)}
               <ScrollView>
                 <View>
                   <View style={styles.modalBody}>
+                    <Text style = {styles.bodyText}>Products: </Text>
                     {props.object !== [] && (<View>
-                      <Text style={styles.bodyText}>Product: {props.object.products === undefined ? '--' : props.object.products.map((p,k) => (<Text key = {k}>{p.quantity} x {p.product.title} {props.object.products.length - k - 1 === 0 ? null: "\n" }</Text>))}</Text>
+                      <Text style={styles.bodyText}>{props.object.products === undefined ? '--' : props.object.products.map((p,k) => (<Text key = {k}>{'\t'}{p.quantity} x {p.product.title} x {p.product.price}{props.object.products.length - k - 1 === 0 ? null: "\n" }</Text>))}</Text>
                       {/* <Text style={styles.bodyText}>Quantity: {props.object.quantity}</Text> */}
                       <Text style={styles.bodyText}>Total: {props.object.total}</Text>
-                      <Text style={styles.bodyText}>Delivery Status: {props.object.deliveryStatus}</Text>
                       <Text style={styles.bodyText}>Payment: {props.object.payment}</Text>
 
                       <Text style={styles.bodyText}>Client: {props.object.client === undefined ? '--' : props.object.client.userName}</Text>
                       <Text style={styles.bodyText}>note: {props.object.note}</Text>
                       <Text style={styles.bodyText}>date: {props.object.date === undefined ? '---' : `${props.object.date.toLocaleString().split('T')[0]} - ${props.object.date.toLocaleString().split('T')[1].slice(0, 8)}`}</Text>
-                      <Text style={styles.bodyText}>Received: {props.object.received}</Text>
+                      {props.object.payment === 'Partial' && <Text style={styles.bodyText}>Received: {props.object.received}</Text>}
                     </View>
                     )}
                   </View>
