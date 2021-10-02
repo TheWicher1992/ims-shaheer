@@ -113,8 +113,8 @@ const Warehouse = props => {
   const addWarehouse = async () => {
     const body = {
       name: warehouseName,
-      totalProducts: Number.parseInt(totalProducts, 10),
-      totalStock: stock
+      totalProducts: 0,
+      totalStock: 0
     }
 
     await axios.post(`${uri}/api/warehouse`, body,
@@ -180,8 +180,6 @@ const Warehouse = props => {
               <Text style={styles.modalTitle}>Add Warehouse</Text>
               <View>
                 <TextInput onChangeText={onChangeWarehouseName} style={styles.input} placeholder="Name" autoCorrect={false} />
-                <TextInput keyboardType = 'numeric' onChangeText={onChangeTotalProducts} style={styles.input} placeholder="Total Products" autoCorrect={false} />
-                <TextInput keyboardType = 'numeric' onChangeText={onChangeStock} style={styles.input} placeholder="Total Stocks" autoCorrect={false} />
               </View>
               <View style={{ flexDirection: 'row', alignItems: 'center', top: 45 }}>
                 <TouchableOpacity style={{ alignSelf: 'flex-start' }} onPress={() => { setModalVisible(false) }}>

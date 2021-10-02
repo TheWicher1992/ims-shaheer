@@ -48,7 +48,7 @@ router.post('/', async (req, res) => {
         let total = 0;
 
         for (const product of products) {
-            total += product.price
+            total += Number(product.price) * Number.parseInt(product.quantity,10)
         }
 
 
@@ -171,7 +171,8 @@ router.post('/', async (req, res) => {
                 deliveryOrder: p.typeOfSale === 'DeliveryOrder' ? p.deliveryOrderId : null,
                 quantity: p.typeOfSale === 'DeliveryOrder' ? 
                     deliveryOrder.quantity :
-                    p.warehouses.reduce((acc, w) => acc + w.quantity, 0)
+                    p.warehouses.reduce((acc, w) => acc + w.quantity, 0),
+                salePrice: p.price
             }
         }))
 
