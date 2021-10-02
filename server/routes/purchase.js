@@ -169,7 +169,7 @@ router.get('/form-inputs', async (req, res) => {
 
         const clients = await Client.find().select('userName')
         const warehouses = await Warehouse.find().select('name')
-        const products = await Product.find().select('title')
+        const products = await Product.find().select('title serial')
 
         return res.json({
             clients, warehouses, products

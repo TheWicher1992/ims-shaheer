@@ -42,7 +42,7 @@ const MakeSale = props => {
       res.data.products.forEach(e => {
         let obj = {
           "id": e._id,
-          "name": e.title
+          "name": e.serial + " " + e.title 
         }
 
         arr.push(obj)
