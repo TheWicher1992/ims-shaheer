@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Modal, StyleSheet, Text, View, TouchableOpacity, Dimensions, TouchableWithoutFeedback } from "react-native";
 import UpdateModal from "./UpdateModal";
 import { FontAwesome } from "@expo/vector-icons";
+import moment from "moment"
 const DeliveryOrderModal = props => {
   const [modalVisible, setModalVisible] = useState(false);
   const [isUpdateModalVisible, setUpdateModalVisible] = React.useState(false);
@@ -54,7 +55,7 @@ const DeliveryOrderModal = props => {
               {
                 props.object !== [] ? (
                   <View>
-                    <Text style={styles.bodyText}>Date: {props.object.date === undefined ? '---' : `${props.object.date.toLocaleString().split('T')[0]} - ${props.object.date.toLocaleString().split('T')[1].slice(0,8)}` }</Text>
+                    <Text style={styles.bodyText}>Date: {props.object.date === undefined ? '---' : `${moment(props.object.date).local().format('YYYY-MM-DD HH:mm:ss')}` }</Text>
                     <Text style={styles.bodyText}>Product: {props.object.product === undefined ? '--' : props.object.product.title}</Text>
                     <Text style={styles.bodyText}>Client: {props.object.client === undefined ? '--' : props.object.client.userName}</Text>
                     <Text style={styles.bodyText}>Quantity: {props.object.quantity}</Text>

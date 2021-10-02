@@ -5,6 +5,7 @@ import { uri } from '../api.json'
 import axios from "axios"
 import ShowAlert from './ShowAlert'
 import EmployeeChangePasswordModal from "./EmployeeChangePasswordModal";
+import moment from "moment"
 
 const EmployeeDetailModal = props => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -58,7 +59,7 @@ const EmployeeDetailModal = props => {
                 <View style={styles.modalBody}>
                   {props.object !== [] && (<View><Text style={styles.bodyText}>Username: {props.object.userName}</Text>
                     <Text style={styles.bodyText}>Occupation: {props.occupation === 'Admin' ? 'Admin' : 'Employee'}</Text>
-                    <Text style={styles.bodyText}>Date: {props.object.date === undefined ? '---' : `${props.object.date.toLocaleString().split('T')[0]} - ${props.object.date.toLocaleString().split('T')[1].slice(0,8)}` }</Text>
+                    <Text style={styles.bodyText}>Date: {props.object.date === undefined ? '---' : `${moment(props.object.date).local().format('YYYY-MM-DD HH:mm:ss')}` }</Text>
                     </View>)}
                 </View>
               </ScrollView>

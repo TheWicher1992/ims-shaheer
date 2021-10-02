@@ -4,12 +4,13 @@ import { StyleSheet, Text, View, Button, Dimensions, TextInput, TouchableOpacity
 import HeaderButton from '../components/HeaderButton';
 import { HeaderButtons, Item } from 'react-navigation-header-buttons';
 import { DataTable } from 'react-native-paper';
-import TableDetailModal from '../components/TableDetailModal';
+import SaleDetailModal from '../components/SaleDetailModal';
 import { uri } from '../api.json'
 import axios from "axios"
 import Spinner from '../components/Spinner';
 import ExportButton from '../components/ExportAsExcel'
 import ShowAlert from '../components/ShowAlert';
+import moment from "moment"
 
 const optionsPerPage = [2, 3, 4];
 
@@ -96,7 +97,7 @@ const MakeSale = props => {
 
     <View>
       <ShowAlert state={alertState} handleClose={show} alertTitle={alertTitle} alertMsg={alertMsg} style={styles.buttonModalContainer} />
-      <TableDetailModal state={isTableDetailModalVisible} handleClose={handleClose} title='Employee Information' name='Raahem Asghar' email='raahemasghar97@gmail.com' occupation="Employee" />
+      <SaleDetailModal state={isTableDetailModalVisible} handleClose={handleClose} title='Employee Information' name='Raahem Asghar' email='raahemasghar97@gmail.com' occupation="Employee" />
       <View style={styles.screen}>
         <View>
           <Text style={styles.title}>Sales</Text>
