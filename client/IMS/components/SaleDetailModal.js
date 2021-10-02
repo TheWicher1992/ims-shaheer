@@ -29,7 +29,7 @@ const SaleDetailModal = props => {
   useEffect(() => {
     let infoString = ''
     props.object.products !== undefined && props.object.products.map((p,k) => {
-      infoString = infoString + `<tr class="service"><td><h3>${p.product.title}</h3></td><td><h3>${p.quantity}</h3></td><td><h3>${p.product.price * p.quantity}</h3></td></tr>`
+      infoString = infoString + `<tr class="service"><td><h3>${p.product.title}</h3></td><td><h3>${p.quantity}</h3></td><td><h3>${p.salePrice * p.quantity}</h3></td></tr>`
     })
     
     // infoString = infoString + `<tr><td>${props.object.products !== undefined && props.object.products.map((p,k) => `${`${p.quantity}` + 'x' + `${p.product.title}` + `${props.object.products.length - k - 1 === 0 ? ' ': "\n" }`}`)}</td><td>${props.object.total}</td><td>${props.object.payment}</td><td>${props.object.client === undefined ? '--' : props.object.client.userName}</td><td>${props.object.received}</td></tr>`
@@ -47,7 +47,7 @@ const SaleDetailModal = props => {
           
           padding: 2mm;
           margin: 0 auto;
-          width: 44mm;
+          width: 57mm;
           background: #fff;
        }
         #invoice-POS ::selection {
