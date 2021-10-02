@@ -29,96 +29,110 @@ const SaleDetailModal = props => {
   useEffect(() => {
     let infoString = ''
     props.object.products !== undefined && props.object.products.map((p,k) => {
-      infoString = infoString + `<tr><td>${p.product.title}</td><td>${p.quantity}</td><td>${p.product.price}</td></tr>`
+      infoString = infoString + `<tr class="service"><td><h3>${p.product.title}</h3></td><td><h3>${p.quantity}</h3></td><td><h3>${p.product.price * p.quantity}</h3></td></tr>`
     })
     
     // infoString = infoString + `<tr><td>${props.object.products !== undefined && props.object.products.map((p,k) => `${`${p.quantity}` + 'x' + `${p.product.title}` + `${props.object.products.length - k - 1 === 0 ? ' ': "\n" }`}`)}</td><td>${props.object.total}</td><td>${props.object.payment}</td><td>${props.object.client === undefined ? '--' : props.object.client.userName}</td><td>${props.object.received}</td></tr>`
     const htmlcontent = `
-    <html>
+
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
       <body>
         <style>
-          #invoice-POS{
-            box-shadow: 0 0 1in -0.25in rgba(0, 0, 0, 0.5);
-            padding:2mm;
-            margin: 0 auto;
-            width: 57mm;
-            background: #FFF;
-            
-            
-          ::selection {background: #f31544; color: #FFF;}
-          ::moz-selection {background: #f31544; color: #FFF;}
-          h1{
-            font-size: 1.5em;
-            color: #222;
-          }
-          h2{font-size: .5em;}
-          h3{
-            font-size: 1.2em;
-            font-weight: 300;
-            line-height: 2em;
-          }
-          p{
-            font-size: .7em;
-            color: #666;
-            line-height: 1.2em;
-          }
+        #invoice-POS {
           
-          #top, #mid,#bot{ /* Targets all id with 'col-' */
-            border-bottom: 1px solid #EEE;
-          }
-          
-          #top{min-height: 100px;}
-          #mid{min-height: 80px;} 
-          #bot{ min-height: 50px;}
-          
-          #top .logo{
-            //float: left;
-            height: 60px;
-            width: 60px;
-            background: url(http://michaeltruong.ca/images/logo1.png) no-repeat;
-            background-size: 60px 60px;
-          }
-          .clientlogo{
-            float: left;
-            height: 60px;
-            width: 60px;
-            background: url(http://michaeltruong.ca/images/client.jpg) no-repeat;
-            background-size: 60px 60px;
-            border-radius: 50px;
-          }
-          .info{
-            display: block;
-            //float:left;
-            margin-left: 0;
-          }
-          .title{
-            float: right;
-          }
-          .title p{text-align: right;} 
-          table{
-            width: 100%;
-            border-collapse: collapse;
-          }
-          td{
-            //padding: 5px 0 5px 15px;
-            //border: 1px solid #EEE
-          }
-          .tabletitle{
-            //padding: 5px;
-            font-size: .3em;
-            background: #EEE;
-          }
-          .service{border-bottom: 1px solid #EEE;}
-          .item{width: 14mm; font-size: .1em;}
-          .itemtext{font-size: .5em;}
-          
-          #legalcopy{
-            margin-top: 5mm;
-          }
-          
-            
-            
-          }
+          padding: 2mm;
+          margin: 0 auto;
+          width: 44mm;
+          background: #fff;
+       }
+        #invoice-POS ::selection {
+          background: #f31544;
+          color: #fff;
+       }
+        #invoice-POS ::moz-selection {
+          background: #f31544;
+          color: #fff;
+       }
+        #invoice-POS h1 {
+          font-size: 0.8em;
+          color: #222;
+       }
+        #invoice-POS h2 {
+          font-size: 0.9em;
+       }
+        #invoice-POS h3 {
+          font-size: 0.5em;
+          font-weight: 300;
+          line-height: 2em;
+          color: #000000;
+       }
+        #invoice-POS p {
+          font-size: 0.7em;
+          color: #666;
+          line-height: 1.2em;
+       }
+        #invoice-POS #top, #invoice-POS #mid, #invoice-POS #bot {
+         /* Targets all id with 'col-' */
+          border-bottom: 1px solid #eee;
+       }
+        #invoice-POS #top {
+          min-height: 100px;
+       }
+        #invoice-POS #mid {
+          min-height: 80px;
+       }
+        #invoice-POS #bot {
+          min-height: 50px;
+       }
+        #invoice-POS #top .logo {
+          height: 60px;
+          width: 60px;
+          background: url(http://michaeltruong.ca/images/logo1.png) no-repeat;
+          background-size: 60px 60px;
+       }
+        #invoice-POS .clientlogo {
+          float: left;
+          height: 60px;
+          width: 60px;
+          background: url(http://michaeltruong.ca/images/client.jpg) no-repeat;
+          background-size: 60px 60px;
+          border-radius: 50px;
+       }
+        #invoice-POS .info {
+          display: block;
+          margin-left: 0;
+       }
+        #invoice-POS .title {
+          float: right;
+       }
+        #invoice-POS .title p {
+          text-align: right;
+       }
+        #invoice-POS table {
+          width: 100%;
+          border-collapse: collapse;
+       }
+        #invoice-POS .tabletitle {
+          font-size: 0.5em;
+          background: #eee;
+       }
+        #invoice-POS .service {
+          border-bottom: 1px solid #eee;
+       }
+        #invoice-POS .item {
+          width: 24mm;
+       }
+        #invoice-POS .itemtext {
+          font-size: 0.5em;
+       }
+        #invoice-POS #legalcopy {
+          margin-top: 5mm;
+       }
           </style>
           <div id="invoice-POS">
             
@@ -133,6 +147,9 @@ const SaleDetailModal = props => {
                 <p>
                   Date: ${props.object.date === undefined ? '---' : `${props.object.date.toLocaleString().split('T')[0]} - ${props.object.date.toLocaleString().split('T')[1].slice(0, 8)}`}
                 </p>
+                <p>
+                  Payment Type: ${props.object === undefined ? '---' : props.object.payment}
+                </p>
               </div>
             </center><!--End InvoiceTop-->
             
@@ -145,52 +162,21 @@ const SaleDetailModal = props => {
                         <td class="Hours"><h2>Qty</h2></td>
                         <td class="Rate"><h2>Price</h2></td>
                       </tr>
-
-                      <tr class="service">
-                        <td class="tableitem"><p class="itemtext">Communication</p></td>
-                        <td class="tableitem"><p class="itemtext">5</p></td>
-                        <td class="tableitem"><p class="itemtext">$375.00</p></td>
-                      </tr>
-
-                      <tr class="service">
-                        <td class="tableitem"><p class="itemtext">Asset Gathering</p></td>
-                        <td class="tableitem"><p class="itemtext">3</p></td>
-                        <td class="tableitem"><p class="itemtext">$225.00</p></td>
-                      </tr>
-
-                      <tr class="service">
-                        <td class="tableitem"><p class="itemtext">Design Development</p></td>
-                        <td class="tableitem"><p class="itemtext">5</p></td>
-                        <td class="tableitem"><p class="itemtext">$375.00</p></td>
-                      </tr>
-
-                      <tr class="service">
-                        <td class="tableitem"><p class="itemtext">Animation</p></td>
-                        <td class="tableitem"><p class="itemtext">20</p></td>
-                        <td class="tableitem"><p class="itemtext">$1500.00</p></td>
-                      </tr>
-
-                      <tr class="service">
-                        <td class="tableitem"><p class="itemtext">Animation Revisions</p></td>
-                        <td class="tableitem"><p class="itemtext">10</p></td>
-                        <td class="tableitem"><p class="itemtext">$750.00</p></td>
-                      </tr>
-
-
-                      <tr class="tabletitle">
-                        <td></td>
-                        <td class="Rate"><h2>tax</h2></td>
-                        <td class="payment"><h2>$419.25</h2></td>
-                      </tr>
-
+                      ${infoString}
                       <tr class="tabletitle">
                         <td></td>
                         <td class="Rate"><h2>Total</h2></td>
-                        <td class="payment"><h2>$3,644.25</h2></td>
+                        <td class="payment"><h2>Rs ${props.object.total}</h2></td>
                       </tr>
+                      <tr class="tabletitle">
+								      <td></td>
+							      	<td class="Rate"><h2>Received</h2></td>
+								      <td class="payment"><h2>Rs ${props.object.payment === 'Partial' ? props.object.received : (props.object.payment=== 'Credit' ? 0 : props.object.total)}</h2></td>
+							        </tr>
 
                     </table>
                   </div><!--End Table-->
+
 
                 </div><!--End InvoiceBot-->
           </div><!--End Invoice-->
@@ -261,7 +247,7 @@ catch(error) {console.error(error)}
                   <View style={styles.modalBody}>
                     <Text style = {styles.bodyText}>Products: </Text>
                     {props.object !== [] && (<View>
-                      <Text style={styles.bodyText}>{props.object.products === undefined ? '--' : props.object.products.map((p,k) => (<Text key = {k}>{'\t'}{p.quantity} x {p.product.title} x {p.product.price}{props.object.products.length - k - 1 === 0 ? null: "\n" }</Text>))}</Text>
+                      <Text style={styles.bodyText}>{props.object.products === undefined ? '--' : props.object.products.map((p,k) => (<Text key = {k}>{'\t'}{p.quantity} x {p.product.title} x {p.salePrice}{props.object.products.length - k - 1 === 0 ? null: "\n" }</Text>))}</Text>
                       {/* <Text style={styles.bodyText}>Quantity: {props.object.quantity}</Text> */}
                       <Text style={styles.bodyText}>Total: {props.object.total}</Text>
                       <Text style={styles.bodyText}>Payment: {props.object.payment}</Text>

@@ -28,6 +28,9 @@ const saleSchema = new Schema({
             },
             quantity: {
                 type: Number
+            },
+            salePrice: {
+                type: Number
             }
         }
     ],
