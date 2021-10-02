@@ -10,6 +10,7 @@ import { uri } from '../api.json'
 import Spinner from '../components/Spinner';
 import ExportButton from '../components/ExportAsExcel'
 import ShowAlert from '../components/ShowAlert';
+import moment from "moment"
 
 const optionsPerPage = [2, 3, 4];
 const ClientPurchaseDetail = props => {

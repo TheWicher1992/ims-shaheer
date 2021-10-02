@@ -7,6 +7,7 @@ import { uri } from '../api.json'
 import axios from "axios"
 import { DataTable } from 'react-native-paper';
 import ExportButton from '../components/ExportAsExcel'
+import moment from 'moment';
 
 const Ledger = props => {
     const [ledgerData, setLedgerData] = useState([])
@@ -30,7 +31,7 @@ const Ledger = props => {
         prevBalance = prevBalance - l.received + l.total
 
         const body1 = {
-          date: l.date.toLocaleString().split('T')[0],
+          date: moment(l.date).local().format('YYYY-MM-DD'),
           description: l.note,
           debit: '',
           credit: l.total,
@@ -51,7 +52,7 @@ const Ledger = props => {
         return (
           <View>
             <DataTable.Row>
-              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.date.toLocaleString().split('T')[0]}</Text></DataTable.Cell>
+              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{moment(l.date).local().format('YYYY-MM-DD')}</Text></DataTable.Cell>
               <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.note}</Text></DataTable.Cell>
               <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
               <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.total}</Text></DataTable.Cell>
@@ -71,7 +72,7 @@ const Ledger = props => {
         prevBalance = prevBalance + l.total
 
         const body1 = {
-          date: l.date.toLocaleString().split('T')[0],
+          date:  moment(l.date).local().format('YYYY-MM-DD'),
           description: l.note,
           debit: '',
           credit: l.total,
@@ -91,7 +92,7 @@ const Ledger = props => {
         return (
           <View>
             <DataTable.Row>
-              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.date.toLocaleString().split('T')[0]}</Text></DataTable.Cell>
+              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{moment(l.date).local().format('YYYY-MM-DD')}</Text></DataTable.Cell>
               <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.note}</Text></DataTable.Cell>
               <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
               <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.total}</Text></DataTable.Cell>
@@ -109,7 +110,7 @@ const Ledger = props => {
       }
       else if(l.payment === 'Full'){
         const body1 = {
-          date: l.date.toLocaleString().split('T')[0],
+          date: moment(l.date).local().format('YYYY-MM-DD'),
           description: l.note,
           debit: '',
           credit: l.total,
@@ -128,7 +129,7 @@ const Ledger = props => {
         return (
           <View>
             <DataTable.Row>
-              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.date.toLocaleString().split('T')[0]}</Text></DataTable.Cell>
+              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{moment(l.date).local().format('YYYY-MM-DD')}</Text></DataTable.Cell>
               <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.note}</Text></DataTable.Cell>
               <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
               <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.total}</Text></DataTable.Cell>
@@ -154,7 +155,7 @@ const Ledger = props => {
         prevBalance = prevBalance - l.total + l.received
 
         const body1 = {
-          date: l.date.toLocaleString().split('T')[0],
+          date: moment(l.date).local().format('YYYY-MM-DD'),
           description: l.note,
           debit: l.total,
           credit: '',
@@ -174,7 +175,7 @@ const Ledger = props => {
         return (
           <View>
             <DataTable.Row>
-              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.date.toLocaleString().split('T')[0]}</Text></DataTable.Cell>
+              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{moment(l.date).local().format('YYYY-MM-DD')}</Text></DataTable.Cell>
               <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.note}</Text></DataTable.Cell>
               <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.total}</Text></DataTable.Cell>
               <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
@@ -194,7 +195,7 @@ const Ledger = props => {
       }
       else if(l.payment === 'Full'){
         const body1 = {
-          date: l.date.toLocaleString().split('T')[0],
+          date: moment(l.date).local().format('YYYY-MM-DD'),
           description: l.note,
           debit: l.total,
           credit: '',
@@ -213,7 +214,7 @@ const Ledger = props => {
         return(
           <View>
             <DataTable.Row>
-              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.date.toLocaleString().split('T')[0]}</Text></DataTable.Cell>
+              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{moment(l.date).local().format('YYYY-MM-DD')}</Text></DataTable.Cell>
               <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.note}</Text></DataTable.Cell>
               <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.total}</Text></DataTable.Cell>
               <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
@@ -236,7 +237,7 @@ const Ledger = props => {
         prevBalance = prevBalance - l.total
 
         const body1 = {
-          date: l.date.toLocaleString().split('T')[0],
+          date: moment(l.date).local().format('YYYY-MM-DD'),
           description: l.note,
           debit: l.total,
           credit: '',
@@ -256,7 +257,7 @@ const Ledger = props => {
         return (
           <View>
             <DataTable.Row>
-              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.date.toLocaleString().split('T')[0]}</Text></DataTable.Cell>
+              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{moment(l.date).local().format('YYYY-MM-DD')}</Text></DataTable.Cell>
               <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.note}</Text></DataTable.Cell>
               <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.total}</Text></DataTable.Cell>
               <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
@@ -279,7 +280,7 @@ const Ledger = props => {
       prevBalance = prevBalance - l.cash
 
       const body1 = {
-        date: l.date.toLocaleString().split('T')[0],
+        date: moment(l.date).local().format('YYYY-MM-DD'),
         description: 'Payment Sent',
         debit: l.cash,
         credit: '',
@@ -290,7 +291,7 @@ const Ledger = props => {
       return (
         <View>
           <DataTable.Row>
-            <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.date.toLocaleString().split('T')[0]}</Text></DataTable.Cell>
+            <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{moment(l.date).local().format('YYYY-MM-DD')}</Text></DataTable.Cell>
             <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>Payment Sent</Text></DataTable.Cell>
             <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.cash}</Text></DataTable.Cell>
             <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
@@ -304,7 +305,7 @@ const Ledger = props => {
     const renderReceived = (l) => {
       prevBalance = prevBalance + l.cash
       const body1 = {
-        date: l.date.toLocaleString().split('T')[0],
+        date: moment(l.date).local().format('YYYY-MM-DD'),
         description: 'Payment Received',
         debit: '',
         credit: l.cash,
@@ -315,7 +316,7 @@ const Ledger = props => {
       return (
         <View>
           <DataTable.Row>
-            <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.date.toLocaleString().split('T')[0]}</Text></DataTable.Cell>
+            <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{moment(l.date).local().format('YYYY-MM-DD')}</Text></DataTable.Cell>
             <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>Payment Received</Text></DataTable.Cell>
             <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
             <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.cash}</Text></DataTable.Cell>

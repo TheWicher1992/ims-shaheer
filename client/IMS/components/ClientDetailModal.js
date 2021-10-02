@@ -3,6 +3,7 @@ import { Modal, StyleSheet, Text, View, TouchableOpacity, Dimensions, ScrollView
 import ClientUpdateModal from "./ClientUpdateModal";
 import ClientPaymentModal from "./ClientPaymentModal"
 import { FontAwesome } from "@expo/vector-icons";
+import moment from "moment"
 
 
 const ClientDetailModal = props => {
@@ -69,7 +70,7 @@ const ClientDetailModal = props => {
                   {props.object !== [] && (<View><Text style={styles.bodyText}>Client Name: {props.object.userName}</Text>
                     <Text style={styles.bodyText}>Balance: {props.object.balance}</Text>
                     <Text style={styles.bodyText}>Phone Number: {props.object.phone}</Text>
-                    <Text style={styles.bodyText}>Date: {props.object.date === undefined ? '---' : `${props.object.date.toLocaleString().split('T')[0]} - ${props.object.date.toLocaleString().split('T')[1].slice(0,8)}` }</Text>
+                    <Text style={styles.bodyText}>Date: {props.object.date === undefined ? '---' : `${moment(props.object.date).local().format('YYYY-MM-DD HH:mm:ss')}` }</Text>
                     </View>)}
                 </View>
               </ScrollView>
