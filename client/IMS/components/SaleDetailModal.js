@@ -5,6 +5,8 @@ import axios from "axios"
 import ShowAlert from '../components/ShowAlert';
 import { FontAwesome } from "@expo/vector-icons";
 import * as Print from 'expo-print';
+import moment from 'moment';
+
 const SaleDetailModal = props => {
   const [modalVisible, setModalVisible] = useState(false);
   const [isUpdateModalVisible, setUpdateModalVisible] = React.useState(false);
@@ -145,7 +147,7 @@ const SaleDetailModal = props => {
                   Client: ${props.object.client === undefined ? '---' : props.object.client.userName}
                 </p>
                 <p>
-                  Date: ${props.object.date === undefined ? '---' : `${props.object.date.toLocaleString().split('T')[0]} - ${props.object.date.toLocaleString().split('T')[1].slice(0, 8)}`}
+                  Date: ${props.object.date === undefined ? '---' : moment(props.object.date).local().format('YYYY-MM-DD HH:mm:ss')}
                 </p>
                 <p>
                   Payment Type: ${props.object === undefined ? '---' : props.object.payment}
@@ -254,7 +256,7 @@ catch(error) {console.error(error)}
 
                       <Text style={styles.bodyText}>Client: {props.object.client === undefined ? '--' : props.object.client.userName}</Text>
                       <Text style={styles.bodyText}>note: {props.object.note}</Text>
-                      <Text style={styles.bodyText}>date: {props.object.date === undefined ? '---' : `${props.object.date.toLocaleString().split('T')[0]} - ${props.object.date.toLocaleString().split('T')[1].slice(0, 8)}`}</Text>
+                      <Text style={styles.bodyText}>date: {props.object.date === undefined ? '---' : moment(props.object.date).local().format('YYYY-MM-DD HH:mm:ss')}</Text>
                       {props.object.payment === 'Partial' && <Text style={styles.bodyText}>Received: {props.object.received}</Text>}
                     </View>
                     )}
