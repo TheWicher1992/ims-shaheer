@@ -5,6 +5,7 @@ import axios from 'axios'
 import { uri } from '../api.json'
 import ShowAlert from '../components/ShowAlert';
 import { FontAwesome } from "@expo/vector-icons";
+import moment from 'moment'
 const PurchaseDetailModal = props => {
   const [modalVisible, setModalVisible] = useState(false);
   const [isUpdateModalVisible, setUpdateModalVisible] = React.useState(false);
@@ -101,7 +102,7 @@ const PurchaseDetailModal = props => {
                 <Text style={styles.bodyText}>Total Amount: {props.object.total} </Text>
                 <Text style={styles.bodyText}>Amount Sent: {props.object.received}  </Text>
                 <Text style={styles.bodyText}>Notes:  {props.object.note} </Text>
-                <Text style={styles.bodyText}>Date: {props.object.date === undefined ? '---' : `${props.object.date.toLocaleString().split('T')[0]} - ${props.object.date.toLocaleString().split('T')[1].slice(0,8)}` }   </Text>
+                <Text style={styles.bodyText}>Date: {props.object.date === undefined ? '---' : moment(props.object.date).local().format('YYYY-MM-DD HH:mm:ss') }   </Text>
                 <Text style={styles.bodyText}>Type:  {props.object.typeOfPurchase === undefined ? (null) : props.object.typeOfPurchase} </Text>
                 {props.object.typeOfPurchase === undefined ? (null) :(props.object.typeOfPurchase === 'Warehouse' ? (<Text style={styles.bodyText}>No Location</Text>) : (<Text style={styles.bodyText}>Location: {props.object.deliveryOrder.location === undefined ? '' :props.object.deliveryOrder.location }</Text>))}
 
