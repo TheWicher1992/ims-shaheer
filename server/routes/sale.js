@@ -48,26 +48,26 @@ router.post('/', async (req, res) => {
         let total = 0;
 
         for (const product of products) {
-            total += Number(product.price) * Number.parseInt(product.quantity,10)
+            total += Number(product.price) * Number.parseInt(product.quantity, 10)
         }
 
 
-                //update client balance
-                var neg = parseInt(total) - parseInt(received)
-                const clientPrev = await Client.findById(clientID)
-        
-                if (payment === 'Partial') {
-                    let prev = clientPrev.balance
-                    let newBal = prev - neg
-                    clientPrev.balance = newBal
-                    await clientPrev.save()
-                }
-                else if (payment === 'Credit') {
-                    let prev = clientPrev.balance
-                    let newBal = prev - total
-                    clientPrev.balance = newBal
-                    await clientPrev.save()
-                }
+        //update client balance
+        var neg = parseInt(total) - parseInt(received)
+        const clientPrev = await Client.findById(clientID)
+
+        if (payment === 'Partial') {
+            let prev = clientPrev.balance
+            let newBal = prev - neg
+            clientPrev.balance = newBal
+            await clientPrev.save()
+        }
+        else if (payment === 'Credit') {
+            let prev = clientPrev.balance
+            let newBal = prev - total
+            clientPrev.balance = newBal
+            await clientPrev.save()
+        }
 
         for (const product of products) {
             if (product.typeOfSale === 'DeliveryOrder') {
@@ -99,7 +99,7 @@ router.post('/', async (req, res) => {
                     }
 
                 }
-                
+
             }
         }
 
@@ -157,19 +157,20 @@ router.post('/', async (req, res) => {
 
         const productsInSale = await Promise.all(products.map(async p => {
 
-        let deliveryOrder = null
-        if(p.typeOfSale === 'DeliveryOrder'){
-        deliveryOrder = await DeliveryOrder.findById(
-                p.deliveryOrderId
-        )
-        deliveryOrder.status = true
-        await deliveryOrder.save()}
+            let deliveryOrder = null
+            if (p.typeOfSale === 'DeliveryOrder') {
+                deliveryOrder = await DeliveryOrder.findById(
+                    p.deliveryOrderId
+                )
+                deliveryOrder.status = true
+                await deliveryOrder.save()
+            }
 
             return {
                 product: p.id,
                 typeOfSale: p.typeOfSale,
                 deliveryOrder: p.typeOfSale === 'DeliveryOrder' ? p.deliveryOrderId : null,
-                quantity: p.typeOfSale === 'DeliveryOrder' ? 
+                quantity: p.typeOfSale === 'DeliveryOrder' ?
                     deliveryOrder.quantity :
                     p.warehouses.reduce((acc, w) => acc + w.quantity, 0),
                 salePrice: p.price
@@ -209,8 +210,18 @@ router.get('/filters', async (req, res) => {
     try {
         const clients = await Client.find().select('userName')
         const products = await Product.find().select('title')
-        const maxTotal = (await Sale.find().sort({ total: -1 }).limit(1))[0].total
-        const maxQuantity = (await Sale.find().sort({ quantity: -1 }).limit(1))[0].quantity
+        const saleForTotal = await Sale.find().sort({ total: -1 })
+            .limit(1)
+        const maxTotal = saleForTotal.length !== 0 ? saleForTotal[0].total : 0
+
+        // const maxTotal = (await Sale.find().sort({ total: -1 })
+        //     .limit(1))[0].total
+
+        const saleForMaxQuant = await Sale.find().sort({ quantity: -1 }).limit(1)
+
+        const maxQuantity = saleForMaxQuant.length !== 0 ? saleForMaxQuant[0].quantity : 0
+        console.log(maxQuantity)
+        // const maxQuantity = (await Sale.find().sort({ quantity: -1 }).limit(1))[0].quantity
 
         const filters = {
             clients,

@@ -113,7 +113,7 @@ router.post('/', async (req, res) => {
 
     }
     catch (err) {
-        console.log("///",err)
+        console.log("///", err)
         return res.status(500).json({
             error: errors.SERVER_ERROR
         })
@@ -142,8 +142,11 @@ router.get('/filters', async (req, res) => {
     try {
         const clients = await Client.find().select('userName')
         const products = await Product.find().select('title')
-        const maxTotal = (await Purchase.find().sort({ total: -1 }).limit(1))[0].total
-        const maxQuantity = (await Purchase.find().sort({ quantity: -1 }).limit(1))[0].quantity
+        const purchaseMaxTotal = await Purchase.find().sort({ total: -1 }).limit(1)
+        const maxTotal = purchaseMaxTotal.length !== 0 ? purchaseMaxTotal[0].total : 0
+
+        const purchaseMaxQuant = await Purchase.find().sort({ quantity: -1 }).limit(1)
+        const maxQuantity = purchaseMaxQuant.length !== 0 ? purchaseMaxQuant[0].quantity : 0
 
         const filters = {
             clients,
@@ -322,14 +325,12 @@ router.put('/:id', async (req, res) => {
         const purchase = await Purchase.findOne({ _id: id })
 
 
-        if (purchase.typeOfPurchase == 'DeliveryOrder')
-        {
+        if (purchase.typeOfPurchase == 'DeliveryOrder') {
             await DeliveryOrder.deleteOne({
-                _id : purchase.deliveryOrder
+                _id: purchase.deliveryOrder
             })
         }
-        else
-        {
+        else {
             const oldWareHouse = await Warehouse.findOne({
                 _id: purchase.warehouse
             })
@@ -340,8 +341,7 @@ router.put('/:id', async (req, res) => {
 
             oldStock.stock -= purchase.quantity
             oldWareHouse.totalStock -= purchase.quantity
-            if (oldStock.stock<=0)
-            {
+            if (oldStock.stock <= 0) {
                 oldWareHouse.totalProducts -= 1
             }
             console.log(oldStock)
@@ -351,7 +351,7 @@ router.put('/:id', async (req, res) => {
         }
 
 
-        
+
         purchase.product = product
         purchase.quantity = quantity
         purchase.client = client
@@ -360,7 +360,7 @@ router.put('/:id', async (req, res) => {
         purchase.received = received
         purchase.note = note
         await purchase.save()
-        
+
         //if DeliveryOrder
         if (isDeliveryOrder) {
 
