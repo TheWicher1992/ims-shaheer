@@ -52,7 +52,7 @@ const EmployeeStocks = props => {
 
     
     const res = await axios.get(
-      `${uri}/api/product/stock/${filters.page}/${filters.query}/${filters.sort}/${filters.sortBy}`
+      `${uri}/api/product/stocks`
     )
     res.data.stocks.length === 0 ? searchWarning(): null
     setProducts(res.data.stocks.reverse())

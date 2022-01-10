@@ -1559,7 +1559,7 @@ const MakeSale = props => {
                   <DataTable.Row>
                     <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{sale.products === undefined ? '--' : sale.products.map((p,k) => (<Text key = {k}>{p.quantity} x {p.product.title}{"\n"}</Text>))}</Text></DataTable.Cell>
                     {/* <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{sale.quantity === undefined ? '--' : sale.quantity}</Text></DataTable.Cell> */}
-                    <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{sale.total === undefined ? '--' : sale.total}</Text></DataTable.Cell>
+                    <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{sale.total === undefined ? '--' : sale.total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</Text></DataTable.Cell>
                     <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{sale.client === null ? '--' : sale.client.userName}</Text></DataTable.Cell>
                   </DataTable.Row>
                 </TouchableOpacity>

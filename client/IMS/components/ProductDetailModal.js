@@ -86,8 +86,8 @@ const ProductDetailModal = props => {
                     <Text style={styles.bodyText}>Serial: {props.object.serial}</Text>
                     <Text style={styles.bodyText}>Color: {props.object.colour === undefined ? '--' : props.object.colour.title}</Text>
                     <Text style={styles.bodyText}>Brand: {props.object.brand === undefined ? '--' : props.object.brand.title}</Text>
-                    {props.occupation === 'Admin' ? <Text style={styles.bodyText}>Price: {props.object.price}</Text> : null}
-                    <Text style={styles.bodyText}>Stock: {props.object.totalStock}</Text>
+                    {props.occupation === 'Admin' ? <Text style={styles.bodyText}>Price: {props.object.price === undefined ? 0 : props.object.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</Text> : null}
+                    <Text style={styles.bodyText}>Stock: {props.object.totalStock === undefined ? 0 : props.object.totalStock.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</Text>
                     <Text style={styles.bodyText}>Date: {props.object.date === undefined ? '---' : moment(props.object.date).local().format('YYYY-MM-DD HH:mm:ss') }</Text>
                     <Text style={styles.bodyText}>Description: {props.object.description}</Text></View>)}
                 </View>

@@ -8,14 +8,24 @@ import * as Sharing from 'expo-sharing';
 const ExportButton = (props) => {
   const [exportData, setExportData] = useState([])
   useEffect(() =>{
-    if(props.screenName === 'employees' || props.screenName === 'clients' || props.screenName === 'warehouses'){
+    if(props.screenName === 'employees' ){
       props.data.map(d => {
       exportData.push({...d, date: d.date.toLocaleString().split('T')[0]})
     })
     }
-    else if(props.screenName === 'deliveryOrders' || props.screenName === 'purchases'){
+    else if(props.screenName === 'deliveryOrders'){
       props.data.map(d => {
         exportData.push({...d, client: d.client.userName, product: d.product.title, date: d.date.toLocaleString().split('T')[0]})
+      })
+    }
+    else if(props.screenName === 'purchases'){
+      props.data.map(d => {
+        exportData.push({...d, client: d.client.userName, product: d.product.title, quantity: d.quantity.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','), received: d.received === null ? '' : d.received.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','), total: d.total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','), date: d.date.toLocaleString().split('T')[0]})
+      })
+    }
+    else if(props.screenName === 'warehouses'){
+      props.data.map(d => {
+        exportData.push({...d, date: d.date.toLocaleString().split('T')[0], totalStock: d.totalStock.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')})
       })
     }
     else if(props.screenName === 'stocks'){
@@ -23,9 +33,14 @@ const ExportButton = (props) => {
         exportData.push({...d, product: d.product.title, warehouse: d.warehouse === undefined ? 'No Name' : d.warehouse.name})
       })
     }
+    else if(props.screenName === 'clients'){
+      props.data.map(d => {
+        exportData.push({...d, date: d.date.toLocaleString().split('T')[0], balance: d.balance.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')})
+      })
+    }
     else if(props.screenName === 'products'){
       props.data.map(d => {
-        exportData.push({...d, brand: d.brand.title, colour: d.colour.title, date: d.date.toLocaleString().split('T')[0]})
+        exportData.push({...d, brand: d.brand.title, colour: d.colour.title, price: d.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','), date: d.date.toLocaleString().split('T')[0]})
       })
     }
     else if(props.screenName === 'ledger'){
@@ -36,7 +51,7 @@ const ExportButton = (props) => {
         let str = ''
         d.products.map((p,i) => 
           ( str = str + `${p.quantity} x ${p.product.title}` + ' -- '))
-        exportData.push({...d, client: d.client.userName, products: str, date: d.date.toLocaleString().split('T')[0]})
+        exportData.push({...d, client: d.client.userName, products: str, received: d.received === null ? '' : d.received.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','), total: d.total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','),date: d.date.toLocaleString().split('T')[0]})
       })
     }
     

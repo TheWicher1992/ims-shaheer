@@ -52,7 +52,7 @@ const StockModal = props => {
                 <View style={styles.modalBody}>
                   {props.object !== [] && (<View><Text style={styles.bodyText}>Product Name: {props.object.product === undefined ? '--' : props.object.product.title}</Text>
                     <Text style={styles.bodyText}>Serial No: {props.object.product === undefined ? '--' : props.object.product.serial}</Text>
-                    <Text style={styles.bodyText}>Stock: {props.object === [] ? null : props.object.stock}</Text>
+                    <Text style={styles.bodyText}>Stock: {props.object.stock === undefined ? 0 : props.object.stock.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</Text>
                     <Text style={styles.bodyText}>Warehouse: {props.object.warehouse === undefined ? null : props.object.warehouse.name}</Text>
                     </View>)}
                 </View>

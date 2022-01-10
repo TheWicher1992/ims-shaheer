@@ -256,8 +256,8 @@ const Warehouse = props => {
                 <TouchableOpacity key={i} onPress={() => onPressModal(warehouse)}>
                   <DataTable.Row>
                     <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{warehouse.name}</Text></DataTable.Cell>
-                    <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{warehouse.totalProducts}</Text></DataTable.Cell>
-                    <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{warehouse.totalStock}</Text></DataTable.Cell>
+                    <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{warehouse.totalProducts.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</Text></DataTable.Cell>
+                    <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{warehouse.totalStock.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</Text></DataTable.Cell>
                   </DataTable.Row>
                 </TouchableOpacity>
               ))

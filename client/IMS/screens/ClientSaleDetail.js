@@ -70,25 +70,16 @@ const MakeSale = props => {
   React.useEffect(() => { //for table
     setPage(0);
   }, [itemsPerPage]);
-
-
-  const [search, setSearch] = React.useState(``) //for keeping track of search
-
-
-  // make a sale variables below:
-  const [productName, setProductName] = React.useState(``)
-  const [quantityVal, setQuantityVal] = React.useState(0)
-  const [totalAmount, setTotalAmount] = React.useState(0) //this is total amount
-  const [amountReceived, setAmountReceived] = React.useState(0) //this is amount received
-  const [paymentType, setPaymentType] = React.useState(``) //this is the type of payment
-  const [clientName, setClientName] = React.useState(``)
-  const [notes, setNotes] = React.useState(``)
-  const [selectedWarehouse, setSelectedWarehouse] = useState({})
-
   const [isTableDetailModalVisible, setTableDetailModalVisible] = React.useState(false);
 
   const handleClose = () => {
     setTableDetailModalVisible(false)
+  }
+  const [touchedSale, setTouchedSale] = useState([])
+
+  const selectedSaleRecord = (sale) => {
+    setTouchedSale(sale)
+    setTableDetailModalVisible(true)
   }
 
 
@@ -97,7 +88,7 @@ const MakeSale = props => {
 
     <View>
       <ShowAlert state={alertState} handleClose={show} alertTitle={alertTitle} alertMsg={alertMsg} style={styles.buttonModalContainer} />
-      <SaleDetailModal state={isTableDetailModalVisible} handleClose={handleClose} title='Employee Information' name='Raahem Asghar' email='raahemasghar97@gmail.com' occupation="Employee" />
+      <SaleDetailModal state={isTableDetailModalVisible} handleClose={handleClose} object={touchedSale} title='Employee Information' name='Raahem Asghar' email='raahemasghar97@gmail.com' occupation="Employee" />
       <View style={styles.screen}>
         <View>
           <Text style={styles.title}>Sales</Text>
@@ -130,11 +121,11 @@ const MakeSale = props => {
 
           {
             sales.map((sale, i) => (
-              <TouchableOpacity onPress={() => setTableDetailModalVisible(true)} key={sale._id}>
+              <TouchableOpacity onPress={() => selectedSaleRecord(sale)} key={sale._id}>
                 <DataTable.Row>
                   <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{sale.product === undefined ? '--' : sale.product.title}</Text></DataTable.Cell>
                   <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{sale.quantity === undefined ? '--' : sale.quantity}</Text></DataTable.Cell>
-                  <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>69000</Text></DataTable.Cell>
+                  <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{sale.total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</Text></DataTable.Cell>
                   <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{sale.client === undefined ? '--' : sale.client.userName}</Text></DataTable.Cell>
                 </DataTable.Row>
               </TouchableOpacity>

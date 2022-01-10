@@ -99,8 +99,8 @@ const PurchaseDetailModal = props => {
                 <Text style={styles.bodyText}>Quantity: {props.object.quantity}</Text>
                 <Text style={styles.bodyText}>Client Name: {props.object.client === undefined ? "---" : props.object.client.userName}  </Text>
                 <Text style={styles.bodyText}>Payment Type: {props.object.payment} </Text>
-                <Text style={styles.bodyText}>Total Amount: {props.object.total} </Text>
-                <Text style={styles.bodyText}>Amount Sent: {props.object.received}  </Text>
+                <Text style={styles.bodyText}>Total Amount: {props.object.total !== undefined ? props.object.total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') : '-'} </Text>
+                <Text style={styles.bodyText}>Amount Sent: {props.object.received !== undefined ? props.object.received.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') : '-'}  </Text>
                 <Text style={styles.bodyText}>Notes:  {props.object.note} </Text>
                 <Text style={styles.bodyText}>Date: {props.object.date === undefined ? '---' : moment(props.object.date).local().format('YYYY-MM-DD HH:mm:ss') }   </Text>
                 <Text style={styles.bodyText}>Type:  {props.object.typeOfPurchase === undefined ? (null) : props.object.typeOfPurchase} </Text>
