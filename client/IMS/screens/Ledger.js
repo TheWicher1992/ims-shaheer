@@ -55,15 +55,15 @@ const Ledger = props => {
               <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{moment(l.date).local().format('YYYY-MM-DD')}</Text></DataTable.Cell>
               <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.note}</Text></DataTable.Cell>
               <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
-              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.total}</Text></DataTable.Cell>
+              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</Text></DataTable.Cell>
               <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
             </DataTable.Row>
             <DataTable.Row>
               <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
               <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
-              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.received}</Text></DataTable.Cell>
+              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.received.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</Text></DataTable.Cell>
               <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
-              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{prevBalance > 0 ? `${prevBalance} Cr` : `${Math.abs(prevBalance)} Dr`}</Text></DataTable.Cell>
+              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{prevBalance > 0 ? `${prevBalance.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')} Cr` : `${Math.abs(prevBalance).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')} Dr`}</Text></DataTable.Cell>
             </DataTable.Row>
           </View> 
         )
@@ -95,7 +95,7 @@ const Ledger = props => {
               <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{moment(l.date).local().format('YYYY-MM-DD')}</Text></DataTable.Cell>
               <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.note}</Text></DataTable.Cell>
               <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
-              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.total}</Text></DataTable.Cell>
+              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</Text></DataTable.Cell>
               <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
             </DataTable.Row>
             <DataTable.Row>
@@ -103,7 +103,7 @@ const Ledger = props => {
               <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
               <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>0</Text></DataTable.Cell>
               <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
-              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{prevBalance > 0 ? `${prevBalance} Cr` : `${Math.abs(prevBalance)} Dr`}</Text></DataTable.Cell>
+              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{prevBalance > 0 ? `${prevBalance.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')} Cr` : `${Math.abs(prevBalance).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')} Dr`}</Text></DataTable.Cell>
             </DataTable.Row>
           </View> 
         )
@@ -132,7 +132,7 @@ const Ledger = props => {
               <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{moment(l.date).local().format('YYYY-MM-DD')}</Text></DataTable.Cell>
               <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.note}</Text></DataTable.Cell>
               <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
-              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.total}</Text></DataTable.Cell>
+              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</Text></DataTable.Cell>
               <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
             </DataTable.Row>
             <DataTable.Row>
@@ -140,7 +140,7 @@ const Ledger = props => {
               <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
               <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.total}</Text></DataTable.Cell>
               <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
-              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{prevBalance > 0 ? `${prevBalance} Cr` : `${Math.abs(prevBalance)} Dr`}</Text></DataTable.Cell>
+              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{prevBalance > 0 ? `${prevBalance.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')} Cr` : `${Math.abs(prevBalance).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')} Dr`}</Text></DataTable.Cell>
             </DataTable.Row>
           </View> 
         )
@@ -177,7 +177,7 @@ const Ledger = props => {
             <DataTable.Row>
               <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{moment(l.date).local().format('YYYY-MM-DD')}</Text></DataTable.Cell>
               <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.note}</Text></DataTable.Cell>
-              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.total}</Text></DataTable.Cell>
+              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</Text></DataTable.Cell>
               <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
               <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
             </DataTable.Row>
@@ -185,8 +185,8 @@ const Ledger = props => {
               <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
               <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
               <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
-              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.received}</Text></DataTable.Cell>
-              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{prevBalance > 0 ? `${prevBalance} Cr` : `${Math.abs(prevBalance)} Dr`}</Text></DataTable.Cell>
+              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.received.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</Text></DataTable.Cell>
+              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{prevBalance > 0 ? `${prevBalance.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')} Cr` : `${Math.abs(prevBalance).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')} Dr`}</Text></DataTable.Cell>
             </DataTable.Row>
         </View>
         )
@@ -216,7 +216,7 @@ const Ledger = props => {
             <DataTable.Row>
               <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{moment(l.date).local().format('YYYY-MM-DD')}</Text></DataTable.Cell>
               <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.note}</Text></DataTable.Cell>
-              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.total}</Text></DataTable.Cell>
+              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</Text></DataTable.Cell>
               <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
               <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
             </DataTable.Row>
@@ -224,8 +224,8 @@ const Ledger = props => {
               <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
               <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
               <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
-              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.total}</Text></DataTable.Cell>
-              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{prevBalance > 0 ? `${prevBalance} Cr` : `${Math.abs(prevBalance)} Dr`}</Text></DataTable.Cell>
+              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</Text></DataTable.Cell>
+              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{prevBalance > 0 ? `${prevBalance.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')} Cr` : `${Math.abs(prevBalance).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')} Dr`}</Text></DataTable.Cell>
             </DataTable.Row>
           </View>
         )
@@ -259,7 +259,7 @@ const Ledger = props => {
             <DataTable.Row>
               <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{moment(l.date).local().format('YYYY-MM-DD')}</Text></DataTable.Cell>
               <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.note}</Text></DataTable.Cell>
-              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.total}</Text></DataTable.Cell>
+              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</Text></DataTable.Cell>
               <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
               <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
             </DataTable.Row>
@@ -268,7 +268,7 @@ const Ledger = props => {
               <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
               <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
               <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>0</Text></DataTable.Cell>
-              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{prevBalance > 0 ? `${prevBalance} Cr` : `${Math.abs(prevBalance)} Dr`}</Text></DataTable.Cell>
+              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{prevBalance > 0 ? `${prevBalance.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')} Cr` : `${Math.abs(prevBalance).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')} Dr`}</Text></DataTable.Cell>
             </DataTable.Row>
         </View>
         )
@@ -293,9 +293,9 @@ const Ledger = props => {
           <DataTable.Row>
             <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{moment(l.date).local().format('YYYY-MM-DD')}</Text></DataTable.Cell>
             <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>Payment Sent</Text></DataTable.Cell>
-            <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.cash}</Text></DataTable.Cell>
+            <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.cash.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</Text></DataTable.Cell>
             <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
-            <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{prevBalance > 0 ? `${prevBalance} Cr` : `${Math.abs(prevBalance)} Dr`}</Text></DataTable.Cell>
+            <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{prevBalance > 0 ? `${prevBalance.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')} Cr` : `${Math.abs(prevBalance).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')} Dr`}</Text></DataTable.Cell>
           </DataTable.Row>
           
         </View>
@@ -320,7 +320,7 @@ const Ledger = props => {
             <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>Payment Received</Text></DataTable.Cell>
             <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
             <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.cash}</Text></DataTable.Cell>
-            <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{prevBalance > 0 ? `${prevBalance} Cr` : `${Math.abs(prevBalance)} Dr`}</Text></DataTable.Cell>
+            <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{prevBalance > 0 ? `${prevBalance.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')} Cr` : `${Math.abs(prevBalance).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')} Dr`}</Text></DataTable.Cell>
           </DataTable.Row>
         </View>
       )
