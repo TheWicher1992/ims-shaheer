@@ -82,8 +82,8 @@ const WarehouseDetailModal= props => {
                     <View style={styles.modalBody}>
                           {props.object !== [] && (<View> 
                           <Text style={styles.bodyText}>Warehouse name: {props.object.name}</Text>
-                          <Text style={styles.bodyText}>Total Products: {props.object.totalProducts}</Text>
-                          <Text style={styles.bodyText}>Total Stock: {props.object.totalStock}</Text></View>)}
+                          <Text style={styles.bodyText}>Total Products: {props.object.totalProducts !== undefined ? props.object.totalProducts.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','): ''}</Text>
+                          <Text style={styles.bodyText}>Total Stock: {props.object.totalStock !== undefined ? props.object.totalStock.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') : ''}</Text></View>)}
                     </View>
                     </View>
                     <View style={{flexDirection: 'row', justifyContent: 'space-evenly', alignItems : 'center'}}>

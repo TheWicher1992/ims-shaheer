@@ -70,12 +70,12 @@ const AdminDashboard = props => {
       </View>
       <TouchableOpacity onPress={() => props.navigation.navigate({ routeName: 'Stocks' })}>
         <View style={styles.containers}>
-          <Text style={styles.containerText}>Goods out of stock {outOfStock}</Text>
+          <Text style={styles.containerText}>Goods out of stock {outOfStock.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</Text>
         </View>
       </TouchableOpacity>
       <TouchableOpacity onPress={() => props.navigation.navigate({ routeName: 'Sales' })}>
         <View style={styles.containers}>
-          <Text style={styles.containerText}>Today's Revenue {todayRevenue}</Text>
+          <Text style={styles.containerText}>Today's Revenue {todayRevenue.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</Text>
         </View>
       </TouchableOpacity>
       {/* <TouchableOpacity onPress={() => props.navigation.navigate({ routeName: 'Delivery' })}>

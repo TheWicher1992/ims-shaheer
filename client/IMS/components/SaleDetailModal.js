@@ -31,7 +31,7 @@ const SaleDetailModal = props => {
   useEffect(() => {
     let infoString = ''
     props.object.products !== undefined && props.object.products.map((p,k) => {
-      infoString = infoString + `<tr class="service"><td><h3>${p.product.title}</h3></td><td><h3>${p.quantity}</h3></td><td><h3>${p.salePrice * p.quantity}</h3></td></tr>`
+      infoString = infoString + `<tr class="service"><td><h3>${p.product.title}</h3></td><td><h3>${p.quantity.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</h3></td><td><h3>${(p.salePrice * p.quantity).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</h3></td></tr>`
     })
     
     // infoString = infoString + `<tr><td>${props.object.products !== undefined && props.object.products.map((p,k) => `${`${p.quantity}` + 'x' + `${p.product.title}` + `${props.object.products.length - k - 1 === 0 ? ' ': "\n" }`}`)}</td><td>${props.object.total}</td><td>${props.object.payment}</td><td>${props.object.client === undefined ? '--' : props.object.client.userName}</td><td>${props.object.received}</td></tr>`
@@ -144,13 +144,16 @@ const SaleDetailModal = props => {
               </div><!--End Info-->
               <div class = "Info">
                 <p>
+                  Al Azam Square
+                </p>
+                <p>
+                  Shop No. J-9A, Karachi
+                </p>
+                <p>
+                  Phone: +922136826010
+                </p>
+                <p>
                   Client: ${props.object.client === undefined ? '---' : props.object.client.userName}
-                </p>
-                <p>
-                  Date: ${props.object.date === undefined ? '---' : moment(props.object.date).local().format('YYYY-MM-DD HH:mm:ss')}
-                </p>
-                <p>
-                  Payment Type: ${props.object === undefined ? '---' : props.object.payment}
                 </p>
               </div>
             </center><!--End InvoiceTop-->
@@ -168,17 +171,24 @@ const SaleDetailModal = props => {
                       <tr class="tabletitle">
                         <td></td>
                         <td class="Rate"><h2>Total</h2></td>
-                        <td class="payment"><h2>Rs ${props.object.total}</h2></td>
+                        <td class="payment"><h2>Rs ${props.object.total === undefined ? 0 : props.object.total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</h2></td>
                       </tr>
                       <tr class="tabletitle">
 								      <td></td>
 							      	<td class="Rate"><h2>Received</h2></td>
-								      <td class="payment"><h2>Rs ${props.object.payment === 'Partial' ? props.object.received : (props.object.payment=== 'Credit' ? 0 : props.object.total)}</h2></td>
+								      <td class="payment"><h2>Rs ${props.object.payment === 'Partial' ? props.object.received.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') : (props.object.payment=== 'Credit' ? 0 : props.object.total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','))}</h2></td>
 							        </tr>
 
                     </table>
                   </div><!--End Table-->
-
+              <div class="info"> 
+                <p>
+                  Date: ${props.object.date === undefined ? '---' : moment(props.object.date).local().format('YYYY-MM-DD HH:mm:ss')}
+                </p>
+                <p>
+                  Payment Type: ${props.object === undefined ? '---' : props.object.payment}
+                </p>
+              </div><!--End Info-->
 
                 </div><!--End InvoiceBot-->
           </div><!--End Invoice-->
@@ -251,13 +261,13 @@ catch(error) {console.error(error)}
                     {props.object !== [] && (<View>
                       <Text style={styles.bodyText}>{props.object.products === undefined ? '--' : props.object.products.map((p,k) => (<Text key = {k}>{'\t'}{p.quantity} x {p.product.title} x {p.salePrice}{props.object.products.length - k - 1 === 0 ? null: "\n" }</Text>))}</Text>
                       {/* <Text style={styles.bodyText}>Quantity: {props.object.quantity}</Text> */}
-                      <Text style={styles.bodyText}>Total: {props.object.total}</Text>
+                      <Text style={styles.bodyText}>Total: {props.object.total === undefined ? 0 : props.object.total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</Text>
                       <Text style={styles.bodyText}>Payment: {props.object.payment}</Text>
 
                       <Text style={styles.bodyText}>Client: {props.object.client === undefined ? '--' : props.object.client.userName}</Text>
                       <Text style={styles.bodyText}>note: {props.object.note}</Text>
                       <Text style={styles.bodyText}>date: {props.object.date === undefined ? '---' : moment(props.object.date).local().format('YYYY-MM-DD HH:mm:ss')}</Text>
-                      {props.object.payment === 'Partial' && <Text style={styles.bodyText}>Received: {props.object.received}</Text>}
+                      {props.object.payment === 'Partial' && <Text style={styles.bodyText}>Received: {props.object.received === undefined ? 0 : props.object.received.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</Text>}
                     </View>
                     )}
                   </View>

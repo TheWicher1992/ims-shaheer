@@ -196,7 +196,7 @@ const Stocks = (props) => {
                     <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{product.product === undefined ? 0 : product.product.serial}</Text></DataTable.Cell>
                     <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{product.product === undefined ? 0 : product.product.title}</Text></DataTable.Cell>
                     <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{product.warehouse === undefined ? '--' : product.warehouse.name}</Text></DataTable.Cell>
-                    <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{product === undefined ? '--' : product.stock}</Text></DataTable.Cell>
+                    <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{product === undefined ? '--' : product.stock.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</Text></DataTable.Cell>
                   </DataTable.Row>
                 </TouchableOpacity>
 

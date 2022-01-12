@@ -266,7 +266,7 @@ const Clients = props => {
                   <DataTable.Row>
                     <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{c.userName}</Text></DataTable.Cell>
                     {c.balance < 0 ? 
-                    <DataTable.Cell style={styles.cells}><Text style={styles.tableTextRed}>{c.balance}</Text></DataTable.Cell>:<DataTable.Cell style={styles.cells}><Text style={styles.tableTextGreen}>{c.balance}</Text></DataTable.Cell>}
+                    <DataTable.Cell style={styles.cells}><Text style={styles.tableTextRed}>{c.balance.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</Text></DataTable.Cell>:<DataTable.Cell style={styles.cells}><Text style={styles.tableTextGreen}>{c.balance.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</Text></DataTable.Cell>}
                     <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{c.phone}</Text></DataTable.Cell>
                   </DataTable.Row>
                 </TouchableOpacity>

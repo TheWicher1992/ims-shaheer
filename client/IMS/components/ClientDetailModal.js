@@ -68,7 +68,7 @@ const ClientDetailModal = props => {
               <ScrollView>
                 <View style={styles.modalBody}>
                   {props.object !== [] && (<View><Text style={styles.bodyText}>Client Name: {props.object.userName}</Text>
-                    <Text style={styles.bodyText}>Balance: {props.object.balance}</Text>
+                    <Text style={styles.bodyText}>Balance: {props.object.balance === undefined ? '---' : props.object.balance.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</Text>
                     <Text style={styles.bodyText}>Phone Number: {props.object.phone}</Text>
                     <Text style={styles.bodyText}>Date: {props.object.date === undefined ? '---' : `${moment(props.object.date).local().format('YYYY-MM-DD HH:mm:ss')}` }</Text>
                     </View>)}

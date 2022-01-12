@@ -118,7 +118,7 @@ const ClientUpdateModal = props => {
                 <View style={styles.modalBody}>
                     <TextInput placeholder="Username" onChangeText= {onChangeClientName} style={styles.input} value = {clientName}/>
                     <TextInput keyboardType = 'numeric' placeholder="PhoneNumber" onChangeText= {onChangePhoneNumber}  style={styles.input} value = {phoneNumber}/>
-                    <TextInput keyboardType = 'numeric' placeholder="Balance" onChangeText= {onChangeBalance}  style={styles.input} value = {balance===undefined ? '0' : balance.toString()}/>
+                    {/* <TextInput keyboardType = 'numeric' placeholder="Balance" onChangeText= {onChangeBalance}  style={styles.input} value = {balance===undefined ? '0' : balance.toString()}/> */}
                 </View>
                 <View style={{flexDirection: 'row', justifyContent: 'space-evenly', alignItems : 'center'}}>
                     <TouchableOpacity onPress={() => props.handleClose()}>

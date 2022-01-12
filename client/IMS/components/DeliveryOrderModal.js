@@ -58,7 +58,7 @@ const DeliveryOrderModal = props => {
                     <Text style={styles.bodyText}>Date: {props.object.date === undefined ? '---' : `${moment(props.object.date).local().format('YYYY-MM-DD HH:mm:ss')}` }</Text>
                     <Text style={styles.bodyText}>Product: {props.object.product === undefined ? '--' : props.object.product.title}</Text>
                     <Text style={styles.bodyText}>Client: {props.object.client === undefined ? '--' : props.object.client.userName}</Text>
-                    <Text style={styles.bodyText}>Quantity: {props.object.quantity}</Text>
+                    <Text style={styles.bodyText}>Quantity: {props.object.quantity === undefined ? 0 : props.object.quantity.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</Text>
                     <Text style={styles.bodyText}>Location: {props.object.location}</Text>
                     <Text style={styles.bodyText}>Note: {props.object.note}</Text>
                     <Text style={styles.bodyText}>Status: {props.object.status === true ? 'Delivered' : 'Pending'}</Text>
