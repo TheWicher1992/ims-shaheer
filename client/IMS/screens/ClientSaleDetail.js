@@ -114,7 +114,6 @@ const MakeSale = props => {
         <DataTable>
           <DataTable.Header>
             <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Product</Text></DataTable.Title>
-            <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Quantity</Text></DataTable.Title>
             <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Amount</Text></DataTable.Title>
             <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Client</Text></DataTable.Title>
           </DataTable.Header>
@@ -123,8 +122,7 @@ const MakeSale = props => {
             sales.map((sale, i) => (
               <TouchableOpacity onPress={() => selectedSaleRecord(sale)} key={sale._id}>
                 <DataTable.Row>
-                  <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{sale.product === undefined ? '--' : sale.product.title}</Text></DataTable.Cell>
-                  <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{sale.quantity === undefined ? '--' : sale.quantity}</Text></DataTable.Cell>
+                  <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{sale.products === undefined ? '--' : sale.products.map(p => (`${p.quantity} x ${p.product.title}`))}</Text></DataTable.Cell>
                   <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{sale.total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</Text></DataTable.Cell>
                   <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{sale.client === undefined ? '--' : sale.client.userName}</Text></DataTable.Cell>
                 </DataTable.Row>

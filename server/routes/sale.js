@@ -280,7 +280,7 @@ router.get('/:page/:query/:products/:clients/:payment/:date/:quantity/:amount', 
             $lte: d2
         }
     }
-
+    console.log("sale is hitt ")
     if (amount !== '*') filters['total'] = amount
 
     if (quantity !== '*') filters['products.quantity'] = quantity
@@ -413,9 +413,9 @@ router.put('/:id', async (req, res) => {
 router.get(`/:id`, async (req, res) => {
 
     try {
-
+        console.log("sale hittttt")
         id = req.params.id
-        const sales = await Sale.find({ client: id }).populate(['product', 'client'])
+        const sales = await Sale.find({ client: id }).populate(['products.product', 'client'])
         return res.status(200).json({
             sales
         })

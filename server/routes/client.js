@@ -13,10 +13,15 @@ router.get('/ledger/:id', async (req, res) => {
 
         const purchases = await Purchase.find({
             client: clientId
-        })
-        const sales = await Sale.find({
+        }).populate('product')
+        // const sales = await Sale.find({
+        //     client: clientId
+        // }).populate('product')
+        const sales = await Sale
+        .find({
             client: clientId
         })
+        .populate(['products.product', 'client'])
         const payments = await Payment.find({
             client: clientId
         })
@@ -35,6 +40,7 @@ router.get('/ledger/:id', async (req, res) => {
 
 
     } catch (err) {
+        console.log(err)
         return res.status(500).json({
             error: SERVER_ERROR
         })

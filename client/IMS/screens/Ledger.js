@@ -32,7 +32,7 @@ const Ledger = props => {
 
         const body1 = {
           date: moment(l.date).local().format('YYYY-MM-DD'),
-          description: l.note,
+          description: `${l.quantity} x ${l.product.title}`,
           debit: '',
           credit: l.total,
           balance: ''
@@ -53,7 +53,7 @@ const Ledger = props => {
           <View>
             <DataTable.Row>
               <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{moment(l.date).local().format('YYYY-MM-DD')}</Text></DataTable.Cell>
-              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.note}</Text></DataTable.Cell>
+              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{`${l.quantity} x ${l.product.title}`}</Text></DataTable.Cell>
               <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
               <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</Text></DataTable.Cell>
               <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
@@ -73,7 +73,7 @@ const Ledger = props => {
 
         const body1 = {
           date:  moment(l.date).local().format('YYYY-MM-DD'),
-          description: l.note,
+          description: `${l.quantity} x ${l.product.title}`,
           debit: '',
           credit: l.total,
           balance: ''
@@ -93,7 +93,7 @@ const Ledger = props => {
           <View>
             <DataTable.Row>
               <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{moment(l.date).local().format('YYYY-MM-DD')}</Text></DataTable.Cell>
-              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.note}</Text></DataTable.Cell>
+              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{`${l.quantity} x ${l.product.title}`}</Text></DataTable.Cell>
               <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
               <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</Text></DataTable.Cell>
               <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
@@ -111,7 +111,7 @@ const Ledger = props => {
       else if(l.payment === 'Full'){
         const body1 = {
           date: moment(l.date).local().format('YYYY-MM-DD'),
-          description: l.note,
+          description: `${l.quantity} x ${l.product.title}`,
           debit: '',
           credit: l.total,
           balance: ''
@@ -130,7 +130,7 @@ const Ledger = props => {
           <View>
             <DataTable.Row>
               <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{moment(l.date).local().format('YYYY-MM-DD')}</Text></DataTable.Cell>
-              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.note}</Text></DataTable.Cell>
+              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{`${l.quantity} x ${l.product.title}`}</Text></DataTable.Cell>
               <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
               <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</Text></DataTable.Cell>
               <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
@@ -176,7 +176,7 @@ const Ledger = props => {
           <View>
             <DataTable.Row>
               <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{moment(l.date).local().format('YYYY-MM-DD')}</Text></DataTable.Cell>
-              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.note}</Text></DataTable.Cell>
+              <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l?.products.map((v1) => (`${v1.quantity} x ${v1.product.title}`))}</Text></DataTable.Cell>
               <DataTable.Cell style={styles.cells}><Text style={styles.tableText}>{l.total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</Text></DataTable.Cell>
               <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
               <DataTable.Cell style={styles.cells}><Text style={styles.tableText}></Text></DataTable.Cell>
@@ -344,7 +344,7 @@ const Ledger = props => {
             <DataTable style={{ marginTop: 10 }}>
         <DataTable.Header>
           <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Date</Text></DataTable.Title>
-          <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Description</Text></DataTable.Title>
+          <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Products</Text></DataTable.Title>
           <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Debit</Text></DataTable.Title>
           <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Credit</Text></DataTable.Title>
           <DataTable.Title style={styles.cells}><Text style={styles.tableTitleText}>Balance</Text></DataTable.Title>
