@@ -144,13 +144,16 @@ const SaleDetailModal = props => {
               </div><!--End Info-->
               <div class = "Info">
                 <p>
+                  Al Azam Square
+                </p>
+                <p>
+                  Shop No. J-9A, Karachi
+                </p>
+                <p>
+                  Phone: +922136826010
+                </p>
+                <p>
                   Client: ${props.object.client === undefined ? '---' : props.object.client.userName}
-                </p>
-                <p>
-                  Date: ${props.object.date === undefined ? '---' : moment(props.object.date).local().format('YYYY-MM-DD HH:mm:ss')}
-                </p>
-                <p>
-                  Payment Type: ${props.object === undefined ? '---' : props.object.payment}
                 </p>
               </div>
             </center><!--End InvoiceTop-->
@@ -173,12 +176,19 @@ const SaleDetailModal = props => {
                       <tr class="tabletitle">
 								      <td></td>
 							      	<td class="Rate"><h2>Received</h2></td>
-								      <td class="payment"><h2>Rs ${props.object.payment === 'Partial' ? props.object.received : (props.object.payment=== 'Credit' ? 0 : props.object.total)}</h2></td>
+								      <td class="payment"><h2>Rs ${props.object.payment === 'Partial' ? props.object.received.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') : (props.object.payment=== 'Credit' ? 0 : props.object.total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','))}</h2></td>
 							        </tr>
 
                     </table>
                   </div><!--End Table-->
-
+              <div class="info"> 
+                <p>
+                  Date: ${props.object.date === undefined ? '---' : moment(props.object.date).local().format('YYYY-MM-DD HH:mm:ss')}
+                </p>
+                <p>
+                  Payment Type: ${props.object === undefined ? '---' : props.object.payment}
+                </p>
+              </div><!--End Info-->
 
                 </div><!--End InvoiceBot-->
           </div><!--End Invoice-->
