@@ -1,0 +1,1982 @@
+﻿{
+    "products": [
+        {
+            "GRADE": "PA707",
+            "Product": "ABS",
+            "Amount": "12500",
+            "Stock": "62",
+            "Description": "-",
+            "Warehouse": "J14",
+            "Color": "Natural",
+            "Brand": "Chimei"
+        },
+        {
+            "GRADE": "QU0191S",
+            "Product": "ABS",
+            "Amount": "11000",
+            "Stock": "31",
+            "Description": "-",
+            "Warehouse": "H1",
+            "Color": "Beige",
+            "Brand": "LOTTE"
+        },
+        {
+            "GRADE": "SD0150",
+            "Product": "ABS",
+            "Amount": "11000",
+            "Stock": "13",
+            "Description": "-",
+            "Warehouse": "H1",
+            "Color": "Grey",
+            "Brand": "SAMSUNG STAREX"
+        },
+        {
+            "GRADE": "1517",
+            "Product": "ABS",
+            "Amount": "11000",
+            "Stock": "2",
+            "Description": "-",
+            "Warehouse": "H1",
+            "Color": "Grey",
+            "Brand": "Colored"
+        },
+        {
+            "GRADE": "1515",
+            "Product": "ABS",
+            "Amount": "15000",
+            "Stock": "0",
+            "Description": "-",
+            "Warehouse": "H1",
+            "Color": "White",
+            "Brand": "Tairisan"
+        },
+        {
+            "GRADE": "PA757 ",
+            "Product": "ABS RESIN.",
+            "Amount": "16000",
+            "Stock": "39",
+            "Description": "J01",
+            "Warehouse": "J14",
+            "Color": "Black",
+            "Brand": "Chimei"
+        },
+        {
+            "GRADE": "F30-03",
+            "Product": "Acetal Copolymer",
+            "Amount": "21500",
+            "Stock": "60",
+            "Description": "-",
+            "Warehouse": "J14",
+            "Color": "Natural",
+            "Brand": "Kepital"
+        },
+        {
+            "GRADE": "127-ASL150",
+            "Product": "AS",
+            "Amount": "14500",
+            "Stock": "16",
+            "Description": "-",
+            "Warehouse": "J13",
+            "Color": "Natural",
+            "Brand": "Chimei"
+        },
+        {
+            "GRADE": "107-ASL125",
+            "Product": "AS",
+            "Amount": "14500",
+            "Stock": "5",
+            "Description": "-",
+            "Warehouse": "J14",
+            "Color": "Natural",
+            "Brand": "Chimei"
+        },
+        {
+            "GRADE": "PN127 L100",
+            "Product": "AS",
+            "Amount": "14500",
+            "Stock": "9",
+            "Description": "-",
+            "Warehouse": "J14",
+            "Color": "Natural",
+            "Brand": "Chimei"
+        },
+        {
+            "GRADE": "PN117C",
+            "Product": "AS Resin",
+            "Amount": "14500",
+            "Stock": "0",
+            "Description": "-",
+            "Warehouse": "J14",
+            "Color": "Natural",
+            "Brand": "Chimei"
+        },
+        {
+            "GRADE": "Azmat ",
+            "Product": "Bakelite",
+            "Amount": "7450",
+            "Stock": "2",
+            "Description": "-",
+            "Warehouse": "J13",
+            "Color": "Black",
+            "Brand": "Azmat"
+        },
+        {
+            "GRADE": "525",
+            "Product": "Crystal",
+            "Amount": "10550",
+            "Stock": "80",
+            "Description": "-",
+            "Warehouse": "J14",
+            "Color": "Natural",
+            "Brand": "PPI"
+        },
+        {
+            "GRADE": "HI850",
+            "Product": "Crystal",
+            "Amount": "11600",
+            "Stock": "27",
+            "Description": "-",
+            "Warehouse": "J14",
+            "Color": "Natural",
+            "Brand": "PPI"
+        },
+        {
+            "GRADE": "PS510",
+            "Product": "Crystal",
+            "Amount": "11900",
+            "Stock": "19",
+            "Description": "-",
+            "Warehouse": "H1",
+            "Color": "-",
+            "Brand": "PPI"
+        },
+        {
+            "GRADE": "PS12",
+            "Product": "Crystal",
+            "Amount": "11900",
+            "Stock": "4",
+            "Description": "-",
+            "Warehouse": "H1",
+            "Color": "-",
+            "Brand": "PPI"
+        },
+        {
+            "GRADE": "PS Black",
+            "Product": "Crystal ",
+            "Amount": "11900",
+            "Stock": "3",
+            "Description": "-",
+            "Warehouse": "H1",
+            "Color": "-",
+            "Brand": "PPI"
+        },
+        {
+            "GRADE": "PS-ZSBB",
+            "Product": "Crystal",
+            "Amount": "11800",
+            "Stock": "4",
+            "Description": "-",
+            "Warehouse": "H1",
+            "Color": "-",
+            "Brand": "PPI"
+        },
+        {
+            "GRADE": "500n",
+            "Product": "Crystal ",
+            "Amount": "10550",
+            "Stock": "-",
+            "Description": "-",
+            "Warehouse": "H1",
+            "Color": "-",
+            "Brand": "PPI"
+        },
+        {
+            "GRADE": "S148",
+            "Product": "Cycolac MG47F",
+            "Amount": "11800",
+            "Stock": "85",
+            "Description": "-",
+            "Warehouse": "J14",
+            "Color": "Natural",
+            "Brand": "Sabic"
+        },
+        {
+            "GRADE": "B30S",
+            "Product": "Durethan",
+            "Amount": "21000",
+            "Stock": "70",
+            "Description": "-",
+            "Warehouse": "J14",
+            "Color": "Natural",
+            "Brand": "LANXESS"
+        },
+        {
+            "GRADE": "EVA2518C0",
+            "Product": "EVA",
+            "Amount": "20000",
+            "Stock": "28",
+            "Description": "-",
+            "Warehouse": "H1",
+            "Color": "Natural",
+            "Brand": "Sipchem"
+        },
+        {
+            "GRADE": "FJ00952",
+            "Product": "HDPE",
+            "Amount": "7850",
+            "Stock": "10",
+            "Description": "-",
+            "Warehouse": "J13",
+            "Color": "Natural",
+            "Brand": "Sabic"
+        },
+        {
+            "GRADE": "17450N",
+            "Product": "HDPE",
+            "Amount": "8100",
+            "Stock": "64",
+            "Description": "-",
+            "Warehouse": "J13",
+            "Color": "Natural",
+            "Brand": "DOW"
+        },
+        {
+            "GRADE": "M200056",
+            "Product": "HDPE",
+            "Amount": "8300",
+            "Stock": "85",
+            "Description": "-",
+            "Warehouse": "J13",
+            "Color": "Natural",
+            "Brand": "Sabic"
+        },
+        {
+            "GRADE": "5502BN",
+            "Product": "HDPE",
+            "Amount": "7750",
+            "Stock": "41",
+            "Description": "-",
+            "Warehouse": "J13",
+            "Color": "Natural",
+            "Brand": "Marlex"
+        },
+        {
+            "GRADE": "HB5502",
+            "Product": "HDPE",
+            "Amount": "7700",
+            "Stock": "2",
+            "Description": "-",
+            "Warehouse": "J13",
+            "Color": "Natural",
+            "Brand": "Lotte Malaysia"
+        },
+        {
+            "GRADE": "HD-1018",
+            "Product": "HDPE Color",
+            "Amount": "10400",
+            "Stock": "2",
+            "Description": "-",
+            "Warehouse": "H1",
+            "Color": "-",
+            "Brand": "Colored"
+        },
+        {
+            "GRADE": "HD-1198",
+            "Product": "HDPE Color",
+            "Amount": "10400",
+            "Stock": "3",
+            "Description": "-",
+            "Warehouse": "H1",
+            "Color": "-",
+            "Brand": "Colored"
+        },
+        {
+            "GRADE": "HD-1216",
+            "Product": "HDPE Color",
+            "Amount": "10400",
+            "Stock": "2",
+            "Description": "-",
+            "Warehouse": "H1",
+            "Color": "-",
+            "Brand": "Colored"
+        },
+        {
+            "GRADE": "HD-711",
+            "Product": "HDPE Color",
+            "Amount": "10400",
+            "Stock": "2",
+            "Description": "-",
+            "Warehouse": "H1",
+            "Color": "-",
+            "Brand": "Colored"
+        },
+        {
+            "GRADE": "HD Black",
+            "Product": "HDPE Color",
+            "Amount": "10400",
+            "Stock": "4",
+            "Description": "-",
+            "Warehouse": "H1",
+            "Color": "-",
+            "Brand": "Colored"
+        },
+        {
+            "GRADE": "HD-13",
+            "Product": "HDPE Color",
+            "Amount": "10400",
+            "Stock": "1",
+            "Description": "-",
+            "Warehouse": "H1",
+            "Color": "Green",
+            "Brand": "Colored"
+        },
+        {
+            "GRADE": "HD-500",
+            "Product": "HDPE Color",
+            "Amount": "10400",
+            "Stock": "3",
+            "Description": "-",
+            "Warehouse": "H1",
+            "Color": "-",
+            "Brand": "Colored"
+        },
+        {
+            "GRADE": "HD-ZSB",
+            "Product": "HDPE Color",
+            "Amount": "10400",
+            "Stock": "29",
+            "Description": "-",
+            "Warehouse": "H1",
+            "Color": "Black",
+            "Brand": "Colored"
+        },
+        {
+            "GRADE": "HD-37",
+            "Product": "HDPE Color",
+            "Amount": "10400",
+            "Stock": "4",
+            "Description": "-",
+            "Warehouse": "H1",
+            "Color": "-",
+            "Brand": "Colored"
+        },
+        {
+            "GRADE": "HD-1244",
+            "Product": "HDPE Color",
+            "Amount": "10400",
+            "Stock": "4",
+            "Description": "-",
+            "Warehouse": "H1",
+            "Color": "-",
+            "Brand": "Colored"
+        },
+        {
+            "GRADE": "HD-27",
+            "Product": "HDPE Color",
+            "Amount": "10400",
+            "Stock": "3",
+            "Description": "-",
+            "Warehouse": "H1",
+            "Color": "-",
+            "Brand": "Colored"
+        },
+        {
+            "GRADE": "HD Purple",
+            "Product": "HDPE Color",
+            "Amount": "10400",
+            "Stock": "1",
+            "Description": "-",
+            "Warehouse": "H1",
+            "Color": "Purple",
+            "Brand": "Colored"
+        },
+        {
+            "GRADE": "HD-5310",
+            "Product": "HDPE Color",
+            "Amount": "10400",
+            "Stock": "2",
+            "Description": "-",
+            "Warehouse": "H1",
+            "Brand": "Colored"
+        },
+        {
+            "GRADE": "FD0374",
+            "Product": "LDPE",
+            "Amount": "9300",
+            "Stock": "51",
+            "Description": "-",
+            "Warehouse": "J13",
+            "Color": "Natural",
+            "Brand": "Lotrene"
+        },
+        {
+            "GRADE": "4025AS",
+            "Product": "LDPE",
+            "Amount": "9300",
+            "Stock": "67",
+            "Description": "-",
+            "Warehouse": "J13",
+            "Color": "Natural",
+            "Brand": "Tasnee"
+        },
+        {
+            "GRADE": "474",
+            "Product": "LDPE",
+            "Amount": "9350",
+            "Stock": "66",
+            "Description": "-",
+            "Warehouse": "J13",
+            "Color": "-",
+            "Brand": "Lotrene"
+        },
+        {
+            "GRADE": "MG70",
+            "Product": "LDPE",
+            "Amount": "10000",
+            "Stock": "21",
+            "Description": "-",
+            "Warehouse": "J14",
+            "Color": "-",
+            "Brand": "Lotrene"
+        },
+        {
+            "GRADE": "M050X",
+            "Product": "LDPE ",
+            "Amount": "10000",
+            "Stock": "6",
+            "Description": "-",
+            "Warehouse": "J13",
+            "Color": "Natural",
+            "Brand": "Petlin"
+        },
+        {
+            "GRADE": "LD 1244",
+            "Product": "LDPE Color",
+            "Amount": "10500",
+            "Stock": "2",
+            "Description": "-",
+            "Warehouse": "H1",
+            "Color": "-",
+            "Brand": "Colored"
+        },
+        {
+            "GRADE": "LD 1265",
+            "Product": "LDPE Color",
+            "Amount": "10500",
+            "Stock": "1",
+            "Description": "-",
+            "Warehouse": "H1",
+            "Color": "-",
+            "Brand": "Colored"
+        },
+        {
+            "GRADE": "LD 13",
+            "Product": "LDPE Color",
+            "Amount": "10500",
+            "Stock": "1",
+            "Description": "-",
+            "Warehouse": "H1",
+            "Color": "-",
+            "Brand": "Colored"
+        },
+        {
+            "GRADE": "LD 27",
+            "Product": "LDPE Color",
+            "Amount": "10500",
+            "Stock": "1",
+            "Description": "-",
+            "Warehouse": "H1",
+            "Color": "-",
+            "Brand": "Colored"
+        },
+        {
+            "GRADE": "LD 37 ",
+            "Product": "LDPE Color",
+            "Amount": "10500",
+            "Stock": "6",
+            "Description": "-",
+            "Warehouse": "H1",
+            "Color": "Red",
+            "Brand": "Colored"
+        },
+        {
+            "GRADE": "LD 711",
+            "Product": "LDPE Color",
+            "Amount": "10500",
+            "Stock": "1",
+            "Description": "-",
+            "Warehouse": "H1",
+            "Color": "Pink",
+            "Brand": "Colored"
+        },
+        {
+            "GRADE": "LD 5310",
+            "Product": "LDPE Color",
+            "Amount": "10500",
+            "Stock": "1",
+            "Description": "-",
+            "Warehouse": "H1",
+            "Color": "-",
+            "Brand": "Colored"
+        },
+        {
+            "GRADE": "LD 1018",
+            "Product": "LD Color",
+            "Amount": "10500",
+            "Stock": "2",
+            "Description": "-",
+            "Warehouse": "H1",
+            "Color": "-",
+            "Brand": "Colored"
+        },
+        {
+            "GRADE": "LD 1198",
+            "Product": "LDPE Color",
+            "Amount": "10500",
+            "Stock": "1",
+            "Description": "-",
+            "Warehouse": "H1",
+            "Color": "-",
+            "Brand": "Colored"
+        },
+        {
+            "GRADE": "LD H36",
+            "Product": "LDPE Color",
+            "Amount": "10500",
+            "Stock": "4",
+            "Description": "-",
+            "Warehouse": "H1",
+            "Color": "-",
+            "Brand": "Colored"
+        },
+        {
+            "GRADE": "LD Black",
+            "Product": "LDPE Color",
+            "Amount": "10500",
+            "Stock": "5",
+            "Description": "-",
+            "Warehouse": "H1",
+            "Color": "Black",
+            "Brand": "Colored"
+        },
+        {
+            "GRADE": "LD Ferozi MB",
+            "Product": "LDPE Color",
+            "Amount": "10500",
+            "Stock": "3",
+            "Description": "-",
+            "Warehouse": "H1",
+            "Color": "Ferozi",
+            "Brand": "Colored"
+        },
+        {
+            "GRADE": "LD ZSB",
+            "Product": "LDPE Color",
+            "Amount": "10500",
+            "Stock": "16",
+            "Description": "-",
+            "Warehouse": "H1",
+            "Color": "White",
+            "Brand": "Colored"
+        },
+        {
+            "GRADE": "118WJ",
+            "Product": "LLDPE",
+            "Amount": "7800",
+            "Stock": "13",
+            "Description": "-",
+            "Warehouse": "J13",
+            "Color": "Natural",
+            "Brand": "Sabic"
+        },
+        {
+            "GRADE": "136",
+            "Product": "Nylon",
+            "Amount": "20000",
+            "Stock": "48",
+            "Description": "-",
+            "Warehouse": "J14",
+            "Color": "-",
+            "Brand": "Kopa"
+        },
+        {
+            "GRADE": "KNP2100",
+            "Product": "Nylon",
+            "Amount": "19000",
+            "Stock": "10",
+            "Description": "-",
+            "Warehouse": "J14",
+            "Color": "Natural",
+            "Brand": "Kopla"
+        },
+        {
+            "GRADE": "KNG1030",
+            "Product": "Nylon PA6 + GF",
+            "Amount": "19000",
+            "Stock": "23",
+            "Description": "-",
+            "Warehouse": "J14",
+            "Color": "Natural",
+            "Brand": "Kopla"
+        },
+        {
+            "GRADE": "KNP1100",
+            "Product": "PA6 Nylon",
+            "Amount": "19000",
+            "Stock": "16",
+            "Description": "-",
+            "Warehouse": "J14",
+            "Color": "Natural",
+            "Brand": "Kopla"
+        },
+        {
+            "GRADE": "KBG1030",
+            "Product": "PP GF",
+            "Amount": "21000",
+            "Stock": "15",
+            "Description": "PBT",
+            "Warehouse": "H1",
+            "Color": "-",
+            "Brand": "Kopla"
+        },
+        {
+            "GRADE": "2856",
+            "Product": "PC",
+            "Amount": "19800",
+            "Stock": "16",
+            "Description": "-",
+            "Warehouse": "J14",
+            "Color": "-",
+            "Brand": "Makrolon"
+        },
+        {
+            "GRADE": "1003R",
+            "Product": "PC",
+            "Amount": "19800",
+            "Stock": "30",
+            "Description": "-",
+            "Warehouse": "J13",
+            "Color": "Natural",
+            "Brand": "Sabic"
+        },
+        {
+            "GRADE": "140HF",
+            "Product": "PMMA ",
+            "Amount": "14500",
+            "Stock": "23",
+            "Description": "-",
+            "Warehouse": "J14",
+            "Color": "Natural",
+            "Brand": "Sabic"
+        },
+        {
+            "GRADE": "CM207",
+            "Product": "PMMA Acrylic ",
+            "Amount": "15500",
+            "Stock": "10",
+            "Description": "-",
+            "Warehouse": "J14",
+            "Color": "-",
+            "Brand": "Chimei"
+        },
+        {
+            "GRADE": "1010C2",
+            "Product": "PolyAmide",
+            "Amount": "22000",
+            "Stock": "19",
+            "Description": "-",
+            "Warehouse": "J14",
+            "Color": "Natural",
+            "Brand": "Novamid"
+        },
+        {
+            "GRADE": "C5070D",
+            "Product": "Polyolefin Elastomer",
+            "Amount": "15500",
+            "Stock": "47",
+            "Description": "-",
+            "Warehouse": "J13",
+            "Color": "Natural",
+            "Brand": "Sabic - Cohere"
+        },
+        {
+            "GRADE": "PP500P",
+            "Product": "PP",
+            "Amount": "8200",
+            "Stock": "29",
+            "Description": "-",
+            "Warehouse": "J13",
+            "Color": "Natural",
+            "Brand": "Sabic"
+        },
+        {
+            "GRADE": "P1100N11",
+            "Product": "PP",
+            "Amount": "8000",
+            "Stock": "0",
+            "Description": "-",
+            "Warehouse": "J13",
+            "Color": "Natural",
+            "Brand": "Advanced"
+        },
+        {
+            "GRADE": "RB307MO",
+            "Product": "PP COP",
+            "Amount": "9100",
+            "Stock": "46",
+            "Description": "Random Blow",
+            "Warehouse": "J13",
+            "Color": "Natural",
+            "Brand": "Borouge"
+        },
+        {
+            "GRADE": "HE125MO",
+            "Product": "PP",
+            "Amount": "8000",
+            "Stock": "114",
+            "Description": "-",
+            "Warehouse": "J13",
+            "Color": "Natural",
+            "Brand": "Borouge"
+        },
+        {
+            "GRADE": "RG568MO",
+            "Product": "PP",
+            "Amount": "9000",
+            "Stock": "73",
+            "Description": "Rndm Inj",
+            "Warehouse": "J13",
+            "Color": "Natural",
+            "Brand": "Borouge"
+        },
+        {
+            "GRADE": "H4120",
+            "Product": "PP",
+            "Amount": "8000",
+            "Stock": "11",
+            "Description": "-",
+            "Warehouse": "J14",
+            "Color": "Natural",
+            "Brand": "Tasnee"
+        },
+        {
+            "GRADE": "QR6701K",
+            "Product": "PP COP",
+            "Amount": "9000",
+            "Stock": "32",
+            "Description": "Random ",
+            "Warehouse": "J14",
+            "Color": "Natural",
+            "Brand": "Sabic"
+        },
+        {
+            "GRADE": "RE420MO",
+            "Product": "PP",
+            "Amount": "8800",
+            "Stock": "15",
+            "Description": "Random",
+            "Warehouse": "J14",
+            "Color": "Natural",
+            "Brand": "Borouge"
+        },
+        {
+            "GRADE": "BF970MO",
+            "Product": "PP",
+            "Amount": "8300",
+            "Stock": "58",
+            "Description": "-",
+            "Warehouse": "J14",
+            "Color": "Natural",
+            "Brand": "Borouge"
+        },
+        {
+            "GRADE": "SM198",
+            "Product": "PP COP",
+            "Amount": "9600",
+            "Stock": "6",
+            "Description": "RNDM Blow",
+            "Warehouse": "J14",
+            "Color": "Natural",
+            "Brand": "Lotte"
+        },
+        {
+            "GRADE": "EPC40R",
+            "Product": "PP",
+            "Amount": "8250",
+            "Stock": "77",
+            "Description": "-",
+            "Warehouse": "J14",
+            "Color": "Natural",
+            "Brand": "Lotte"
+        },
+        {
+            "GRADE": "1126NK",
+            "Product": "PP Film",
+            "Amount": "8200",
+            "Stock": "1",
+            "Description": "-",
+            "Warehouse": "H1",
+            "Color": "Natural",
+            "Brand": "Polimaxx"
+        },
+        {
+            "GRADE": "H4260",
+            "Product": "PP",
+            "Amount": "8500",
+            "Stock": "12",
+            "Description": "-",
+            "Warehouse": "H1",
+            "Color": "-",
+            "Brand": "Tasnee"
+        },
+        {
+            "GRADE": "572c ",
+            "Product": "PP Color",
+            "Amount": "9400",
+            "Stock": "1",
+            "Description": "-",
+            "Warehouse": "H1",
+            "Color": "Green",
+            "Brand": "Colored"
+        },
+        {
+            "GRADE": "5742",
+            "Product": "PP Color",
+            "Amount": "9400",
+            "Stock": "1",
+            "Description": "-",
+            "Warehouse": "H1",
+            "Color": "-",
+            "Brand": "Colored"
+        },
+        {
+            "GRADE": "PP Black",
+            "Product": "PP Color",
+            "Amount": "9400",
+            "Stock": "1",
+            "Description": "-",
+            "Warehouse": "H1",
+            "Color": "Black",
+            "Brand": "Colored"
+        },
+        {
+            "GRADE": "37",
+            "Product": "PP Color",
+            "Amount": "9400",
+            "Stock": "7",
+            "Description": "-",
+            "Warehouse": "H1",
+            "Color": "Red",
+            "Brand": "Colored"
+        },
+        {
+            "GRADE": "5310",
+            "Product": "PP Color",
+            "Amount": "9400",
+            "Stock": "2",
+            "Description": "-",
+            "Warehouse": "H1",
+            "Color": "Off-white",
+            "Brand": "Colored"
+        },
+        {
+            "GRADE": "1216",
+            "Product": "PP Color",
+            "Amount": "9400",
+            "Stock": "0",
+            "Description": "-",
+            "Warehouse": "H1",
+            "Color": "Red",
+            "Brand": "Colored"
+        },
+        {
+            "GRADE": "1018",
+            "Product": "PP Color",
+            "Amount": "9400",
+            "Stock": "7",
+            "Description": "-",
+            "Warehouse": "H1",
+            "Color": "Grey*",
+            "Brand": "Colored"
+        },
+        {
+            "GRADE": "181",
+            "Product": "PP Color",
+            "Amount": "9400",
+            "Stock": "2",
+            "Description": "-",
+            "Warehouse": "H1",
+            "Color": "Off-white*",
+            "Brand": "Colored"
+        },
+        {
+            "GRADE": "13",
+            "Product": "PP Color",
+            "Amount": "9400",
+            "Stock": "2",
+            "Description": "-",
+            "Warehouse": "H1",
+            "Color": "Green",
+            "Brand": "Colored"
+        },
+        {
+            "GRADE": "27",
+            "Product": "PP Color",
+            "Amount": "9400",
+            "Stock": "4",
+            "Description": "-",
+            "Warehouse": "H1",
+            "Color": "Blue",
+            "Brand": "Colored"
+        },
+        {
+            "GRADE": "1244",
+            "Product": "PP Color",
+            "Amount": "9400",
+            "Stock": "3",
+            "Description": "-",
+            "Warehouse": "H1",
+            "Color": "Yellow",
+            "Brand": "Colored"
+        },
+        {
+            "GRADE": "3040",
+            "Product": "PP Color",
+            "Amount": "9400",
+            "Stock": "3",
+            "Description": "-",
+            "Warehouse": "H1",
+            "Color": "Brown",
+            "Brand": "Colored"
+        },
+        {
+            "GRADE": "AR",
+            "Product": "PP Color",
+            "Amount": "9400",
+            "Stock": "2",
+            "Description": "-",
+            "Warehouse": "H1",
+            "Color": "White",
+            "Brand": "Colored"
+        },
+        {
+            "GRADE": "1198",
+            "Product": "PP Color",
+            "Amount": "9400",
+            "Stock": "2",
+            "Description": "-",
+            "Warehouse": "H1",
+            "Color": "Blue",
+            "Brand": "Colored"
+        },
+        {
+            "GRADE": "711",
+            "Product": "PP Color",
+            "Amount": "9400",
+            "Stock": "1",
+            "Description": "-",
+            "Warehouse": "H1",
+            "Color": "Pink",
+            "Brand": "Colored"
+        },
+        {
+            "GRADE": "PP Lux Green",
+            "Product": "PP Color",
+            "Amount": "9400",
+            "Stock": "1",
+            "Description": "-",
+            "Warehouse": "H1",
+            "Color": "Green",
+            "Brand": "Colored"
+        },
+        {
+            "GRADE": "PP Lux Pink",
+            "Product": "PP Color",
+            "Amount": "9400",
+            "Stock": "1",
+            "Description": "-",
+            "Warehouse": "H1",
+            "Color": "Pink",
+            "Brand": "Colored"
+        },
+        {
+            "GRADE": "PP Orange",
+            "Product": "PP Color",
+            "Amount": "9400",
+            "Stock": "5",
+            "Description": "-",
+            "Warehouse": "H1",
+            "Color": "Orange",
+            "Brand": "Colored"
+        },
+        {
+            "GRADE": "Cop Black",
+            "Product": "PP Cop",
+            "Amount": "9500",
+            "Stock": "1",
+            "Description": "-",
+            "Warehouse": "H1",
+            "Color": "Black",
+            "Brand": "Borouge"
+        },
+        {
+            "GRADE": "PPBlack",
+            "Product": "PP Cop Color",
+            "Amount": "9500",
+            "Stock": "1",
+            "Description": "-",
+            "Warehouse": "H1",
+            "Color": "Black",
+            "Brand": "Sabic"
+        },
+        {
+            "GRADE": "Cop White",
+            "Product": "PP Cop Color",
+            "Amount": "9500",
+            "Stock": "1",
+            "Description": "-",
+            "Warehouse": "H1",
+            "Color": "White",
+            "Brand": "Colored"
+        },
+        {
+            "GRADE": "P745J",
+            "Product": "PP Block COP",
+            "Amount": "8200",
+            "Stock": "48",
+            "Description": "-",
+            "Warehouse": "J14",
+            "Color": "Natural",
+            "Brand": "EL-PRO"
+        },
+        {
+            "GRADE": "T30",
+            "Product": "PP Talc Nania",
+            "Amount": "10500",
+            "Stock": "3",
+            "Description": "-",
+            "Warehouse": "J13",
+            "Color": "Natural",
+            "Brand": "LE Resin"
+        },
+        {
+            "GRADE": "90",
+            "Product": "PU ",
+            "Amount": "21000",
+            "Stock": "23",
+            "Description": "-",
+            "Warehouse": "J14",
+            "Color": "Natural",
+            "Brand": "Wanhua"
+        },
+        {
+            "GRADE": "KRBlue",
+            "Product": "PVC ",
+            "Amount": "8700",
+            "Stock": "39",
+            "Description": "-",
+            "Warehouse": "J13",
+            "Color": "Blue",
+            "Brand": "ZS"
+        },
+        {
+            "GRADE": "C1",
+            "Product": "PVC C1",
+            "Amount": "10000",
+            "Stock": "10",
+            "Description": "-",
+            "Warehouse": "J13",
+            "Color": "Black",
+            "Brand": "ZS"
+        },
+        {
+            "GRADE": "C1",
+            "Product": "PVC C1",
+            "Amount": "10000",
+            "Stock": "11",
+            "Description": "-",
+            "Warehouse": "J13",
+            "Color": "White",
+            "Brand": "ZS"
+        },
+        {
+            "GRADE": "KRRed",
+            "Product": "PVC Compound",
+            "Amount": "10000",
+            "Stock": "11",
+            "Description": "-",
+            "Warehouse": "J13",
+            "Color": "Red",
+            "Brand": "ZS"
+        },
+        {
+            "GRADE": "KRBlack",
+            "Product": "PVC Compound",
+            "Amount": "10000",
+            "Stock": "42",
+            "Description": "-",
+            "Warehouse": "J13",
+            "Color": "Black",
+            "Brand": "ZS"
+        },
+        {
+            "GRADE": "FLNBLACK",
+            "Product": "PVC Compound",
+            "Amount": "13300",
+            "Stock": "5",
+            "Description": "-",
+            "Warehouse": "H1",
+            "Color": "Black",
+            "Brand": "ZS"
+        },
+        {
+            "GRADE": "PB5903",
+            "Product": "Q RESIN",
+            "Amount": "14000",
+            "Stock": "37",
+            "Description": "-",
+            "Warehouse": "J14",
+            "Color": "Natural",
+            "Brand": "Chimei"
+        },
+        {
+            "GRADE": "NF2100",
+            "Product": "SAN RESIN",
+            "Amount": "11000",
+            "Stock": "42",
+            "Description": "-",
+            "Warehouse": "J14",
+            "Color": "Natural",
+            "Brand": "Tairisan"
+        },
+        {
+            "GRADE": "PT2502",
+            "Product": "SBR",
+            "Amount": "18500",
+            "Stock": "24",
+            "Description": "-",
+            "Warehouse": "H1",
+            "Color": "Natural",
+            "Brand": "SBR"
+        },
+        {
+            "GRADE": "M4012",
+            "Product": "PP Talc ",
+            "Amount": "6000",
+            "Stock": "8",
+            "Description": "-",
+            "Warehouse": "H1",
+            "Color": "Natural",
+            "Brand": "Tasnee"
+        },
+        {
+            "GRADE": "M8038",
+            "Product": "EVA",
+            "Amount": "22000",
+            "Stock": "10",
+            "Description": "-",
+            "Warehouse": "J14",
+            "Color": "Natural",
+            "Brand": "Polene Thai"
+        },
+        {
+            "GRADE": "657l",
+            "Product": "ABS ",
+            "Amount": "11000",
+            "Stock": "-",
+            "Description": "-",
+            "Warehouse": "-",
+            "Color": "White",
+            "Brand": "LG Chem"
+        },
+        {
+            "GRADE": "1702",
+            "Product": "ABS ",
+            "Amount": "15000",
+            "Stock": "-",
+            "Description": "-",
+            "Warehouse": "-",
+            "Color": "Cream",
+            "Brand": "Colored"
+        },
+        {
+            "GRADE": "w2320",
+            "Product": "Acetal",
+            "Amount": "21500",
+            "Stock": "-",
+            "Description": "-",
+            "Warehouse": "-",
+            "Color": "Natural",
+            "Brand": "BASF"
+        },
+        {
+            "GRADE": "F30-03BK",
+            "Product": "Acetal  ",
+            "Amount": "20000",
+            "Stock": "-",
+            "Description": "-",
+            "Warehouse": "-",
+            "Color": "Black",
+            "Brand": "Kepital"
+        },
+        {
+            "GRADE": "HI800",
+            "Product": "Crystal",
+            "Amount": "11600",
+            "Stock": "-",
+            "Description": "-",
+            "Warehouse": "-",
+            "Color": "Natural",
+            "Brand": "PPI"
+        },
+        {
+            "GRADE": "5403",
+            "Product": "HDPE Blow",
+            "Amount": "7700",
+            "Stock": "-",
+            "Description": "-",
+            "Warehouse": "-",
+            "Color": "Natural",
+            "Brand": "Aramco"
+        },
+        {
+            "GRADE": "HD-1265",
+            "Product": "HDPE Color",
+            "Amount": "10400",
+            "Stock": "-",
+            "Description": "-",
+            "Warehouse": "-",
+            "Color": "-",
+            "Brand": "Colored"
+        },
+        {
+            "GRADE": "HD-151",
+            "Product": "HDPE Color",
+            "Amount": "10400",
+            "Stock": "-",
+            "Description": "-",
+            "Warehouse": "-",
+            "Color": "-",
+            "Brand": "Colored"
+        },
+        {
+            "GRADE": "HD-H36",
+            "Product": "HDPE Color",
+            "Amount": "10400",
+            "Stock": "3",
+            "Description": "-",
+            "Warehouse": "H1",
+            "Color": "Blue",
+            "Brand": "Colored"
+        },
+        {
+            "GRADE": "HD Orange",
+            "Product": "HDPE Color",
+            "Amount": "10400",
+            "Stock": "-",
+            "Description": "-",
+            "Warehouse": "-",
+            "Color": "Orange",
+            "Brand": "Colored"
+        },
+        {
+            "GRADE": "LD 1216",
+            "Product": "LDPE Color",
+            "Amount": "10500",
+            "Stock": "-",
+            "Description": "-",
+            "Warehouse": "-",
+            "Color": "-",
+            "Brand": "Colored"
+        },
+        {
+            "GRADE": "LD Orange MB",
+            "Product": "LDPE Color",
+            "Amount": "10500",
+            "Stock": "-",
+            "Description": "-",
+            "Warehouse": "-",
+            "Color": "Orange",
+            "Brand": "Colored"
+        },
+        {
+            "GRADE": "66",
+            "Product": "Nylon ",
+            "Amount": "30000",
+            "Stock": "-",
+            "Description": "-",
+            "Warehouse": "-",
+            "Color": "Natural",
+            "Brand": "Kopla"
+        },
+        {
+            "GRADE": "GF 66",
+            "Product": "Nylon ",
+            "Amount": "30000",
+            "Stock": "2",
+            "Description": "-",
+            "Warehouse": "Shop",
+            "Color": "Natural",
+            "Brand": "Kopla"
+        },
+        {
+            "GRADE": "115",
+            "Product": "PC",
+            "Amount": "21000",
+            "Stock": "5",
+            "Description": "-",
+            "Warehouse": "Shop",
+            "Color": "Natural",
+            "Brand": "Wonderlite Chimei"
+        },
+        {
+            "GRADE": "280S",
+            "Product": "PolyAcetal(POM)",
+            "Amount": "21500",
+            "Stock": "1",
+            "Description": "-",
+            "Warehouse": "J14",
+            "Color": "Natural",
+            "Brand": "Sabic"
+        },
+        {
+            "GRADE": "57MNK10",
+            "Product": "PP COP",
+            "Amount": "8250",
+            "Stock": "49",
+            "Description": "-",
+            "Warehouse": "J14",
+            "Color": "Natural",
+            "Brand": "Sabic"
+        },
+        {
+            "GRADE": "BH975MO",
+            "Product": "PP",
+            "Amount": "8300",
+            "Stock": "-",
+            "Description": "-",
+            "Warehouse": "-",
+            "Color": "Natural",
+            "Brand": "Borouge"
+        },
+        {
+            "GRADE": "575P",
+            "Product": "PP",
+            "Amount": "8000",
+            "Stock": "145",
+            "Description": "-",
+            "Warehouse": "J13",
+            "Color": "Natural",
+            "Brand": "Sabic"
+        },
+        {
+            "GRADE": "P1128N11",
+            "Product": "PP Film",
+            "Amount": "8200",
+            "Stock": "-",
+            "Description": "-",
+            "Warehouse": "-",
+            "Color": "Natural",
+            "Brand": "Advanced"
+        },
+        {
+            "GRADE": "500N",
+            "Product": "PP",
+            "Amount": "8000",
+            "Stock": "-",
+            "Description": "-",
+            "Warehouse": "-",
+            "Color": "Natural",
+            "Brand": "LyondellBasell"
+        },
+        {
+            "GRADE": "500p",
+            "Product": "PP Tape",
+            "Amount": "8100",
+            "Stock": "1",
+            "Description": "-",
+            "Warehouse": "Shop",
+            "Color": "Natural",
+            "Brand": "Sabic"
+        },
+        {
+            "GRADE": "H36",
+            "Product": "PP Color",
+            "Amount": "9400",
+            "Stock": "3",
+            "Description": "-",
+            "Warehouse": "H1",
+            "Color": "Blue",
+            "Brand": "Colored"
+        },
+        {
+            "GRADE": "1265",
+            "Product": "PP Color",
+            "Amount": "9400",
+            "Stock": "-",
+            "Description": "-",
+            "Warehouse": "H1",
+            "Color": "Green",
+            "Brand": "Colored"
+        },
+        {
+            "GRADE": "230",
+            "Product": "PP Color",
+            "Amount": "9400",
+            "Stock": "1",
+            "Description": "-",
+            "Warehouse": "H1",
+            "Color": "Pink",
+            "Brand": "Colored"
+        },
+        {
+            "GRADE": "UUSP",
+            "Product": "PP Color",
+            "Amount": "9400",
+            "Stock": "1",
+            "Description": "-",
+            "Warehouse": "H1",
+            "Brand": "Colored"
+        },
+        {
+            "GRADE": "PP Green ",
+            "Product": "PP Color",
+            "Amount": "9400",
+            "Stock": "-",
+            "Description": "Green Purya",
+            "Warehouse": "H1",
+            "Color": "Green",
+            "Brand": "Colored"
+        },
+        {
+            "GRADE": "PP Lux Blue",
+            "Product": "PP Color",
+            "Amount": "9400",
+            "Stock": "-",
+            "Description": "-",
+            "Warehouse": "H1",
+            "Color": "Blue",
+            "Brand": "Colored"
+        },
+        {
+            "GRADE": "PP Yellow ",
+            "Product": "PP Color",
+            "Amount": "9400",
+            "Stock": "-",
+            "Description": "Yellow Purya",
+            "Warehouse": "H1",
+            "Color": "Yellow",
+            "Brand": "Colored"
+        },
+        {
+            "GRADE": "ZSB White",
+            "Product": "PP Color",
+            "Amount": "9400",
+            "Stock": "7",
+            "Description": "-",
+            "Warehouse": "H1",
+            "Color": "White",
+            "Brand": "Colored"
+        },
+        {
+            "GRADE": "961",
+            "Product": "PP Cop",
+            "Amount": "8250",
+            "Stock": "9",
+            "Description": "-",
+            "Warehouse": "H1",
+            "Color": "Natural",
+            "Brand": "Borouge"
+        },
+        {
+            "GRADE": "332",
+            "Product": "PP Cop",
+            "Amount": "8250",
+            "Stock": "-",
+            "Description": "-",
+            "Warehouse": "H1",
+            "Color": "Natural",
+            "Brand": "Saudia"
+        },
+        {
+            "GRADE": "5742",
+            "Product": "PP Cop Color",
+            "Amount": "9500",
+            "Stock": "1",
+            "Description": "-",
+            "Warehouse": "H1",
+            "Color": "Grey",
+            "Brand": "Sabic"
+        },
+        {
+            "GRADE": "KPG1030",
+            "Product": "PP GF",
+            "Amount": "12000",
+            "Stock": "13",
+            "Description": "-",
+            "Warehouse": "J13",
+            "Color": "Natural",
+            "Brand": "Kopla"
+        },
+        {
+            "GRADE": "T20",
+            "Product": "PP Talc ",
+            "Amount": "10500",
+            "Stock": "3",
+            "Description": "-",
+            "Warehouse": "Shop",
+            "Color": "Natural",
+            "Brand": "LE Resin"
+        },
+        {
+            "GRADE": "2042196",
+            "Product": "PP Plain",
+            "Amount": "7800",
+            "Stock": "-",
+            "Description": "-",
+            "Warehouse": "J13",
+            "Color": "Natural",
+            "Brand": "Saudi"
+        },
+        {
+            "GRADE": "6202",
+            "Product": "PPE COP",
+            "Amount": "15000",
+            "Stock": "-",
+            "Description": "-",
+            "Warehouse": "J14",
+            "Color": "Natural",
+            "Brand": "EXXON VISTAMAXX"
+        },
+        {
+            "GRADE": "98",
+            "Product": "PU ",
+            "Amount": "18000",
+            "Stock": "3",
+            "Description": "-",
+            "Warehouse": "Shop",
+            "Color": "Natural",
+            "Brand": "Wanhua"
+        },
+        {
+            "GRADE": "80",
+            "Product": "PU ",
+            "Amount": "21000",
+            "Stock": "4",
+            "Description": "-",
+            "Warehouse": "Shop",
+            "Color": "Natural",
+            "Brand": "Wanhua"
+        },
+        {
+            "GRADE": "70",
+            "Product": "PU ",
+            "Amount": "21000",
+            "Stock": "5",
+            "Description": "-",
+            "Warehouse": "Shop",
+            "Color": "Natural",
+            "Brand": "Wanhua"
+        },
+        {
+            "GRADE": "55",
+            "Product": "PU ",
+            "Amount": "21000",
+            "Stock": "3",
+            "Description": "-",
+            "Warehouse": "Shop",
+            "Color": "Natural",
+            "Brand": "Wanhua"
+        },
+        {
+            "GRADE": "MBR9666",
+            "Product": "Titanium ",
+            "Amount": "20000",
+            "Stock": "3",
+            "Description": "-",
+            "Warehouse": "J13",
+            "Color": "White",
+            "Brand": "Brand"
+        },
+        {
+            "GRADE": "210k",
+            "Product": "KP",
+            "Amount": "20000",
+            "Stock": "1",
+            "Description": "-",
+            "Warehouse": "J13",
+            "Color": "Natural",
+            "Brand": "Kopa"
+        },
+        {
+            "GRADE": "KN117M",
+            "Product": "Nylon ",
+            "Amount": "20000",
+            "Stock": "1",
+            "Description": "-",
+            "Warehouse": "J14",
+            "Color": "Natural",
+            "Brand": "Kopa"
+        },
+        {
+            "GRADE": "124GDI03",
+            "Product": "Polyolefin",
+            "Amount": "-",
+            "Stock": "30",
+            "Description": "-",
+            "Warehouse": "J13",
+            "Color": "Natural",
+            "Brand": "Luban"
+        },
+        {
+            "GRADE": "PVCFL2",
+            "Product": "PVC Compound",
+            "Amount": "7650",
+            "Stock": "8",
+            "Description": "-",
+            "Warehouse": "J13",
+            "Color": "Black",
+            "Brand": "ZS"
+        },
+        {
+            "GRADE": "GSTBLACK",
+            "Product": "PVC Compound",
+            "Amount": "12600",
+            "Stock": "24",
+            "Description": "-",
+            "Warehouse": "H1",
+            "Color": "Black",
+            "Brand": "ZS"
+        },
+        {
+            "GRADE": "KRGT4",
+            "Product": "PVC Compound",
+            "Amount": "12700",
+            "Stock": "34",
+            "Description": "-",
+            "Warehouse": "H1",
+            "Color": "-",
+            "Brand": "ZS"
+        },
+        {
+            "GRADE": "KR STP1",
+            "Product": "PVC Compound",
+            "Amount": "13500",
+            "Stock": "5",
+            "Description": "-",
+            "Warehouse": "H1",
+            "Color": "-",
+            "Brand": "ZS"
+        },
+        {
+            "GRADE": "ST0",
+            "Product": "PVC Compound",
+            "Amount": "12800",
+            "Stock": "24",
+            "Description": "-",
+            "Warehouse": "H1",
+            "Color": "-",
+            "Brand": "ZS"
+        },
+        {
+            "GRADE": "KRGREY",
+            "Product": "PVC Compound",
+            "Amount": "8300",
+            "Stock": "18",
+            "Description": "-",
+            "Warehouse": "H1",
+            "Color": "Grey",
+            "Brand": "ZS"
+        },
+        {
+            "GRADE": "FL2",
+            "Product": "PVC Compound",
+            "Amount": "7650",
+            "Stock": "9",
+            "Description": "-",
+            "Warehouse": "H1",
+            "Color": "White",
+            "Brand": "ZS"
+        },
+        {
+            "GRADE": "FLN",
+            "Product": "PVC ",
+            "Amount": "13000",
+            "Stock": "21",
+            "Description": "Natural Dori",
+            "Warehouse": "J13",
+            "Color": "Natural",
+            "Brand": "ZS"
+        },
+        {
+            "GRADE": "FL10 ",
+            "Product": "PVC Color",
+            "Amount": "9400",
+            "Stock": "14",
+            "Description": "-",
+            "Warehouse": "H1",
+            "Color": "White",
+            "Brand": "ZS"
+        },
+        {
+            "GRADE": "FL3 ",
+            "Product": "PVC Color",
+            "Amount": "9100",
+            "Stock": "1",
+            "Description": "-",
+            "Warehouse": "J13",
+            "Color": "Black",
+            "Brand": "ZS"
+        },
+        {
+            "GRADE": "FLNH ",
+            "Product": "PVC Color",
+            "Amount": "13000",
+            "Stock": "5",
+            "Description": "-",
+            "Warehouse": "J13",
+            "Color": "Black",
+            "Brand": "ZS"
+        },
+        {
+            "GRADE": "FLN ",
+            "Product": "PVC",
+            "Amount": "13000",
+            "Stock": "20",
+            "Description": "Face Cutting",
+            "Warehouse": "H1",
+            "Color": "Natural",
+            "Brand": "ZS"
+        },
+        {
+            "GRADE": "KRGreen",
+            "Product": "PVC Color",
+            "Amount": "8300",
+            "Stock": "7",
+            "Description": "-",
+            "Warehouse": "J13",
+            "Color": "Green",
+            "Brand": "ZS"
+        },
+        {
+            "GRADE": "MN-Black",
+            "Product": "PVC Color",
+            "Amount": "12750",
+            "Stock": "1",
+            "Description": "-",
+            "Warehouse": "J13",
+            "Color": "Black",
+            "Brand": "ZS"
+        },
+        {
+            "GRADE": "MN-Natural",
+            "Product": "PVC ",
+            "Amount": "12750",
+            "Stock": "-",
+            "Description": "-",
+            "Warehouse": "J13",
+            "Color": "Natural",
+            "Brand": "ZS"
+        },
+        {
+            "GRADE": "KRPurple",
+            "Product": "PVC Color",
+            "Amount": "8300",
+            "Stock": "11",
+            "Description": "-",
+            "Warehouse": "J13",
+            "Color": "Purple",
+            "Brand": "ZS"
+        },
+        {
+            "GRADE": "KRYellow",
+            "Product": "PVC Color",
+            "Amount": "8300",
+            "Stock": "-",
+            "Description": "-",
+            "Warehouse": "J13",
+            "Color": "Yellow",
+            "Brand": "ZS"
+        },
+        {
+            "GRADE": "PT8554",
+            "Product": "SBR",
+            "Amount": "16500",
+            "Stock": "20",
+            "Description": "-",
+            "Warehouse": "J13",
+            "Color": "Natural",
+            "Brand": "SBR"
+        },
+        {
+            "GRADE": "95",
+            "Product": "PU ",
+            "Amount": "22500",
+            "Stock": "1",
+            "Description": "-",
+            "Warehouse": "Shop",
+            "Color": "Natural",
+            "Brand": "Wanhua"
+        },
+        {
+            "GRADE": "85",
+            "Product": "PU ",
+            "Amount": "22500",
+            "Stock": "6",
+            "Description": "-",
+            "Warehouse": "Shop",
+            "Color": "Natural",
+            "Brand": "Wanhua"
+        },
+        {
+            "GRADE": "T60",
+            "Product": "PP Talc",
+            "Amount": "12000",
+            "Stock": "1",
+            "Description": "-",
+            "Warehouse": "Shop",
+            "Color": "Natural",
+            "Brand": "LE Resin"
+        },
+        {
+            "GRADE": "T40",
+            "Product": "PP Talc",
+            "Amount": "12000",
+            "Stock": "1",
+            "Description": "-",
+            "Warehouse": "Shop",
+            "Color": "Natural",
+            "Brand": "LE Resin"
+        },
+        {
+            "GRADE": "KBP1000",
+            "Product": "PBT",
+            "Amount": "21000",
+            "Stock": "3",
+            "Description": "-",
+            "Warehouse": "Shop",
+            "Color": "Natural",
+            "Brand": "-"
+        },
+        {
+            "GRADE": "1102K11",
+            "Product": "PP Tape",
+            "Amount": "8150",
+            "Stock": "27",
+            "Description": "-",
+            "Warehouse": "J14",
+            "Color": "Natural",
+            "Brand": "-"
+        },
+        {
+            "GRADE": "S1",
+            "Product": "MB",
+            "Amount": "20000",
+            "Stock": "6",
+            "Description": "-",
+            "Warehouse": "J13",
+            "Color": "-",
+            "Brand": "-"
+        },
+        {
+            "GRADE": "SP",
+            "Product": "MB",
+            "Amount": "22500",
+            "Stock": "2",
+            "Description": "-",
+            "Warehouse": "J13",
+            "Color": "-",
+            "Brand": "-"
+        },
+        {
+            "GRADE": "Golden",
+            "Product": "MB",
+            "Amount": "48750",
+            "Stock": "1",
+            "Description": "-",
+            "Warehouse": "J13",
+            "Color": "Golden",
+            "Brand": "-"
+        },
+        {
+            "GRADE": "1100",
+            "Product": "MB",
+            "Amount": "26000",
+            "Stock": "1",
+            "Description": "-",
+            "Warehouse": "J13",
+            "Color": "-",
+            "Brand": "-"
+        },
+        {
+            "GRADE": "1030",
+            "Product": "MB",
+            "Amount": "25000",
+            "Stock": "2",
+            "Description": "-",
+            "Warehouse": "J13",
+            "Color": "-",
+            "Brand": "-"
+        },
+        {
+            "GRADE": "Orange",
+            "Product": "MB",
+            "Amount": "23000",
+            "Stock": "4",
+            "Description": "-",
+            "Warehouse": "J13",
+            "Color": "Orange",
+            "Brand": "-"
+        },
+        {
+            "GRADE": "3200",
+            "Product": "MB",
+            "Amount": "21250",
+            "Stock": "3",
+            "Description": "-",
+            "Warehouse": "J13",
+            "Color": "-",
+            "Brand": "-"
+        },
+        {
+            "GRADE": "35",
+            "Product": "MB",
+            "Amount": "27500",
+            "Stock": "2",
+            "Description": "-",
+            "Warehouse": "J13",
+            "Color": "-",
+            "Brand": "-"
+        },
+        {
+            "GRADE": "37",
+            "Product": "MB",
+            "Amount": "22500",
+            "Stock": "13",
+            "Description": "-",
+            "Warehouse": "J13",
+            "Color": "-",
+            "Brand": "-"
+        },
+        {
+            "GRADE": "Silver",
+            "Product": "MB",
+            "Amount": "27500",
+            "Stock": "3",
+            "Description": "-",
+            "Warehouse": "J13",
+            "Color": "Silver",
+            "Brand": "-"
+        },
+        {
+            "GRADE": "699",
+            "Product": "MB",
+            "Amount": "21250",
+            "Stock": "1",
+            "Description": "-",
+            "Warehouse": "J13",
+            "Color": "-",
+            "Brand": "-"
+        }
+    ]
+}
