@@ -85,7 +85,8 @@ const seedProducts = async () => {
             if (brandIdMap[product.Brand] === null) console.log("pb---->", product.Brand)
 
             const data = {
-                title: `${product.Product}-${product.GRADE}`,
+                title: product.Product,
+                serial: product.Grade,
                 brandID: brandIdMap[product.Brand ? product.Brand : "-"],
                 colourID: colourIdMap[product.Color ? product.Color : "-"],
                 description: product.Description,
