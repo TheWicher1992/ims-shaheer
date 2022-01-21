@@ -86,7 +86,7 @@ const seedProducts = async () => {
 
             const data = {
                 title: product.Product,
-                serial: product.Grade,
+                serial: product.GRADE,
                 brandID: brandIdMap[product.Brand ? product.Brand : "-"],
                 colourID: colourIdMap[product.Color ? product.Color : "-"],
                 description: product.Description,
