@@ -176,7 +176,7 @@ const SaleDetailModal = props => {
                       <tr class="tabletitle">
 								      <td></td>
 							      	<td class="Rate"><h2>Received</h2></td>
-								      <td class="payment"><h2>Rs ${props.object.payment === 'Partial' ? props.object.received.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') : (props.object.payment=== 'Credit' ? 0 : props.object.total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ','))}</h2></td>
+								      <td class="payment"><h2>Rs ${props.object.payment === 'Partial' ? props.object.received.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') : (props.object.payment=== 'Credit' ? 0 : (props.object.total !== undefined ? props.object.total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',') : 0))}</h2></td>
 							        </tr>
 
                     </table>
