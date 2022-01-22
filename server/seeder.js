@@ -19,16 +19,23 @@ const Product = require('./models/Product')
 const ProductColour = require('./models/ProductColour')
 const ProductBrand = require('./models/Brand')
 const Warehouse = require('./models/Warehouse')
+const Sale = require('./models/Sale')
+const Stock = require('./models/Stock')
+const Purchase = require('./models/Purchase')
+const Payment = require('./models/Payment')
+const DeliveryOrder = require('./models/DeliveryOrder')
+
+
 const seedProducts = async () => {
+    await DeliveryOrder.deleteMany()
+    await Sale.deleteMany()
+    await Purchase.deleteMany()
     await Product.deleteMany()
     await ProductColour.deleteMany()
     await ProductBrand.deleteMany()
     await Warehouse.deleteMany()
-    require("./models/DeliveryOrder").deleteMany()
-    require("./models/Payment").deleteMany()
-    require("./models/Purchase").deleteMany()
-    require("./models/Sale").deleteMany()
-    require("./models/Stock").deleteMany()
+    await Stock.deleteMany()
+    await Payment.deleteMany()
 
     const colors = []
     const brands = []
