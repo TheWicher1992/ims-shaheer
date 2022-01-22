@@ -104,7 +104,7 @@ const ProductDetailModal = props => {
                     <Text style={styles.buttonModalText}>Update</Text>
                   </View>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() =>
+                {/* <TouchableOpacity onPress={() =>
                   Alert.alert(
                     "Confirmation",
                     "Are you sure you want to delete?",
@@ -122,7 +122,7 @@ const ProductDetailModal = props => {
                   <View style={styles.deleteButtonModalContainer}>
                     <Text style={styles.buttonModalText}>Delete</Text>
                   </View>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
               </View>) : (<View style={{ flexDirection: 'row', justifyContent: 'space-evenly', alignItems: 'center' }}>
                 <TouchableOpacity onPress={() => props.handleClose()}>
                   <View style={styles.buttonModalContainer}>
