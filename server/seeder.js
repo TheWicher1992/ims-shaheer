@@ -24,6 +24,11 @@ const seedProducts = async () => {
     await ProductColour.deleteMany()
     await ProductBrand.deleteMany()
     await Warehouse.deleteMany()
+    require("./models/DeliveryOrder").deleteMany()
+    require("./models/Payment").deleteMany()
+    require("./models/Purchase").deleteMany()
+    require("./models/Sale").deleteMany()
+    require("./models/Stock").deleteMany()
 
     const colors = []
     const brands = []
